@@ -1,0 +1,15 @@
+FastBokeh.dir/
+FastBokeh.exe
+FastBokeh.exp
+FastBokeh.lib
+FastBokeh.pdb
+*.vcxproj.user
+Debug/
+MinSizeRel/
+Release/
+RelWithDebInfo/
+.vs/
+*.vcxproj
+*.vcxproj.filters
+*.sln
+imgui.ini

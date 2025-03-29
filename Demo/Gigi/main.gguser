@@ -1,0 +1,3829 @@
+{
+    "version": "2.0",
+    "syncInterval": 0,
+    "systemVars": {
+        "camera": {
+            "leftHanded": false,
+            "FOV": 25.0,
+            "flySpeed": 0.20000000298023225,
+            "mouseSensitivity": 0.0010000000474974514,
+            "startingCameraPos": [
+                475.5538024902344,
+                129.8760986328125,
+                190.14169311523438
+            ],
+            "startingCameraAltitudeAzimuth": [
+                -0.23799701035022736,
+                1.7436481714248658
+            ]
+        },
+        "ProjMtx_textureName": "ColorHDR"
+    },
+    "snapshot": {
+        "resourceViewNodeIndex": 35,
+        "resourceViewResourceIndex": 3,
+        "cameraPos": [
+            475.5538024902344,
+            129.8760986328125,
+            190.14169311523438
+        ],
+        "cameraAltitudeAzimuth": [
+            -0.23799701035022736,
+            1.7436481714248658
+        ],
+        "importedResources": [
+            {
+                "nodeName": "Scene",
+                "isATexture": false,
+                "buffer": {
+                    "fileName": "Assets\\Interior\\Interior.bin",
+                    "structIndex": 0,
+                    "BLASOpaque": true
+                }
+            },
+            {
+                "nodeName": "VertexBuffer",
+                "isATexture": false,
+                "buffer": {
+                    "fileName": "Assets\\Interior\\Interior.bin",
+                    "structIndex": 0,
+                    "BLASOpaque": true
+                }
+            }
+        ],
+        "savedVariables": [
+            {
+                "name": "Reset",
+                "value": "false"
+            },
+            {
+                "name": "RenderSize",
+                "value": "1024,768"
+            },
+            {
+                "name": "MaterialSet",
+                "value": "1"
+            },
+            {
+                "name": "Accumulate",
+                "value": "true"
+            },
+            {
+                "name": "Animate",
+                "value": "true"
+            },
+            {
+                "name": "SamplesPerPixelPerFrame",
+                "value": "8"
+            },
+            {
+                "name": "JitterPixels",
+                "value": "1"
+            },
+            {
+                "name": "DepthNearPlane",
+                "value": "0.100000"
+            },
+            {
+                "name": "RayPosNormalNudge",
+                "value": "0.100000"
+            },
+            {
+                "name": "NumBounces",
+                "value": "15"
+            },
+            {
+                "name": "AlbedoMode",
+                "value": "false"
+            },
+            {
+                "name": "AlbedoModeAlbedoMultiplier",
+                "value": "0.250000"
+            },
+            {
+                "name": "FocalLength",
+                "value": "30.600000"
+            },
+            {
+                "name": "LensRNGSource",
+                "value": "14"
+            },
+            {
+                "name": "LensRNGExtend",
+                "value": "3"
+            },
+            {
+                "name": "JitterNoiseTextures",
+                "value": "false"
+            },
+            {
+                "name": "DOF",
+                "value": "1"
+            },
+            {
+                "name": "ApertureRadius",
+                "value": "0.750000"
+            },
+            {
+                "name": "AnamorphicScaling",
+                "value": "1.000000,1.000000"
+            },
+            {
+                "name": "PetzvalScaling",
+                "value": "1.000000,1.000000"
+            },
+            {
+                "name": "OcclusionSettings",
+                "value": "1.000000,1.000000,1.000000"
+            },
+            {
+                "name": "NoImportanceSampling",
+                "value": "false"
+            },
+            {
+                "name": "SkyColor",
+                "value": "0.995098,0.896392,0.785347"
+            },
+            {
+                "name": "SkyBrightness",
+                "value": "0.500000"
+            },
+            {
+                "name": "MaterialEmissiveMultiplier",
+                "value": "100.000000"
+            },
+            {
+                "name": "SmallLightBrightness",
+                "value": "200.000000"
+            },
+            {
+                "name": "SmallLightsColor",
+                "value": "1.000000,1.000000,1.000000"
+            },
+            {
+                "name": "SmallLightsColorful",
+                "value": "true"
+            },
+            {
+                "name": "SmallLightRadius",
+                "value": "1.000000"
+            },
+            {
+                "name": "GatherDOF_UseNoiseTextures",
+                "value": "true"
+            },
+            {
+                "name": "GatherDOF_AnimateNoiseTextures",
+                "value": "true"
+            },
+            {
+                "name": "GatherDOF_SuppressBokeh",
+                "value": "false"
+            },
+            {
+                "name": "GatherDOF_FocalDistance",
+                "value": "500.000000"
+            },
+            {
+                "name": "GatherDOF_FocalRegion",
+                "value": "100.000000"
+            },
+            {
+                "name": "GatherDOF_FocalLength",
+                "value": "75.000000"
+            },
+            {
+                "name": "GatherDOF_NearTransitionRegion",
+                "value": "50.000000"
+            },
+            {
+                "name": "GatherDOF_FarTransitionRegion",
+                "value": "200.000000"
+            },
+            {
+                "name": "GatherDOF_Scale",
+                "value": "0.500000"
+            },
+            {
+                "name": "GatherDOF_DoFarField",
+                "value": "true"
+            },
+            {
+                "name": "GatherDOF_DoFarFieldFloodFill",
+                "value": "false"
+            },
+            {
+                "name": "GatherDOF_DoNearField",
+                "value": "true"
+            },
+            {
+                "name": "GatherDOF_DoNearFieldFloodFill",
+                "value": "false"
+            },
+            {
+                "name": "GatherDOF_KernelSize",
+                "value": "20.000000,1.570000,6.000000,0.000000"
+            },
+            {
+                "name": "GatherDOF_BlurTapCount",
+                "value": "4"
+            },
+            {
+                "name": "GatherDOF_FloodFillTapCount",
+                "value": "4"
+            },
+            {
+                "name": "GaussBlur_Sigma",
+                "value": "1.000000"
+            },
+            {
+                "name": "GaussBlur_Disable",
+                "value": "true"
+            },
+            {
+                "name": "TemporalAccumulation_Alpha",
+                "value": "0.010000"
+            },
+            {
+                "name": "TemporalAccumulation_Enabled",
+                "value": "false"
+            },
+            {
+                "name": "ToneMap_ExposureFStops",
+                "value": "2.000000"
+            },
+            {
+                "name": "ToneMap_ToneMapper",
+                "value": "3"
+            }
+        ]
+    },
+    "snapshots": [
+        {
+            "name": "1",
+            "resourceViewNodeIndex": 35,
+            "resourceViewResourceIndex": 3,
+            "loadResources": false,
+            "cameraPos": [
+                -507.65643310546877,
+                85.50888061523438,
+                255.29820251464845
+            ],
+            "cameraAltitudeAzimuth": [
+                -0.1107226014137268,
+                0.04365141689777374
+            ],
+            "importedResources": [
+                {
+                    "nodeName": "Scene",
+                    "isATexture": false,
+                    "buffer": {
+                        "fileName": "..\\Assets\\Exterior\\exterior.bin",
+                        "structIndex": 0,
+                        "BLASOpaque": true
+                    }
+                },
+                {
+                    "nodeName": "VertexBuffer",
+                    "isATexture": false,
+                    "buffer": {
+                        "fileName": "..\\Assets\\Exterior\\exterior.bin",
+                        "structIndex": 0,
+                        "BLASOpaque": true
+                    }
+                }
+            ],
+            "savedVariables": [
+                {
+                    "name": "Reset",
+                    "value": "false"
+                },
+                {
+                    "name": "RenderSize",
+                    "value": "1024,768"
+                },
+                {
+                    "name": "MaterialSet",
+                    "value": "2"
+                },
+                {
+                    "name": "Accumulate",
+                    "value": "true"
+                },
+                {
+                    "name": "Animate",
+                    "value": "true"
+                },
+                {
+                    "name": "SamplesPerPixelPerFrame",
+                    "value": "9"
+                },
+                {
+                    "name": "JitterPixels",
+                    "value": "1"
+                },
+                {
+                    "name": "DepthNearPlane",
+                    "value": "0.100000"
+                },
+                {
+                    "name": "RayPosNormalNudge",
+                    "value": "0.100000"
+                },
+                {
+                    "name": "NumBounces",
+                    "value": "8"
+                },
+                {
+                    "name": "AlbedoMode",
+                    "value": "false"
+                },
+                {
+                    "name": "AlbedoModeAlbedoMultiplier",
+                    "value": "0.250000"
+                },
+                {
+                    "name": "FocalLength",
+                    "value": "220.000000"
+                },
+                {
+                    "name": "LensRNGSource",
+                    "value": "14"
+                },
+                {
+                    "name": "LensRNGExtend",
+                    "value": "3"
+                },
+                {
+                    "name": "JitterNoiseTextures",
+                    "value": "false"
+                },
+                {
+                    "name": "DOF",
+                    "value": "1"
+                },
+                {
+                    "name": "ApertureRadius",
+                    "value": "4.000000"
+                },
+                {
+                    "name": "AnamorphicScaling",
+                    "value": "1.000000,1.000000"
+                },
+                {
+                    "name": "PetzvalScaling",
+                    "value": "1.000000,1.000000"
+                },
+                {
+                    "name": "OcclusionSettings",
+                    "value": "1.000000,1.000000,1.000000"
+                },
+                {
+                    "name": "NoImportanceSampling",
+                    "value": "false"
+                },
+                {
+                    "name": "SkyColor",
+                    "value": "1.000000,1.000000,1.000000"
+                },
+                {
+                    "name": "SkyBrightness",
+                    "value": "1.000000"
+                },
+                {
+                    "name": "MaterialEmissiveMultiplier",
+                    "value": "100.000000"
+                },
+                {
+                    "name": "SmallLightBrightness",
+                    "value": "200.000000"
+                },
+                {
+                    "name": "SmallLightsColor",
+                    "value": "1.000000,1.000000,1.000000"
+                },
+                {
+                    "name": "SmallLightsColorful",
+                    "value": "true"
+                },
+                {
+                    "name": "SmallLightRadius",
+                    "value": "1.000000"
+                },
+                {
+                    "name": "GatherDOF_UseNoiseTextures",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_AnimateNoiseTextures",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_SuppressBokeh",
+                    "value": "false"
+                },
+                {
+                    "name": "GatherDOF_FocalDistance",
+                    "value": "500.000000"
+                },
+                {
+                    "name": "GatherDOF_FocalRegion",
+                    "value": "100.000000"
+                },
+                {
+                    "name": "GatherDOF_FocalLength",
+                    "value": "75.000000"
+                },
+                {
+                    "name": "GatherDOF_NearTransitionRegion",
+                    "value": "50.000000"
+                },
+                {
+                    "name": "GatherDOF_FarTransitionRegion",
+                    "value": "200.000000"
+                },
+                {
+                    "name": "GatherDOF_Scale",
+                    "value": "0.500000"
+                },
+                {
+                    "name": "GatherDOF_DoFarField",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_DoFarFieldFloodFill",
+                    "value": "false"
+                },
+                {
+                    "name": "GatherDOF_DoNearField",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_DoNearFieldFloodFill",
+                    "value": "false"
+                },
+                {
+                    "name": "GatherDOF_KernelSize",
+                    "value": "20.000000,1.570000,6.000000,0.000000"
+                },
+                {
+                    "name": "GatherDOF_BlurTapCount",
+                    "value": "4"
+                },
+                {
+                    "name": "GatherDOF_FloodFillTapCount",
+                    "value": "4"
+                },
+                {
+                    "name": "GaussBlur_Sigma",
+                    "value": "1.000000"
+                },
+                {
+                    "name": "GaussBlur_Disable",
+                    "value": "true"
+                },
+                {
+                    "name": "TemporalAccumulation_Alpha",
+                    "value": "0.010000"
+                },
+                {
+                    "name": "TemporalAccumulation_Enabled",
+                    "value": "true"
+                },
+                {
+                    "name": "ToneMap_ExposureFStops",
+                    "value": "1.500000"
+                },
+                {
+                    "name": "ToneMap_ToneMapper",
+                    "value": "3"
+                },
+                {
+                    "name": "Reset",
+                    "value": "false"
+                },
+                {
+                    "name": "RenderSize",
+                    "value": "1024,768"
+                },
+                {
+                    "name": "MaterialSet",
+                    "value": "2"
+                },
+                {
+                    "name": "Accumulate",
+                    "value": "true"
+                },
+                {
+                    "name": "Animate",
+                    "value": "true"
+                },
+                {
+                    "name": "SamplesPerPixelPerFrame",
+                    "value": "9"
+                },
+                {
+                    "name": "JitterPixels",
+                    "value": "1"
+                },
+                {
+                    "name": "DepthNearPlane",
+                    "value": "0.100000"
+                },
+                {
+                    "name": "RayPosNormalNudge",
+                    "value": "0.100000"
+                },
+                {
+                    "name": "NumBounces",
+                    "value": "8"
+                },
+                {
+                    "name": "AlbedoMode",
+                    "value": "false"
+                },
+                {
+                    "name": "AlbedoModeAlbedoMultiplier",
+                    "value": "0.250000"
+                },
+                {
+                    "name": "FocalLength",
+                    "value": "220.000000"
+                },
+                {
+                    "name": "LensRNGSource",
+                    "value": "14"
+                },
+                {
+                    "name": "LensRNGExtend",
+                    "value": "3"
+                },
+                {
+                    "name": "JitterNoiseTextures",
+                    "value": "false"
+                },
+                {
+                    "name": "DOF",
+                    "value": "1"
+                },
+                {
+                    "name": "ApertureRadius",
+                    "value": "4.000000"
+                },
+                {
+                    "name": "AnamorphicScaling",
+                    "value": "1.000000,1.000000"
+                },
+                {
+                    "name": "PetzvalScaling",
+                    "value": "1.000000,1.000000"
+                },
+                {
+                    "name": "OcclusionSettings",
+                    "value": "1.000000,1.000000,1.000000"
+                },
+                {
+                    "name": "NoImportanceSampling",
+                    "value": "false"
+                },
+                {
+                    "name": "SkyColor",
+                    "value": "1.000000,1.000000,1.000000"
+                },
+                {
+                    "name": "SkyBrightness",
+                    "value": "1.000000"
+                },
+                {
+                    "name": "MaterialEmissiveMultiplier",
+                    "value": "100.000000"
+                },
+                {
+                    "name": "SmallLightBrightness",
+                    "value": "200.000000"
+                },
+                {
+                    "name": "SmallLightsColor",
+                    "value": "1.000000,1.000000,1.000000"
+                },
+                {
+                    "name": "SmallLightsColorful",
+                    "value": "true"
+                },
+                {
+                    "name": "SmallLightRadius",
+                    "value": "1.000000"
+                },
+                {
+                    "name": "GatherDOF_UseNoiseTextures",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_AnimateNoiseTextures",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_SuppressBokeh",
+                    "value": "false"
+                },
+                {
+                    "name": "GatherDOF_FocalDistance",
+                    "value": "500.000000"
+                },
+                {
+                    "name": "GatherDOF_FocalRegion",
+                    "value": "100.000000"
+                },
+                {
+                    "name": "GatherDOF_FocalLength",
+                    "value": "75.000000"
+                },
+                {
+                    "name": "GatherDOF_NearTransitionRegion",
+                    "value": "50.000000"
+                },
+                {
+                    "name": "GatherDOF_FarTransitionRegion",
+                    "value": "200.000000"
+                },
+                {
+                    "name": "GatherDOF_Scale",
+                    "value": "0.500000"
+                },
+                {
+                    "name": "GatherDOF_DoFarField",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_DoFarFieldFloodFill",
+                    "value": "false"
+                },
+                {
+                    "name": "GatherDOF_DoNearField",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_DoNearFieldFloodFill",
+                    "value": "false"
+                },
+                {
+                    "name": "GatherDOF_KernelSize",
+                    "value": "20.000000,1.570000,6.000000,0.000000"
+                },
+                {
+                    "name": "GatherDOF_BlurTapCount",
+                    "value": "4"
+                },
+                {
+                    "name": "GatherDOF_FloodFillTapCount",
+                    "value": "4"
+                },
+                {
+                    "name": "GaussBlur_Sigma",
+                    "value": "1.000000"
+                },
+                {
+                    "name": "GaussBlur_Disable",
+                    "value": "true"
+                },
+                {
+                    "name": "TemporalAccumulation_Alpha",
+                    "value": "0.010000"
+                },
+                {
+                    "name": "TemporalAccumulation_Enabled",
+                    "value": "true"
+                },
+                {
+                    "name": "ToneMap_ExposureFStops",
+                    "value": "1.500000"
+                },
+                {
+                    "name": "ToneMap_ToneMapper",
+                    "value": "3"
+                }
+            ]
+        },
+        {
+            "name": "Mirror_1",
+            "resourceViewNodeIndex": 35,
+            "resourceViewResourceIndex": 3,
+            "loadResources": false,
+            "cameraPos": [
+                -528.052490234375,
+                122.41352081298828,
+                -40.531166076660159
+            ],
+            "cameraAltitudeAzimuth": [
+                -0.2719613313674927,
+                2.525960922241211
+            ],
+            "importedResources": [
+                {
+                    "nodeName": "Scene",
+                    "isATexture": false,
+                    "buffer": {
+                        "fileName": "..\\Assets\\Exterior\\exterior.bin",
+                        "structIndex": 0,
+                        "BLASOpaque": true
+                    }
+                },
+                {
+                    "nodeName": "VertexBuffer",
+                    "isATexture": false,
+                    "buffer": {
+                        "fileName": "..\\Assets\\Exterior\\exterior.bin",
+                        "structIndex": 0,
+                        "BLASOpaque": true
+                    }
+                }
+            ],
+            "savedVariables": [
+                {
+                    "name": "Reset",
+                    "value": "false"
+                },
+                {
+                    "name": "RenderSize",
+                    "value": "1024,768"
+                },
+                {
+                    "name": "MaterialSet",
+                    "value": "2"
+                },
+                {
+                    "name": "Accumulate",
+                    "value": "true"
+                },
+                {
+                    "name": "Animate",
+                    "value": "true"
+                },
+                {
+                    "name": "SamplesPerPixelPerFrame",
+                    "value": "1"
+                },
+                {
+                    "name": "JitterPixels",
+                    "value": "1"
+                },
+                {
+                    "name": "DepthNearPlane",
+                    "value": "0.100000"
+                },
+                {
+                    "name": "RayPosNormalNudge",
+                    "value": "0.100000"
+                },
+                {
+                    "name": "NumBounces",
+                    "value": "15"
+                },
+                {
+                    "name": "AlbedoMode",
+                    "value": "false"
+                },
+                {
+                    "name": "AlbedoModeAlbedoMultiplier",
+                    "value": "0.250000"
+                },
+                {
+                    "name": "FocalLength",
+                    "value": "75.000000"
+                },
+                {
+                    "name": "LensRNGSource",
+                    "value": "14"
+                },
+                {
+                    "name": "LensRNGExtend",
+                    "value": "3"
+                },
+                {
+                    "name": "JitterNoiseTextures",
+                    "value": "false"
+                },
+                {
+                    "name": "DOF",
+                    "value": "1"
+                },
+                {
+                    "name": "ApertureRadius",
+                    "value": "1.000000"
+                },
+                {
+                    "name": "AnamorphicScaling",
+                    "value": "1.000000,1.000000"
+                },
+                {
+                    "name": "PetzvalScaling",
+                    "value": "1.000000,1.000000"
+                },
+                {
+                    "name": "OcclusionSettings",
+                    "value": "1.000000,1.000000,1.000000"
+                },
+                {
+                    "name": "NoImportanceSampling",
+                    "value": "false"
+                },
+                {
+                    "name": "SkyColor",
+                    "value": "1.000000,1.000000,1.000000"
+                },
+                {
+                    "name": "SkyBrightness",
+                    "value": "1.000000"
+                },
+                {
+                    "name": "MaterialEmissiveMultiplier",
+                    "value": "100.000000"
+                },
+                {
+                    "name": "SmallLightBrightness",
+                    "value": "200.000000"
+                },
+                {
+                    "name": "SmallLightsColor",
+                    "value": "1.000000,1.000000,1.000000"
+                },
+                {
+                    "name": "SmallLightsColorful",
+                    "value": "true"
+                },
+                {
+                    "name": "SmallLightRadius",
+                    "value": "1.000000"
+                },
+                {
+                    "name": "GatherDOF_UseNoiseTextures",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_AnimateNoiseTextures",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_SuppressBokeh",
+                    "value": "false"
+                },
+                {
+                    "name": "GatherDOF_FocalDistance",
+                    "value": "500.000000"
+                },
+                {
+                    "name": "GatherDOF_FocalRegion",
+                    "value": "100.000000"
+                },
+                {
+                    "name": "GatherDOF_FocalLength",
+                    "value": "75.000000"
+                },
+                {
+                    "name": "GatherDOF_NearTransitionRegion",
+                    "value": "50.000000"
+                },
+                {
+                    "name": "GatherDOF_FarTransitionRegion",
+                    "value": "200.000000"
+                },
+                {
+                    "name": "GatherDOF_Scale",
+                    "value": "0.500000"
+                },
+                {
+                    "name": "GatherDOF_DoFarField",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_DoFarFieldFloodFill",
+                    "value": "false"
+                },
+                {
+                    "name": "GatherDOF_DoNearField",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_DoNearFieldFloodFill",
+                    "value": "false"
+                },
+                {
+                    "name": "GatherDOF_KernelSize",
+                    "value": "20.000000,1.570000,6.000000,0.000000"
+                },
+                {
+                    "name": "GatherDOF_BlurTapCount",
+                    "value": "4"
+                },
+                {
+                    "name": "GatherDOF_FloodFillTapCount",
+                    "value": "4"
+                },
+                {
+                    "name": "GaussBlur_Sigma",
+                    "value": "1.000000"
+                },
+                {
+                    "name": "GaussBlur_Disable",
+                    "value": "true"
+                },
+                {
+                    "name": "TemporalAccumulation_Alpha",
+                    "value": "0.010000"
+                },
+                {
+                    "name": "TemporalAccumulation_Enabled",
+                    "value": "true"
+                },
+                {
+                    "name": "ToneMap_ExposureFStops",
+                    "value": "1.500000"
+                },
+                {
+                    "name": "ToneMap_ToneMapper",
+                    "value": "3"
+                }
+            ]
+        },
+        {
+            "name": "Mirror_4",
+            "resourceViewNodeIndex": 35,
+            "resourceViewResourceIndex": 3,
+            "cameraPos": [
+                -534.7569580078125,
+                122.53125,
+                -57.03848648071289
+            ],
+            "cameraAltitudeAzimuth": [
+                -0.23963166773319245,
+                2.6116456985473635
+            ],
+            "importedResources": [
+                {
+                    "nodeName": "Scene",
+                    "isATexture": false,
+                    "buffer": {
+                        "fileName": "..\\Assets\\Exterior\\exterior.bin",
+                        "structIndex": 0,
+                        "BLASOpaque": true
+                    }
+                },
+                {
+                    "nodeName": "VertexBuffer",
+                    "isATexture": false,
+                    "buffer": {
+                        "fileName": "..\\Assets\\Exterior\\exterior.bin",
+                        "structIndex": 0,
+                        "BLASOpaque": true
+                    }
+                }
+            ],
+            "savedVariables": [
+                {
+                    "name": "Reset",
+                    "value": "false"
+                },
+                {
+                    "name": "RenderSize",
+                    "value": "1024,768"
+                },
+                {
+                    "name": "MaterialSet",
+                    "value": "2"
+                },
+                {
+                    "name": "Accumulate",
+                    "value": "true"
+                },
+                {
+                    "name": "Animate",
+                    "value": "true"
+                },
+                {
+                    "name": "SamplesPerPixelPerFrame",
+                    "value": "8"
+                },
+                {
+                    "name": "JitterPixels",
+                    "value": "1"
+                },
+                {
+                    "name": "DepthNearPlane",
+                    "value": "0.100000"
+                },
+                {
+                    "name": "RayPosNormalNudge",
+                    "value": "0.100000"
+                },
+                {
+                    "name": "NumBounces",
+                    "value": "15"
+                },
+                {
+                    "name": "AlbedoMode",
+                    "value": "false"
+                },
+                {
+                    "name": "AlbedoModeAlbedoMultiplier",
+                    "value": "0.250000"
+                },
+                {
+                    "name": "FocalLength",
+                    "value": "75.000000"
+                },
+                {
+                    "name": "LensRNGSource",
+                    "value": "14"
+                },
+                {
+                    "name": "LensRNGExtend",
+                    "value": "3"
+                },
+                {
+                    "name": "JitterNoiseTextures",
+                    "value": "false"
+                },
+                {
+                    "name": "DOF",
+                    "value": "1"
+                },
+                {
+                    "name": "ApertureRadius",
+                    "value": "1.000000"
+                },
+                {
+                    "name": "AnamorphicScaling",
+                    "value": "1.000000,1.000000"
+                },
+                {
+                    "name": "PetzvalScaling",
+                    "value": "1.000000,1.000000"
+                },
+                {
+                    "name": "OcclusionSettings",
+                    "value": "1.000000,1.000000,1.000000"
+                },
+                {
+                    "name": "NoImportanceSampling",
+                    "value": "false"
+                },
+                {
+                    "name": "SkyColor",
+                    "value": "1.000000,0.810842,0.598039"
+                },
+                {
+                    "name": "SkyBrightness",
+                    "value": "2.000000"
+                },
+                {
+                    "name": "MaterialEmissiveMultiplier",
+                    "value": "100.000000"
+                },
+                {
+                    "name": "SmallLightBrightness",
+                    "value": "200.000000"
+                },
+                {
+                    "name": "SmallLightsColor",
+                    "value": "1.000000,1.000000,1.000000"
+                },
+                {
+                    "name": "SmallLightsColorful",
+                    "value": "true"
+                },
+                {
+                    "name": "SmallLightRadius",
+                    "value": "1.000000"
+                },
+                {
+                    "name": "GatherDOF_UseNoiseTextures",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_AnimateNoiseTextures",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_SuppressBokeh",
+                    "value": "false"
+                },
+                {
+                    "name": "GatherDOF_FocalDistance",
+                    "value": "500.000000"
+                },
+                {
+                    "name": "GatherDOF_FocalRegion",
+                    "value": "100.000000"
+                },
+                {
+                    "name": "GatherDOF_FocalLength",
+                    "value": "75.000000"
+                },
+                {
+                    "name": "GatherDOF_NearTransitionRegion",
+                    "value": "50.000000"
+                },
+                {
+                    "name": "GatherDOF_FarTransitionRegion",
+                    "value": "200.000000"
+                },
+                {
+                    "name": "GatherDOF_Scale",
+                    "value": "0.500000"
+                },
+                {
+                    "name": "GatherDOF_DoFarField",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_DoFarFieldFloodFill",
+                    "value": "false"
+                },
+                {
+                    "name": "GatherDOF_DoNearField",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_DoNearFieldFloodFill",
+                    "value": "false"
+                },
+                {
+                    "name": "GatherDOF_KernelSize",
+                    "value": "20.000000,1.570000,6.000000,0.000000"
+                },
+                {
+                    "name": "GatherDOF_BlurTapCount",
+                    "value": "4"
+                },
+                {
+                    "name": "GatherDOF_FloodFillTapCount",
+                    "value": "4"
+                },
+                {
+                    "name": "GaussBlur_Sigma",
+                    "value": "1.000000"
+                },
+                {
+                    "name": "GaussBlur_Disable",
+                    "value": "true"
+                },
+                {
+                    "name": "TemporalAccumulation_Alpha",
+                    "value": "0.010000"
+                },
+                {
+                    "name": "TemporalAccumulation_Enabled",
+                    "value": "true"
+                },
+                {
+                    "name": "ToneMap_ExposureFStops",
+                    "value": "1.000000"
+                },
+                {
+                    "name": "ToneMap_ToneMapper",
+                    "value": "3"
+                }
+            ]
+        },
+        {
+            "name": "Mirror_5",
+            "resourceViewNodeIndex": 35,
+            "resourceViewResourceIndex": 3,
+            "cameraPos": [
+                -558.1189575195313,
+                113.91619873046875,
+                -35.46678161621094
+            ],
+            "cameraAltitudeAzimuth": [
+                -0.2660079300403595,
+                2.213686943054199
+            ],
+            "importedResources": [
+                {
+                    "nodeName": "Scene",
+                    "isATexture": false,
+                    "buffer": {
+                        "fileName": "..\\Assets\\Exterior\\exterior.bin",
+                        "structIndex": 0,
+                        "BLASOpaque": true
+                    }
+                },
+                {
+                    "nodeName": "VertexBuffer",
+                    "isATexture": false,
+                    "buffer": {
+                        "fileName": "..\\Assets\\Exterior\\exterior.bin",
+                        "structIndex": 0,
+                        "BLASOpaque": true
+                    }
+                }
+            ],
+            "savedVariables": [
+                {
+                    "name": "Reset",
+                    "value": "false"
+                },
+                {
+                    "name": "RenderSize",
+                    "value": "1024,768"
+                },
+                {
+                    "name": "MaterialSet",
+                    "value": "2"
+                },
+                {
+                    "name": "Accumulate",
+                    "value": "true"
+                },
+                {
+                    "name": "Animate",
+                    "value": "true"
+                },
+                {
+                    "name": "SamplesPerPixelPerFrame",
+                    "value": "8"
+                },
+                {
+                    "name": "JitterPixels",
+                    "value": "1"
+                },
+                {
+                    "name": "DepthNearPlane",
+                    "value": "0.100000"
+                },
+                {
+                    "name": "RayPosNormalNudge",
+                    "value": "0.100000"
+                },
+                {
+                    "name": "NumBounces",
+                    "value": "15"
+                },
+                {
+                    "name": "AlbedoMode",
+                    "value": "false"
+                },
+                {
+                    "name": "AlbedoModeAlbedoMultiplier",
+                    "value": "0.250000"
+                },
+                {
+                    "name": "FocalLength",
+                    "value": "81.000000"
+                },
+                {
+                    "name": "LensRNGSource",
+                    "value": "14"
+                },
+                {
+                    "name": "LensRNGExtend",
+                    "value": "3"
+                },
+                {
+                    "name": "JitterNoiseTextures",
+                    "value": "false"
+                },
+                {
+                    "name": "DOF",
+                    "value": "1"
+                },
+                {
+                    "name": "ApertureRadius",
+                    "value": "1.000000"
+                },
+                {
+                    "name": "AnamorphicScaling",
+                    "value": "1.000000,1.000000"
+                },
+                {
+                    "name": "PetzvalScaling",
+                    "value": "1.000000,1.000000"
+                },
+                {
+                    "name": "OcclusionSettings",
+                    "value": "1.000000,1.000000,1.000000"
+                },
+                {
+                    "name": "NoImportanceSampling",
+                    "value": "false"
+                },
+                {
+                    "name": "SkyColor",
+                    "value": "1.000000,0.810842,0.598039"
+                },
+                {
+                    "name": "SkyBrightness",
+                    "value": "2.000000"
+                },
+                {
+                    "name": "MaterialEmissiveMultiplier",
+                    "value": "100.000000"
+                },
+                {
+                    "name": "SmallLightBrightness",
+                    "value": "200.000000"
+                },
+                {
+                    "name": "SmallLightsColor",
+                    "value": "1.000000,1.000000,1.000000"
+                },
+                {
+                    "name": "SmallLightsColorful",
+                    "value": "true"
+                },
+                {
+                    "name": "SmallLightRadius",
+                    "value": "1.000000"
+                },
+                {
+                    "name": "GatherDOF_UseNoiseTextures",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_AnimateNoiseTextures",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_SuppressBokeh",
+                    "value": "false"
+                },
+                {
+                    "name": "GatherDOF_FocalDistance",
+                    "value": "500.000000"
+                },
+                {
+                    "name": "GatherDOF_FocalRegion",
+                    "value": "100.000000"
+                },
+                {
+                    "name": "GatherDOF_FocalLength",
+                    "value": "75.000000"
+                },
+                {
+                    "name": "GatherDOF_NearTransitionRegion",
+                    "value": "50.000000"
+                },
+                {
+                    "name": "GatherDOF_FarTransitionRegion",
+                    "value": "200.000000"
+                },
+                {
+                    "name": "GatherDOF_Scale",
+                    "value": "0.500000"
+                },
+                {
+                    "name": "GatherDOF_DoFarField",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_DoFarFieldFloodFill",
+                    "value": "false"
+                },
+                {
+                    "name": "GatherDOF_DoNearField",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_DoNearFieldFloodFill",
+                    "value": "false"
+                },
+                {
+                    "name": "GatherDOF_KernelSize",
+                    "value": "20.000000,1.570000,6.000000,0.000000"
+                },
+                {
+                    "name": "GatherDOF_BlurTapCount",
+                    "value": "4"
+                },
+                {
+                    "name": "GatherDOF_FloodFillTapCount",
+                    "value": "4"
+                },
+                {
+                    "name": "GaussBlur_Sigma",
+                    "value": "1.000000"
+                },
+                {
+                    "name": "GaussBlur_Disable",
+                    "value": "true"
+                },
+                {
+                    "name": "TemporalAccumulation_Alpha",
+                    "value": "0.010000"
+                },
+                {
+                    "name": "TemporalAccumulation_Enabled",
+                    "value": "true"
+                },
+                {
+                    "name": "ToneMap_ExposureFStops",
+                    "value": "1.500000"
+                },
+                {
+                    "name": "ToneMap_ToneMapper",
+                    "value": "3"
+                }
+            ]
+        },
+        {
+            "name": "Flowers_1",
+            "resourceViewNodeIndex": 35,
+            "resourceViewResourceIndex": 3,
+            "cameraPos": [
+                -91.34020233154297,
+                148.56312561035157,
+                357.1207580566406
+            ],
+            "cameraAltitudeAzimuth": [
+                -0.18602025508880616,
+                2.775770425796509
+            ],
+            "importedResources": [
+                {
+                    "nodeName": "Scene",
+                    "isATexture": false,
+                    "buffer": {
+                        "fileName": "..\\Assets\\Exterior\\exterior.bin",
+                        "structIndex": 0,
+                        "BLASOpaque": true
+                    }
+                },
+                {
+                    "nodeName": "VertexBuffer",
+                    "isATexture": false,
+                    "buffer": {
+                        "fileName": "..\\Assets\\Exterior\\exterior.bin",
+                        "structIndex": 0,
+                        "BLASOpaque": true
+                    }
+                }
+            ],
+            "savedVariables": [
+                {
+                    "name": "Reset",
+                    "value": "false"
+                },
+                {
+                    "name": "RenderSize",
+                    "value": "1024,768"
+                },
+                {
+                    "name": "MaterialSet",
+                    "value": "2"
+                },
+                {
+                    "name": "Accumulate",
+                    "value": "true"
+                },
+                {
+                    "name": "Animate",
+                    "value": "true"
+                },
+                {
+                    "name": "SamplesPerPixelPerFrame",
+                    "value": "8"
+                },
+                {
+                    "name": "JitterPixels",
+                    "value": "1"
+                },
+                {
+                    "name": "DepthNearPlane",
+                    "value": "0.100000"
+                },
+                {
+                    "name": "RayPosNormalNudge",
+                    "value": "0.100000"
+                },
+                {
+                    "name": "NumBounces",
+                    "value": "15"
+                },
+                {
+                    "name": "AlbedoMode",
+                    "value": "false"
+                },
+                {
+                    "name": "AlbedoModeAlbedoMultiplier",
+                    "value": "0.250000"
+                },
+                {
+                    "name": "FocalLength",
+                    "value": "52.000000"
+                },
+                {
+                    "name": "LensRNGSource",
+                    "value": "14"
+                },
+                {
+                    "name": "LensRNGExtend",
+                    "value": "3"
+                },
+                {
+                    "name": "JitterNoiseTextures",
+                    "value": "false"
+                },
+                {
+                    "name": "DOF",
+                    "value": "1"
+                },
+                {
+                    "name": "ApertureRadius",
+                    "value": "1.000000"
+                },
+                {
+                    "name": "AnamorphicScaling",
+                    "value": "1.000000,1.000000"
+                },
+                {
+                    "name": "PetzvalScaling",
+                    "value": "1.000000,1.000000"
+                },
+                {
+                    "name": "OcclusionSettings",
+                    "value": "1.000000,1.000000,1.000000"
+                },
+                {
+                    "name": "NoImportanceSampling",
+                    "value": "false"
+                },
+                {
+                    "name": "SkyColor",
+                    "value": "1.000000,0.810842,0.598039"
+                },
+                {
+                    "name": "SkyBrightness",
+                    "value": "2.000000"
+                },
+                {
+                    "name": "MaterialEmissiveMultiplier",
+                    "value": "100.000000"
+                },
+                {
+                    "name": "SmallLightBrightness",
+                    "value": "200.000000"
+                },
+                {
+                    "name": "SmallLightsColor",
+                    "value": "1.000000,1.000000,1.000000"
+                },
+                {
+                    "name": "SmallLightsColorful",
+                    "value": "true"
+                },
+                {
+                    "name": "SmallLightRadius",
+                    "value": "1.000000"
+                },
+                {
+                    "name": "GatherDOF_UseNoiseTextures",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_AnimateNoiseTextures",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_SuppressBokeh",
+                    "value": "false"
+                },
+                {
+                    "name": "GatherDOF_FocalDistance",
+                    "value": "500.000000"
+                },
+                {
+                    "name": "GatherDOF_FocalRegion",
+                    "value": "100.000000"
+                },
+                {
+                    "name": "GatherDOF_FocalLength",
+                    "value": "75.000000"
+                },
+                {
+                    "name": "GatherDOF_NearTransitionRegion",
+                    "value": "50.000000"
+                },
+                {
+                    "name": "GatherDOF_FarTransitionRegion",
+                    "value": "200.000000"
+                },
+                {
+                    "name": "GatherDOF_Scale",
+                    "value": "0.500000"
+                },
+                {
+                    "name": "GatherDOF_DoFarField",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_DoFarFieldFloodFill",
+                    "value": "false"
+                },
+                {
+                    "name": "GatherDOF_DoNearField",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_DoNearFieldFloodFill",
+                    "value": "false"
+                },
+                {
+                    "name": "GatherDOF_KernelSize",
+                    "value": "20.000000,1.570000,6.000000,0.000000"
+                },
+                {
+                    "name": "GatherDOF_BlurTapCount",
+                    "value": "4"
+                },
+                {
+                    "name": "GatherDOF_FloodFillTapCount",
+                    "value": "4"
+                },
+                {
+                    "name": "GaussBlur_Sigma",
+                    "value": "1.000000"
+                },
+                {
+                    "name": "GaussBlur_Disable",
+                    "value": "true"
+                },
+                {
+                    "name": "TemporalAccumulation_Alpha",
+                    "value": "0.010000"
+                },
+                {
+                    "name": "TemporalAccumulation_Enabled",
+                    "value": "true"
+                },
+                {
+                    "name": "ToneMap_ExposureFStops",
+                    "value": "2.000000"
+                },
+                {
+                    "name": "ToneMap_ToneMapper",
+                    "value": "3"
+                }
+            ]
+        },
+        {
+            "name": "Flowers_2",
+            "resourceViewNodeIndex": 35,
+            "resourceViewResourceIndex": 3,
+            "cameraPos": [
+                -32.76557540893555,
+                150.42703247070313,
+                401.1598205566406
+            ],
+            "cameraAltitudeAzimuth": [
+                -0.2724059522151947,
+                2.6818017959594728
+            ],
+            "importedResources": [
+                {
+                    "nodeName": "Scene",
+                    "isATexture": false,
+                    "buffer": {
+                        "fileName": "..\\Assets\\Exterior\\exterior.bin",
+                        "structIndex": 0,
+                        "BLASOpaque": true
+                    }
+                },
+                {
+                    "nodeName": "VertexBuffer",
+                    "isATexture": false,
+                    "buffer": {
+                        "fileName": "..\\Assets\\Exterior\\exterior.bin",
+                        "structIndex": 0,
+                        "BLASOpaque": true
+                    }
+                }
+            ],
+            "savedVariables": [
+                {
+                    "name": "Reset",
+                    "value": "false"
+                },
+                {
+                    "name": "RenderSize",
+                    "value": "1024,768"
+                },
+                {
+                    "name": "MaterialSet",
+                    "value": "2"
+                },
+                {
+                    "name": "Accumulate",
+                    "value": "true"
+                },
+                {
+                    "name": "Animate",
+                    "value": "true"
+                },
+                {
+                    "name": "SamplesPerPixelPerFrame",
+                    "value": "8"
+                },
+                {
+                    "name": "JitterPixels",
+                    "value": "1"
+                },
+                {
+                    "name": "DepthNearPlane",
+                    "value": "0.100000"
+                },
+                {
+                    "name": "RayPosNormalNudge",
+                    "value": "0.100000"
+                },
+                {
+                    "name": "NumBounces",
+                    "value": "15"
+                },
+                {
+                    "name": "AlbedoMode",
+                    "value": "false"
+                },
+                {
+                    "name": "AlbedoModeAlbedoMultiplier",
+                    "value": "0.250000"
+                },
+                {
+                    "name": "FocalLength",
+                    "value": "40.400002"
+                },
+                {
+                    "name": "LensRNGSource",
+                    "value": "14"
+                },
+                {
+                    "name": "LensRNGExtend",
+                    "value": "3"
+                },
+                {
+                    "name": "JitterNoiseTextures",
+                    "value": "false"
+                },
+                {
+                    "name": "DOF",
+                    "value": "1"
+                },
+                {
+                    "name": "ApertureRadius",
+                    "value": "1.000000"
+                },
+                {
+                    "name": "AnamorphicScaling",
+                    "value": "1.000000,1.000000"
+                },
+                {
+                    "name": "PetzvalScaling",
+                    "value": "1.000000,1.000000"
+                },
+                {
+                    "name": "OcclusionSettings",
+                    "value": "1.000000,1.000000,1.000000"
+                },
+                {
+                    "name": "NoImportanceSampling",
+                    "value": "false"
+                },
+                {
+                    "name": "SkyColor",
+                    "value": "1.000000,0.810842,0.598039"
+                },
+                {
+                    "name": "SkyBrightness",
+                    "value": "2.000000"
+                },
+                {
+                    "name": "MaterialEmissiveMultiplier",
+                    "value": "100.000000"
+                },
+                {
+                    "name": "SmallLightBrightness",
+                    "value": "200.000000"
+                },
+                {
+                    "name": "SmallLightsColor",
+                    "value": "1.000000,1.000000,1.000000"
+                },
+                {
+                    "name": "SmallLightsColorful",
+                    "value": "true"
+                },
+                {
+                    "name": "SmallLightRadius",
+                    "value": "1.000000"
+                },
+                {
+                    "name": "GatherDOF_UseNoiseTextures",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_AnimateNoiseTextures",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_SuppressBokeh",
+                    "value": "false"
+                },
+                {
+                    "name": "GatherDOF_FocalDistance",
+                    "value": "500.000000"
+                },
+                {
+                    "name": "GatherDOF_FocalRegion",
+                    "value": "100.000000"
+                },
+                {
+                    "name": "GatherDOF_FocalLength",
+                    "value": "75.000000"
+                },
+                {
+                    "name": "GatherDOF_NearTransitionRegion",
+                    "value": "50.000000"
+                },
+                {
+                    "name": "GatherDOF_FarTransitionRegion",
+                    "value": "200.000000"
+                },
+                {
+                    "name": "GatherDOF_Scale",
+                    "value": "0.500000"
+                },
+                {
+                    "name": "GatherDOF_DoFarField",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_DoFarFieldFloodFill",
+                    "value": "false"
+                },
+                {
+                    "name": "GatherDOF_DoNearField",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_DoNearFieldFloodFill",
+                    "value": "false"
+                },
+                {
+                    "name": "GatherDOF_KernelSize",
+                    "value": "20.000000,1.570000,6.000000,0.000000"
+                },
+                {
+                    "name": "GatherDOF_BlurTapCount",
+                    "value": "4"
+                },
+                {
+                    "name": "GatherDOF_FloodFillTapCount",
+                    "value": "4"
+                },
+                {
+                    "name": "GaussBlur_Sigma",
+                    "value": "1.000000"
+                },
+                {
+                    "name": "GaussBlur_Disable",
+                    "value": "true"
+                },
+                {
+                    "name": "TemporalAccumulation_Alpha",
+                    "value": "0.010000"
+                },
+                {
+                    "name": "TemporalAccumulation_Enabled",
+                    "value": "true"
+                },
+                {
+                    "name": "ToneMap_ExposureFStops",
+                    "value": "2.000000"
+                },
+                {
+                    "name": "ToneMap_ToneMapper",
+                    "value": "3"
+                }
+            ]
+        },
+        {
+            "name": "Bike_1",
+            "resourceViewNodeIndex": 35,
+            "resourceViewResourceIndex": 3,
+            "cameraPos": [
+                -518.6932373046875,
+                115.90502166748047,
+                258.32464599609377
+            ],
+            "cameraAltitudeAzimuth": [
+                -0.015621410682797432,
+                0.061274271458387378
+            ],
+            "importedResources": [
+                {
+                    "nodeName": "Scene",
+                    "isATexture": false,
+                    "buffer": {
+                        "fileName": "..\\Assets\\Exterior\\exterior.bin",
+                        "structIndex": 0,
+                        "BLASOpaque": true
+                    }
+                },
+                {
+                    "nodeName": "VertexBuffer",
+                    "isATexture": false,
+                    "buffer": {
+                        "fileName": "..\\Assets\\Exterior\\exterior.bin",
+                        "structIndex": 0,
+                        "BLASOpaque": true
+                    }
+                }
+            ],
+            "savedVariables": [
+                {
+                    "name": "Reset",
+                    "value": "false"
+                },
+                {
+                    "name": "RenderSize",
+                    "value": "1024,768"
+                },
+                {
+                    "name": "MaterialSet",
+                    "value": "2"
+                },
+                {
+                    "name": "Accumulate",
+                    "value": "true"
+                },
+                {
+                    "name": "Animate",
+                    "value": "true"
+                },
+                {
+                    "name": "SamplesPerPixelPerFrame",
+                    "value": "8"
+                },
+                {
+                    "name": "JitterPixels",
+                    "value": "1"
+                },
+                {
+                    "name": "DepthNearPlane",
+                    "value": "0.100000"
+                },
+                {
+                    "name": "RayPosNormalNudge",
+                    "value": "0.100000"
+                },
+                {
+                    "name": "NumBounces",
+                    "value": "15"
+                },
+                {
+                    "name": "AlbedoMode",
+                    "value": "false"
+                },
+                {
+                    "name": "AlbedoModeAlbedoMultiplier",
+                    "value": "0.250000"
+                },
+                {
+                    "name": "FocalLength",
+                    "value": "247.000000"
+                },
+                {
+                    "name": "LensRNGSource",
+                    "value": "14"
+                },
+                {
+                    "name": "LensRNGExtend",
+                    "value": "3"
+                },
+                {
+                    "name": "JitterNoiseTextures",
+                    "value": "false"
+                },
+                {
+                    "name": "DOF",
+                    "value": "1"
+                },
+                {
+                    "name": "ApertureRadius",
+                    "value": "2.000000"
+                },
+                {
+                    "name": "AnamorphicScaling",
+                    "value": "1.000000,1.000000"
+                },
+                {
+                    "name": "PetzvalScaling",
+                    "value": "1.000000,1.000000"
+                },
+                {
+                    "name": "OcclusionSettings",
+                    "value": "1.000000,1.000000,1.000000"
+                },
+                {
+                    "name": "NoImportanceSampling",
+                    "value": "false"
+                },
+                {
+                    "name": "SkyColor",
+                    "value": "0.995098,0.896392,0.785347"
+                },
+                {
+                    "name": "SkyBrightness",
+                    "value": "0.500000"
+                },
+                {
+                    "name": "MaterialEmissiveMultiplier",
+                    "value": "100.000000"
+                },
+                {
+                    "name": "SmallLightBrightness",
+                    "value": "200.000000"
+                },
+                {
+                    "name": "SmallLightsColor",
+                    "value": "1.000000,1.000000,1.000000"
+                },
+                {
+                    "name": "SmallLightsColorful",
+                    "value": "true"
+                },
+                {
+                    "name": "SmallLightRadius",
+                    "value": "1.000000"
+                },
+                {
+                    "name": "GatherDOF_UseNoiseTextures",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_AnimateNoiseTextures",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_SuppressBokeh",
+                    "value": "false"
+                },
+                {
+                    "name": "GatherDOF_FocalDistance",
+                    "value": "500.000000"
+                },
+                {
+                    "name": "GatherDOF_FocalRegion",
+                    "value": "100.000000"
+                },
+                {
+                    "name": "GatherDOF_FocalLength",
+                    "value": "75.000000"
+                },
+                {
+                    "name": "GatherDOF_NearTransitionRegion",
+                    "value": "50.000000"
+                },
+                {
+                    "name": "GatherDOF_FarTransitionRegion",
+                    "value": "200.000000"
+                },
+                {
+                    "name": "GatherDOF_Scale",
+                    "value": "0.500000"
+                },
+                {
+                    "name": "GatherDOF_DoFarField",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_DoFarFieldFloodFill",
+                    "value": "false"
+                },
+                {
+                    "name": "GatherDOF_DoNearField",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_DoNearFieldFloodFill",
+                    "value": "false"
+                },
+                {
+                    "name": "GatherDOF_KernelSize",
+                    "value": "20.000000,1.570000,6.000000,0.000000"
+                },
+                {
+                    "name": "GatherDOF_BlurTapCount",
+                    "value": "4"
+                },
+                {
+                    "name": "GatherDOF_FloodFillTapCount",
+                    "value": "4"
+                },
+                {
+                    "name": "GaussBlur_Sigma",
+                    "value": "1.000000"
+                },
+                {
+                    "name": "GaussBlur_Disable",
+                    "value": "true"
+                },
+                {
+                    "name": "TemporalAccumulation_Alpha",
+                    "value": "0.010000"
+                },
+                {
+                    "name": "TemporalAccumulation_Enabled",
+                    "value": "true"
+                },
+                {
+                    "name": "ToneMap_ExposureFStops",
+                    "value": "2.000000"
+                },
+                {
+                    "name": "ToneMap_ToneMapper",
+                    "value": "3"
+                }
+            ]
+        },
+        {
+            "name": "Interior_1",
+            "resourceViewNodeIndex": 35,
+            "resourceViewResourceIndex": 3,
+            "cameraPos": [
+                475.5538024902344,
+                129.8760986328125,
+                190.14169311523438
+            ],
+            "cameraAltitudeAzimuth": [
+                -0.23799701035022736,
+                1.7436481714248658
+            ],
+            "importedResources": [
+                {
+                    "nodeName": "Scene",
+                    "isATexture": false,
+                    "buffer": {
+                        "fileName": "..\\Assets\\Interior\\Interior.bin",
+                        "structIndex": 0,
+                        "BLASOpaque": true
+                    }
+                },
+                {
+                    "nodeName": "VertexBuffer",
+                    "isATexture": false,
+                    "buffer": {
+                        "fileName": "..\\Assets\\Interior\\Interior.bin",
+                        "structIndex": 0,
+                        "BLASOpaque": true
+                    }
+                }
+            ],
+            "savedVariables": [
+                {
+                    "name": "Reset",
+                    "value": "false"
+                },
+                {
+                    "name": "RenderSize",
+                    "value": "1024,768"
+                },
+                {
+                    "name": "MaterialSet",
+                    "value": "1"
+                },
+                {
+                    "name": "Accumulate",
+                    "value": "true"
+                },
+                {
+                    "name": "Animate",
+                    "value": "true"
+                },
+                {
+                    "name": "SamplesPerPixelPerFrame",
+                    "value": "8"
+                },
+                {
+                    "name": "JitterPixels",
+                    "value": "1"
+                },
+                {
+                    "name": "DepthNearPlane",
+                    "value": "0.100000"
+                },
+                {
+                    "name": "RayPosNormalNudge",
+                    "value": "0.100000"
+                },
+                {
+                    "name": "NumBounces",
+                    "value": "15"
+                },
+                {
+                    "name": "AlbedoMode",
+                    "value": "false"
+                },
+                {
+                    "name": "AlbedoModeAlbedoMultiplier",
+                    "value": "0.250000"
+                },
+                {
+                    "name": "FocalLength",
+                    "value": "30.600000"
+                },
+                {
+                    "name": "LensRNGSource",
+                    "value": "14"
+                },
+                {
+                    "name": "LensRNGExtend",
+                    "value": "3"
+                },
+                {
+                    "name": "JitterNoiseTextures",
+                    "value": "false"
+                },
+                {
+                    "name": "DOF",
+                    "value": "1"
+                },
+                {
+                    "name": "ApertureRadius",
+                    "value": "0.750000"
+                },
+                {
+                    "name": "AnamorphicScaling",
+                    "value": "1.000000,1.000000"
+                },
+                {
+                    "name": "PetzvalScaling",
+                    "value": "1.000000,1.000000"
+                },
+                {
+                    "name": "OcclusionSettings",
+                    "value": "1.000000,1.000000,1.000000"
+                },
+                {
+                    "name": "NoImportanceSampling",
+                    "value": "false"
+                },
+                {
+                    "name": "SkyColor",
+                    "value": "0.995098,0.896392,0.785347"
+                },
+                {
+                    "name": "SkyBrightness",
+                    "value": "0.500000"
+                },
+                {
+                    "name": "MaterialEmissiveMultiplier",
+                    "value": "100.000000"
+                },
+                {
+                    "name": "SmallLightBrightness",
+                    "value": "200.000000"
+                },
+                {
+                    "name": "SmallLightsColor",
+                    "value": "1.000000,1.000000,1.000000"
+                },
+                {
+                    "name": "SmallLightsColorful",
+                    "value": "true"
+                },
+                {
+                    "name": "SmallLightRadius",
+                    "value": "1.000000"
+                },
+                {
+                    "name": "GatherDOF_UseNoiseTextures",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_AnimateNoiseTextures",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_SuppressBokeh",
+                    "value": "false"
+                },
+                {
+                    "name": "GatherDOF_FocalDistance",
+                    "value": "500.000000"
+                },
+                {
+                    "name": "GatherDOF_FocalRegion",
+                    "value": "100.000000"
+                },
+                {
+                    "name": "GatherDOF_FocalLength",
+                    "value": "75.000000"
+                },
+                {
+                    "name": "GatherDOF_NearTransitionRegion",
+                    "value": "50.000000"
+                },
+                {
+                    "name": "GatherDOF_FarTransitionRegion",
+                    "value": "200.000000"
+                },
+                {
+                    "name": "GatherDOF_Scale",
+                    "value": "0.500000"
+                },
+                {
+                    "name": "GatherDOF_DoFarField",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_DoFarFieldFloodFill",
+                    "value": "false"
+                },
+                {
+                    "name": "GatherDOF_DoNearField",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_DoNearFieldFloodFill",
+                    "value": "false"
+                },
+                {
+                    "name": "GatherDOF_KernelSize",
+                    "value": "20.000000,1.570000,6.000000,0.000000"
+                },
+                {
+                    "name": "GatherDOF_BlurTapCount",
+                    "value": "4"
+                },
+                {
+                    "name": "GatherDOF_FloodFillTapCount",
+                    "value": "4"
+                },
+                {
+                    "name": "GaussBlur_Sigma",
+                    "value": "1.000000"
+                },
+                {
+                    "name": "GaussBlur_Disable",
+                    "value": "true"
+                },
+                {
+                    "name": "TemporalAccumulation_Alpha",
+                    "value": "0.010000"
+                },
+                {
+                    "name": "TemporalAccumulation_Enabled",
+                    "value": "true"
+                },
+                {
+                    "name": "ToneMap_ExposureFStops",
+                    "value": "2.000000"
+                },
+                {
+                    "name": "ToneMap_ToneMapper",
+                    "value": "3"
+                }
+            ]
+        },
+        {
+            "name": "Interior_2",
+            "resourceViewNodeIndex": 35,
+            "resourceViewResourceIndex": 3,
+            "cameraPos": [
+                509.20489501953127,
+                138.4390106201172,
+                245.58834838867188
+            ],
+            "cameraAltitudeAzimuth": [
+                0.02422758750617504,
+                0.08991730958223343
+            ],
+            "importedResources": [
+                {
+                    "nodeName": "Scene",
+                    "isATexture": false,
+                    "buffer": {
+                        "fileName": "..\\Assets\\Interior\\Interior.bin",
+                        "structIndex": 0,
+                        "BLASOpaque": true
+                    }
+                },
+                {
+                    "nodeName": "VertexBuffer",
+                    "isATexture": false,
+                    "buffer": {
+                        "fileName": "..\\Assets\\Interior\\Interior.bin",
+                        "structIndex": 0,
+                        "BLASOpaque": true
+                    }
+                }
+            ],
+            "savedVariables": [
+                {
+                    "name": "Reset",
+                    "value": "false"
+                },
+                {
+                    "name": "RenderSize",
+                    "value": "1024,768"
+                },
+                {
+                    "name": "MaterialSet",
+                    "value": "1"
+                },
+                {
+                    "name": "Accumulate",
+                    "value": "true"
+                },
+                {
+                    "name": "Animate",
+                    "value": "true"
+                },
+                {
+                    "name": "SamplesPerPixelPerFrame",
+                    "value": "8"
+                },
+                {
+                    "name": "JitterPixels",
+                    "value": "1"
+                },
+                {
+                    "name": "DepthNearPlane",
+                    "value": "0.100000"
+                },
+                {
+                    "name": "RayPosNormalNudge",
+                    "value": "0.100000"
+                },
+                {
+                    "name": "NumBounces",
+                    "value": "15"
+                },
+                {
+                    "name": "AlbedoMode",
+                    "value": "false"
+                },
+                {
+                    "name": "AlbedoModeAlbedoMultiplier",
+                    "value": "0.250000"
+                },
+                {
+                    "name": "FocalLength",
+                    "value": "96.500000"
+                },
+                {
+                    "name": "LensRNGSource",
+                    "value": "14"
+                },
+                {
+                    "name": "LensRNGExtend",
+                    "value": "3"
+                },
+                {
+                    "name": "JitterNoiseTextures",
+                    "value": "false"
+                },
+                {
+                    "name": "DOF",
+                    "value": "1"
+                },
+                {
+                    "name": "ApertureRadius",
+                    "value": "0.750000"
+                },
+                {
+                    "name": "AnamorphicScaling",
+                    "value": "1.000000,1.000000"
+                },
+                {
+                    "name": "PetzvalScaling",
+                    "value": "1.000000,1.000000"
+                },
+                {
+                    "name": "OcclusionSettings",
+                    "value": "1.000000,1.000000,1.000000"
+                },
+                {
+                    "name": "NoImportanceSampling",
+                    "value": "false"
+                },
+                {
+                    "name": "SkyColor",
+                    "value": "0.995098,0.896392,0.785347"
+                },
+                {
+                    "name": "SkyBrightness",
+                    "value": "0.500000"
+                },
+                {
+                    "name": "MaterialEmissiveMultiplier",
+                    "value": "100.000000"
+                },
+                {
+                    "name": "SmallLightBrightness",
+                    "value": "200.000000"
+                },
+                {
+                    "name": "SmallLightsColor",
+                    "value": "1.000000,1.000000,1.000000"
+                },
+                {
+                    "name": "SmallLightsColorful",
+                    "value": "true"
+                },
+                {
+                    "name": "SmallLightRadius",
+                    "value": "1.000000"
+                },
+                {
+                    "name": "GatherDOF_UseNoiseTextures",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_AnimateNoiseTextures",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_SuppressBokeh",
+                    "value": "false"
+                },
+                {
+                    "name": "GatherDOF_FocalDistance",
+                    "value": "500.000000"
+                },
+                {
+                    "name": "GatherDOF_FocalRegion",
+                    "value": "100.000000"
+                },
+                {
+                    "name": "GatherDOF_FocalLength",
+                    "value": "75.000000"
+                },
+                {
+                    "name": "GatherDOF_NearTransitionRegion",
+                    "value": "50.000000"
+                },
+                {
+                    "name": "GatherDOF_FarTransitionRegion",
+                    "value": "200.000000"
+                },
+                {
+                    "name": "GatherDOF_Scale",
+                    "value": "0.500000"
+                },
+                {
+                    "name": "GatherDOF_DoFarField",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_DoFarFieldFloodFill",
+                    "value": "false"
+                },
+                {
+                    "name": "GatherDOF_DoNearField",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_DoNearFieldFloodFill",
+                    "value": "false"
+                },
+                {
+                    "name": "GatherDOF_KernelSize",
+                    "value": "20.000000,1.570000,6.000000,0.000000"
+                },
+                {
+                    "name": "GatherDOF_BlurTapCount",
+                    "value": "4"
+                },
+                {
+                    "name": "GatherDOF_FloodFillTapCount",
+                    "value": "4"
+                },
+                {
+                    "name": "GaussBlur_Sigma",
+                    "value": "1.000000"
+                },
+                {
+                    "name": "GaussBlur_Disable",
+                    "value": "true"
+                },
+                {
+                    "name": "TemporalAccumulation_Alpha",
+                    "value": "0.010000"
+                },
+                {
+                    "name": "TemporalAccumulation_Enabled",
+                    "value": "true"
+                },
+                {
+                    "name": "ToneMap_ExposureFStops",
+                    "value": "2.000000"
+                },
+                {
+                    "name": "ToneMap_ToneMapper",
+                    "value": "3"
+                }
+            ]
+        },
+        {
+            "name": "Interior_3",
+            "resourceViewNodeIndex": 35,
+            "resourceViewResourceIndex": 3,
+            "cameraPos": [
+                260.5958251953125,
+                144.8390350341797,
+                -153.6374053955078
+            ],
+            "cameraAltitudeAzimuth": [
+                -0.012989235110580922,
+                1.7988505363464356
+            ],
+            "importedResources": [
+                {
+                    "nodeName": "Scene",
+                    "isATexture": false,
+                    "buffer": {
+                        "fileName": "..\\Assets\\Interior\\Interior.bin",
+                        "structIndex": 0,
+                        "BLASOpaque": true
+                    }
+                },
+                {
+                    "nodeName": "VertexBuffer",
+                    "isATexture": false,
+                    "buffer": {
+                        "fileName": "..\\Assets\\Interior\\Interior.bin",
+                        "structIndex": 0,
+                        "BLASOpaque": true
+                    }
+                }
+            ],
+            "savedVariables": [
+                {
+                    "name": "Reset",
+                    "value": "false"
+                },
+                {
+                    "name": "RenderSize",
+                    "value": "1024,768"
+                },
+                {
+                    "name": "MaterialSet",
+                    "value": "1"
+                },
+                {
+                    "name": "Accumulate",
+                    "value": "true"
+                },
+                {
+                    "name": "Animate",
+                    "value": "true"
+                },
+                {
+                    "name": "SamplesPerPixelPerFrame",
+                    "value": "8"
+                },
+                {
+                    "name": "JitterPixels",
+                    "value": "1"
+                },
+                {
+                    "name": "DepthNearPlane",
+                    "value": "0.100000"
+                },
+                {
+                    "name": "RayPosNormalNudge",
+                    "value": "0.100000"
+                },
+                {
+                    "name": "NumBounces",
+                    "value": "15"
+                },
+                {
+                    "name": "AlbedoMode",
+                    "value": "false"
+                },
+                {
+                    "name": "AlbedoModeAlbedoMultiplier",
+                    "value": "0.250000"
+                },
+                {
+                    "name": "FocalLength",
+                    "value": "227.000000"
+                },
+                {
+                    "name": "LensRNGSource",
+                    "value": "14"
+                },
+                {
+                    "name": "LensRNGExtend",
+                    "value": "3"
+                },
+                {
+                    "name": "JitterNoiseTextures",
+                    "value": "false"
+                },
+                {
+                    "name": "DOF",
+                    "value": "1"
+                },
+                {
+                    "name": "ApertureRadius",
+                    "value": "2.000000"
+                },
+                {
+                    "name": "AnamorphicScaling",
+                    "value": "1.000000,1.000000"
+                },
+                {
+                    "name": "PetzvalScaling",
+                    "value": "1.000000,1.000000"
+                },
+                {
+                    "name": "OcclusionSettings",
+                    "value": "1.000000,1.000000,1.000000"
+                },
+                {
+                    "name": "NoImportanceSampling",
+                    "value": "false"
+                },
+                {
+                    "name": "SkyColor",
+                    "value": "0.995098,0.896392,0.785347"
+                },
+                {
+                    "name": "SkyBrightness",
+                    "value": "0.500000"
+                },
+                {
+                    "name": "MaterialEmissiveMultiplier",
+                    "value": "100.000000"
+                },
+                {
+                    "name": "SmallLightBrightness",
+                    "value": "200.000000"
+                },
+                {
+                    "name": "SmallLightsColor",
+                    "value": "1.000000,1.000000,1.000000"
+                },
+                {
+                    "name": "SmallLightsColorful",
+                    "value": "true"
+                },
+                {
+                    "name": "SmallLightRadius",
+                    "value": "1.000000"
+                },
+                {
+                    "name": "GatherDOF_UseNoiseTextures",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_AnimateNoiseTextures",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_SuppressBokeh",
+                    "value": "false"
+                },
+                {
+                    "name": "GatherDOF_FocalDistance",
+                    "value": "500.000000"
+                },
+                {
+                    "name": "GatherDOF_FocalRegion",
+                    "value": "100.000000"
+                },
+                {
+                    "name": "GatherDOF_FocalLength",
+                    "value": "75.000000"
+                },
+                {
+                    "name": "GatherDOF_NearTransitionRegion",
+                    "value": "50.000000"
+                },
+                {
+                    "name": "GatherDOF_FarTransitionRegion",
+                    "value": "200.000000"
+                },
+                {
+                    "name": "GatherDOF_Scale",
+                    "value": "0.500000"
+                },
+                {
+                    "name": "GatherDOF_DoFarField",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_DoFarFieldFloodFill",
+                    "value": "false"
+                },
+                {
+                    "name": "GatherDOF_DoNearField",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_DoNearFieldFloodFill",
+                    "value": "false"
+                },
+                {
+                    "name": "GatherDOF_KernelSize",
+                    "value": "20.000000,1.570000,6.000000,0.000000"
+                },
+                {
+                    "name": "GatherDOF_BlurTapCount",
+                    "value": "4"
+                },
+                {
+                    "name": "GatherDOF_FloodFillTapCount",
+                    "value": "4"
+                },
+                {
+                    "name": "GaussBlur_Sigma",
+                    "value": "1.000000"
+                },
+                {
+                    "name": "GaussBlur_Disable",
+                    "value": "true"
+                },
+                {
+                    "name": "TemporalAccumulation_Alpha",
+                    "value": "0.010000"
+                },
+                {
+                    "name": "TemporalAccumulation_Enabled",
+                    "value": "true"
+                },
+                {
+                    "name": "ToneMap_ExposureFStops",
+                    "value": "2.000000"
+                },
+                {
+                    "name": "ToneMap_ToneMapper",
+                    "value": "3"
+                }
+            ]
+        },
+        {
+            "name": "Interior_4",
+            "resourceViewNodeIndex": 35,
+            "resourceViewResourceIndex": 3,
+            "cameraPos": [
+                249.45941162109376,
+                144.23915100097657,
+                -170.09259033203126
+            ],
+            "cameraAltitudeAzimuth": [
+                -0.04077710583806038,
+                1.9105361700057984
+            ],
+            "importedResources": [
+                {
+                    "nodeName": "Scene",
+                    "isATexture": false,
+                    "buffer": {
+                        "fileName": "..\\Assets\\Interior\\Interior.bin",
+                        "structIndex": 0,
+                        "BLASOpaque": true
+                    }
+                },
+                {
+                    "nodeName": "VertexBuffer",
+                    "isATexture": false,
+                    "buffer": {
+                        "fileName": "..\\Assets\\Interior\\Interior.bin",
+                        "structIndex": 0,
+                        "BLASOpaque": true
+                    }
+                }
+            ],
+            "savedVariables": [
+                {
+                    "name": "Reset",
+                    "value": "false"
+                },
+                {
+                    "name": "RenderSize",
+                    "value": "1024,768"
+                },
+                {
+                    "name": "MaterialSet",
+                    "value": "1"
+                },
+                {
+                    "name": "Accumulate",
+                    "value": "true"
+                },
+                {
+                    "name": "Animate",
+                    "value": "true"
+                },
+                {
+                    "name": "SamplesPerPixelPerFrame",
+                    "value": "8"
+                },
+                {
+                    "name": "JitterPixels",
+                    "value": "1"
+                },
+                {
+                    "name": "DepthNearPlane",
+                    "value": "0.100000"
+                },
+                {
+                    "name": "RayPosNormalNudge",
+                    "value": "0.100000"
+                },
+                {
+                    "name": "NumBounces",
+                    "value": "15"
+                },
+                {
+                    "name": "AlbedoMode",
+                    "value": "false"
+                },
+                {
+                    "name": "AlbedoModeAlbedoMultiplier",
+                    "value": "0.250000"
+                },
+                {
+                    "name": "FocalLength",
+                    "value": "250.000000"
+                },
+                {
+                    "name": "LensRNGSource",
+                    "value": "14"
+                },
+                {
+                    "name": "LensRNGExtend",
+                    "value": "3"
+                },
+                {
+                    "name": "JitterNoiseTextures",
+                    "value": "false"
+                },
+                {
+                    "name": "DOF",
+                    "value": "1"
+                },
+                {
+                    "name": "ApertureRadius",
+                    "value": "2.000000"
+                },
+                {
+                    "name": "AnamorphicScaling",
+                    "value": "1.000000,1.000000"
+                },
+                {
+                    "name": "PetzvalScaling",
+                    "value": "1.000000,1.000000"
+                },
+                {
+                    "name": "OcclusionSettings",
+                    "value": "1.000000,1.000000,1.000000"
+                },
+                {
+                    "name": "NoImportanceSampling",
+                    "value": "false"
+                },
+                {
+                    "name": "SkyColor",
+                    "value": "0.995098,0.896392,0.785347"
+                },
+                {
+                    "name": "SkyBrightness",
+                    "value": "0.500000"
+                },
+                {
+                    "name": "MaterialEmissiveMultiplier",
+                    "value": "100.000000"
+                },
+                {
+                    "name": "SmallLightBrightness",
+                    "value": "200.000000"
+                },
+                {
+                    "name": "SmallLightsColor",
+                    "value": "1.000000,1.000000,1.000000"
+                },
+                {
+                    "name": "SmallLightsColorful",
+                    "value": "true"
+                },
+                {
+                    "name": "SmallLightRadius",
+                    "value": "1.000000"
+                },
+                {
+                    "name": "GatherDOF_UseNoiseTextures",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_AnimateNoiseTextures",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_SuppressBokeh",
+                    "value": "false"
+                },
+                {
+                    "name": "GatherDOF_FocalDistance",
+                    "value": "500.000000"
+                },
+                {
+                    "name": "GatherDOF_FocalRegion",
+                    "value": "100.000000"
+                },
+                {
+                    "name": "GatherDOF_FocalLength",
+                    "value": "75.000000"
+                },
+                {
+                    "name": "GatherDOF_NearTransitionRegion",
+                    "value": "50.000000"
+                },
+                {
+                    "name": "GatherDOF_FarTransitionRegion",
+                    "value": "200.000000"
+                },
+                {
+                    "name": "GatherDOF_Scale",
+                    "value": "0.500000"
+                },
+                {
+                    "name": "GatherDOF_DoFarField",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_DoFarFieldFloodFill",
+                    "value": "false"
+                },
+                {
+                    "name": "GatherDOF_DoNearField",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_DoNearFieldFloodFill",
+                    "value": "false"
+                },
+                {
+                    "name": "GatherDOF_KernelSize",
+                    "value": "20.000000,1.570000,6.000000,0.000000"
+                },
+                {
+                    "name": "GatherDOF_BlurTapCount",
+                    "value": "4"
+                },
+                {
+                    "name": "GatherDOF_FloodFillTapCount",
+                    "value": "4"
+                },
+                {
+                    "name": "GaussBlur_Sigma",
+                    "value": "1.000000"
+                },
+                {
+                    "name": "GaussBlur_Disable",
+                    "value": "true"
+                },
+                {
+                    "name": "TemporalAccumulation_Alpha",
+                    "value": "0.010000"
+                },
+                {
+                    "name": "TemporalAccumulation_Enabled",
+                    "value": "true"
+                },
+                {
+                    "name": "ToneMap_ExposureFStops",
+                    "value": "2.500000"
+                },
+                {
+                    "name": "ToneMap_ToneMapper",
+                    "value": "3"
+                }
+            ]
+        },
+        {
+            "name": "Interior_5",
+            "resourceViewNodeIndex": 35,
+            "resourceViewResourceIndex": 3,
+            "cameraPos": [
+                247.81793212890626,
+                135.61546325683595,
+                -163.8733367919922
+            ],
+            "cameraAltitudeAzimuth": [
+                -0.06576444953680039,
+                1.8814842700958253
+            ],
+            "importedResources": [
+                {
+                    "nodeName": "Scene",
+                    "isATexture": false,
+                    "buffer": {
+                        "fileName": "..\\Assets\\Interior\\Interior.bin",
+                        "structIndex": 0,
+                        "BLASOpaque": true
+                    }
+                },
+                {
+                    "nodeName": "VertexBuffer",
+                    "isATexture": false,
+                    "buffer": {
+                        "fileName": "..\\Assets\\Interior\\Interior.bin",
+                        "structIndex": 0,
+                        "BLASOpaque": true
+                    }
+                }
+            ],
+            "savedVariables": [
+                {
+                    "name": "Reset",
+                    "value": "false"
+                },
+                {
+                    "name": "RenderSize",
+                    "value": "1024,768"
+                },
+                {
+                    "name": "MaterialSet",
+                    "value": "1"
+                },
+                {
+                    "name": "Accumulate",
+                    "value": "true"
+                },
+                {
+                    "name": "Animate",
+                    "value": "true"
+                },
+                {
+                    "name": "SamplesPerPixelPerFrame",
+                    "value": "8"
+                },
+                {
+                    "name": "JitterPixels",
+                    "value": "1"
+                },
+                {
+                    "name": "DepthNearPlane",
+                    "value": "0.100000"
+                },
+                {
+                    "name": "RayPosNormalNudge",
+                    "value": "0.100000"
+                },
+                {
+                    "name": "NumBounces",
+                    "value": "15"
+                },
+                {
+                    "name": "AlbedoMode",
+                    "value": "false"
+                },
+                {
+                    "name": "AlbedoModeAlbedoMultiplier",
+                    "value": "0.250000"
+                },
+                {
+                    "name": "FocalLength",
+                    "value": "244.000000"
+                },
+                {
+                    "name": "LensRNGSource",
+                    "value": "14"
+                },
+                {
+                    "name": "LensRNGExtend",
+                    "value": "3"
+                },
+                {
+                    "name": "JitterNoiseTextures",
+                    "value": "false"
+                },
+                {
+                    "name": "DOF",
+                    "value": "1"
+                },
+                {
+                    "name": "ApertureRadius",
+                    "value": "2.000000"
+                },
+                {
+                    "name": "AnamorphicScaling",
+                    "value": "1.000000,1.000000"
+                },
+                {
+                    "name": "PetzvalScaling",
+                    "value": "1.000000,1.000000"
+                },
+                {
+                    "name": "OcclusionSettings",
+                    "value": "1.000000,1.000000,1.000000"
+                },
+                {
+                    "name": "NoImportanceSampling",
+                    "value": "false"
+                },
+                {
+                    "name": "SkyColor",
+                    "value": "0.995098,0.896392,0.785347"
+                },
+                {
+                    "name": "SkyBrightness",
+                    "value": "0.500000"
+                },
+                {
+                    "name": "MaterialEmissiveMultiplier",
+                    "value": "100.000000"
+                },
+                {
+                    "name": "SmallLightBrightness",
+                    "value": "200.000000"
+                },
+                {
+                    "name": "SmallLightsColor",
+                    "value": "1.000000,1.000000,1.000000"
+                },
+                {
+                    "name": "SmallLightsColorful",
+                    "value": "true"
+                },
+                {
+                    "name": "SmallLightRadius",
+                    "value": "1.000000"
+                },
+                {
+                    "name": "GatherDOF_UseNoiseTextures",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_AnimateNoiseTextures",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_SuppressBokeh",
+                    "value": "false"
+                },
+                {
+                    "name": "GatherDOF_FocalDistance",
+                    "value": "500.000000"
+                },
+                {
+                    "name": "GatherDOF_FocalRegion",
+                    "value": "100.000000"
+                },
+                {
+                    "name": "GatherDOF_FocalLength",
+                    "value": "75.000000"
+                },
+                {
+                    "name": "GatherDOF_NearTransitionRegion",
+                    "value": "50.000000"
+                },
+                {
+                    "name": "GatherDOF_FarTransitionRegion",
+                    "value": "200.000000"
+                },
+                {
+                    "name": "GatherDOF_Scale",
+                    "value": "0.500000"
+                },
+                {
+                    "name": "GatherDOF_DoFarField",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_DoFarFieldFloodFill",
+                    "value": "false"
+                },
+                {
+                    "name": "GatherDOF_DoNearField",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_DoNearFieldFloodFill",
+                    "value": "false"
+                },
+                {
+                    "name": "GatherDOF_KernelSize",
+                    "value": "20.000000,1.570000,6.000000,0.000000"
+                },
+                {
+                    "name": "GatherDOF_BlurTapCount",
+                    "value": "4"
+                },
+                {
+                    "name": "GatherDOF_FloodFillTapCount",
+                    "value": "4"
+                },
+                {
+                    "name": "GaussBlur_Sigma",
+                    "value": "1.000000"
+                },
+                {
+                    "name": "GaussBlur_Disable",
+                    "value": "true"
+                },
+                {
+                    "name": "TemporalAccumulation_Alpha",
+                    "value": "0.010000"
+                },
+                {
+                    "name": "TemporalAccumulation_Enabled",
+                    "value": "true"
+                },
+                {
+                    "name": "ToneMap_ExposureFStops",
+                    "value": "2.500000"
+                },
+                {
+                    "name": "ToneMap_ToneMapper",
+                    "value": "3"
+                }
+            ]
+        },
+        {
+            "name": "Interior_6",
+            "resourceViewNodeIndex": 35,
+            "resourceViewResourceIndex": 3,
+            "cameraPos": [
+                262.1739501953125,
+                160.88912963867188,
+                -186.2200164794922
+            ],
+            "cameraAltitudeAzimuth": [
+                0.1093563660979271,
+                1.962462306022644
+            ],
+            "importedResources": [
+                {
+                    "nodeName": "Scene",
+                    "isATexture": false,
+                    "buffer": {
+                        "fileName": "..\\Assets\\Interior\\Interior.bin",
+                        "structIndex": 0,
+                        "BLASOpaque": true
+                    }
+                },
+                {
+                    "nodeName": "VertexBuffer",
+                    "isATexture": false,
+                    "buffer": {
+                        "fileName": "..\\Assets\\Interior\\Interior.bin",
+                        "structIndex": 0,
+                        "BLASOpaque": true
+                    }
+                }
+            ],
+            "savedVariables": [
+                {
+                    "name": "Reset",
+                    "value": "false"
+                },
+                {
+                    "name": "RenderSize",
+                    "value": "1024,768"
+                },
+                {
+                    "name": "MaterialSet",
+                    "value": "1"
+                },
+                {
+                    "name": "Accumulate",
+                    "value": "true"
+                },
+                {
+                    "name": "Animate",
+                    "value": "true"
+                },
+                {
+                    "name": "SamplesPerPixelPerFrame",
+                    "value": "8"
+                },
+                {
+                    "name": "JitterPixels",
+                    "value": "1"
+                },
+                {
+                    "name": "DepthNearPlane",
+                    "value": "0.100000"
+                },
+                {
+                    "name": "RayPosNormalNudge",
+                    "value": "0.100000"
+                },
+                {
+                    "name": "NumBounces",
+                    "value": "15"
+                },
+                {
+                    "name": "AlbedoMode",
+                    "value": "false"
+                },
+                {
+                    "name": "AlbedoModeAlbedoMultiplier",
+                    "value": "0.250000"
+                },
+                {
+                    "name": "FocalLength",
+                    "value": "231.000000"
+                },
+                {
+                    "name": "LensRNGSource",
+                    "value": "14"
+                },
+                {
+                    "name": "LensRNGExtend",
+                    "value": "3"
+                },
+                {
+                    "name": "JitterNoiseTextures",
+                    "value": "false"
+                },
+                {
+                    "name": "DOF",
+                    "value": "1"
+                },
+                {
+                    "name": "ApertureRadius",
+                    "value": "2.000000"
+                },
+                {
+                    "name": "AnamorphicScaling",
+                    "value": "1.000000,1.000000"
+                },
+                {
+                    "name": "PetzvalScaling",
+                    "value": "1.000000,1.000000"
+                },
+                {
+                    "name": "OcclusionSettings",
+                    "value": "1.000000,1.000000,1.000000"
+                },
+                {
+                    "name": "NoImportanceSampling",
+                    "value": "false"
+                },
+                {
+                    "name": "SkyColor",
+                    "value": "0.995098,0.896392,0.785347"
+                },
+                {
+                    "name": "SkyBrightness",
+                    "value": "0.500000"
+                },
+                {
+                    "name": "MaterialEmissiveMultiplier",
+                    "value": "100.000000"
+                },
+                {
+                    "name": "SmallLightBrightness",
+                    "value": "200.000000"
+                },
+                {
+                    "name": "SmallLightsColor",
+                    "value": "1.000000,1.000000,1.000000"
+                },
+                {
+                    "name": "SmallLightsColorful",
+                    "value": "true"
+                },
+                {
+                    "name": "SmallLightRadius",
+                    "value": "1.000000"
+                },
+                {
+                    "name": "GatherDOF_UseNoiseTextures",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_AnimateNoiseTextures",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_SuppressBokeh",
+                    "value": "false"
+                },
+                {
+                    "name": "GatherDOF_FocalDistance",
+                    "value": "500.000000"
+                },
+                {
+                    "name": "GatherDOF_FocalRegion",
+                    "value": "100.000000"
+                },
+                {
+                    "name": "GatherDOF_FocalLength",
+                    "value": "75.000000"
+                },
+                {
+                    "name": "GatherDOF_NearTransitionRegion",
+                    "value": "50.000000"
+                },
+                {
+                    "name": "GatherDOF_FarTransitionRegion",
+                    "value": "200.000000"
+                },
+                {
+                    "name": "GatherDOF_Scale",
+                    "value": "0.500000"
+                },
+                {
+                    "name": "GatherDOF_DoFarField",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_DoFarFieldFloodFill",
+                    "value": "false"
+                },
+                {
+                    "name": "GatherDOF_DoNearField",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_DoNearFieldFloodFill",
+                    "value": "false"
+                },
+                {
+                    "name": "GatherDOF_KernelSize",
+                    "value": "20.000000,1.570000,6.000000,0.000000"
+                },
+                {
+                    "name": "GatherDOF_BlurTapCount",
+                    "value": "4"
+                },
+                {
+                    "name": "GatherDOF_FloodFillTapCount",
+                    "value": "4"
+                },
+                {
+                    "name": "GaussBlur_Sigma",
+                    "value": "1.000000"
+                },
+                {
+                    "name": "GaussBlur_Disable",
+                    "value": "true"
+                },
+                {
+                    "name": "TemporalAccumulation_Alpha",
+                    "value": "0.010000"
+                },
+                {
+                    "name": "TemporalAccumulation_Enabled",
+                    "value": "true"
+                },
+                {
+                    "name": "ToneMap_ExposureFStops",
+                    "value": "3.000000"
+                },
+                {
+                    "name": "ToneMap_ToneMapper",
+                    "value": "3"
+                }
+            ]
+        },
+        {
+            "name": "Interior_7",
+            "resourceViewNodeIndex": 35,
+            "resourceViewResourceIndex": 3,
+            "cameraPos": [
+                262.0777282714844,
+                158.84796142578126,
+                -190.4768829345703
+            ],
+            "cameraAltitudeAzimuth": [
+                0.09938934445381165,
+                1.990634560585022
+            ],
+            "importedResources": [
+                {
+                    "nodeName": "Scene",
+                    "isATexture": false,
+                    "buffer": {
+                        "fileName": "..\\Assets\\Interior\\Interior.bin",
+                        "structIndex": 0,
+                        "BLASOpaque": true
+                    }
+                },
+                {
+                    "nodeName": "VertexBuffer",
+                    "isATexture": false,
+                    "buffer": {
+                        "fileName": "..\\Assets\\Interior\\Interior.bin",
+                        "structIndex": 0,
+                        "BLASOpaque": true
+                    }
+                }
+            ],
+            "savedVariables": [
+                {
+                    "name": "Reset",
+                    "value": "false"
+                },
+                {
+                    "name": "RenderSize",
+                    "value": "1024,768"
+                },
+                {
+                    "name": "MaterialSet",
+                    "value": "1"
+                },
+                {
+                    "name": "Accumulate",
+                    "value": "true"
+                },
+                {
+                    "name": "Animate",
+                    "value": "true"
+                },
+                {
+                    "name": "SamplesPerPixelPerFrame",
+                    "value": "8"
+                },
+                {
+                    "name": "JitterPixels",
+                    "value": "1"
+                },
+                {
+                    "name": "DepthNearPlane",
+                    "value": "0.100000"
+                },
+                {
+                    "name": "RayPosNormalNudge",
+                    "value": "0.100000"
+                },
+                {
+                    "name": "NumBounces",
+                    "value": "15"
+                },
+                {
+                    "name": "AlbedoMode",
+                    "value": "false"
+                },
+                {
+                    "name": "AlbedoModeAlbedoMultiplier",
+                    "value": "0.250000"
+                },
+                {
+                    "name": "FocalLength",
+                    "value": "230.000000"
+                },
+                {
+                    "name": "LensRNGSource",
+                    "value": "14"
+                },
+                {
+                    "name": "LensRNGExtend",
+                    "value": "3"
+                },
+                {
+                    "name": "JitterNoiseTextures",
+                    "value": "false"
+                },
+                {
+                    "name": "DOF",
+                    "value": "1"
+                },
+                {
+                    "name": "ApertureRadius",
+                    "value": "1.250000"
+                },
+                {
+                    "name": "AnamorphicScaling",
+                    "value": "1.000000,1.000000"
+                },
+                {
+                    "name": "PetzvalScaling",
+                    "value": "1.000000,1.000000"
+                },
+                {
+                    "name": "OcclusionSettings",
+                    "value": "1.000000,1.000000,1.000000"
+                },
+                {
+                    "name": "NoImportanceSampling",
+                    "value": "false"
+                },
+                {
+                    "name": "SkyColor",
+                    "value": "0.995098,0.896392,0.785347"
+                },
+                {
+                    "name": "SkyBrightness",
+                    "value": "0.500000"
+                },
+                {
+                    "name": "MaterialEmissiveMultiplier",
+                    "value": "100.000000"
+                },
+                {
+                    "name": "SmallLightBrightness",
+                    "value": "200.000000"
+                },
+                {
+                    "name": "SmallLightsColor",
+                    "value": "1.000000,1.000000,1.000000"
+                },
+                {
+                    "name": "SmallLightsColorful",
+                    "value": "true"
+                },
+                {
+                    "name": "SmallLightRadius",
+                    "value": "1.000000"
+                },
+                {
+                    "name": "GatherDOF_UseNoiseTextures",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_AnimateNoiseTextures",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_SuppressBokeh",
+                    "value": "false"
+                },
+                {
+                    "name": "GatherDOF_FocalDistance",
+                    "value": "500.000000"
+                },
+                {
+                    "name": "GatherDOF_FocalRegion",
+                    "value": "100.000000"
+                },
+                {
+                    "name": "GatherDOF_FocalLength",
+                    "value": "75.000000"
+                },
+                {
+                    "name": "GatherDOF_NearTransitionRegion",
+                    "value": "50.000000"
+                },
+                {
+                    "name": "GatherDOF_FarTransitionRegion",
+                    "value": "200.000000"
+                },
+                {
+                    "name": "GatherDOF_Scale",
+                    "value": "0.500000"
+                },
+                {
+                    "name": "GatherDOF_DoFarField",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_DoFarFieldFloodFill",
+                    "value": "false"
+                },
+                {
+                    "name": "GatherDOF_DoNearField",
+                    "value": "true"
+                },
+                {
+                    "name": "GatherDOF_DoNearFieldFloodFill",
+                    "value": "false"
+                },
+                {
+                    "name": "GatherDOF_KernelSize",
+                    "value": "20.000000,1.570000,6.000000,0.000000"
+                },
+                {
+                    "name": "GatherDOF_BlurTapCount",
+                    "value": "4"
+                },
+                {
+                    "name": "GatherDOF_FloodFillTapCount",
+                    "value": "4"
+                },
+                {
+                    "name": "GaussBlur_Sigma",
+                    "value": "1.000000"
+                },
+                {
+                    "name": "GaussBlur_Disable",
+                    "value": "true"
+                },
+                {
+                    "name": "TemporalAccumulation_Alpha",
+                    "value": "0.010000"
+                },
+                {
+                    "name": "TemporalAccumulation_Enabled",
+                    "value": "true"
+                },
+                {
+                    "name": "ToneMap_ExposureFStops",
+                    "value": "3.000000"
+                },
+                {
+                    "name": "ToneMap_ToneMapper",
+                    "value": "3"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,1189 @@
+{
+    "$schema": "gigischema.json",
+    "name": "FastBokeh",
+    "version": "0.99b",
+    "variables": [
+        {
+            "name": "Reset",
+            "type": "Bool",
+            "visibility": "User",
+            "UISettings": {
+                "UIHint": "Button"
+            }
+        },
+        {
+            "name": "RenderSize",
+            "type": "Uint2",
+            "dflt": "512, 512",
+            "visibility": "User"
+        },
+        {
+            "name": "MaterialSet",
+            "type": "Int",
+            "dflt": "None",
+            "visibility": "User",
+            "Enum": "MaterialSets"
+        },
+        {
+            "name": "Accumulate",
+            "type": "Bool",
+            "dflt": "true",
+            "visibility": "User"
+        },
+        {
+            "name": "Animate",
+            "type": "Bool",
+            "dflt": "true",
+            "visibility": "User"
+        },
+        {
+            "name": "SamplesPerPixelPerFrame",
+            "type": "Uint",
+            "dflt": "1",
+            "visibility": "User"
+        },
+        {
+            "name": "JitterPixels",
+            "comment": "Provides Antialiasing",
+            "type": "Int",
+            "dflt": "PerPixel",
+            "visibility": "User",
+            "Enum": "PixelJitterType"
+        },
+        {
+            "name": "DepthNearPlane",
+            "type": "Float",
+            "dflt": "0.1",
+            "visibility": "Host"
+        },
+        {
+            "name": "CameraPos",
+            "type": "Float3",
+            "visibility": "Host"
+        },
+        {
+            "name": "RayPosNormalNudge",
+            "type": "Float",
+            "dflt": "0.1f",
+            "visibility": "Host"
+        },
+        {
+            "name": "CameraChanged",
+            "type": "Bool",
+            "visibility": "Host"
+        },
+        {
+            "name": "InvViewProjMtx",
+            "type": "Float4x4",
+            "visibility": "Host"
+        },
+        {
+            "name": "MouseState",
+            "type": "Float4",
+            "visibility": "Host"
+        },
+        {
+            "name": "FrameIndex",
+            "type": "Uint",
+            "transient": true
+        },
+        {
+            "name": "NumBounces",
+            "comment": "How many bounces the rays are allowed",
+            "type": "Uint",
+            "dflt": "4",
+            "visibility": "User"
+        },
+        {
+            "name": "AlbedoMode",
+            "comment": "if true, returns albedo * AlbedoModeAlbedoMultiplier + emissive at primary hit",
+            "type": "Bool",
+            "dflt": "1.0f",
+            "visibility": "User"
+        },
+        {
+            "name": "AlbedoModeAlbedoMultiplier",
+            "comment": "How much to multiply albedo by in albedo mode, to darken it or lighten it",
+            "type": "Float",
+            "dflt": "0.5f",
+            "visibility": "User"
+        },
+        {
+            "name": "FocalLength",
+            "type": "Float",
+            "dflt": "1.0f",
+            "visibility": "User"
+        },
+        {
+            "name": "LensRNGSource",
+            "type": "Int",
+            "dflt": "UniformCircleWhite",
+            "visibility": "User",
+            "Enum": "LensRNG"
+        },
+        {
+            "name": "LensRNGExtend",
+            "comment": "How to extend the noise textures",
+            "type": "Int",
+            "dflt": "None",
+            "visibility": "User",
+            "Enum": "NoiseTexExtends"
+        },
+        {
+            "name": "JitterNoiseTextures",
+            "comment": "The noise textures are 8 bit unorms. This adds a random value between -0.5/255 and +0.5/255 to fill in the unset bits with white noise.",
+            "type": "Bool",
+            "dflt": "false",
+            "visibility": "User"
+        },
+        {
+            "name": "DOF",
+            "type": "Int",
+            "dflt": "Off",
+            "visibility": "User",
+            "Enum": "DOFMode"
+        },
+        {
+            "name": "InvViewMtx",
+            "type": "Float4x4",
+            "visibility": "Host"
+        },
+        {
+            "name": "ApertureRadius",
+            "type": "Float",
+            "dflt": "1.0f",
+            "visibility": "User"
+        },
+        {
+            "name": "AnamorphicScaling",
+            "comment": "Defaults to 1.0, 1.0 for no anamorphic effects. Elongates the aperture, does not simulate anamorphic elements.",
+            "type": "Float2",
+            "dflt": "1.0f, 1.0f",
+            "visibility": "User"
+        },
+        {
+            "name": "PetzvalScaling",
+            "comment": "Scales bokeh on each axis depending on screen position. Fakes the effect. Defaults to 1.0, 1.0 for no elongation.",
+            "type": "Float2",
+            "dflt": "1.0f, 1.0f",
+            "visibility": "User"
+        },
+        {
+            "name": "OcclusionSettings",
+            "comment": "Pushes the bounding square of the lens outwards and clips against a unit circle. 1,1,1 means no occlusion. x is how far from the center of the screen to start moving the square. 0 is center, 1 is the corner.  y is how much to scale the lens bounding square by.  z is how far to move the square, as the pixel is farther from where the occlusion begins. Reasonable settings are 0, 0.1, 1.25.",
+            "type": "Float3",
+            "dflt": "1.0f, 1.0f, 1.0f",
+            "visibility": "User"
+        },
+        {
+            "name": "NoImportanceSampling",
+            "comment": "If true, the FAST noise textures will not be used, and ",
+            "type": "Bool",
+            "dflt": "false",
+            "visibility": "User"
+        },
+        {
+            "name": "SkyColor",
+            "type": "Float3",
+            "dflt": "1.0f, 1.0f, 1.0f",
+            "visibility": "User",
+            "UISettings": {
+                "UIHint": "Color"
+            }
+        },
+        {
+            "name": "SkyBrightness",
+            "type": "Float",
+            "dflt": "10.0f",
+            "visibility": "User"
+        },
+        {
+            "name": "MaterialEmissiveMultiplier",
+            "type": "Float",
+            "dflt": "1.0f",
+            "visibility": "User"
+        },
+        {
+            "name": "SmallLightBrightness",
+            "type": "Float",
+            "dflt": "1.0f",
+            "visibility": "User",
+            "UIGroup": "SmallLights"
+        },
+        {
+            "name": "SmallLightsColor",
+            "type": "Float3",
+            "dflt": "1.0f, 1.0f, 1.0f",
+            "visibility": "User",
+            "UISettings": {
+                "UIHint": "Color"
+            },
+            "UIGroup": "SmallLights"
+        },
+        {
+            "name": "SmallLightsColorful",
+            "comment": "If true, makes the small lights colorful, else makes them all the same color",
+            "type": "Bool",
+            "visibility": "User",
+            "UIGroup": "SmallLights"
+        },
+        {
+            "name": "SmallLightRadius",
+            "type": "Float",
+            "dflt": "1.0f",
+            "visibility": "User",
+            "UIGroup": "SmallLights"
+        }
+    ],
+    "shaders": [
+        {
+            "name": "RayGen",
+            "fileName": "RT_exterior.hlsl",
+            "type": "RTRayGen",
+            "entryPoint": "RayGen",
+            "resources": [
+                {
+                    "name": "Output",
+                    "type": "Texture",
+                    "access": "UAV",
+                    "buffer": {
+                        "PODAsStructuredBuffer": false
+                    }
+                },
+                {
+                    "name": "LinearDepth",
+                    "type": "Texture",
+                    "access": "UAV",
+                    "texture": {
+                        "viewType": "Float"
+                    }
+                },
+                {
+                    "name": "Scene",
+                    "type": "Buffer",
+                    "access": "RTScene",
+                    "buffer": {
+                        "PODAsStructuredBuffer": false
+                    }
+                },
+                {
+                    "name": "VertexBuffer",
+                    "type": "Buffer",
+                    "access": "SRV",
+                    "buffer": {
+                        "typeStruct": {
+                            "name": "VBStruct"
+                        },
+                        "PODAsStructuredBuffer": false
+                    }
+                },
+                {
+                    "name": "PixelDebug",
+                    "type": "Buffer",
+                    "access": "UAV",
+                    "buffer": {
+                        "typeStruct": {
+                            "name": "PixelDebugStruct"
+                        },
+                        "PODAsStructuredBuffer": false
+                    }
+                }
+            ],
+            "samplers": [
+                {
+                    "name": "PointWrapSampler",
+                    "filter": "MinMagMipPoint"
+                },
+                {
+                    "name": "PointClampSampler",
+                    "filter": "MinMagMipPoint",
+                    "addressMode": "Clamp"
+                }
+            ]
+        },
+        {
+            "name": "Miss",
+            "fileName": "RT_exterior.hlsl",
+            "type": "RTMiss",
+            "entryPoint": "Miss",
+            "copyFile": false
+        },
+        {
+            "name": "ClosestHit",
+            "fileName": "RT_exterior.hlsl",
+            "type": "RTClosestHit",
+            "entryPoint": "ClosestHit",
+            "copyFile": false
+        }
+    ],
+    "structs": [
+        {
+            "name": "VBStruct",
+            "forceHostVisible": true,
+            "fields": [
+                {
+                    "name": "position",
+                    "type": "Float3",
+                    "semantic": "Position"
+                },
+                {
+                    "name": "normal",
+                    "type": "Float3",
+                    "semantic": "Normal"
+                },
+                {
+                    "name": "tangent",
+                    "type": "Float4",
+                    "semantic": "Tangent"
+                },
+                {
+                    "name": "UV",
+                    "type": "Float2",
+                    "semantic": "UV"
+                },
+                {
+                    "name": "materialID",
+                    "type": "Uint",
+                    "semantic": "MaterialID"
+                }
+            ]
+        },
+        {
+            "name": "PixelDebugStruct",
+            "fields": [
+                {
+                    "name": "MousePos",
+                    "type": "Float2"
+                },
+                {
+                    "name": "MaterialID",
+                    "type": "Uint"
+                },
+                {
+                    "name": "HitT",
+                    "type": "Float"
+                },
+                {
+                    "name": "WorldPos",
+                    "type": "Float3"
+                },
+                {
+                    "name": "centerDepth",
+                    "type": "Float"
+                },
+                {
+                    "name": "centerSize",
+                    "type": "Float"
+                },
+                {
+                    "name": "tot",
+                    "type": "Float"
+                }
+            ]
+        }
+    ],
+    "fileCopies": [
+        {
+            "fileName": "PCG.hlsli",
+            "type": "Shader"
+        },
+        {
+            "fileName": "IndexToColor.hlsli",
+            "type": "Shader"
+        },
+        {
+            "fileName": "LDSShuffler.hlsli",
+            "type": "Shader"
+        },
+        {
+            "fileName": "Assets\\Exterior\\exterior.bin",
+            "type": "Asset",
+            "binary": true
+        },
+        {
+            "fileName": "Assets\\Exterior\\exterior.mtl",
+            "type": "Asset",
+            "binary": true
+        },
+        {
+            "fileName": "Assets\\Exterior\\exterior.obj",
+            "type": "Asset",
+            "binary": true
+        },
+        {
+            "fileName": "Assets\\Interior\\countcsv.py",
+            "type": "Asset",
+            "binary": true
+        },
+        {
+            "fileName": "Assets\\Interior\\Interior.bin",
+            "type": "Asset",
+            "binary": true
+        },
+        {
+            "fileName": "Assets\\Interior\\interior.mtl",
+            "type": "Asset",
+            "binary": true
+        },
+        {
+            "fileName": "Assets\\Interior\\interior.obj",
+            "type": "Asset",
+            "binary": true
+        },
+        {
+            "fileName": "Assets\\readme.txt",
+            "type": "Asset",
+            "binary": true
+        }
+    ],
+    "nodes": [
+        {
+            "actionRayShader": {
+                "name": "Raytrace",
+                "editorPos": [
+                    -299.0,
+                    -718.0
+                ],
+                "linkProperties": [
+                    {},
+                    {},
+                    {},
+                    {},
+                    {}
+                ],
+                "connections": [
+                    {
+                        "srcPin": "Output",
+                        "dstNode": "ColorHDR",
+                        "dstPin": "resource"
+                    },
+                    {
+                        "srcPin": "Scene",
+                        "dstNode": "Scene",
+                        "dstPin": "resource"
+                    },
+                    {
+                        "srcPin": "VertexBuffer",
+                        "dstNode": "VertexBuffer",
+                        "dstPin": "resource"
+                    },
+                    {
+                        "srcPin": "LinearDepth",
+                        "dstNode": "LinearDepth",
+                        "dstPin": "resource"
+                    },
+                    {
+                        "srcPin": "PixelDebug",
+                        "dstNode": "PixelDebug",
+                        "dstPin": "resource"
+                    }
+                ],
+                "shader": {
+                    "name": "RayGen"
+                },
+                "dispatchSize": {
+                    "node": {
+                        "name": "ColorHDR"
+                    }
+                }
+            }
+        },
+        {
+            "resourceTexture": {
+                "name": "ColorHDR",
+                "editorPos": [
+                    -469.0,
+                    -766.0
+                ],
+                "transient": false,
+                "format": {
+                    "format": "RGBA32_Float"
+                },
+                "size": {
+                    "variable": {
+                        "name": "RenderSize"
+                    }
+                }
+            }
+        },
+        {
+            "resourceBuffer": {
+                "name": "PixelDebug",
+                "editorPos": [
+                    -469.0,
+                    -574.0
+                ],
+                "format": {
+                    "structureType": {
+                        "name": "PixelDebugStruct"
+                    }
+                }
+            }
+        },
+        {
+            "resourceTexture": {
+                "name": "LinearDepth",
+                "editorPos": [
+                    -469.0,
+                    -718.0
+                ],
+                "transient": false,
+                "format": {
+                    "format": "R32_Float"
+                },
+                "size": {
+                    "variable": {
+                        "name": "RenderSize"
+                    }
+                }
+            }
+        },
+        {
+            "actionSubGraph": {
+                "name": "GatherDOF",
+                "editorPos": [
+                    -121.0,
+                    -718.0
+                ],
+                "linkProperties": [
+                    {},
+                    {},
+                    {}
+                ],
+                "connections": [
+                    {
+                        "srcPin": "Color",
+                        "dstNode": "Raytrace",
+                        "dstPin": "Output"
+                    },
+                    {
+                        "srcPin": "LinearDepth",
+                        "dstNode": "Raytrace",
+                        "dstPin": "LinearDepth"
+                    },
+                    {
+                        "srcPin": "Output"
+                    }
+                ],
+                "fileName": "GatherDOF2018\\dof.gg",
+                "subGraphData": {
+                    "importedResources": [
+                        "Color",
+                        "LinearDepth"
+                    ],
+                    "exportedResources": [
+                        "Output"
+                    ],
+                    "variables": [
+                        {
+                            "name": "UseNoiseTextures",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "AnimateNoiseTextures",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "LensRNGSource",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "LensRNGExtend",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "JitterNoiseTextures",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "SuppressBokeh",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "FocalDistance",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "FocalRegion",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "FocalLength",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "NearTransitionRegion",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "FarTransitionRegion",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "Scale",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "DoFarField",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "DoFarFieldFloodFill",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "DoNearField",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "DoNearFieldFloodFill",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "KernelSize",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "BlurTapCount",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "FloodFillTapCount",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "sRGB",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "FrameIndex"
+                        }
+                    ]
+                },
+                "variableSettings": [
+                    {
+                        "name": "UseNoiseTextures",
+                        "visibility": "User"
+                    },
+                    {
+                        "name": "AnimateNoiseTextures",
+                        "visibility": "User"
+                    },
+                    {
+                        "name": "LensRNGSource",
+                        "visibility": "User",
+                        "replaceWithStr": "LensRNGSource"
+                    },
+                    {
+                        "name": "LensRNGExtend",
+                        "visibility": "User",
+                        "replaceWithStr": "LensRNGExtend"
+                    },
+                    {
+                        "name": "JitterNoiseTextures",
+                        "visibility": "User",
+                        "replaceWithStr": "JitterNoiseTextures"
+                    },
+                    {
+                        "name": "SuppressBokeh",
+                        "visibility": "User"
+                    },
+                    {
+                        "name": "FocalDistance",
+                        "visibility": "User"
+                    },
+                    {
+                        "name": "FocalRegion",
+                        "visibility": "User"
+                    },
+                    {
+                        "name": "FocalLength",
+                        "visibility": "User"
+                    },
+                    {
+                        "name": "NearTransitionRegion",
+                        "visibility": "User"
+                    },
+                    {
+                        "name": "FarTransitionRegion",
+                        "visibility": "User"
+                    },
+                    {
+                        "name": "Scale",
+                        "visibility": "User"
+                    },
+                    {
+                        "name": "DoFarField",
+                        "visibility": "User"
+                    },
+                    {
+                        "name": "DoFarFieldFloodFill",
+                        "visibility": "User"
+                    },
+                    {
+                        "name": "DoNearField",
+                        "visibility": "User"
+                    },
+                    {
+                        "name": "DoNearFieldFloodFill",
+                        "visibility": "User"
+                    },
+                    {
+                        "name": "KernelSize",
+                        "visibility": "User"
+                    },
+                    {
+                        "name": "BlurTapCount",
+                        "visibility": "User"
+                    },
+                    {
+                        "name": "FloodFillTapCount",
+                        "visibility": "User"
+                    },
+                    {
+                        "name": "sRGB",
+                        "visibility": "User",
+                        "replaceWithValue": "false"
+                    },
+                    {
+                        "name": "FrameIndex"
+                    }
+                ]
+            }
+        },
+        {
+            "actionCopyResource": {
+                "name": "CopyHDR",
+                "editorPos": [
+                    21.0,
+                    -705.0
+                ],
+                "condition": {
+                    "variable1": "DOF",
+                    "comparison": "NotEquals",
+                    "value2": "PostProcessing"
+                },
+                "linkProperties": [
+                    {},
+                    {}
+                ],
+                "source": {
+                    "node": "GatherDOF",
+                    "pin": "Color"
+                },
+                "dest": {
+                    "node": "GatherDOF",
+                    "pin": "Output"
+                }
+            }
+        },
+        {
+            "resourceBuffer": {
+                "name": "Scene",
+                "editorPos": [
+                    -469.0,
+                    -670.0
+                ],
+                "visibility": "Imported"
+            }
+        },
+        {
+            "resourceBuffer": {
+                "name": "VertexBuffer",
+                "editorPos": [
+                    -473.0,
+                    -622.0
+                ],
+                "visibility": "Imported"
+            }
+        },
+        {
+            "actionSubGraph": {
+                "name": "GaussBlur",
+                "editorPos": [
+                    150.0,
+                    -705.0
+                ],
+                "linkProperties": [
+                    {},
+                    {}
+                ],
+                "connections": [
+                    {
+                        "srcPin": "Input",
+                        "dstNode": "CopyHDR",
+                        "dstPin": "dest"
+                    },
+                    {
+                        "srcPin": "Output"
+                    }
+                ],
+                "fileName": "GaussBlur\\GaussBlur.gg",
+                "subGraphData": {
+                    "importedResources": [
+                        "Input"
+                    ],
+                    "exportedResources": [
+                        "Output"
+                    ],
+                    "variables": [
+                        {
+                            "name": "Sigma",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "Support",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "sRGB",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "Disable",
+                            "visibility": "User"
+                        }
+                    ]
+                },
+                "variableSettings": [
+                    {
+                        "name": "Sigma",
+                        "visibility": "User"
+                    },
+                    {
+                        "name": "Support",
+                        "visibility": "User",
+                        "replaceWithValue": "0.995f"
+                    },
+                    {
+                        "name": "sRGB",
+                        "visibility": "User",
+                        "replaceWithValue": "false"
+                    },
+                    {
+                        "name": "Disable",
+                        "visibility": "User"
+                    }
+                ]
+            }
+        },
+        {
+            "actionSubGraph": {
+                "name": "ToneMap",
+                "editorPos": [
+                    453.0,
+                    -702.0
+                ],
+                "linkProperties": [
+                    {},
+                    {}
+                ],
+                "connections": [
+                    {
+                        "srcPin": "Color HDR",
+                        "dstNode": "TemporalAccumulation",
+                        "dstPin": "Accum"
+                    },
+                    {
+                        "srcPin": "Color SDR"
+                    }
+                ],
+                "fileName": "Tonemap\\Tonemap.gg",
+                "subGraphData": {
+                    "importedResources": [
+                        "Color HDR"
+                    ],
+                    "exportedResources": [
+                        "Color SDR"
+                    ],
+                    "variables": [
+                        {
+                            "name": "ExposureFStops",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "ToneMapper",
+                            "visibility": "User"
+                        }
+                    ]
+                },
+                "variableSettings": [
+                    {
+                        "name": "ExposureFStops",
+                        "visibility": "User"
+                    },
+                    {
+                        "name": "ToneMapper",
+                        "visibility": "User"
+                    }
+                ]
+            }
+        },
+        {
+            "actionSubGraph": {
+                "name": "TemporalAccumulation",
+                "editorPos": [
+                    261.0,
+                    -702.0
+                ],
+                "linkProperties": [
+                    {},
+                    {}
+                ],
+                "connections": [
+                    {
+                        "srcPin": "Input",
+                        "dstNode": "GaussBlur",
+                        "dstPin": "Output"
+                    },
+                    {
+                        "srcPin": "Accum"
+                    }
+                ],
+                "fileName": "TemporalAccumulation\\TemporalAccumulation.gg",
+                "subGraphData": {
+                    "importedResources": [
+                        "Input"
+                    ],
+                    "exportedResources": [
+                        "Accum"
+                    ],
+                    "variables": [
+                        {
+                            "name": "Alpha",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "Enabled",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "Reset",
+                            "visibility": "User"
+                        }
+                    ]
+                },
+                "variableSettings": [
+                    {
+                        "name": "Alpha",
+                        "visibility": "User"
+                    },
+                    {
+                        "name": "Enabled",
+                        "visibility": "User"
+                    },
+                    {
+                        "name": "Reset",
+                        "visibility": "User",
+                        "replaceWithStr": "CameraChanged"
+                    }
+                ]
+            }
+        }
+    ],
+    "enums": [
+        {
+            "name": "LensRNG",
+            "items": [
+                {
+                    "label": "UniformCircleWhite_PCG"
+                },
+                {
+                    "label": "UniformCircleWhite"
+                },
+                {
+                    "label": "UniformCircleBlue"
+                },
+                {
+                    "label": "UniformHexagonWhite"
+                },
+                {
+                    "label": "UniformHexagonBlue"
+                },
+                {
+                    "label": "UniformHexagonICDF_White"
+                },
+                {
+                    "label": "UniformHexagonICDF_Blue"
+                },
+                {
+                    "label": "UniformStarWhite"
+                },
+                {
+                    "label": "UniformStarBlue"
+                },
+                {
+                    "label": "UniformStarICDF_White"
+                },
+                {
+                    "label": "UniformStarICDF_Blue"
+                },
+                {
+                    "label": "NonUniformStarWhite"
+                },
+                {
+                    "label": "NonUniformStarBlue"
+                },
+                {
+                    "label": "NonUniformStar2White"
+                },
+                {
+                    "label": "NonUniformStar2Blue"
+                },
+                {
+                    "label": "LKCP6White"
+                },
+                {
+                    "label": "LKCP6Blue"
+                },
+                {
+                    "label": "LKCP204White"
+                },
+                {
+                    "label": "LKCP204Blue"
+                },
+                {
+                    "label": "LKCP204ICDF_White"
+                },
+                {
+                    "label": "LKCP204ICDF_Blue"
+                }
+            ]
+        },
+        {
+            "name": "DOFMode",
+            "items": [
+                {
+                    "label": "Off"
+                },
+                {
+                    "label": "PathTraced"
+                },
+                {
+                    "label": "PostProcessing"
+                }
+            ]
+        },
+        {
+            "name": "PixelJitterType",
+            "items": [
+                {
+                    "label": "None"
+                },
+                {
+                    "label": "PerPixel"
+                },
+                {
+                    "label": "Global"
+                }
+            ]
+        },
+        {
+            "name": "MaterialSets",
+            "items": [
+                {
+                    "label": "None"
+                },
+                {
+                    "label": "Interior"
+                },
+                {
+                    "label": "Exterior"
+                }
+            ]
+        },
+        {
+            "name": "NoiseTexExtends",
+            "items": [
+                {
+                    "label": "None"
+                },
+                {
+                    "label": "White"
+                },
+                {
+                    "label": "Shuffle1D"
+                },
+                {
+                    "label": "Shuffle1DHilbert"
+                }
+            ]
+        }
+    ],
+    "setVars": [
+        {
+            "destination": {
+                "name": "FrameIndex"
+            },
+            "ALiteral": "0",
+            "op": "Noop",
+            "condition": {
+                "variable1": "CameraChanged",
+                "comparison": "IsTrue"
+            }
+        },
+        {
+            "destination": {
+                "name": "FrameIndex"
+            },
+            "ALiteral": "0",
+            "op": "Noop",
+            "condition": {
+                "variable1": "Reset",
+                "comparison": "IsTrue"
+            }
+        },
+        {
+            "destination": {
+                "name": "FrameIndex"
+            },
+            "ALiteral": "0",
+            "op": "Noop",
+            "condition": {
+                "variable1": "Animate",
+                "comparison": "IsFalse"
+            }
+        },
+        {
+            "destination": {
+                "name": "FrameIndex"
+            },
+            "AVar": {
+                "name": "FrameIndex"
+            },
+            "BLiteral": "1"
+        },
+        {
+            "destination": {
+                "name": "NumBounces"
+            },
+            "AVar": {
+                "name": "NumBounces"
+            },
+            "op": "Maximum",
+            "BLiteral": "2"
+        }
+    ],
+    "hitGroups": [
+        {
+            "name": "HitGroupPathTrace",
+            "closestHit": {
+                "name": "ClosestHit"
+            }
+        }
+    ],
+    "settings": {
+        "dx12": {
+            "numSRVDescriptors": 4096
+        }
+    },
+    "buildSettings": {
+        "outDX12": "../DX12/"
+    },
+    "customTokens": [
+        {
+            "key": "CopyrightHeader",
+            "value": "///////////////////////////////////////////////////////////////////////////////\n//     Filter-Adapted Spatio-Temporal Sampling With General Distributions    //\n//        Copyright (c) 2025 Electronic Arts Inc. All rights reserved.       //\n///////////////////////////////////////////////////////////////////////////////\n\n"
+        }
+    ]
+}
