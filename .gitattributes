@@ -3,3 +3,4 @@ Demo/DX12/assets/Assets/Exterior/exterior.bin filter=lfs diff=lfs merge=lfs -tex
 Demo/DX12/assets/Assets/Interior/interior.obj filter=lfs diff=lfs merge=lfs -text
 Demo/DX12/assets/Assets/Interior/interior.bin filter=lfs diff=lfs merge=lfs -text
 Demo/Gigi/Assets/Exterior/exterior.obj filter=lfs diff=lfs merge=lfs -text
+Demo/Gigi/Assets/Exterior/exterior.bin filter=lfs diff=lfs merge=lfs -text
