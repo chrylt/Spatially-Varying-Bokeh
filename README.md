@@ -1,6 +1,6 @@
 # Filter-Adapted Spatio-Temporal Sampling With General Distributions
 
-This repo is to go with the paper at **TODO: link**.
+This repo goes with the paper [Importance-Sampled Filter-Adapted Spatio-Temporal Sampling](https://jcgt.org/published/0014/01/08/).
 
 ![image](teaser.png)
 
