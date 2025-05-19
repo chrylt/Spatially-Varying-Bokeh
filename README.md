@@ -11,6 +11,14 @@ texture using that distribution is used to sample the lens in a thin lens path t
 
 This image, and the other images in the paper, were rendered using the demo in this repo.
 
+## Other Resources
+
+YouTube Video
+
+[Slide Deck](https://docs.google.com/presentation/d/1OX9A-lipIfnBn84uRfpsBXXivdK4n1Nt/edit?usp=sharing&ouid=103654468992788649377&rtpof=true&sd=true)
+
+[Published Paper](https://jcgt.org/published/0014/01/08/)
+
 ## Running the Demo
 
 There are two ways to run the demo.
