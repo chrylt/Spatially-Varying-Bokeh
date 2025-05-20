@@ -1,0 +1,11 @@
+{
+    "Title":"Importance Sampled Filter Adapted Spatiotemporal Sampling",
+    "Description":"The demo used to gather data and make diagrams for the paper",
+    "Author":"Wolfe, Donnelly, Halén",
+    "Tags":"lighting,noise,monte carlo,research",
+    "Technique": "main.gg",
+    "Website": "https://github.com/electronicarts/importance-sampled-FAST-noise",
+    "Screenshot":"teaser.png",
+    "License":"LICENSE.txt",
+    "GigiVersion":"0.99b",
+}
