@@ -13,7 +13,7 @@ This image, and the other images in the paper, were rendered using the demo in t
 
 ## Other Resources
 
-YouTube Video
+[25 Minute YouTube Video](https://www.youtube.com/watch?v=aFSkDFcxVVc)
 
 [Slide Deck](https://docs.google.com/presentation/d/1OX9A-lipIfnBn84uRfpsBXXivdK4n1Nt/edit?usp=sharing&ouid=103654468992788649377&rtpof=true&sd=true)
 
