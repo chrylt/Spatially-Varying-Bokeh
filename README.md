@@ -126,6 +126,12 @@ The techniques described allow you to use general distributions while using the 
 
 We showcased depth of field and bokeh as a usage case for this work, but are looking forward to people using the general idea in other situations as well.
 
+Another example made after the paper was published is use in area lights, with results shown below.  The demo for this is available in the [Gigi](https://github.com/electronicarts/gigi/) browser, and is named "Blue Noise Area Lights".
+
+![image](AreaLights1.png)
+
+![image](AreaLights2.png)
+
 ## Authors
 
 <p align="center"><a href="https://seed.ea.com"><img src="SEED.jpg" width="150px"></a><br>
