@@ -13,6 +13,8 @@ This image, and the other images in the paper, were rendered using the demo in t
 
 ## Other Resources
 
+[WebGPU Area Light Sampling Comparative Demo](https://electronicarts.github.io/gigi/Demos/BlueNoiseAreaLights/index.html)
+
 [25 Minute YouTube Video](https://www.youtube.com/watch?v=aFSkDFcxVVc)
 
 [Slide Deck](https://docs.google.com/presentation/d/1OX9A-lipIfnBn84uRfpsBXXivdK4n1Nt/edit?usp=sharing&ouid=103654468992788649377&rtpof=true&sd=true)
@@ -127,6 +129,8 @@ The techniques described allow you to use general distributions while using the 
 We showcased depth of field and bokeh as a usage case for this work, but are looking forward to people using the general idea in other situations as well.
 
 Another example made after the paper was published is use in area lights, with results shown below.  The demo for this is available in the [Gigi](https://github.com/electronicarts/gigi/) browser, and is named "Blue Noise Area Lights".
+
+There is also a WebGPU version at https://electronicarts.github.io/gigi/Demos/BlueNoiseAreaLights/index.html.
 
 ![image](AreaLights1.png)
 
