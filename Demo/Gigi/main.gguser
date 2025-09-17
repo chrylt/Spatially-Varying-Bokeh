@@ -102,15 +102,15 @@
             },
             {
                 "name": "FocalLength",
-                "value": "30.600000"
+                "value": "30.000000"
             },
             {
                 "name": "LensRNGSource",
-                "value": "14"
+                "value": "0"
             },
             {
                 "name": "LensRNGExtend",
-                "value": "3"
+                "value": "0"
             },
             {
                 "name": "JitterNoiseTextures",
@@ -118,7 +118,7 @@
             },
             {
                 "name": "DOF",
-                "value": "1"
+                "value": "3"
             },
             {
                 "name": "ApertureRadius",

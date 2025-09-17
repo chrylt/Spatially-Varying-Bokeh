@@ -1,7 +1,7 @@
 {
     "$schema": "gigischema.json",
     "name": "FastBokeh",
-    "version": "0.99b",
+    "version": "1.0",
     "variables": [
         {
             "name": "Reset",
@@ -244,32 +244,32 @@
             "resources": [
                 {
                     "name": "Output",
-                    "type": "Texture",
                     "access": "UAV",
+                    "type": "Texture",
                     "buffer": {
                         "PODAsStructuredBuffer": false
                     }
                 },
                 {
                     "name": "LinearDepth",
-                    "type": "Texture",
                     "access": "UAV",
+                    "type": "Texture",
                     "texture": {
                         "viewType": "Float"
                     }
                 },
                 {
                     "name": "Scene",
-                    "type": "Buffer",
                     "access": "RTScene",
+                    "type": "Buffer",
                     "buffer": {
                         "PODAsStructuredBuffer": false
                     }
                 },
                 {
                     "name": "VertexBuffer",
-                    "type": "Buffer",
                     "access": "SRV",
+                    "type": "Buffer",
                     "buffer": {
                         "typeStruct": {
                             "name": "VBStruct"
@@ -279,8 +279,8 @@
                 },
                 {
                     "name": "PixelDebug",
-                    "type": "Buffer",
                     "access": "UAV",
+                    "type": "Buffer",
                     "buffer": {
                         "typeStruct": {
                             "name": "PixelDebugStruct"
@@ -458,6 +458,11 @@
                         "dstPin": "resource"
                     },
                     {
+                        "srcPin": "LinearDepth",
+                        "dstNode": "LinearDepth",
+                        "dstPin": "resource"
+                    },
+                    {
                         "srcPin": "Scene",
                         "dstNode": "Scene",
                         "dstPin": "resource"
@@ -465,11 +470,6 @@
                     {
                         "srcPin": "VertexBuffer",
                         "dstNode": "VertexBuffer",
-                        "dstPin": "resource"
-                    },
-                    {
-                        "srcPin": "LinearDepth",
-                        "dstNode": "LinearDepth",
                         "dstPin": "resource"
                     },
                     {
@@ -1061,6 +1061,9 @@
                 },
                 {
                     "label": "PostProcessing"
+                },
+                {
+                    "label": "Realistic"
                 }
             ]
         },

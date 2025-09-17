@@ -1022,11 +1022,186 @@ float2 SampleICDF(float2 rng, in Texture2D<float> MarginalCDF)
     return uv * 2.0f - 1.0f;
 }
 
+/************************************************************************************
+Spatially Varying Lens Simulation
+*************************************************************************************/
+
+struct Ray
+{
+	float3 Origin;
+	float3 Direction;
+};
+
+static float4 fishEyeLens[] = {
+	// Muller 16mm/f4 155.9FOV fisheye lens			
+	// MLD p164			
+	// Scaled to 10 mm from 100 mm			
+	// radius	sep	n	aperture
+	float4(30.2249f, 0.8335f, 1.620f, 30.34f),
+	float4(11.3931f, 7.4136f, 1.0f, 20.68f),
+	float4(75.2019f, 1.0654f, 1.639f, 17.80f),
+	float4(8.3349f, 11.1549f, 1.0f, 13.42f),
+	float4(9.5882f, 2.0054f, 1.654f, 9.02f),
+	float4(43.8677f, 5.3895f, 1.0f, 8.14f),
+	float4(	0.0f, 1.4163f, 0.0f, 6.08f),
+	float4(29.4541f, 2.1934f, 1.517f, 5.96f),
+	float4(-5.2265f, 0.9714f, 1.805f, 5.84f),
+	float4(-14.2884f, 0.0627f, 1.0f, 5.96f),
+	float4(-22.3726f, 0.9400f, 1.673f, 5.96f),
+	float4(-15.0404f, 25.0f,  1.0f, 6.52),
+	float4(0.0f, 0.0f, 0.0f, 0.0f),
+	float4(0.0f, 0.0f, 0.0f, 0.0f),
+	float4(0.0f, 0.0f, 0.0f, 0.0f),
+	float4(0.0f, 0.0f, 0.0f, 0.0f),
+};
+
+
+// Ray-sphere intersection for a sphere at the origin
+// Returns true if intersection exists and writes the two t values to "intersections" (t0 <= t1)
+bool sphereRayIntersect(out float2 intersections, in float3 rayOrigin, in float3 rayDir, in float radius)
+{
+	intersections = float2(0.0f, 0.0f);
+
+	float a = dot(rayDir, rayDir);
+	// avoid divide by zero for degenerate rays
+	if (a <= 1e-12f)
+		return false;
+
+	float b = dot(rayOrigin, rayDir);
+	float c = dot(rayOrigin, rayOrigin) - radius * radius;
+
+	float discr = b * b - a * c;
+	if (discr < 0.0f)
+		return false;
+
+	float sqrtD = sqrt(discr);
+	float t0 = (-b - sqrtD) / a;
+	float t1 = (-b + sqrtD) / a;
+
+	if (t0 > t1)
+	{
+		float tmp = t0; t0 = t1; t1 = tmp;
+	}
+
+	intersections = float2(t0, t1);
+	return true;
+}
+
+bool intersect(float radius, float center, Ray ray, out float t, out float3 normal)
+{
+	t = 0.0f;
+	normal = float3(0, 0, 0);
+	
+	float2 intersections;
+	if (!sphereRayIntersect(intersections, ray.Origin - float3(0, 0, center), ray.Direction, radius))
+		return false;
+	
+	bool useCloserT = (ray.Direction.z > 0) ^ (radius < 0);
+	t = useCloserT ? min(intersections.y, intersections.x) : max(intersections.y, intersections.x);
+	
+	normal = normalize(ray.Origin + t * ray.Direction - float3(0, 0, center));
+
+	// If using the second intersection, we need to flip the normal	
+	normal *= useCloserT ? 1.0f : -1.0f;
+
+	return true;
+}
+
+bool traceLensesFromFilm(Ray ray, int elementCount, float4 lensElements[16], out Ray outRay)
+{
+	float z = 0.0f; // Start at the film, z = 0
+	
+	for (int i = elementCount - 1; i >= 0; i--)
+	{
+		const float curvatureRadius = lensElements[i].x;
+		const float thickness = lensElements[i].y;
+		const float etaI = lensElements[i].z;
+		const float etaT = i > 0 ? lensElements[i - 1].z : 1.0f;
+		const float apatureRadius = lensElements[i].w;
+		
+		z -= thickness;
+		float t = 0;
+		float3 normal = float3(0, 0, 0);
+		
+		bool isStop = (curvatureRadius == 0.0f);
+		if (isStop)
+		{
+			if (ray.Direction.z >= 0.0f)
+				return false;
+			t = (z - ray.Origin.z) / ray.Direction.z;
+		}
+		else
+		{
+			float center = z + curvatureRadius;
+			if (!intersect(curvatureRadius, center, ray, t, normal))
+			{
+				return false;
+			}
+		}
+		
+		float3 hit = ray.Origin + t * ray.Direction;
+		
+		float r2 = hit.x * hit.x + hit.y * hit.y;
+
+		if (r2 > (apatureRadius * apatureRadius))
+			return false;
+		
+		ray.Origin = hit;
+		
+		if (!isStop)
+		{
+			float3 refractDir = refract(ray.Direction, normal, etaI / (etaT > 0.0f ? etaT : 1.0f));
+			if (all(refractDir == 0.0f))
+				return false;
+			ray.Direction = normalize(refractDir);
+		}
+	} 
+	
+	outRay = ray;
+
+	return true;
+}
+
+// returns PDF
+float ApplyRealisticLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 px, inout uint RNG, in uint2 screenDims)
+{
+	float3 cameraRight = mul(float4(1.0f, 0.0f, 0.0f, 0.0f), /*$(Variable:InvViewMtx)*/).xyz;
+	float3 cameraUp = mul(float4(0.0f, 1.0f, 0.0f, 0.0f), /*$(Variable:InvViewMtx)*/).xyz;
+	float3 cameraForward = mul(float4(0.0f, 0.0f, 1.0f, 0.0f), /*$(Variable:InvViewMtx)*/).xyz;
+	
+	// Convert ray origin and direction into camera-local space for lens tracing.
+	float3 originCameraSpace = rayPos - /*$(Variable:CameraPos)*/;
+	Ray filmRay;
+	filmRay.Origin = float3(dot(originCameraSpace, cameraRight), dot(originCameraSpace, cameraUp), dot(originCameraSpace, cameraForward));
+	filmRay.Origin.z = 0.0f; // Film plane at z = 0
+	filmRay.Direction = float3(dot(rayDir, cameraRight), dot(rayDir, cameraUp), dot(rayDir, cameraForward));
+	
+	// Trace through lens elements (using hard coded lens data for now)
+	Ray refracted;
+	if (traceLensesFromFilm(filmRay, 12, fishEyeLens, refracted))
+	{
+		// Transform the refracted ray back to world space
+		rayPos = /*$(Variable:CameraPos)*/ + 
+				 refracted.Origin.x * cameraRight + 
+				 refracted.Origin.y * cameraUp + 
+				 refracted.Origin.z * cameraForward;
+		rayDir = normalize(
+				 refracted.Direction.x * cameraRight + 
+				 refracted.Direction.y * cameraUp + 
+				 refracted.Direction.z * cameraForward);
+		return 1.0f;
+	}
+	
+	return 0.0f;
+}
+
+/************************************************************************************
+End of Spatially Varying Lens Simulation
+*************************************************************************************/
+
 // returns PDF
 float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 px, inout uint RNG, in uint2 screenDims)
 {
-	if (/*$(Variable:DOF)*/ != DOFMode::PathTraced)
-		return 1.0f;
 
 	float3 cameraRight = mul(float4(1.0f, 0.0f, 0.0f, 0.0f), /*$(Variable:InvViewMtx)*/).xyz;
 	float3 cameraUp = mul(float4(0.0f, 1.0f, 0.0f, 0.0f), /*$(Variable:InvViewMtx)*/).xyz;
@@ -1366,7 +1541,11 @@ float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 
 		// Apply depth of field through lens simulation
 		float3 rayPos = /*$(Variable:CameraPos)*/;
 		float3 rayDir = normalize(world.xyz - /*$(Variable:CameraPos)*/);
-		float PDF = ApplyDOFLensSimulation(rayPos, rayDir, px, RNG, DispatchRaysDimensions().xy);
+		float PDF = 1.0f;
+		if (/*$(Variable:DOF)*/ == DOFMode::Realistic)
+			PDF = ApplyRealisticLensSimulation(rayPos, rayDir, px, RNG, DispatchRaysDimensions().xy);
+		if (/*$(Variable:DOF)*/ == DOFMode::PathTraced)
+			PDF = ApplyDOFLensSimulation(rayPos, rayDir, px, RNG, DispatchRaysDimensions().xy);
 
 		// Shoot the ray
 		float3 rayColor = (PDF > 0.0f) ? GetColorForRay(rayPos, rayDir, RNG, pixelDebug, rayIndex, px.xy) / PDF : float3(0.0f, 0.0f, 0.0f);
