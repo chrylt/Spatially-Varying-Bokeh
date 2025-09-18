@@ -1048,7 +1048,58 @@ static float4 fishEyeLens[] = {
 	float4(-5.2265f, 0.9714f, 1.805f, 5.84f),
 	float4(-14.2884f, 0.0627f, 1.0f, 5.96f),
 	float4(-22.3726f, 0.9400f, 1.673f, 5.96f),
-	float4(-15.0404f, 25.0f,  1.0f, 6.52),
+	float4(-15.0404f, 25.0f,  1.0f, 6.52), // 12
+	float4(0.0f, 0.0f, 0.0f, 0.0f),
+	float4(0.0f, 0.0f, 0.0f, 0.0f),
+	float4(0.0f, 0.0f, 0.0f, 0.0f),
+	float4(0.0f, 0.0f, 0.0f, 0.0f),
+};
+
+static float wideAngleLens[] = {
+	// Wide-angle (38-degree) lens. Nakamura.			
+	// MLD, p. 360"			
+	// Scaled to 22 mm from 100 mm			
+	// radius   sep	      n       aperture
+	float4( 35.98738f, 1.21638f, 1.540f, 23.716f),
+	float4( 11.69718f, 9.99570f, 1.000f, 17.996f),
+	float4( 13.08714f, 5.12622f, 1.772f, 12.364f),
+	float4(-22.63294f, 1.76924f, 1.617f, 9.8120f),
+	float4( 71.05802f, 0.81840f, 1.000f, 9.1520f), 
+	float4( 0.000000f, 2.27766f, 0.000f, 8.7560f),
+	float4(-9.585840f, 2.43254f, 1.617f, 8.1840f),
+	float4(-11.28864f, 0.11506f, 1.000f, 9.1520f),
+	float4(-166.7765f, 3.09606f, 1.713f, 10.648f),
+	float4(-7.591100f,	1.32682f, 1.805f, 11.440f),
+	float4(-16.76620f, 3.98068f, 1.000f, 12.276f),
+	float4(-7.702860f, 1.21638f, 1.617f, 13.420f),
+	float4(-11.97328f, 5.00000f, 1.000f, 17.996f), //13
+	float4(0.0f, 0.0f, 0.0f, 0.0f),
+	float4(0.0f, 0.0f, 0.0f, 0.0f),
+	float4(0.0f, 0.0f, 0.0f, 0.0f),
+};
+
+static float helios_focal_length = 58.0f; // mm
+static float helios_scale = helios_focal_length / 100.0f; // helios unit scaling from patent
+static float helios_aperture = 14.5f; // mm (f/2 probably)
+static float helios_lens_length = 93.04f * helios_scale; // sum of sep in mm
+static float helios_d_to_film = helios_focal_length - helios_lens_length / 2; // mm
+
+static float4 helios[] = {
+	// Helios 44-2 58mm/f2 lens
+	// scaled from 100 units to 58mm
+	// 				radius								sep								n			aperture		
+	float4(	/*r1*/	83.6f    * helios_scale, 	/*d1*/ 	10.75f * helios_scale, 	/*n1*/	1.64238f, 	helios_aperture),
+	float4(	/*r2*/	321.0f   * helios_scale, 	/*l1*/	1.65f  * helios_scale, 	/*air*/	1.0f, 		helios_aperture),
+	float4(	/*r3*/	44.8f    * helios_scale, 	/*d2*/	15.55f * helios_scale, 	/*n2*/	1.62306f, 	helios_aperture),
+	float4( /*r4*/	-1150.0f * helios_scale, 	/*d3*/	5.05   * helios_scale, 	/*n3*/	1.57566f, 	helios_aperture),
+	float4( /*r5*/	28.3f    * helios_scale, 	/*l2*/	18.9   * helios_scale, 	/*air*/ 1.0f, 		helios_aperture),
+	float4( /*r6*/  -38.5f   * helios_scale, 	/*d4*/	5.05f  * helios_scale, 	/*n4*/	1.67270f, 	helios_aperture),
+	float4( /*r7*/	50.5f    * helios_scale, 	/*d5*/	21.22f * helios_scale, 	/*n5*/	1.64238f, 	helios_aperture),
+	float4( /*r8*/	-53.2f   * helios_scale, 	/*l3*/	0.97f  * helios_scale, 	/*air*/	1.0f, 		helios_aperture),
+	float4( /*r9*/	106.0f   * helios_scale, 	/*d6*/	13.9f  * helios_scale, 	/*n6*/	1.64238f, 	helios_aperture),
+	float4( /*r10*/	-120.0f  * helios_scale, 	/*f*/	helios_d_to_film, 		/*air*/	1.0, 		helios_aperture), //10
+	float4(0.0f, 0.0f, 0.0f, 0.0f),
+	float4(0.0f, 0.0f, 0.0f, 0.0f),
 	float4(0.0f, 0.0f, 0.0f, 0.0f),
 	float4(0.0f, 0.0f, 0.0f, 0.0f),
 	float4(0.0f, 0.0f, 0.0f, 0.0f),
@@ -1178,7 +1229,7 @@ float ApplyRealisticLensSimulation(inout float3 rayPos, inout float3 rayDir, in 
 	
 	// Trace through lens elements (using hard coded lens data for now)
 	Ray refracted;
-	if (traceLensesFromFilm(filmRay, 12, fishEyeLens, refracted))
+	if (traceLensesFromFilm(filmRay, 10, helios, refracted))
 	{
 		// Transform the refracted ray back to world space
 		rayPos = /*$(Variable:CameraPos)*/ + 
