@@ -1080,7 +1080,7 @@ static float wideAngleLens[] = {
 
 static float helios_focal_length = 58.0f; // mm
 static float helios_scale = helios_focal_length / 100.0f; // helios unit scaling from patent
-static float helios_aperture = 14.5f; // mm (f/2 probably)
+static float helios_aperture = 29.0f; // mm (f/2 probably)
 static float helios_lens_length = 93.04f * helios_scale; // sum of sep in mm
 static float helios_d_to_film = helios_focal_length - helios_lens_length / 2; // mm
 
@@ -1214,35 +1214,59 @@ bool traceLensesFromFilm(Ray ray, int elementCount, float4 lensElements[16], out
 }
 
 // returns PDF
-float ApplyRealisticLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 px, inout uint RNG, in uint2 screenDims)
+float ApplyRealisticLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 px, inout uint RNG, in uint2 screenDims, in float2 screenPos)
 {
 	float3 cameraRight = mul(float4(1.0f, 0.0f, 0.0f, 0.0f), /*$(Variable:InvViewMtx)*/).xyz;
 	float3 cameraUp = mul(float4(0.0f, 1.0f, 0.0f, 0.0f), /*$(Variable:InvViewMtx)*/).xyz;
-	float3 cameraForward = mul(float4(0.0f, 0.0f, 1.0f, 0.0f), /*$(Variable:InvViewMtx)*/).xyz;
+	float3 cameraForward = mul(float4(0.0f, 0.0f, -1.0f, 0.0f), /*$(Variable:InvViewMtx)*/).xyz;
+
+	// Map normalized screen position ([-1,1]) to film plane coordinates in mm
+	const float sensorWidthMM = 36.0f;
+	float aspect = float(screenDims.x) / float(screenDims.y);
+	float sensorHeightMM = sensorWidthMM / aspect;
+	float filmX = screenPos.x * (sensorWidthMM * 0.5f);
+	float filmY = screenPos.y * (sensorHeightMM * 0.5f);
+
+	// Compute the focal (in-world) point
+	float focalLength = /*$(Variable:FocalLength)*/;
+	float3 focalWorld = rayPos + rayDir * focalLength;
 	
-	// Convert ray origin and direction into camera-local space for lens tracing.
-	float3 originCameraSpace = rayPos - /*$(Variable:CameraPos)*/;
+	// Transform the focal point into camera space
+	float3 camPos = /*$(Variable:CameraPos)*/;
+	float3 focalCam = float3(dot(focalWorld - camPos, cameraRight),
+							  dot(focalWorld - camPos, cameraUp),
+							  dot(focalWorld - camPos, cameraForward));
+
+	// Convert focal point from world units to mm
+	float worldToMM = 1000.0f;
+	float3 focal_mm = focalCam * worldToMM;
+
+	// Sample a random point on the aperture using polar coordinates
+	float theta = RandomFloat01(RNG) * 6.2831853f;
+	float r = sqrt(RandomFloat01(RNG));
+	float2 apertureOffset = float2(cos(theta), sin(theta)) * r;
+	apertureOffset *= /*$(Variable:ApertureRadius)*/;
+
+	// Construct a film-space ray with the sampled aperture offset
 	Ray filmRay;
-	filmRay.Origin = float3(dot(originCameraSpace, cameraRight), dot(originCameraSpace, cameraUp), dot(originCameraSpace, cameraForward));
-	filmRay.Origin.z = 0.0f; // Film plane at z = 0
-	filmRay.Direction = float3(dot(rayDir, cameraRight), dot(rayDir, cameraUp), dot(rayDir, cameraForward));
-	
+	filmRay.Origin = float3(filmX + apertureOffset.x, filmY + apertureOffset.y, 0.0f);
+	filmRay.Direction = normalize(focal_mm - filmRay.Origin);
+
 	// Trace through lens elements (using hard coded lens data for now)
 	Ray refracted;
 	if (traceLensesFromFilm(filmRay, 10, helios, refracted))
 	{
-		// Transform the refracted ray back to world space
-		rayPos = /*$(Variable:CameraPos)*/ + 
-				 refracted.Origin.x * cameraRight + 
-				 refracted.Origin.y * cameraUp + 
-				 refracted.Origin.z * cameraForward;
+		float invWorldToMM = 1.0f / worldToMM;
+		rayPos = camPos +
+				 (refracted.Origin.x * invWorldToMM) * cameraRight +
+				 (refracted.Origin.y * invWorldToMM) * cameraUp +
+				 (refracted.Origin.z * invWorldToMM) * cameraForward;
 		rayDir = normalize(
-				 refracted.Direction.x * cameraRight + 
-				 refracted.Direction.y * cameraUp + 
+				 refracted.Direction.x * cameraRight +
+				 refracted.Direction.y * cameraUp +
 				 refracted.Direction.z * cameraForward);
 		return 1.0f;
 	}
-	
 	return 0.0f;
 }
 
@@ -1594,7 +1618,7 @@ float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 
 		float3 rayDir = normalize(world.xyz - /*$(Variable:CameraPos)*/);
 		float PDF = 1.0f;
 		if (/*$(Variable:DOF)*/ == DOFMode::Realistic)
-			PDF = ApplyRealisticLensSimulation(rayPos, rayDir, px, RNG, DispatchRaysDimensions().xy);
+			PDF = ApplyRealisticLensSimulation(rayPos, rayDir, px, RNG, DispatchRaysDimensions().xy, screenPos);
 		if (/*$(Variable:DOF)*/ == DOFMode::PathTraced)
 			PDF = ApplyDOFLensSimulation(rayPos, rayDir, px, RNG, DispatchRaysDimensions().xy);
 
