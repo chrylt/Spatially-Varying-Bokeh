@@ -8,28 +8,28 @@
             "flySpeed": 0.20000000298023225,
             "mouseSensitivity": 0.0010000000474974514,
             "startingCameraPos": [
-                475.5538024902344,
-                129.8760986328125,
-                190.14169311523438
+                443.0090637207031,
+                121.87708282470703,
+                184.83238220214845
             ],
             "startingCameraAltitudeAzimuth": [
-                -0.23799701035022736,
-                1.7436481714248658
+                -0.24891315400600434,
+                1.7454910278320313
             ]
         },
         "ProjMtx_textureName": "ColorHDR"
     },
     "snapshot": {
-        "resourceViewNodeIndex": 35,
+        "resourceViewNodeIndex": 36,
         "resourceViewResourceIndex": 3,
         "cameraPos": [
-            408.1075439453125,
-            113.26058197021485,
-            178.36932373046876
+            443.0491638183594,
+            121.9168472290039,
+            185.50450134277345
         ],
         "cameraAltitudeAzimuth": [
-            -0.27640587091445925,
-            1.720137119293213
+            -0.24891315400600434,
+            1.7454910278320313
         ],
         "importedResources": [
             {
@@ -98,11 +98,11 @@
             },
             {
                 "name": "AlbedoModeAlbedoMultiplier",
-                "value": "0.250000"
+                "value": "2.000000"
             },
             {
                 "name": "FocalLength",
-                "value": "0.050000"
+                "value": "43.673000"
             },
             {
                 "name": "LensRNGSource",
@@ -122,7 +122,7 @@
             },
             {
                 "name": "ApertureRadius",
-                "value": "0.750000"
+                "value": "1.000000"
             },
             {
                 "name": "AnamorphicScaling",

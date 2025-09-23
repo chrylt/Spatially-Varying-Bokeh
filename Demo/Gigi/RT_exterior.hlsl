@@ -11,6 +11,7 @@
 #include "LDSShuffler.hlsli"
 
 static const float c_maxT = 10000.0f;
+static const float PI = 3.14159265358979323846f;
 
 //#define FLT_MAX		3.402823466e+38
 #define FLT_MAX		c_maxT
@@ -1078,27 +1079,29 @@ static float wideAngleLens[] = {
 	float4(0.0f, 0.0f, 0.0f, 0.0f),
 };
 
-static float helios_focal_length = 58.0f; // mm
-static float helios_scale = helios_focal_length / 100.0f; // helios unit scaling from patent
-static float helios_aperture = 29.0f; // mm (f/2 probably)
-static float helios_lens_length = 93.04f * helios_scale; // sum of sep in mm
-static float helios_d_to_film = helios_focal_length - helios_lens_length / 2; // mm
+static const float helios_sensor_width = 20.0f;
+static const float helios_max_focal_length = 58.0f; // mm
+static const float helios_scale = helios_max_focal_length / 100.0f; // helios unit scaling from patent
+static const float helios_aperture = 16.0f; // mm widest possible aperture is 16mm
+static const float helios_lens_radius = 16.0f;
+static const float helios_lens_length = 93.04f * helios_scale; // sum of sep in mm ~53.9632
+static const float helios_d_to_film = /*$(Variable:FocalLength)*/; // mm
 
 static float4 helios[] = {
 	// Helios 44-2 58mm/f2 lens
 	// scaled from 100 units to 58mm
-	// 				radius								sep								n			aperture		
-	float4(	/*r1*/	83.6f    * helios_scale, 	/*d1*/ 	10.75f * helios_scale, 	/*n1*/	1.64238f, 	helios_aperture),
-	float4(	/*r2*/	321.0f   * helios_scale, 	/*l1*/	1.65f  * helios_scale, 	/*air*/	1.0f, 		helios_aperture),
-	float4(	/*r3*/	44.8f    * helios_scale, 	/*d2*/	15.55f * helios_scale, 	/*n2*/	1.62306f, 	helios_aperture),
-	float4( /*r4*/	-1150.0f * helios_scale, 	/*d3*/	5.05   * helios_scale, 	/*n3*/	1.57566f, 	helios_aperture),
-	float4( /*r5*/	28.3f    * helios_scale, 	/*l2*/	18.9   * helios_scale, 	/*air*/ 1.0f, 		helios_aperture),
-	float4( /*r6*/  -38.5f   * helios_scale, 	/*d4*/	5.05f  * helios_scale, 	/*n4*/	1.67270f, 	helios_aperture),
-	float4( /*r7*/	50.5f    * helios_scale, 	/*d5*/	21.22f * helios_scale, 	/*n5*/	1.64238f, 	helios_aperture),
-	float4( /*r8*/	-53.2f   * helios_scale, 	/*l3*/	0.97f  * helios_scale, 	/*air*/	1.0f, 		helios_aperture),
-	float4( /*r9*/	106.0f   * helios_scale, 	/*d6*/	13.9f  * helios_scale, 	/*n6*/	1.64238f, 	helios_aperture),
-	float4( /*r10*/	-120.0f  * helios_scale, 	/*f*/	helios_d_to_film, 		/*air*/	1.0, 		helios_aperture), //10
-	float4(0.0f, 0.0f, 0.0f, 0.0f),
+	// 				radius								sep								n			aperture	
+	float4(	/*r1*/	83.6f    * helios_scale, 	/*d1*/ 	10.75f * helios_scale, 	/*n1*/	1.64238f, 	helios_lens_radius),
+	float4(	/*r2*/	321.0f   * helios_scale, 	/*l1*/	1.65f  * helios_scale, 	/*air*/	1.0f, 		helios_lens_radius),
+	float4(	/*r3*/	44.8f    * helios_scale, 	/*d2*/	15.55f * helios_scale, 	/*n2*/	1.62306f, 	helios_lens_radius),
+	float4( /*r4*/	-1150.0f * helios_scale, 	/*d3*/	5.05   * helios_scale, 	/*n3*/	1.57566f, 	helios_lens_radius),
+	float4( /*r5*/	28.3f    * helios_scale, 	/*l2*/	18.9/2 * helios_scale, 	/*air*/ 1.0f, 		helios_lens_radius),
+	float4( /*aperture*/		0.0f, 			/*l2*/	18.9/2 * helios_scale, 	/*air*/ 1.0f, 		helios_aperture),
+	float4( /*r6*/  -38.5f   * helios_scale, 	/*d4*/	5.05f  * helios_scale, 	/*n4*/	1.67270f, 	helios_lens_radius),
+	float4( /*r7*/	50.5f    * helios_scale, 	/*d5*/	21.22f * helios_scale, 	/*n5*/	1.64238f, 	helios_lens_radius),
+	float4( /*r8*/	-53.2f   * helios_scale, 	/*l3*/	0.97f  * helios_scale, 	/*air*/	1.0f, 		helios_lens_radius),
+	float4( /*r9*/	106.0f   * helios_scale, 	/*d6*/	13.9f  * helios_scale, 	/*n6*/	1.64238f, 	helios_lens_radius),
+	float4( /*r10*/	-120.0f  * helios_scale, 	/*f*/	helios_d_to_film, 		/*air*/	1.0, 		helios_lens_radius), //11
 	float4(0.0f, 0.0f, 0.0f, 0.0f),
 	float4(0.0f, 0.0f, 0.0f, 0.0f),
 	float4(0.0f, 0.0f, 0.0f, 0.0f),
@@ -1218,43 +1221,36 @@ float ApplyRealisticLensSimulation(inout float3 rayPos, inout float3 rayDir, in 
 {
 	float3 cameraRight = mul(float4(1.0f, 0.0f, 0.0f, 0.0f), /*$(Variable:InvViewMtx)*/).xyz;
 	float3 cameraUp = mul(float4(0.0f, 1.0f, 0.0f, 0.0f), /*$(Variable:InvViewMtx)*/).xyz;
-	float3 cameraForward = mul(float4(0.0f, 0.0f, -1.0f, 0.0f), /*$(Variable:InvViewMtx)*/).xyz;
+	float3 cameraForward = mul(float4(0.0f, 0.0f, 1.0f, 0.0f), /*$(Variable:InvViewMtx)*/).xyz;
+	float3 camPos = /*$(Variable:CameraPos)*/;
 
 	// Map normalized screen position ([-1,1]) to film plane coordinates in mm
-	const float sensorWidthMM = 36.0f;
+	// compensate for mirroring along both axis
 	float aspect = float(screenDims.x) / float(screenDims.y);
-	float sensorHeightMM = sensorWidthMM / aspect;
-	float filmX = screenPos.x * (sensorWidthMM * 0.5f);
-	float filmY = screenPos.y * (sensorHeightMM * 0.5f);
+	float sensor_height = helios_sensor_width / aspect;
+	float filmX = -screenPos.x * (helios_sensor_width * 0.5f);
+	float filmY = -screenPos.y * (sensor_height * 0.5f);
 
-	// Compute the focal (in-world) point
-	float focalLength = /*$(Variable:FocalLength)*/;
-	float3 focalWorld = rayPos + rayDir * focalLength;
-	
-	// Transform the focal point into camera space
-	float3 camPos = /*$(Variable:CameraPos)*/;
-	float3 focalCam = float3(dot(focalWorld - camPos, cameraRight),
-							  dot(focalWorld - camPos, cameraUp),
-							  dot(focalWorld - camPos, cameraForward));
-
-	// Convert focal point from world units to mm
-	float worldToMM = 1000.0f;
-	float3 focal_mm = focalCam * worldToMM;
+	// Conversion between world units and millimeters for lens/film space
+	float worldToMM = 10.0f;
 
 	// Sample a random point on the aperture using polar coordinates
-	float theta = RandomFloat01(RNG) * 6.2831853f;
+	float theta = RandomFloat01(RNG) * 2 * PI;
 	float r = sqrt(RandomFloat01(RNG));
 	float2 apertureOffset = float2(cos(theta), sin(theta)) * r;
-	apertureOffset *= /*$(Variable:ApertureRadius)*/;
+	apertureOffset *= helios_lens_radius;
 
-	// Construct a film-space ray with the sampled aperture offset
+	// Construct film-space ray with the sampled aperture offset
 	Ray filmRay;
-	filmRay.Origin = float3(filmX + apertureOffset.x, filmY + apertureOffset.y, 0.0f);
-	filmRay.Direction = normalize(focal_mm - filmRay.Origin);
+	filmRay.Origin = float3(filmX, filmY, 0.0f);
 
-	// Trace through lens elements (using hard coded lens data for now)
+	// Aim ray at randomly sampled point on innermost lens element
+	float3 target = float3(apertureOffset.x, apertureOffset.y, -helios_d_to_film);
+	filmRay.Direction = normalize(target - filmRay.Origin);
+
+	// Trace through lens elements
 	Ray refracted;
-	if (traceLensesFromFilm(filmRay, 10, helios, refracted))
+	if (traceLensesFromFilm(filmRay, 11, helios, refracted))
 	{
 		float invWorldToMM = 1.0f / worldToMM;
 		rayPos = camPos +
@@ -1262,9 +1258,9 @@ float ApplyRealisticLensSimulation(inout float3 rayPos, inout float3 rayDir, in 
 				 (refracted.Origin.y * invWorldToMM) * cameraUp +
 				 (refracted.Origin.z * invWorldToMM) * cameraForward;
 		rayDir = normalize(
-				 refracted.Direction.x * cameraRight +
-				 refracted.Direction.y * cameraUp +
-				 refracted.Direction.z * cameraForward);
+			 refracted.Direction.x * cameraRight +
+			 refracted.Direction.y * cameraUp +
+			 refracted.Direction.z * cameraForward);
 		return 1.0f;
 	}
 	return 0.0f;
@@ -1624,6 +1620,7 @@ float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 
 
 		// Shoot the ray
 		float3 rayColor = (PDF > 0.0f) ? GetColorForRay(rayPos, rayDir, RNG, pixelDebug, rayIndex, px.xy) / PDF : float3(0.0f, 0.0f, 0.0f);
+		//rayColor *= 1000;
 
 		// accumualate the sample
 		color = lerp(color, rayColor, 1.0f / float(rayIndex+1));
