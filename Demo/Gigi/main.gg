@@ -111,11 +111,11 @@
         {
             "name": "FocalLength",
             "type": "Float",
-            "dflt": "43.8f",
+            "dflt": "28",
             "visibility": "User",
             "UISettings": {
                 "UIHint": "Slider",
-                "min": "30",
+                "min": "5",
                 "max": "60",
                 "step": "0.1"
             }
@@ -302,10 +302,7 @@
                 {
                     "name": "DebugTex",
                     "access": "UAV",
-                    "type": "Texture",
-                    "texture": {
-                        "viewType": "Float"
-                    }
+                    "type": "Texture"
                 }
             ],
             "samplers": [
@@ -333,6 +330,18 @@
             "type": "RTClosestHit",
             "entryPoint": "ClosestHit",
             "copyFile": false
+        },
+        {
+            "name": "ShaderToHuman",
+            "fileName": "s2h\\include\\s2h.hlsl",
+            "type": "Count",
+            "entryPoint": ""
+        },
+        {
+            "name": "S2H Scatter",
+            "fileName": "s2h\\include\\s2h_scatter.hlsl",
+            "type": "Count",
+            "entryPoint": ""
         }
     ],
     "structs": [
@@ -1009,12 +1018,12 @@
             "resourceTexture": {
                 "name": "DebugTex",
                 "editorPos": [
-                    -389.0,
-                    -478.0
+                    -405.0,
+                    -494.0
                 ],
                 "transient": false,
                 "format": {
-                    "format": "R32_Float"
+                    "format": "RGBA32_Float"
                 },
                 "size": {
                     "node": {

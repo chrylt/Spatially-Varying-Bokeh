@@ -23,9 +23,9 @@
         "resourceViewNodeIndex": 36,
         "resourceViewResourceIndex": 3,
         "cameraPos": [
-            443.0491638183594,
-            121.9168472290039,
-            185.50450134277345
+            442.654541015625,
+            121.78557586669922,
+            184.76980590820313
         ],
         "cameraAltitudeAzimuth": [
             -0.24891315400600434,
@@ -102,7 +102,7 @@
             },
             {
                 "name": "FocalLength",
-                "value": "43.673000"
+                "value": "43.166000"
             },
             {
                 "name": "LensRNGSource",

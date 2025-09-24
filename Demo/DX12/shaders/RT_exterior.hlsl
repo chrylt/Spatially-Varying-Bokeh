@@ -36,6 +36,7 @@ struct DOFMode
     static const int Off = 0;
     static const int PathTraced = 1;
     static const int PostProcessing = 2;
+    static const int Realistic = 3;
 };
 
 struct PixelJitterType
@@ -129,6 +130,7 @@ RWTexture2D<float> LinearDepth : register(u1);
 RaytracingAccelerationStructure Scene : register(t0);
 StructuredBuffer<Struct_VBStruct> VertexBuffer : register(t1);
 RWStructuredBuffer<Struct_PixelDebugStruct> PixelDebug : register(u2);
+RWTexture2D<float> DebugTex : register(u3);
 Texture2D<float4> _loadedTexture_0 : register(t2);
 Texture2D<float4> _loadedTexture_1 : register(t3);
 Texture2D<float4> _loadedTexture_2 : register(t4);
@@ -333,8 +335,10 @@ ConstantBuffer<Struct__RayGenCB> _RayGenCB : register(b0);
 #include "PCG.hlsli"
 #include "IndexToColor.hlsli"
 #include "LDSShuffler.hlsli"
+#include "s2h.h"
 
 static const float c_maxT = 10000.0f;
+static const float PI = 3.14159265358979323846f;
 
 //#define FLT_MAX		3.402823466e+38
 #define FLT_MAX		c_maxT
@@ -1061,7 +1065,7 @@ bool VisibilityQuery(float3 pos, float3 direction, float dist)
 float3 SmallLightColor(int index)
 {
 	float3 ret = _RayGenCB.SmallLightsColor;
-	if (_RayGenCB.SmallLightsColorful)
+	if ((bool)_RayGenCB.SmallLightsColorful)
 		ret = IndexToColor(index, 0.95f, 0.95f);
 	return ret;
 }
@@ -1242,7 +1246,7 @@ float3 GetColorForRay(float3 pos, float3 dir, inout uint RNG, inout Struct_Pixel
 			//return float3(1.0f, 0.0f, 1.0f);
 		}
 
-		if (_RayGenCB.AlbedoMode && (materialInfo.alpha > 0.0f || materialInfo.emissive.r > 0.0f || materialInfo.emissive.g > 0.0f || materialInfo.emissive.b > 0.0f))
+		if ((bool)_RayGenCB.AlbedoMode && (materialInfo.alpha > 0.0f || materialInfo.emissive.r > 0.0f || materialInfo.emissive.g > 0.0f || materialInfo.emissive.b > 0.0f))
 		{
 			return materialInfo.albedo * _RayGenCB.AlbedoModeAlbedoMultiplier + materialInfo.emissive;
 		}
@@ -1346,11 +1350,256 @@ float2 SampleICDF(float2 rng, in Texture2D<float> MarginalCDF)
     return uv * 2.0f - 1.0f;
 }
 
+/************************************************************************************
+Spatially Varying Lens Simulation
+*************************************************************************************/
+
+struct Ray
+{
+	float3 Origin;
+	float3 Direction;
+};
+
+static float4 fishEyeLens[] = {
+	// Muller 16mm/f4 155.9FOV fisheye lens			
+	// MLD p164			
+	// Scaled to 10 mm from 100 mm			
+	// radius	sep	n	aperture
+	float4(30.2249f, 0.8335f, 1.620f, 30.34f),
+	float4(11.3931f, 7.4136f, 1.0f, 20.68f),
+	float4(75.2019f, 1.0654f, 1.639f, 17.80f),
+	float4(8.3349f, 11.1549f, 1.0f, 13.42f),
+	float4(9.5882f, 2.0054f, 1.654f, 9.02f),
+	float4(43.8677f, 5.3895f, 1.0f, 8.14f),
+	float4(	0.0f, 1.4163f, 0.0f, 6.08f),
+	float4(29.4541f, 2.1934f, 1.517f, 5.96f),
+	float4(-5.2265f, 0.9714f, 1.805f, 5.84f),
+	float4(-14.2884f, 0.0627f, 1.0f, 5.96f),
+	float4(-22.3726f, 0.9400f, 1.673f, 5.96f),
+	float4(-15.0404f, 25.0f,  1.0f, 6.52), // 12
+	float4(0.0f, 0.0f, 0.0f, 0.0f),
+	float4(0.0f, 0.0f, 0.0f, 0.0f),
+	float4(0.0f, 0.0f, 0.0f, 0.0f),
+	float4(0.0f, 0.0f, 0.0f, 0.0f),
+};
+
+static float wideAngleLens[] = {
+	// Wide-angle (38-degree) lens. Nakamura.			
+	// MLD, p. 360"			
+	// Scaled to 22 mm from 100 mm			
+	// radius   sep	      n       aperture
+	float4( 35.98738f, 1.21638f, 1.540f, 23.716f),
+	float4( 11.69718f, 9.99570f, 1.000f, 17.996f),
+	float4( 13.08714f, 5.12622f, 1.772f, 12.364f),
+	float4(-22.63294f, 1.76924f, 1.617f, 9.8120f),
+	float4( 71.05802f, 0.81840f, 1.000f, 9.1520f), 
+	float4( 0.000000f, 2.27766f, 0.000f, 8.7560f),
+	float4(-9.585840f, 2.43254f, 1.617f, 8.1840f),
+	float4(-11.28864f, 0.11506f, 1.000f, 9.1520f),
+	float4(-166.7765f, 3.09606f, 1.713f, 10.648f),
+	float4(-7.591100f,	1.32682f, 1.805f, 11.440f),
+	float4(-16.76620f, 3.98068f, 1.000f, 12.276f),
+	float4(-7.702860f, 1.21638f, 1.617f, 13.420f),
+	float4(-11.97328f, 5.00000f, 1.000f, 17.996f), //13
+	float4(0.0f, 0.0f, 0.0f, 0.0f),
+	float4(0.0f, 0.0f, 0.0f, 0.0f),
+	float4(0.0f, 0.0f, 0.0f, 0.0f),
+};
+
+static const float helios_sensor_width = 20.0f;
+static const float helios_max_focal_length = 58.0f; // mm
+static const float helios_scale = helios_max_focal_length / 100.0f; // helios unit scaling from patent
+static const float helios_aperture = 16.0f; // mm widest possible aperture is 16mm
+static const float helios_lens_radius = 16.0f;
+static const float helios_lens_length = 93.04f * helios_scale; // sum of sep in mm ~53.9632
+static const float helios_d_to_film = _RayGenCB.FocalLength; // mm
+
+static float4 helios[] = {
+	// Helios 44-2 58mm/f2 lens
+	// scaled from 100 units to 58mm
+	// 				radius								sep								n			aperture	
+	float4(	/*r1*/	83.6f    * helios_scale, 	/*d1*/ 	10.75f * helios_scale, 	/*n1*/	1.64238f, 	helios_lens_radius),
+	float4(	/*r2*/	321.0f   * helios_scale, 	/*l1*/	1.65f  * helios_scale, 	/*air*/	1.0f, 		helios_lens_radius),
+	float4(	/*r3*/	44.8f    * helios_scale, 	/*d2*/	15.55f * helios_scale, 	/*n2*/	1.62306f, 	helios_lens_radius),
+	float4( /*r4*/	-1150.0f * helios_scale, 	/*d3*/	5.05   * helios_scale, 	/*n3*/	1.57566f, 	helios_lens_radius),
+	float4( /*r5*/	28.3f    * helios_scale, 	/*l2*/	18.9/2 * helios_scale, 	/*air*/ 1.0f, 		helios_lens_radius),
+	float4( /*aperture*/		0.0f, 			/*l2*/	18.9/2 * helios_scale, 	/*air*/ 1.0f, 		helios_aperture),
+	float4( /*r6*/  -38.5f   * helios_scale, 	/*d4*/	5.05f  * helios_scale, 	/*n4*/	1.67270f, 	helios_lens_radius),
+	float4( /*r7*/	50.5f    * helios_scale, 	/*d5*/	21.22f * helios_scale, 	/*n5*/	1.64238f, 	helios_lens_radius),
+	float4( /*r8*/	-53.2f   * helios_scale, 	/*l3*/	0.97f  * helios_scale, 	/*air*/	1.0f, 		helios_lens_radius),
+	float4( /*r9*/	106.0f   * helios_scale, 	/*d6*/	13.9f  * helios_scale, 	/*n6*/	1.64238f, 	helios_lens_radius),
+	float4( /*r10*/	-120.0f  * helios_scale, 	/*f*/	helios_d_to_film, 		/*air*/	1.0, 		helios_lens_radius), //11
+	float4(0.0f, 0.0f, 0.0f, 0.0f),
+	float4(0.0f, 0.0f, 0.0f, 0.0f),
+	float4(0.0f, 0.0f, 0.0f, 0.0f),
+	float4(0.0f, 0.0f, 0.0f, 0.0f),
+	float4(0.0f, 0.0f, 0.0f, 0.0f),
+};
+
+
+// Ray-sphere intersection for a sphere at the origin
+// Returns true if intersection exists and writes the two t values to "intersections" (t0 <= t1)
+bool sphereRayIntersect(out float2 intersections, in float3 rayOrigin, in float3 rayDir, in float radius)
+{
+	intersections = float2(0.0f, 0.0f);
+
+	float a = dot(rayDir, rayDir);
+	// avoid divide by zero for degenerate rays
+	if (a <= 1e-12f)
+		return false;
+
+	float b = dot(rayOrigin, rayDir);
+	float c = dot(rayOrigin, rayOrigin) - radius * radius;
+
+	float discr = b * b - a * c;
+	if (discr < 0.0f)
+		return false;
+
+	float sqrtD = sqrt(discr);
+	float t0 = (-b - sqrtD) / a;
+	float t1 = (-b + sqrtD) / a;
+
+	if (t0 > t1)
+	{
+		float tmp = t0; t0 = t1; t1 = tmp;
+	}
+
+	intersections = float2(t0, t1);
+	return true;
+}
+
+bool intersect(float radius, float center, Ray ray, out float t, out float3 normal)
+{
+	t = 0.0f;
+	normal = float3(0, 0, 0);
+	
+	float2 intersections;
+	if (!sphereRayIntersect(intersections, ray.Origin - float3(0, 0, center), ray.Direction, radius))
+		return false;
+	
+	bool useCloserT = (ray.Direction.z > 0) ^ (radius < 0);
+	t = useCloserT ? min(intersections.y, intersections.x) : max(intersections.y, intersections.x);
+	
+	normal = normalize(ray.Origin + t * ray.Direction - float3(0, 0, center));
+
+	// If using the second intersection, we need to flip the normal	
+	normal *= useCloserT ? 1.0f : -1.0f;
+
+	return true;
+}
+
+bool traceLensesFromFilm(Ray ray, int elementCount, float4 lensElements[16], out Ray outRay)
+{
+	float z = 0.0f; // Start at the film, z = 0
+	
+	for (int i = elementCount - 1; i >= 0; i--)
+	{
+		const float curvatureRadius = lensElements[i].x;
+		const float thickness = lensElements[i].y;
+		const float etaI = lensElements[i].z;
+		const float etaT = i > 0 ? lensElements[i - 1].z : 1.0f;
+		const float apatureRadius = lensElements[i].w;
+		
+		z -= thickness;
+		float t = 0;
+		float3 normal = float3(0, 0, 0);
+		
+		bool isStop = (curvatureRadius == 0.0f);
+		if (isStop)
+		{
+			if (ray.Direction.z >= 0.0f)
+				return false;
+			t = (z - ray.Origin.z) / ray.Direction.z;
+		}
+		else
+		{
+			float center = z + curvatureRadius;
+			if (!intersect(curvatureRadius, center, ray, t, normal))
+			{
+				return false;
+			}
+		}
+		
+		float3 hit = ray.Origin + t * ray.Direction;
+		
+		float r2 = hit.x * hit.x + hit.y * hit.y;
+
+		if (r2 > (apatureRadius * apatureRadius))
+			return false;
+		
+		ray.Origin = hit;
+		
+		if (!isStop)
+		{
+			float3 refractDir = refract(ray.Direction, normal, etaI / (etaT > 0.0f ? etaT : 1.0f));
+			if (all(refractDir == 0.0f))
+				return false;
+			ray.Direction = normalize(refractDir);
+		}
+	} 
+	
+	outRay = ray;
+
+	return true;
+}
+
+// returns PDF
+float ApplyRealisticLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 px, inout uint RNG, in uint2 screenDims, in float2 screenPos)
+{
+	float3 cameraRight = mul(float4(1.0f, 0.0f, 0.0f, 0.0f), _RayGenCB.InvViewMtx).xyz;
+	float3 cameraUp = mul(float4(0.0f, 1.0f, 0.0f, 0.0f), _RayGenCB.InvViewMtx).xyz;
+	float3 cameraForward = mul(float4(0.0f, 0.0f, 1.0f, 0.0f), _RayGenCB.InvViewMtx).xyz;
+	float3 camPos = _RayGenCB.CameraPos;
+
+	// Map normalized screen position ([-1,1]) to film plane coordinates in mm
+	// compensate for mirroring along both axis
+	float aspect = float(screenDims.x) / float(screenDims.y);
+	float sensor_height = helios_sensor_width / aspect;
+	float filmX = -screenPos.x * (helios_sensor_width * 0.5f);
+	float filmY = -screenPos.y * (sensor_height * 0.5f);
+
+	// Conversion between world units and millimeters for lens/film space
+	float worldToMM = 10.0f;
+
+	// Sample a random point on the aperture using polar coordinates
+	float theta = RandomFloat01(RNG) * 2 * PI;
+	float r = sqrt(RandomFloat01(RNG));
+	float2 apertureOffset = float2(cos(theta), sin(theta)) * r;
+	apertureOffset *= helios_lens_radius;
+
+	// Construct film-space ray with the sampled aperture offset
+	Ray filmRay;
+	filmRay.Origin = float3(filmX, filmY, 0.0f);
+
+	// Aim ray at randomly sampled point on innermost lens element
+	float3 target = float3(apertureOffset.x, apertureOffset.y, -helios_d_to_film);
+	filmRay.Direction = normalize(target - filmRay.Origin);
+
+	// Trace through lens elements
+	Ray refracted;
+	if (traceLensesFromFilm(filmRay, 11, helios, refracted))
+	{
+		float invWorldToMM = 1.0f / worldToMM;
+		rayPos = camPos +
+				 (refracted.Origin.x * invWorldToMM) * cameraRight +
+				 (refracted.Origin.y * invWorldToMM) * cameraUp +
+				 (refracted.Origin.z * invWorldToMM) * cameraForward;
+		rayDir = normalize(
+			 refracted.Direction.x * cameraRight +
+			 refracted.Direction.y * cameraUp +
+			 refracted.Direction.z * cameraForward);
+		return 1.0f;
+	}
+	return 0.0f;
+}
+
+/************************************************************************************
+End of Spatially Varying Lens Simulation
+*************************************************************************************/
+
 // returns PDF
 float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 px, inout uint RNG, in uint2 screenDims)
 {
-	if (_RayGenCB.DOF != DOFMode::PathTraced)
-		return 1.0f;
 
 	float3 cameraRight = mul(float4(1.0f, 0.0f, 0.0f, 0.0f), _RayGenCB.InvViewMtx).xyz;
 	float3 cameraUp = mul(float4(0.0f, 1.0f, 0.0f, 0.0f), _RayGenCB.InvViewMtx).xyz;
@@ -1362,7 +1611,7 @@ float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 
 	float2 offset = float2(0.0f, 0.0f);
 
 	float PDF = 1.0f;
-	if (_RayGenCB.NoImportanceSampling)
+	if ((bool)_RayGenCB.NoImportanceSampling)
 	{
 		// Random point in square, then we'll adjust the PDF as appropraite
 		float2 uvwhite = float2(RandomFloat01(RNG), RandomFloat01(RNG));
@@ -1584,7 +1833,7 @@ float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 
             }
 		}
 
-		if (_RayGenCB.JitterNoiseTextures)
+		if ((bool)_RayGenCB.JitterNoiseTextures)
 		{
 			uint jitterRNG = HashInit(px);
 			offset += float2((RandomFloat01(jitterRNG) - 0.5f) / 255.0f, (RandomFloat01(jitterRNG) - 0.5f) / 255.0f);
@@ -1650,7 +1899,7 @@ float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 
 }
 
 [shader("raygeneration")]
-#line 1328
+#line 1575
 void RayGen()
 {
 	const float2 dimensions = float2(DispatchRaysDimensions().xy);
@@ -1692,10 +1941,15 @@ void RayGen()
 		// Apply depth of field through lens simulation
 		float3 rayPos = _RayGenCB.CameraPos;
 		float3 rayDir = normalize(world.xyz - _RayGenCB.CameraPos);
-		float PDF = ApplyDOFLensSimulation(rayPos, rayDir, px, RNG, DispatchRaysDimensions().xy);
+		float PDF = 1.0f;
+		if (_RayGenCB.DOF == DOFMode::Realistic)
+			PDF = ApplyRealisticLensSimulation(rayPos, rayDir, px, RNG, DispatchRaysDimensions().xy, screenPos);
+		if (_RayGenCB.DOF == DOFMode::PathTraced)
+			PDF = ApplyDOFLensSimulation(rayPos, rayDir, px, RNG, DispatchRaysDimensions().xy);
 
 		// Shoot the ray
 		float3 rayColor = (PDF > 0.0f) ? GetColorForRay(rayPos, rayDir, RNG, pixelDebug, rayIndex, px.xy) / PDF : float3(0.0f, 0.0f, 0.0f);
+		//rayColor *= 1000;
 
 		// accumualate the sample
 		color = lerp(color, rayColor, 1.0f / float(rayIndex+1));
@@ -1704,7 +1958,7 @@ void RayGen()
 	// Temporally accumulate "color"
 	float3 oldColor = Output[px.xy].rgb;
 	static const uint c_minFrameIndex = 5;
-	float alpha = (_RayGenCB.FrameIndex < c_minFrameIndex || !_RayGenCB.Accumulate || !_RayGenCB.Animate) ? 1.0f : 1.0f / float(_RayGenCB.FrameIndex - c_minFrameIndex +1);
+	float alpha = (_RayGenCB.FrameIndex < c_minFrameIndex || !(bool)_RayGenCB.Accumulate || !(bool)_RayGenCB.Animate) ? 1.0f : 1.0f / float(_RayGenCB.FrameIndex - c_minFrameIndex +1);
 
 	color = lerp(oldColor, color, alpha);
 
@@ -1721,14 +1975,14 @@ void RayGen()
 }
 
 [shader("miss")]
-#line 1397
+#line 1649
 void Miss(inout Payload payload : SV_RayPayload)
 {
 	payload.hitT = -1.0f;
 }
 
 [shader("closesthit")]
-#line 1402
+#line 1654
 void ClosestHit(inout Payload payload : SV_RayPayload, in BuiltInTriangleIntersectionAttributes intersection : SV_IntersectionAttributes)
 {
 	payload.hitT = RayTCurrent();

@@ -56,6 +56,7 @@ namespace FastBokeh
         Off,
         PathTraced,
         PostProcessing,
+        Realistic,
     };
 
     enum class PixelJitterType: int
@@ -157,6 +158,7 @@ namespace FastBokeh
             case DOFMode::Off: return displayString ? "Off" : "Off";
             case DOFMode::PathTraced: return displayString ? "PathTraced" : "PathTraced";
             case DOFMode::PostProcessing: return displayString ? "PostProcessing" : "PostProcessing";
+            case DOFMode::Realistic: return displayString ? "Realistic" : "Realistic";
             default: return nullptr;
         }
     }
@@ -257,10 +259,10 @@ namespace FastBokeh
 
         struct Struct_PixelDebugStruct
         {
-            float2 MousePos = {0.0f,0.0f};
+            float2 MousePos = {0.000000f, 0.000000f};
             uint MaterialID = 0;
             float HitT = 0.000000f;
-            float3 WorldPos = {0.0f,0.0f,0.0f};
+            float3 WorldPos = {0.000000f, 0.000000f, 0.000000f};
             float centerDepth = 0.000000f;
             float centerSize = 0.000000f;
             float tot = 0.000000f;
@@ -272,39 +274,39 @@ namespace FastBokeh
             unsigned int AlbedoMode = 1.0f;  // if true, returns albedo * AlbedoModeAlbedoMultiplier + emissive at primary hit
             float AlbedoModeAlbedoMultiplier = 0.500000f;  // How much to multiply albedo by in albedo mode, to darken it or lighten it
             float _padding0 = 0.000000f;  // Padding
-            float2 AnamorphicScaling = {1.0f, 1.0f};  // Defaults to 1.0, 1.0 for no anamorphic effects. Elongates the aperture, does not simulate anamorphic elements.
+            float2 AnamorphicScaling = {1.000000f, 1.000000f};  // Defaults to 1.0, 1.0 for no anamorphic effects. Elongates the aperture, does not simulate anamorphic elements.
             unsigned int Animate = true;
             float ApertureRadius = 1.000000f;
-            float3 CameraPos = {0.0f,0.0f,0.0f};
+            float3 CameraPos = {0.000000f, 0.000000f, 0.000000f};
             int DOF = (int)DOFMode::Off;
             float DepthNearPlane = 0.100000f;
-            float FocalLength = 1.000000f;
+            float FocalLength = 28.000000f;
             uint FrameIndex = 0;
             float _padding1 = 0.000000f;  // Padding
-            float4x4 InvViewMtx = {0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f};
-            float4x4 InvViewProjMtx = {0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f};
+            float4x4 InvViewMtx = {0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f};
+            float4x4 InvViewProjMtx = {0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f};
             unsigned int JitterNoiseTextures = false;  // The noise textures are 8 bit unorms. This adds a random value between -0.5/255 and +0.5/255 to fill in the unset bits with white noise.
             int JitterPixels = (int)PixelJitterType::PerPixel;  // Provides Antialiasing
             int LensRNGExtend = (int)NoiseTexExtends::None;  // How to extend the noise textures
             int LensRNGSource = (int)LensRNG::UniformCircleWhite;
             float MaterialEmissiveMultiplier = 1.000000f;
             int MaterialSet = (int)MaterialSets::None;
-            float2 _padding2 = {0.0f,0.0f};  // Padding
-            float4 MouseState = {0.0f,0.0f,0.0f,0.0f};
+            float2 _padding2 = {0.000000f, 0.000000f};  // Padding
+            float4 MouseState = {0.000000f, 0.000000f, 0.000000f, 0.000000f};
             unsigned int NoImportanceSampling = false;  // If true, the FAST noise textures will not be used, and 
             uint NumBounces = 4;  // How many bounces the rays are allowed
-            float2 _padding3 = {0.0f,0.0f};  // Padding
-            float3 OcclusionSettings = {1.0f, 1.0f, 1.0f};  // Pushes the bounding square of the lens outwards and clips against a unit circle. 1,1,1 means no occlusion. x is how far from the center of the screen to start moving the square. 0 is center, 1 is the corner.  y is how much to scale the lens bounding square by.  z is how far to move the square, as the pixel is farther from where the occlusion begins. Reasonable settings are 0, 0.1, 1.25.
+            float2 _padding3 = {0.000000f, 0.000000f};  // Padding
+            float3 OcclusionSettings = {1.000000f, 1.000000f, 1.000000f};  // Pushes the bounding square of the lens outwards and clips against a unit circle. 1,1,1 means no occlusion. x is how far from the center of the screen to start moving the square. 0 is center, 1 is the corner.  y is how much to scale the lens bounding square by.  z is how far to move the square, as the pixel is farther from where the occlusion begins. Reasonable settings are 0, 0.1, 1.25.
             float _padding4 = 0.000000f;  // Padding
-            float2 PetzvalScaling = {1.0f, 1.0f};  // Scales bokeh on each axis depending on screen position. Fakes the effect. Defaults to 1.0, 1.0 for no elongation.
+            float2 PetzvalScaling = {1.000000f, 1.000000f};  // Scales bokeh on each axis depending on screen position. Fakes the effect. Defaults to 1.0, 1.0 for no elongation.
             float RayPosNormalNudge = 0.100000f;
             uint SamplesPerPixelPerFrame = 1;
             float SkyBrightness = 10.000000f;
-            float3 SkyColor = {1.0f, 1.0f, 1.0f};
+            float3 SkyColor = {1.000000f, 1.000000f, 1.000000f};
             float SmallLightBrightness = 1.000000f;
             float SmallLightRadius = 1.000000f;
-            float2 _padding5 = {0.0f,0.0f};  // Padding
-            float3 SmallLightsColor = {1.0f, 1.0f, 1.0f};
+            float2 _padding5 = {0.000000f, 0.000000f};  // Padding
+            float3 SmallLightsColor = {1.000000f, 1.000000f, 1.000000f};
             unsigned int SmallLightsColorful = false;  // If true, makes the small lights colorful, else makes them all the same color
         };
 
@@ -326,22 +328,7 @@ namespace FastBokeh
             uint GatherDOF_BlurTapCount = 8;  // 8 for high quality, 6 for low quality. Used in a double for loop, so it's this number squared.
             uint GatherDOF_FrameIndex = 0;
             float _padding0 = 0.000000f;  // Padding
-            float4 GatherDOF_KernelSize = {10.0f, 15.0f, 5.0f, 0.0f};  // x = size of the bokeh blur radius in texel space. y = rotation in radians to apply to the bokeh shape. z = Number of edge of the polygon (number of blades). 0: circle. 4: square, 6: hexagon...
-            unsigned int GatherDOF_UseNoiseTextures = false;
-            unsigned int JitterNoiseTextures = false;  // The noise textures are 8 bit unorms. This adds a random value between -0.5/255 and +0.5/255 to fill in the unset bits with white noise.
-            int LensRNGExtend = (int)NoiseTexExtends::None;  // How to extend the noise textures
-            int LensRNGSource = (int)LensRNG::UniformCircleWhite;
-        };
-
-        struct Struct__GatherDOF_FloodFillFarCSCB
-        {
-            unsigned int GatherDOF_AnimateNoiseTextures = true;
-            unsigned int GatherDOF_DoFarFieldFloodFill = true;  // Whether to do flood fill on the far field
-            unsigned int GatherDOF_DoNearFieldFloodFill = true;  // Whether to do flood fill on the near field
-            uint GatherDOF_FloodFillTapCount = 4;  // 4 for high quality, 3 for low quality. Used in a double for loop, so it's this number squared.
-            uint GatherDOF_FrameIndex = 0;
-            float3 _padding0 = {0.0f,0.0f,0.0f};  // Padding
-            float4 GatherDOF_KernelSize = {10.0f, 15.0f, 5.0f, 0.0f};  // x = size of the bokeh blur radius in texel space. y = rotation in radians to apply to the bokeh shape. z = Number of edge of the polygon (number of blades). 0: circle. 4: square, 6: hexagon...
+            float4 GatherDOF_KernelSize = {10.000000f, 15.000000f, 5.000000f, 0.000000f};  // x = size of the bokeh blur radius in texel space. y = rotation in radians to apply to the bokeh shape. z = Number of edge of the polygon (number of blades). 0: circle. 4: square, 6: hexagon...
             unsigned int GatherDOF_UseNoiseTextures = false;
             unsigned int JitterNoiseTextures = false;  // The noise textures are 8 bit unorms. This adds a random value between -0.5/255 and +0.5/255 to fill in the unset bits with white noise.
             int LensRNGExtend = (int)NoiseTexExtends::None;  // How to extend the noise textures
@@ -354,7 +341,7 @@ namespace FastBokeh
             uint GatherDOF_BlurTapCount = 8;  // 8 for high quality, 6 for low quality. Used in a double for loop, so it's this number squared.
             uint GatherDOF_FrameIndex = 0;
             float _padding0 = 0.000000f;  // Padding
-            float4 GatherDOF_KernelSize = {10.0f, 15.0f, 5.0f, 0.0f};  // x = size of the bokeh blur radius in texel space. y = rotation in radians to apply to the bokeh shape. z = Number of edge of the polygon (number of blades). 0: circle. 4: square, 6: hexagon...
+            float4 GatherDOF_KernelSize = {10.000000f, 15.000000f, 5.000000f, 0.000000f};  // x = size of the bokeh blur radius in texel space. y = rotation in radians to apply to the bokeh shape. z = Number of edge of the polygon (number of blades). 0: circle. 4: square, 6: hexagon...
             unsigned int GatherDOF_UseNoiseTextures = false;
             unsigned int JitterNoiseTextures = false;  // The noise textures are 8 bit unorms. This adds a random value between -0.5/255 and +0.5/255 to fill in the unset bits with white noise.
             int LensRNGExtend = (int)NoiseTexExtends::None;  // How to extend the noise textures
@@ -376,7 +363,7 @@ namespace FastBokeh
         struct Struct__GaussBlur_GaussBlurCSCB
         {
             float GaussBlur_Sigma = 1.000000f;  // Strength of blur. Standard deviation of gaussian distribution.
-            float3 _padding0 = {0.0f,0.0f,0.0f};  // Padding
+            float3 _padding0 = {0.000000f, 0.000000f, 0.000000f};  // Padding
         };
 
         struct Struct__TemporalAccumulation_AccumulateCB
@@ -391,7 +378,37 @@ namespace FastBokeh
         {
             float ToneMap_ExposureFStops = 0.000000f;
             int ToneMap_ToneMapper = (int)ToneMap_ToneMappingOperation::None;
-            float2 _padding0 = {0.0f,0.0f};  // Padding
+            float2 _padding0 = {0.000000f, 0.000000f};  // Padding
+        };
+
+        struct Struct__GatherDOF_FloodFillFarCS_0CB
+        {
+            unsigned int GatherDOF_AnimateNoiseTextures = true;
+            unsigned int GatherDOF_DoFarFieldFloodFill = true;  // Whether to do flood fill on the far field
+            unsigned int GatherDOF_DoNearFieldFloodFill = true;  // Whether to do flood fill on the near field
+            uint GatherDOF_FloodFillTapCount = 4;  // 4 for high quality, 3 for low quality. Used in a double for loop, so it's this number squared.
+            uint GatherDOF_FrameIndex = 0;
+            float3 _padding0 = {0.000000f, 0.000000f, 0.000000f};  // Padding
+            float4 GatherDOF_KernelSize = {10.000000f, 15.000000f, 5.000000f, 0.000000f};  // x = size of the bokeh blur radius in texel space. y = rotation in radians to apply to the bokeh shape. z = Number of edge of the polygon (number of blades). 0: circle. 4: square, 6: hexagon...
+            unsigned int GatherDOF_UseNoiseTextures = false;
+            unsigned int JitterNoiseTextures = false;  // The noise textures are 8 bit unorms. This adds a random value between -0.5/255 and +0.5/255 to fill in the unset bits with white noise.
+            int LensRNGExtend = (int)NoiseTexExtends::None;  // How to extend the noise textures
+            int LensRNGSource = (int)LensRNG::UniformCircleWhite;
+        };
+
+        struct Struct__GatherDOF_FloodFillFarCS_1CB
+        {
+            unsigned int GatherDOF_AnimateNoiseTextures = true;
+            unsigned int GatherDOF_DoFarFieldFloodFill = true;  // Whether to do flood fill on the far field
+            unsigned int GatherDOF_DoNearFieldFloodFill = true;  // Whether to do flood fill on the near field
+            uint GatherDOF_FloodFillTapCount = 4;  // 4 for high quality, 3 for low quality. Used in a double for loop, so it's this number squared.
+            uint GatherDOF_FrameIndex = 0;
+            float3 _padding0 = {0.000000f, 0.000000f, 0.000000f};  // Padding
+            float4 GatherDOF_KernelSize = {10.000000f, 15.000000f, 5.000000f, 0.000000f};  // x = size of the bokeh blur radius in texel space. y = rotation in radians to apply to the bokeh shape. z = Number of edge of the polygon (number of blades). 0: circle. 4: square, 6: hexagon...
+            unsigned int GatherDOF_UseNoiseTextures = false;
+            unsigned int JitterNoiseTextures = false;  // The noise textures are 8 bit unorms. This adds a random value between -0.5/255 and +0.5/255 to fill in the unset bits with white noise.
+            int LensRNGExtend = (int)NoiseTexExtends::None;  // How to extend the noise textures
+            int LensRNGSource = (int)LensRNG::UniformCircleWhite;
         };
 
         // Variables
@@ -422,6 +439,13 @@ namespace FastBokeh
         DXGI_FORMAT texture_LinearDepth_format = DXGI_FORMAT_UNKNOWN;
         static const D3D12_RESOURCE_FLAGS texture_LinearDepth_flags =  D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;
         const D3D12_RESOURCE_STATES c_texture_LinearDepth_endingState = D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE;
+
+        ID3D12Resource* texture_DebugTex = nullptr;
+        unsigned int texture_DebugTex_size[3] = { 0, 0, 0 };
+        unsigned int texture_DebugTex_numMips = 0;
+        DXGI_FORMAT texture_DebugTex_format = DXGI_FORMAT_UNKNOWN;
+        static const D3D12_RESOURCE_FLAGS texture_DebugTex_flags =  D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;
+        const D3D12_RESOURCE_STATES c_texture_DebugTex_endingState = D3D12_RESOURCE_STATE_UNORDERED_ACCESS;
 
         ID3D12Resource* texture_GatherDOF_FarFieldColorCoC = nullptr;
         unsigned int texture_GatherDOF_FarFieldColorCoC_size[3] = { 0, 0, 0 };
@@ -1899,8 +1923,23 @@ namespace FastBokeh
         static ID3D12PipelineState* computeShader_GatherDOF_BlurFar_pso;
         static ID3D12RootSignature* computeShader_GatherDOF_BlurFar_rootSig;
 
-        Struct__GatherDOF_FloodFillFarCSCB constantBuffer__GatherDOF_FloodFillFarCSCB_cpu;
-        ID3D12Resource* constantBuffer__GatherDOF_FloodFillFarCSCB = nullptr;
+        Struct__GatherDOF_NearBlurCB constantBuffer__GatherDOF_NearBlurCB_cpu;
+        ID3D12Resource* constantBuffer__GatherDOF_NearBlurCB = nullptr;
+
+        Struct__GatherDOF_RecombineCSCB constantBuffer__GatherDOF_RecombineCSCB_cpu;
+        ID3D12Resource* constantBuffer__GatherDOF_RecombineCSCB = nullptr;
+
+        Struct__GaussBlur_GaussBlurCSCB constantBuffer__GaussBlur_GaussBlurCSCB_cpu;
+        ID3D12Resource* constantBuffer__GaussBlur_GaussBlurCSCB = nullptr;
+
+        Struct__TemporalAccumulation_AccumulateCB constantBuffer__TemporalAccumulation_AccumulateCB_cpu;
+        ID3D12Resource* constantBuffer__TemporalAccumulation_AccumulateCB = nullptr;
+
+        Struct__ToneMap_TonemapCB constantBuffer__ToneMap_TonemapCB_cpu;
+        ID3D12Resource* constantBuffer__ToneMap_TonemapCB = nullptr;
+
+        Struct__GatherDOF_FloodFillFarCS_0CB constantBuffer__GatherDOF_FloodFillFarCS_0CB_cpu;
+        ID3D12Resource* constantBuffer__GatherDOF_FloodFillFarCS_0CB = nullptr;
 
         static ID3D12PipelineState* computeShader_GatherDOF_FloodFillFar_pso;
         static ID3D12RootSignature* computeShader_GatherDOF_FloodFillFar_rootSig;
@@ -1914,35 +1953,23 @@ namespace FastBokeh
         static ID3D12PipelineState* computeShader_GatherDOF_NearHalo_pso;
         static ID3D12RootSignature* computeShader_GatherDOF_NearHalo_rootSig;
 
-        Struct__GatherDOF_NearBlurCB constantBuffer__GatherDOF_NearBlurCB_cpu;
-        ID3D12Resource* constantBuffer__GatherDOF_NearBlurCB = nullptr;
-
         static ID3D12PipelineState* computeShader_GatherDOF_NearBlur_pso;
         static ID3D12RootSignature* computeShader_GatherDOF_NearBlur_rootSig;
+
+        Struct__GatherDOF_FloodFillFarCS_1CB constantBuffer__GatherDOF_FloodFillFarCS_1CB_cpu;
+        ID3D12Resource* constantBuffer__GatherDOF_FloodFillFarCS_1CB = nullptr;
 
         static ID3D12PipelineState* computeShader_GatherDOF_FloodFillNear_pso;
         static ID3D12RootSignature* computeShader_GatherDOF_FloodFillNear_rootSig;
 
-        Struct__GatherDOF_RecombineCSCB constantBuffer__GatherDOF_RecombineCSCB_cpu;
-        ID3D12Resource* constantBuffer__GatherDOF_RecombineCSCB = nullptr;
-
         static ID3D12PipelineState* computeShader_GatherDOF_Recombine_pso;
         static ID3D12RootSignature* computeShader_GatherDOF_Recombine_rootSig;
-
-        Struct__GaussBlur_GaussBlurCSCB constantBuffer__GaussBlur_GaussBlurCSCB_cpu;
-        ID3D12Resource* constantBuffer__GaussBlur_GaussBlurCSCB = nullptr;
 
         static ID3D12PipelineState* computeShader_GaussBlur_DoBlur_pso;
         static ID3D12RootSignature* computeShader_GaussBlur_DoBlur_rootSig;
 
-        Struct__TemporalAccumulation_AccumulateCB constantBuffer__TemporalAccumulation_AccumulateCB_cpu;
-        ID3D12Resource* constantBuffer__TemporalAccumulation_AccumulateCB = nullptr;
-
         static ID3D12PipelineState* computeShader_TemporalAccumulation_DoAccum_pso;
         static ID3D12RootSignature* computeShader_TemporalAccumulation_DoAccum_rootSig;
-
-        Struct__ToneMap_TonemapCB constantBuffer__ToneMap_TonemapCB_cpu;
-        ID3D12Resource* constantBuffer__ToneMap_TonemapCB = nullptr;
 
         static ID3D12PipelineState* computeShader_ToneMap_Tonemap_pso;
         static ID3D12RootSignature* computeShader_ToneMap_Tonemap_rootSig;

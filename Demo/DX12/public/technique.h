@@ -58,32 +58,33 @@ namespace FastBokeh
             uint variable_SamplesPerPixelPerFrame = 1;
             PixelJitterType variable_JitterPixels = PixelJitterType::PerPixel;  // Provides Antialiasing
             float variable_DepthNearPlane = 0.100000f;
-            float3 variable_CameraPos = {0.0f,0.0f,0.0f};
+            float3 variable_CameraPos = {0.000000f, 0.000000f, 0.000000f};
             float variable_RayPosNormalNudge = 0.100000f;
             bool variable_CameraChanged = false;
-            float4x4 variable_InvViewProjMtx = {0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f};
-            float4 variable_MouseState = {0.0f,0.0f,0.0f,0.0f};
+            float4x4 variable_InvViewProjMtx = {0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f};
+            float4 variable_MouseState = {0.000000f, 0.000000f, 0.000000f, 0.000000f};
             uint variable_NumBounces = 4;  // How many bounces the rays are allowed
             bool variable_AlbedoMode = 1.0f;  // if true, returns albedo * AlbedoModeAlbedoMultiplier + emissive at primary hit
             float variable_AlbedoModeAlbedoMultiplier = 0.500000f;  // How much to multiply albedo by in albedo mode, to darken it or lighten it
-            float variable_FocalLength = 1.000000f;
+            float variable_FocalLength = 28.000000f;
             LensRNG variable_LensRNGSource = LensRNG::UniformCircleWhite;
             NoiseTexExtends variable_LensRNGExtend = NoiseTexExtends::None;  // How to extend the noise textures
             bool variable_JitterNoiseTextures = false;  // The noise textures are 8 bit unorms. This adds a random value between -0.5/255 and +0.5/255 to fill in the unset bits with white noise.
             DOFMode variable_DOF = DOFMode::Off;
-            float4x4 variable_InvViewMtx = {0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f};
+            float4x4 variable_InvViewMtx = {0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f};
             float variable_ApertureRadius = 1.000000f;
-            float2 variable_AnamorphicScaling = {1.0f, 1.0f};  // Defaults to 1.0, 1.0 for no anamorphic effects. Elongates the aperture, does not simulate anamorphic elements.
-            float2 variable_PetzvalScaling = {1.0f, 1.0f};  // Scales bokeh on each axis depending on screen position. Fakes the effect. Defaults to 1.0, 1.0 for no elongation.
-            float3 variable_OcclusionSettings = {1.0f, 1.0f, 1.0f};  // Pushes the bounding square of the lens outwards and clips against a unit circle. 1,1,1 means no occlusion. x is how far from the center of the screen to start moving the square. 0 is center, 1 is the corner.  y is how much to scale the lens bounding square by.  z is how far to move the square, as the pixel is farther from where the occlusion begins. Reasonable settings are 0, 0.1, 1.25.
+            float2 variable_AnamorphicScaling = {1.000000f, 1.000000f};  // Defaults to 1.0, 1.0 for no anamorphic effects. Elongates the aperture, does not simulate anamorphic elements.
+            float2 variable_PetzvalScaling = {1.000000f, 1.000000f};  // Scales bokeh on each axis depending on screen position. Fakes the effect. Defaults to 1.0, 1.0 for no elongation.
+            float3 variable_OcclusionSettings = {1.000000f, 1.000000f, 1.000000f};  // Pushes the bounding square of the lens outwards and clips against a unit circle. 1,1,1 means no occlusion. x is how far from the center of the screen to start moving the square. 0 is center, 1 is the corner.  y is how much to scale the lens bounding square by.  z is how far to move the square, as the pixel is farther from where the occlusion begins. Reasonable settings are 0, 0.1, 1.25.
             bool variable_NoImportanceSampling = false;  // If true, the FAST noise textures will not be used, and 
-            float3 variable_SkyColor = {1.0f, 1.0f, 1.0f};
+            float3 variable_SkyColor = {1.000000f, 1.000000f, 1.000000f};
             float variable_SkyBrightness = 10.000000f;
             float variable_MaterialEmissiveMultiplier = 1.000000f;
             float variable_SmallLightBrightness = 1.000000f;
-            float3 variable_SmallLightsColor = {1.0f, 1.0f, 1.0f};
+            float3 variable_SmallLightsColor = {1.000000f, 1.000000f, 1.000000f};
             bool variable_SmallLightsColorful = false;  // If true, makes the small lights colorful, else makes them all the same color
             float variable_SmallLightRadius = 1.000000f;
+            float variable_HighestAngleThatMakesItOutOfTheLens = 0.000000f;
             bool variable_GatherDOF_UseNoiseTextures = false;
             bool variable_GatherDOF_AnimateNoiseTextures = true;
             bool variable_GatherDOF_SuppressBokeh = false;  // If true, blurs out of focus areas, but reduces the Bokeh effect of small bright lights
@@ -97,7 +98,7 @@ namespace FastBokeh
             bool variable_GatherDOF_DoFarFieldFloodFill = true;  // Whether to do flood fill on the far field
             bool variable_GatherDOF_DoNearField = true;  // Whether or not to do the near field
             bool variable_GatherDOF_DoNearFieldFloodFill = true;  // Whether to do flood fill on the near field
-            float4 variable_GatherDOF_KernelSize = {10.0f, 15.0f, 5.0f, 0.0f};  // x = size of the bokeh blur radius in texel space. y = rotation in radians to apply to the bokeh shape. z = Number of edge of the polygon (number of blades). 0: circle. 4: square, 6: hexagon...
+            float4 variable_GatherDOF_KernelSize = {10.000000f, 15.000000f, 5.000000f, 0.000000f};  // x = size of the bokeh blur radius in texel space. y = rotation in radians to apply to the bokeh shape. z = Number of edge of the polygon (number of blades). 0: circle. 4: square, 6: hexagon...
             uint variable_GatherDOF_BlurTapCount = 8;  // 8 for high quality, 6 for low quality. Used in a double for loop, so it's this number squared.
             uint variable_GatherDOF_FloodFillTapCount = 4;  // 4 for high quality, 3 for low quality. Used in a double for loop, so it's this number squared.
             float variable_GaussBlur_Sigma = 1.000000f;  // Strength of blur. Standard deviation of gaussian distribution.
@@ -288,10 +289,10 @@ namespace FastBokeh
 
     struct Struct_VBStruct
     {
-        float3 position = {0.0f,0.0f,0.0f};
-        float3 normal = {0.0f,0.0f,0.0f};
-        float4 tangent = {0.0f,0.0f,0.0f,0.0f};
-        float2 UV = {0.0f,0.0f};
+        float3 position = {0.000000f, 0.000000f, 0.000000f};
+        float3 normal = {0.000000f, 0.000000f, 0.000000f};
+        float4 tangent = {0.000000f, 0.000000f, 0.000000f, 0.000000f};
+        float2 UV = {0.000000f, 0.000000f};
         uint materialID = 0;
     };
 };

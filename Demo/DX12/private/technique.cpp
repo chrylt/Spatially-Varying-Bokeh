@@ -129,7 +129,7 @@ namespace FastBokeh
             samplers[1].RegisterSpace = 0;
             samplers[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 
-            D3D12_DESCRIPTOR_RANGE ranges[202];
+            D3D12_DESCRIPTOR_RANGE ranges[203];
 
             // Output
             ranges[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
@@ -166,1386 +166,1393 @@ namespace FastBokeh
             ranges[4].RegisterSpace = 0;
             ranges[4].OffsetInDescriptorsFromTableStart = 4;
 
-            // _loadedTexture_0
-            ranges[5].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+            // DebugTex
+            ranges[5].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
             ranges[5].NumDescriptors = 1;
-            ranges[5].BaseShaderRegister = 2;
+            ranges[5].BaseShaderRegister = 3;
             ranges[5].RegisterSpace = 0;
             ranges[5].OffsetInDescriptorsFromTableStart = 5;
 
-            // _loadedTexture_1
+            // _loadedTexture_0
             ranges[6].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[6].NumDescriptors = 1;
-            ranges[6].BaseShaderRegister = 3;
+            ranges[6].BaseShaderRegister = 2;
             ranges[6].RegisterSpace = 0;
             ranges[6].OffsetInDescriptorsFromTableStart = 6;
 
-            // _loadedTexture_2
+            // _loadedTexture_1
             ranges[7].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[7].NumDescriptors = 1;
-            ranges[7].BaseShaderRegister = 4;
+            ranges[7].BaseShaderRegister = 3;
             ranges[7].RegisterSpace = 0;
             ranges[7].OffsetInDescriptorsFromTableStart = 7;
 
-            // _loadedTexture_3
+            // _loadedTexture_2
             ranges[8].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[8].NumDescriptors = 1;
-            ranges[8].BaseShaderRegister = 5;
+            ranges[8].BaseShaderRegister = 4;
             ranges[8].RegisterSpace = 0;
             ranges[8].OffsetInDescriptorsFromTableStart = 8;
 
-            // _loadedTexture_4
+            // _loadedTexture_3
             ranges[9].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[9].NumDescriptors = 1;
-            ranges[9].BaseShaderRegister = 6;
+            ranges[9].BaseShaderRegister = 5;
             ranges[9].RegisterSpace = 0;
             ranges[9].OffsetInDescriptorsFromTableStart = 9;
 
-            // _loadedTexture_5
+            // _loadedTexture_4
             ranges[10].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[10].NumDescriptors = 1;
-            ranges[10].BaseShaderRegister = 7;
+            ranges[10].BaseShaderRegister = 6;
             ranges[10].RegisterSpace = 0;
             ranges[10].OffsetInDescriptorsFromTableStart = 10;
 
-            // _loadedTexture_6
+            // _loadedTexture_5
             ranges[11].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[11].NumDescriptors = 1;
-            ranges[11].BaseShaderRegister = 8;
+            ranges[11].BaseShaderRegister = 7;
             ranges[11].RegisterSpace = 0;
             ranges[11].OffsetInDescriptorsFromTableStart = 11;
 
-            // _loadedTexture_7
+            // _loadedTexture_6
             ranges[12].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[12].NumDescriptors = 1;
-            ranges[12].BaseShaderRegister = 9;
+            ranges[12].BaseShaderRegister = 8;
             ranges[12].RegisterSpace = 0;
             ranges[12].OffsetInDescriptorsFromTableStart = 12;
 
-            // _loadedTexture_8
+            // _loadedTexture_7
             ranges[13].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[13].NumDescriptors = 1;
-            ranges[13].BaseShaderRegister = 10;
+            ranges[13].BaseShaderRegister = 9;
             ranges[13].RegisterSpace = 0;
             ranges[13].OffsetInDescriptorsFromTableStart = 13;
 
-            // _loadedTexture_9
+            // _loadedTexture_8
             ranges[14].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[14].NumDescriptors = 1;
-            ranges[14].BaseShaderRegister = 11;
+            ranges[14].BaseShaderRegister = 10;
             ranges[14].RegisterSpace = 0;
             ranges[14].OffsetInDescriptorsFromTableStart = 14;
 
-            // _loadedTexture_10
+            // _loadedTexture_9
             ranges[15].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[15].NumDescriptors = 1;
-            ranges[15].BaseShaderRegister = 12;
+            ranges[15].BaseShaderRegister = 11;
             ranges[15].RegisterSpace = 0;
             ranges[15].OffsetInDescriptorsFromTableStart = 15;
 
-            // _loadedTexture_11
+            // _loadedTexture_10
             ranges[16].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[16].NumDescriptors = 1;
-            ranges[16].BaseShaderRegister = 13;
+            ranges[16].BaseShaderRegister = 12;
             ranges[16].RegisterSpace = 0;
             ranges[16].OffsetInDescriptorsFromTableStart = 16;
 
-            // _loadedTexture_12
+            // _loadedTexture_11
             ranges[17].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[17].NumDescriptors = 1;
-            ranges[17].BaseShaderRegister = 14;
+            ranges[17].BaseShaderRegister = 13;
             ranges[17].RegisterSpace = 0;
             ranges[17].OffsetInDescriptorsFromTableStart = 17;
 
-            // _loadedTexture_13
+            // _loadedTexture_12
             ranges[18].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[18].NumDescriptors = 1;
-            ranges[18].BaseShaderRegister = 15;
+            ranges[18].BaseShaderRegister = 14;
             ranges[18].RegisterSpace = 0;
             ranges[18].OffsetInDescriptorsFromTableStart = 18;
 
-            // _loadedTexture_14
+            // _loadedTexture_13
             ranges[19].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[19].NumDescriptors = 1;
-            ranges[19].BaseShaderRegister = 16;
+            ranges[19].BaseShaderRegister = 15;
             ranges[19].RegisterSpace = 0;
             ranges[19].OffsetInDescriptorsFromTableStart = 19;
 
-            // _loadedTexture_15
+            // _loadedTexture_14
             ranges[20].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[20].NumDescriptors = 1;
-            ranges[20].BaseShaderRegister = 17;
+            ranges[20].BaseShaderRegister = 16;
             ranges[20].RegisterSpace = 0;
             ranges[20].OffsetInDescriptorsFromTableStart = 20;
 
-            // _loadedTexture_16
+            // _loadedTexture_15
             ranges[21].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[21].NumDescriptors = 1;
-            ranges[21].BaseShaderRegister = 18;
+            ranges[21].BaseShaderRegister = 17;
             ranges[21].RegisterSpace = 0;
             ranges[21].OffsetInDescriptorsFromTableStart = 21;
 
-            // _loadedTexture_17
+            // _loadedTexture_16
             ranges[22].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[22].NumDescriptors = 1;
-            ranges[22].BaseShaderRegister = 19;
+            ranges[22].BaseShaderRegister = 18;
             ranges[22].RegisterSpace = 0;
             ranges[22].OffsetInDescriptorsFromTableStart = 22;
 
-            // _loadedTexture_18
+            // _loadedTexture_17
             ranges[23].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[23].NumDescriptors = 1;
-            ranges[23].BaseShaderRegister = 20;
+            ranges[23].BaseShaderRegister = 19;
             ranges[23].RegisterSpace = 0;
             ranges[23].OffsetInDescriptorsFromTableStart = 23;
 
-            // _loadedTexture_19
+            // _loadedTexture_18
             ranges[24].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[24].NumDescriptors = 1;
-            ranges[24].BaseShaderRegister = 21;
+            ranges[24].BaseShaderRegister = 20;
             ranges[24].RegisterSpace = 0;
             ranges[24].OffsetInDescriptorsFromTableStart = 24;
 
-            // _loadedTexture_20
+            // _loadedTexture_19
             ranges[25].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[25].NumDescriptors = 1;
-            ranges[25].BaseShaderRegister = 22;
+            ranges[25].BaseShaderRegister = 21;
             ranges[25].RegisterSpace = 0;
             ranges[25].OffsetInDescriptorsFromTableStart = 25;
 
-            // _loadedTexture_21
+            // _loadedTexture_20
             ranges[26].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[26].NumDescriptors = 1;
-            ranges[26].BaseShaderRegister = 23;
+            ranges[26].BaseShaderRegister = 22;
             ranges[26].RegisterSpace = 0;
             ranges[26].OffsetInDescriptorsFromTableStart = 26;
 
-            // _loadedTexture_22
+            // _loadedTexture_21
             ranges[27].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[27].NumDescriptors = 1;
-            ranges[27].BaseShaderRegister = 24;
+            ranges[27].BaseShaderRegister = 23;
             ranges[27].RegisterSpace = 0;
             ranges[27].OffsetInDescriptorsFromTableStart = 27;
 
-            // _loadedTexture_23
+            // _loadedTexture_22
             ranges[28].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[28].NumDescriptors = 1;
-            ranges[28].BaseShaderRegister = 25;
+            ranges[28].BaseShaderRegister = 24;
             ranges[28].RegisterSpace = 0;
             ranges[28].OffsetInDescriptorsFromTableStart = 28;
 
-            // _loadedTexture_24
+            // _loadedTexture_23
             ranges[29].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[29].NumDescriptors = 1;
-            ranges[29].BaseShaderRegister = 26;
+            ranges[29].BaseShaderRegister = 25;
             ranges[29].RegisterSpace = 0;
             ranges[29].OffsetInDescriptorsFromTableStart = 29;
 
-            // _loadedTexture_25
+            // _loadedTexture_24
             ranges[30].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[30].NumDescriptors = 1;
-            ranges[30].BaseShaderRegister = 27;
+            ranges[30].BaseShaderRegister = 26;
             ranges[30].RegisterSpace = 0;
             ranges[30].OffsetInDescriptorsFromTableStart = 30;
 
-            // _loadedTexture_26
+            // _loadedTexture_25
             ranges[31].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[31].NumDescriptors = 1;
-            ranges[31].BaseShaderRegister = 28;
+            ranges[31].BaseShaderRegister = 27;
             ranges[31].RegisterSpace = 0;
             ranges[31].OffsetInDescriptorsFromTableStart = 31;
 
-            // _loadedTexture_27
+            // _loadedTexture_26
             ranges[32].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[32].NumDescriptors = 1;
-            ranges[32].BaseShaderRegister = 29;
+            ranges[32].BaseShaderRegister = 28;
             ranges[32].RegisterSpace = 0;
             ranges[32].OffsetInDescriptorsFromTableStart = 32;
 
-            // _loadedTexture_28
+            // _loadedTexture_27
             ranges[33].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[33].NumDescriptors = 1;
-            ranges[33].BaseShaderRegister = 30;
+            ranges[33].BaseShaderRegister = 29;
             ranges[33].RegisterSpace = 0;
             ranges[33].OffsetInDescriptorsFromTableStart = 33;
 
-            // _loadedTexture_29
+            // _loadedTexture_28
             ranges[34].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[34].NumDescriptors = 1;
-            ranges[34].BaseShaderRegister = 31;
+            ranges[34].BaseShaderRegister = 30;
             ranges[34].RegisterSpace = 0;
             ranges[34].OffsetInDescriptorsFromTableStart = 34;
 
-            // _loadedTexture_30
+            // _loadedTexture_29
             ranges[35].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[35].NumDescriptors = 1;
-            ranges[35].BaseShaderRegister = 32;
+            ranges[35].BaseShaderRegister = 31;
             ranges[35].RegisterSpace = 0;
             ranges[35].OffsetInDescriptorsFromTableStart = 35;
 
-            // _loadedTexture_31
+            // _loadedTexture_30
             ranges[36].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[36].NumDescriptors = 1;
-            ranges[36].BaseShaderRegister = 33;
+            ranges[36].BaseShaderRegister = 32;
             ranges[36].RegisterSpace = 0;
             ranges[36].OffsetInDescriptorsFromTableStart = 36;
 
-            // _loadedTexture_32
+            // _loadedTexture_31
             ranges[37].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[37].NumDescriptors = 1;
-            ranges[37].BaseShaderRegister = 34;
+            ranges[37].BaseShaderRegister = 33;
             ranges[37].RegisterSpace = 0;
             ranges[37].OffsetInDescriptorsFromTableStart = 37;
 
-            // _loadedTexture_33
+            // _loadedTexture_32
             ranges[38].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[38].NumDescriptors = 1;
-            ranges[38].BaseShaderRegister = 35;
+            ranges[38].BaseShaderRegister = 34;
             ranges[38].RegisterSpace = 0;
             ranges[38].OffsetInDescriptorsFromTableStart = 38;
 
-            // _loadedTexture_34
+            // _loadedTexture_33
             ranges[39].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[39].NumDescriptors = 1;
-            ranges[39].BaseShaderRegister = 36;
+            ranges[39].BaseShaderRegister = 35;
             ranges[39].RegisterSpace = 0;
             ranges[39].OffsetInDescriptorsFromTableStart = 39;
 
-            // _loadedTexture_35
+            // _loadedTexture_34
             ranges[40].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[40].NumDescriptors = 1;
-            ranges[40].BaseShaderRegister = 37;
+            ranges[40].BaseShaderRegister = 36;
             ranges[40].RegisterSpace = 0;
             ranges[40].OffsetInDescriptorsFromTableStart = 40;
 
-            // _loadedTexture_36
+            // _loadedTexture_35
             ranges[41].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[41].NumDescriptors = 1;
-            ranges[41].BaseShaderRegister = 38;
+            ranges[41].BaseShaderRegister = 37;
             ranges[41].RegisterSpace = 0;
             ranges[41].OffsetInDescriptorsFromTableStart = 41;
 
-            // _loadedTexture_37
+            // _loadedTexture_36
             ranges[42].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[42].NumDescriptors = 1;
-            ranges[42].BaseShaderRegister = 39;
+            ranges[42].BaseShaderRegister = 38;
             ranges[42].RegisterSpace = 0;
             ranges[42].OffsetInDescriptorsFromTableStart = 42;
 
-            // _loadedTexture_38
+            // _loadedTexture_37
             ranges[43].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[43].NumDescriptors = 1;
-            ranges[43].BaseShaderRegister = 40;
+            ranges[43].BaseShaderRegister = 39;
             ranges[43].RegisterSpace = 0;
             ranges[43].OffsetInDescriptorsFromTableStart = 43;
 
-            // _loadedTexture_39
+            // _loadedTexture_38
             ranges[44].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[44].NumDescriptors = 1;
-            ranges[44].BaseShaderRegister = 41;
+            ranges[44].BaseShaderRegister = 40;
             ranges[44].RegisterSpace = 0;
             ranges[44].OffsetInDescriptorsFromTableStart = 44;
 
-            // _loadedTexture_40
+            // _loadedTexture_39
             ranges[45].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[45].NumDescriptors = 1;
-            ranges[45].BaseShaderRegister = 42;
+            ranges[45].BaseShaderRegister = 41;
             ranges[45].RegisterSpace = 0;
             ranges[45].OffsetInDescriptorsFromTableStart = 45;
 
-            // _loadedTexture_41
+            // _loadedTexture_40
             ranges[46].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[46].NumDescriptors = 1;
-            ranges[46].BaseShaderRegister = 43;
+            ranges[46].BaseShaderRegister = 42;
             ranges[46].RegisterSpace = 0;
             ranges[46].OffsetInDescriptorsFromTableStart = 46;
 
-            // _loadedTexture_42
+            // _loadedTexture_41
             ranges[47].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[47].NumDescriptors = 1;
-            ranges[47].BaseShaderRegister = 44;
+            ranges[47].BaseShaderRegister = 43;
             ranges[47].RegisterSpace = 0;
             ranges[47].OffsetInDescriptorsFromTableStart = 47;
 
-            // _loadedTexture_43
+            // _loadedTexture_42
             ranges[48].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[48].NumDescriptors = 1;
-            ranges[48].BaseShaderRegister = 45;
+            ranges[48].BaseShaderRegister = 44;
             ranges[48].RegisterSpace = 0;
             ranges[48].OffsetInDescriptorsFromTableStart = 48;
 
-            // _loadedTexture_44
+            // _loadedTexture_43
             ranges[49].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[49].NumDescriptors = 1;
-            ranges[49].BaseShaderRegister = 46;
+            ranges[49].BaseShaderRegister = 45;
             ranges[49].RegisterSpace = 0;
             ranges[49].OffsetInDescriptorsFromTableStart = 49;
 
-            // _loadedTexture_45
+            // _loadedTexture_44
             ranges[50].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[50].NumDescriptors = 1;
-            ranges[50].BaseShaderRegister = 47;
+            ranges[50].BaseShaderRegister = 46;
             ranges[50].RegisterSpace = 0;
             ranges[50].OffsetInDescriptorsFromTableStart = 50;
 
-            // _loadedTexture_46
+            // _loadedTexture_45
             ranges[51].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[51].NumDescriptors = 1;
-            ranges[51].BaseShaderRegister = 48;
+            ranges[51].BaseShaderRegister = 47;
             ranges[51].RegisterSpace = 0;
             ranges[51].OffsetInDescriptorsFromTableStart = 51;
 
-            // _loadedTexture_47
+            // _loadedTexture_46
             ranges[52].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[52].NumDescriptors = 1;
-            ranges[52].BaseShaderRegister = 49;
+            ranges[52].BaseShaderRegister = 48;
             ranges[52].RegisterSpace = 0;
             ranges[52].OffsetInDescriptorsFromTableStart = 52;
 
-            // _loadedTexture_48
+            // _loadedTexture_47
             ranges[53].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[53].NumDescriptors = 1;
-            ranges[53].BaseShaderRegister = 50;
+            ranges[53].BaseShaderRegister = 49;
             ranges[53].RegisterSpace = 0;
             ranges[53].OffsetInDescriptorsFromTableStart = 53;
 
-            // _loadedTexture_49
+            // _loadedTexture_48
             ranges[54].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[54].NumDescriptors = 1;
-            ranges[54].BaseShaderRegister = 51;
+            ranges[54].BaseShaderRegister = 50;
             ranges[54].RegisterSpace = 0;
             ranges[54].OffsetInDescriptorsFromTableStart = 54;
 
-            // _loadedTexture_50
+            // _loadedTexture_49
             ranges[55].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[55].NumDescriptors = 1;
-            ranges[55].BaseShaderRegister = 52;
+            ranges[55].BaseShaderRegister = 51;
             ranges[55].RegisterSpace = 0;
             ranges[55].OffsetInDescriptorsFromTableStart = 55;
 
-            // _loadedTexture_51
+            // _loadedTexture_50
             ranges[56].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[56].NumDescriptors = 1;
-            ranges[56].BaseShaderRegister = 53;
+            ranges[56].BaseShaderRegister = 52;
             ranges[56].RegisterSpace = 0;
             ranges[56].OffsetInDescriptorsFromTableStart = 56;
 
-            // _loadedTexture_52
+            // _loadedTexture_51
             ranges[57].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[57].NumDescriptors = 1;
-            ranges[57].BaseShaderRegister = 54;
+            ranges[57].BaseShaderRegister = 53;
             ranges[57].RegisterSpace = 0;
             ranges[57].OffsetInDescriptorsFromTableStart = 57;
 
-            // _loadedTexture_53
+            // _loadedTexture_52
             ranges[58].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[58].NumDescriptors = 1;
-            ranges[58].BaseShaderRegister = 55;
+            ranges[58].BaseShaderRegister = 54;
             ranges[58].RegisterSpace = 0;
             ranges[58].OffsetInDescriptorsFromTableStart = 58;
 
-            // _loadedTexture_54
+            // _loadedTexture_53
             ranges[59].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[59].NumDescriptors = 1;
-            ranges[59].BaseShaderRegister = 56;
+            ranges[59].BaseShaderRegister = 55;
             ranges[59].RegisterSpace = 0;
             ranges[59].OffsetInDescriptorsFromTableStart = 59;
 
-            // _loadedTexture_55
+            // _loadedTexture_54
             ranges[60].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[60].NumDescriptors = 1;
-            ranges[60].BaseShaderRegister = 57;
+            ranges[60].BaseShaderRegister = 56;
             ranges[60].RegisterSpace = 0;
             ranges[60].OffsetInDescriptorsFromTableStart = 60;
 
-            // _loadedTexture_56
+            // _loadedTexture_55
             ranges[61].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[61].NumDescriptors = 1;
-            ranges[61].BaseShaderRegister = 58;
+            ranges[61].BaseShaderRegister = 57;
             ranges[61].RegisterSpace = 0;
             ranges[61].OffsetInDescriptorsFromTableStart = 61;
 
-            // _loadedTexture_57
+            // _loadedTexture_56
             ranges[62].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[62].NumDescriptors = 1;
-            ranges[62].BaseShaderRegister = 59;
+            ranges[62].BaseShaderRegister = 58;
             ranges[62].RegisterSpace = 0;
             ranges[62].OffsetInDescriptorsFromTableStart = 62;
 
-            // _loadedTexture_58
+            // _loadedTexture_57
             ranges[63].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[63].NumDescriptors = 1;
-            ranges[63].BaseShaderRegister = 60;
+            ranges[63].BaseShaderRegister = 59;
             ranges[63].RegisterSpace = 0;
             ranges[63].OffsetInDescriptorsFromTableStart = 63;
 
-            // _loadedTexture_59
+            // _loadedTexture_58
             ranges[64].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[64].NumDescriptors = 1;
-            ranges[64].BaseShaderRegister = 61;
+            ranges[64].BaseShaderRegister = 60;
             ranges[64].RegisterSpace = 0;
             ranges[64].OffsetInDescriptorsFromTableStart = 64;
 
-            // _loadedTexture_60
+            // _loadedTexture_59
             ranges[65].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[65].NumDescriptors = 1;
-            ranges[65].BaseShaderRegister = 62;
+            ranges[65].BaseShaderRegister = 61;
             ranges[65].RegisterSpace = 0;
             ranges[65].OffsetInDescriptorsFromTableStart = 65;
 
-            // _loadedTexture_61
+            // _loadedTexture_60
             ranges[66].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[66].NumDescriptors = 1;
-            ranges[66].BaseShaderRegister = 63;
+            ranges[66].BaseShaderRegister = 62;
             ranges[66].RegisterSpace = 0;
             ranges[66].OffsetInDescriptorsFromTableStart = 66;
 
-            // _loadedTexture_62
+            // _loadedTexture_61
             ranges[67].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[67].NumDescriptors = 1;
-            ranges[67].BaseShaderRegister = 64;
+            ranges[67].BaseShaderRegister = 63;
             ranges[67].RegisterSpace = 0;
             ranges[67].OffsetInDescriptorsFromTableStart = 67;
 
-            // _loadedTexture_63
+            // _loadedTexture_62
             ranges[68].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[68].NumDescriptors = 1;
-            ranges[68].BaseShaderRegister = 65;
+            ranges[68].BaseShaderRegister = 64;
             ranges[68].RegisterSpace = 0;
             ranges[68].OffsetInDescriptorsFromTableStart = 68;
 
-            // _loadedTexture_64
+            // _loadedTexture_63
             ranges[69].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[69].NumDescriptors = 1;
-            ranges[69].BaseShaderRegister = 66;
+            ranges[69].BaseShaderRegister = 65;
             ranges[69].RegisterSpace = 0;
             ranges[69].OffsetInDescriptorsFromTableStart = 69;
 
-            // _loadedTexture_65
+            // _loadedTexture_64
             ranges[70].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[70].NumDescriptors = 1;
-            ranges[70].BaseShaderRegister = 67;
+            ranges[70].BaseShaderRegister = 66;
             ranges[70].RegisterSpace = 0;
             ranges[70].OffsetInDescriptorsFromTableStart = 70;
 
-            // _loadedTexture_66
+            // _loadedTexture_65
             ranges[71].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[71].NumDescriptors = 1;
-            ranges[71].BaseShaderRegister = 68;
+            ranges[71].BaseShaderRegister = 67;
             ranges[71].RegisterSpace = 0;
             ranges[71].OffsetInDescriptorsFromTableStart = 71;
 
-            // _loadedTexture_67
+            // _loadedTexture_66
             ranges[72].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[72].NumDescriptors = 1;
-            ranges[72].BaseShaderRegister = 69;
+            ranges[72].BaseShaderRegister = 68;
             ranges[72].RegisterSpace = 0;
             ranges[72].OffsetInDescriptorsFromTableStart = 72;
 
-            // _loadedTexture_68
+            // _loadedTexture_67
             ranges[73].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[73].NumDescriptors = 1;
-            ranges[73].BaseShaderRegister = 70;
+            ranges[73].BaseShaderRegister = 69;
             ranges[73].RegisterSpace = 0;
             ranges[73].OffsetInDescriptorsFromTableStart = 73;
 
-            // _loadedTexture_69
+            // _loadedTexture_68
             ranges[74].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[74].NumDescriptors = 1;
-            ranges[74].BaseShaderRegister = 71;
+            ranges[74].BaseShaderRegister = 70;
             ranges[74].RegisterSpace = 0;
             ranges[74].OffsetInDescriptorsFromTableStart = 74;
 
-            // _loadedTexture_70
+            // _loadedTexture_69
             ranges[75].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[75].NumDescriptors = 1;
-            ranges[75].BaseShaderRegister = 72;
+            ranges[75].BaseShaderRegister = 71;
             ranges[75].RegisterSpace = 0;
             ranges[75].OffsetInDescriptorsFromTableStart = 75;
 
-            // _loadedTexture_71
+            // _loadedTexture_70
             ranges[76].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[76].NumDescriptors = 1;
-            ranges[76].BaseShaderRegister = 73;
+            ranges[76].BaseShaderRegister = 72;
             ranges[76].RegisterSpace = 0;
             ranges[76].OffsetInDescriptorsFromTableStart = 76;
 
-            // _loadedTexture_72
+            // _loadedTexture_71
             ranges[77].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[77].NumDescriptors = 1;
-            ranges[77].BaseShaderRegister = 74;
+            ranges[77].BaseShaderRegister = 73;
             ranges[77].RegisterSpace = 0;
             ranges[77].OffsetInDescriptorsFromTableStart = 77;
 
-            // _loadedTexture_73
+            // _loadedTexture_72
             ranges[78].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[78].NumDescriptors = 1;
-            ranges[78].BaseShaderRegister = 75;
+            ranges[78].BaseShaderRegister = 74;
             ranges[78].RegisterSpace = 0;
             ranges[78].OffsetInDescriptorsFromTableStart = 78;
 
-            // _loadedTexture_74
+            // _loadedTexture_73
             ranges[79].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[79].NumDescriptors = 1;
-            ranges[79].BaseShaderRegister = 76;
+            ranges[79].BaseShaderRegister = 75;
             ranges[79].RegisterSpace = 0;
             ranges[79].OffsetInDescriptorsFromTableStart = 79;
 
-            // _loadedTexture_75
+            // _loadedTexture_74
             ranges[80].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[80].NumDescriptors = 1;
-            ranges[80].BaseShaderRegister = 77;
+            ranges[80].BaseShaderRegister = 76;
             ranges[80].RegisterSpace = 0;
             ranges[80].OffsetInDescriptorsFromTableStart = 80;
 
-            // _loadedTexture_76
+            // _loadedTexture_75
             ranges[81].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[81].NumDescriptors = 1;
-            ranges[81].BaseShaderRegister = 78;
+            ranges[81].BaseShaderRegister = 77;
             ranges[81].RegisterSpace = 0;
             ranges[81].OffsetInDescriptorsFromTableStart = 81;
 
-            // _loadedTexture_77
+            // _loadedTexture_76
             ranges[82].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[82].NumDescriptors = 1;
-            ranges[82].BaseShaderRegister = 79;
+            ranges[82].BaseShaderRegister = 78;
             ranges[82].RegisterSpace = 0;
             ranges[82].OffsetInDescriptorsFromTableStart = 82;
 
-            // _loadedTexture_78
+            // _loadedTexture_77
             ranges[83].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[83].NumDescriptors = 1;
-            ranges[83].BaseShaderRegister = 80;
+            ranges[83].BaseShaderRegister = 79;
             ranges[83].RegisterSpace = 0;
             ranges[83].OffsetInDescriptorsFromTableStart = 83;
 
-            // _loadedTexture_79
+            // _loadedTexture_78
             ranges[84].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[84].NumDescriptors = 1;
-            ranges[84].BaseShaderRegister = 81;
+            ranges[84].BaseShaderRegister = 80;
             ranges[84].RegisterSpace = 0;
             ranges[84].OffsetInDescriptorsFromTableStart = 84;
 
-            // _loadedTexture_80
+            // _loadedTexture_79
             ranges[85].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[85].NumDescriptors = 1;
-            ranges[85].BaseShaderRegister = 82;
+            ranges[85].BaseShaderRegister = 81;
             ranges[85].RegisterSpace = 0;
             ranges[85].OffsetInDescriptorsFromTableStart = 85;
 
-            // _loadedTexture_81
+            // _loadedTexture_80
             ranges[86].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[86].NumDescriptors = 1;
-            ranges[86].BaseShaderRegister = 83;
+            ranges[86].BaseShaderRegister = 82;
             ranges[86].RegisterSpace = 0;
             ranges[86].OffsetInDescriptorsFromTableStart = 86;
 
-            // _loadedTexture_82
+            // _loadedTexture_81
             ranges[87].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[87].NumDescriptors = 1;
-            ranges[87].BaseShaderRegister = 84;
+            ranges[87].BaseShaderRegister = 83;
             ranges[87].RegisterSpace = 0;
             ranges[87].OffsetInDescriptorsFromTableStart = 87;
 
-            // _loadedTexture_83
+            // _loadedTexture_82
             ranges[88].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[88].NumDescriptors = 1;
-            ranges[88].BaseShaderRegister = 85;
+            ranges[88].BaseShaderRegister = 84;
             ranges[88].RegisterSpace = 0;
             ranges[88].OffsetInDescriptorsFromTableStart = 88;
 
-            // _loadedTexture_84
+            // _loadedTexture_83
             ranges[89].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[89].NumDescriptors = 1;
-            ranges[89].BaseShaderRegister = 86;
+            ranges[89].BaseShaderRegister = 85;
             ranges[89].RegisterSpace = 0;
             ranges[89].OffsetInDescriptorsFromTableStart = 89;
 
-            // _loadedTexture_85
+            // _loadedTexture_84
             ranges[90].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[90].NumDescriptors = 1;
-            ranges[90].BaseShaderRegister = 87;
+            ranges[90].BaseShaderRegister = 86;
             ranges[90].RegisterSpace = 0;
             ranges[90].OffsetInDescriptorsFromTableStart = 90;
 
-            // _loadedTexture_86
+            // _loadedTexture_85
             ranges[91].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[91].NumDescriptors = 1;
-            ranges[91].BaseShaderRegister = 88;
+            ranges[91].BaseShaderRegister = 87;
             ranges[91].RegisterSpace = 0;
             ranges[91].OffsetInDescriptorsFromTableStart = 91;
 
-            // _loadedTexture_87
+            // _loadedTexture_86
             ranges[92].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[92].NumDescriptors = 1;
-            ranges[92].BaseShaderRegister = 89;
+            ranges[92].BaseShaderRegister = 88;
             ranges[92].RegisterSpace = 0;
             ranges[92].OffsetInDescriptorsFromTableStart = 92;
 
-            // _loadedTexture_88
+            // _loadedTexture_87
             ranges[93].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[93].NumDescriptors = 1;
-            ranges[93].BaseShaderRegister = 90;
+            ranges[93].BaseShaderRegister = 89;
             ranges[93].RegisterSpace = 0;
             ranges[93].OffsetInDescriptorsFromTableStart = 93;
 
-            // _loadedTexture_89
+            // _loadedTexture_88
             ranges[94].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[94].NumDescriptors = 1;
-            ranges[94].BaseShaderRegister = 91;
+            ranges[94].BaseShaderRegister = 90;
             ranges[94].RegisterSpace = 0;
             ranges[94].OffsetInDescriptorsFromTableStart = 94;
 
-            // _loadedTexture_90
+            // _loadedTexture_89
             ranges[95].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[95].NumDescriptors = 1;
-            ranges[95].BaseShaderRegister = 92;
+            ranges[95].BaseShaderRegister = 91;
             ranges[95].RegisterSpace = 0;
             ranges[95].OffsetInDescriptorsFromTableStart = 95;
 
-            // _loadedTexture_91
+            // _loadedTexture_90
             ranges[96].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[96].NumDescriptors = 1;
-            ranges[96].BaseShaderRegister = 93;
+            ranges[96].BaseShaderRegister = 92;
             ranges[96].RegisterSpace = 0;
             ranges[96].OffsetInDescriptorsFromTableStart = 96;
 
-            // _loadedTexture_92
+            // _loadedTexture_91
             ranges[97].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[97].NumDescriptors = 1;
-            ranges[97].BaseShaderRegister = 94;
+            ranges[97].BaseShaderRegister = 93;
             ranges[97].RegisterSpace = 0;
             ranges[97].OffsetInDescriptorsFromTableStart = 97;
 
-            // _loadedTexture_93
+            // _loadedTexture_92
             ranges[98].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[98].NumDescriptors = 1;
-            ranges[98].BaseShaderRegister = 95;
+            ranges[98].BaseShaderRegister = 94;
             ranges[98].RegisterSpace = 0;
             ranges[98].OffsetInDescriptorsFromTableStart = 98;
 
-            // _loadedTexture_94
+            // _loadedTexture_93
             ranges[99].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[99].NumDescriptors = 1;
-            ranges[99].BaseShaderRegister = 96;
+            ranges[99].BaseShaderRegister = 95;
             ranges[99].RegisterSpace = 0;
             ranges[99].OffsetInDescriptorsFromTableStart = 99;
 
-            // _loadedTexture_95
+            // _loadedTexture_94
             ranges[100].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[100].NumDescriptors = 1;
-            ranges[100].BaseShaderRegister = 97;
+            ranges[100].BaseShaderRegister = 96;
             ranges[100].RegisterSpace = 0;
             ranges[100].OffsetInDescriptorsFromTableStart = 100;
 
-            // _loadedTexture_96
+            // _loadedTexture_95
             ranges[101].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[101].NumDescriptors = 1;
-            ranges[101].BaseShaderRegister = 98;
+            ranges[101].BaseShaderRegister = 97;
             ranges[101].RegisterSpace = 0;
             ranges[101].OffsetInDescriptorsFromTableStart = 101;
 
-            // _loadedTexture_97
+            // _loadedTexture_96
             ranges[102].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[102].NumDescriptors = 1;
-            ranges[102].BaseShaderRegister = 99;
+            ranges[102].BaseShaderRegister = 98;
             ranges[102].RegisterSpace = 0;
             ranges[102].OffsetInDescriptorsFromTableStart = 102;
 
-            // _loadedTexture_98
+            // _loadedTexture_97
             ranges[103].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[103].NumDescriptors = 1;
-            ranges[103].BaseShaderRegister = 100;
+            ranges[103].BaseShaderRegister = 99;
             ranges[103].RegisterSpace = 0;
             ranges[103].OffsetInDescriptorsFromTableStart = 103;
 
-            // _loadedTexture_99
+            // _loadedTexture_98
             ranges[104].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[104].NumDescriptors = 1;
-            ranges[104].BaseShaderRegister = 101;
+            ranges[104].BaseShaderRegister = 100;
             ranges[104].RegisterSpace = 0;
             ranges[104].OffsetInDescriptorsFromTableStart = 104;
 
-            // _loadedTexture_100
+            // _loadedTexture_99
             ranges[105].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[105].NumDescriptors = 1;
-            ranges[105].BaseShaderRegister = 102;
+            ranges[105].BaseShaderRegister = 101;
             ranges[105].RegisterSpace = 0;
             ranges[105].OffsetInDescriptorsFromTableStart = 105;
 
-            // _loadedTexture_101
+            // _loadedTexture_100
             ranges[106].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[106].NumDescriptors = 1;
-            ranges[106].BaseShaderRegister = 103;
+            ranges[106].BaseShaderRegister = 102;
             ranges[106].RegisterSpace = 0;
             ranges[106].OffsetInDescriptorsFromTableStart = 106;
 
-            // _loadedTexture_102
+            // _loadedTexture_101
             ranges[107].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[107].NumDescriptors = 1;
-            ranges[107].BaseShaderRegister = 104;
+            ranges[107].BaseShaderRegister = 103;
             ranges[107].RegisterSpace = 0;
             ranges[107].OffsetInDescriptorsFromTableStart = 107;
 
-            // _loadedTexture_103
+            // _loadedTexture_102
             ranges[108].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[108].NumDescriptors = 1;
-            ranges[108].BaseShaderRegister = 105;
+            ranges[108].BaseShaderRegister = 104;
             ranges[108].RegisterSpace = 0;
             ranges[108].OffsetInDescriptorsFromTableStart = 108;
 
-            // _loadedTexture_104
+            // _loadedTexture_103
             ranges[109].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[109].NumDescriptors = 1;
-            ranges[109].BaseShaderRegister = 106;
+            ranges[109].BaseShaderRegister = 105;
             ranges[109].RegisterSpace = 0;
             ranges[109].OffsetInDescriptorsFromTableStart = 109;
 
-            // _loadedTexture_105
+            // _loadedTexture_104
             ranges[110].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[110].NumDescriptors = 1;
-            ranges[110].BaseShaderRegister = 107;
+            ranges[110].BaseShaderRegister = 106;
             ranges[110].RegisterSpace = 0;
             ranges[110].OffsetInDescriptorsFromTableStart = 110;
 
-            // _loadedTexture_106
+            // _loadedTexture_105
             ranges[111].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[111].NumDescriptors = 1;
-            ranges[111].BaseShaderRegister = 108;
+            ranges[111].BaseShaderRegister = 107;
             ranges[111].RegisterSpace = 0;
             ranges[111].OffsetInDescriptorsFromTableStart = 111;
 
-            // _loadedTexture_107
+            // _loadedTexture_106
             ranges[112].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[112].NumDescriptors = 1;
-            ranges[112].BaseShaderRegister = 109;
+            ranges[112].BaseShaderRegister = 108;
             ranges[112].RegisterSpace = 0;
             ranges[112].OffsetInDescriptorsFromTableStart = 112;
 
-            // _loadedTexture_108
+            // _loadedTexture_107
             ranges[113].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[113].NumDescriptors = 1;
-            ranges[113].BaseShaderRegister = 110;
+            ranges[113].BaseShaderRegister = 109;
             ranges[113].RegisterSpace = 0;
             ranges[113].OffsetInDescriptorsFromTableStart = 113;
 
-            // _loadedTexture_109
+            // _loadedTexture_108
             ranges[114].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[114].NumDescriptors = 1;
-            ranges[114].BaseShaderRegister = 111;
+            ranges[114].BaseShaderRegister = 110;
             ranges[114].RegisterSpace = 0;
             ranges[114].OffsetInDescriptorsFromTableStart = 114;
 
-            // _loadedTexture_110
+            // _loadedTexture_109
             ranges[115].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[115].NumDescriptors = 1;
-            ranges[115].BaseShaderRegister = 112;
+            ranges[115].BaseShaderRegister = 111;
             ranges[115].RegisterSpace = 0;
             ranges[115].OffsetInDescriptorsFromTableStart = 115;
 
-            // _loadedTexture_111
+            // _loadedTexture_110
             ranges[116].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[116].NumDescriptors = 1;
-            ranges[116].BaseShaderRegister = 113;
+            ranges[116].BaseShaderRegister = 112;
             ranges[116].RegisterSpace = 0;
             ranges[116].OffsetInDescriptorsFromTableStart = 116;
 
-            // _loadedTexture_112
+            // _loadedTexture_111
             ranges[117].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[117].NumDescriptors = 1;
-            ranges[117].BaseShaderRegister = 114;
+            ranges[117].BaseShaderRegister = 113;
             ranges[117].RegisterSpace = 0;
             ranges[117].OffsetInDescriptorsFromTableStart = 117;
 
-            // _loadedTexture_113
+            // _loadedTexture_112
             ranges[118].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[118].NumDescriptors = 1;
-            ranges[118].BaseShaderRegister = 115;
+            ranges[118].BaseShaderRegister = 114;
             ranges[118].RegisterSpace = 0;
             ranges[118].OffsetInDescriptorsFromTableStart = 118;
 
-            // _loadedTexture_114
+            // _loadedTexture_113
             ranges[119].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[119].NumDescriptors = 1;
-            ranges[119].BaseShaderRegister = 116;
+            ranges[119].BaseShaderRegister = 115;
             ranges[119].RegisterSpace = 0;
             ranges[119].OffsetInDescriptorsFromTableStart = 119;
 
-            // _loadedTexture_115
+            // _loadedTexture_114
             ranges[120].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[120].NumDescriptors = 1;
-            ranges[120].BaseShaderRegister = 117;
+            ranges[120].BaseShaderRegister = 116;
             ranges[120].RegisterSpace = 0;
             ranges[120].OffsetInDescriptorsFromTableStart = 120;
 
-            // _loadedTexture_116
+            // _loadedTexture_115
             ranges[121].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[121].NumDescriptors = 1;
-            ranges[121].BaseShaderRegister = 118;
+            ranges[121].BaseShaderRegister = 117;
             ranges[121].RegisterSpace = 0;
             ranges[121].OffsetInDescriptorsFromTableStart = 121;
 
-            // _loadedTexture_117
+            // _loadedTexture_116
             ranges[122].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[122].NumDescriptors = 1;
-            ranges[122].BaseShaderRegister = 119;
+            ranges[122].BaseShaderRegister = 118;
             ranges[122].RegisterSpace = 0;
             ranges[122].OffsetInDescriptorsFromTableStart = 122;
 
-            // _loadedTexture_118
+            // _loadedTexture_117
             ranges[123].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[123].NumDescriptors = 1;
-            ranges[123].BaseShaderRegister = 120;
+            ranges[123].BaseShaderRegister = 119;
             ranges[123].RegisterSpace = 0;
             ranges[123].OffsetInDescriptorsFromTableStart = 123;
 
-            // _loadedTexture_119
+            // _loadedTexture_118
             ranges[124].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[124].NumDescriptors = 1;
-            ranges[124].BaseShaderRegister = 121;
+            ranges[124].BaseShaderRegister = 120;
             ranges[124].RegisterSpace = 0;
             ranges[124].OffsetInDescriptorsFromTableStart = 124;
 
-            // _loadedTexture_120
+            // _loadedTexture_119
             ranges[125].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[125].NumDescriptors = 1;
-            ranges[125].BaseShaderRegister = 122;
+            ranges[125].BaseShaderRegister = 121;
             ranges[125].RegisterSpace = 0;
             ranges[125].OffsetInDescriptorsFromTableStart = 125;
 
-            // _loadedTexture_121
+            // _loadedTexture_120
             ranges[126].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[126].NumDescriptors = 1;
-            ranges[126].BaseShaderRegister = 123;
+            ranges[126].BaseShaderRegister = 122;
             ranges[126].RegisterSpace = 0;
             ranges[126].OffsetInDescriptorsFromTableStart = 126;
 
-            // _loadedTexture_122
+            // _loadedTexture_121
             ranges[127].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[127].NumDescriptors = 1;
-            ranges[127].BaseShaderRegister = 124;
+            ranges[127].BaseShaderRegister = 123;
             ranges[127].RegisterSpace = 0;
             ranges[127].OffsetInDescriptorsFromTableStart = 127;
 
-            // _loadedTexture_123
+            // _loadedTexture_122
             ranges[128].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[128].NumDescriptors = 1;
-            ranges[128].BaseShaderRegister = 125;
+            ranges[128].BaseShaderRegister = 124;
             ranges[128].RegisterSpace = 0;
             ranges[128].OffsetInDescriptorsFromTableStart = 128;
 
-            // _loadedTexture_124
+            // _loadedTexture_123
             ranges[129].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[129].NumDescriptors = 1;
-            ranges[129].BaseShaderRegister = 126;
+            ranges[129].BaseShaderRegister = 125;
             ranges[129].RegisterSpace = 0;
             ranges[129].OffsetInDescriptorsFromTableStart = 129;
 
-            // _loadedTexture_125
+            // _loadedTexture_124
             ranges[130].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[130].NumDescriptors = 1;
-            ranges[130].BaseShaderRegister = 127;
+            ranges[130].BaseShaderRegister = 126;
             ranges[130].RegisterSpace = 0;
             ranges[130].OffsetInDescriptorsFromTableStart = 130;
 
-            // _loadedTexture_126
+            // _loadedTexture_125
             ranges[131].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[131].NumDescriptors = 1;
-            ranges[131].BaseShaderRegister = 128;
+            ranges[131].BaseShaderRegister = 127;
             ranges[131].RegisterSpace = 0;
             ranges[131].OffsetInDescriptorsFromTableStart = 131;
 
-            // _loadedTexture_127
+            // _loadedTexture_126
             ranges[132].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[132].NumDescriptors = 1;
-            ranges[132].BaseShaderRegister = 129;
+            ranges[132].BaseShaderRegister = 128;
             ranges[132].RegisterSpace = 0;
             ranges[132].OffsetInDescriptorsFromTableStart = 132;
 
-            // _loadedTexture_128
+            // _loadedTexture_127
             ranges[133].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[133].NumDescriptors = 1;
-            ranges[133].BaseShaderRegister = 130;
+            ranges[133].BaseShaderRegister = 129;
             ranges[133].RegisterSpace = 0;
             ranges[133].OffsetInDescriptorsFromTableStart = 133;
 
-            // _loadedTexture_129
+            // _loadedTexture_128
             ranges[134].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[134].NumDescriptors = 1;
-            ranges[134].BaseShaderRegister = 131;
+            ranges[134].BaseShaderRegister = 130;
             ranges[134].RegisterSpace = 0;
             ranges[134].OffsetInDescriptorsFromTableStart = 134;
 
-            // _loadedTexture_130
+            // _loadedTexture_129
             ranges[135].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[135].NumDescriptors = 1;
-            ranges[135].BaseShaderRegister = 132;
+            ranges[135].BaseShaderRegister = 131;
             ranges[135].RegisterSpace = 0;
             ranges[135].OffsetInDescriptorsFromTableStart = 135;
 
-            // _loadedTexture_131
+            // _loadedTexture_130
             ranges[136].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[136].NumDescriptors = 1;
-            ranges[136].BaseShaderRegister = 133;
+            ranges[136].BaseShaderRegister = 132;
             ranges[136].RegisterSpace = 0;
             ranges[136].OffsetInDescriptorsFromTableStart = 136;
 
-            // _loadedTexture_132
+            // _loadedTexture_131
             ranges[137].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[137].NumDescriptors = 1;
-            ranges[137].BaseShaderRegister = 134;
+            ranges[137].BaseShaderRegister = 133;
             ranges[137].RegisterSpace = 0;
             ranges[137].OffsetInDescriptorsFromTableStart = 137;
 
-            // _loadedTexture_133
+            // _loadedTexture_132
             ranges[138].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[138].NumDescriptors = 1;
-            ranges[138].BaseShaderRegister = 135;
+            ranges[138].BaseShaderRegister = 134;
             ranges[138].RegisterSpace = 0;
             ranges[138].OffsetInDescriptorsFromTableStart = 138;
 
-            // _loadedTexture_134
+            // _loadedTexture_133
             ranges[139].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[139].NumDescriptors = 1;
-            ranges[139].BaseShaderRegister = 136;
+            ranges[139].BaseShaderRegister = 135;
             ranges[139].RegisterSpace = 0;
             ranges[139].OffsetInDescriptorsFromTableStart = 139;
 
-            // _loadedTexture_135
+            // _loadedTexture_134
             ranges[140].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[140].NumDescriptors = 1;
-            ranges[140].BaseShaderRegister = 137;
+            ranges[140].BaseShaderRegister = 136;
             ranges[140].RegisterSpace = 0;
             ranges[140].OffsetInDescriptorsFromTableStart = 140;
 
-            // _loadedTexture_136
+            // _loadedTexture_135
             ranges[141].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[141].NumDescriptors = 1;
-            ranges[141].BaseShaderRegister = 138;
+            ranges[141].BaseShaderRegister = 137;
             ranges[141].RegisterSpace = 0;
             ranges[141].OffsetInDescriptorsFromTableStart = 141;
 
-            // _loadedTexture_137
+            // _loadedTexture_136
             ranges[142].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[142].NumDescriptors = 1;
-            ranges[142].BaseShaderRegister = 139;
+            ranges[142].BaseShaderRegister = 138;
             ranges[142].RegisterSpace = 0;
             ranges[142].OffsetInDescriptorsFromTableStart = 142;
 
-            // _loadedTexture_138
+            // _loadedTexture_137
             ranges[143].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[143].NumDescriptors = 1;
-            ranges[143].BaseShaderRegister = 140;
+            ranges[143].BaseShaderRegister = 139;
             ranges[143].RegisterSpace = 0;
             ranges[143].OffsetInDescriptorsFromTableStart = 143;
 
-            // _loadedTexture_139
+            // _loadedTexture_138
             ranges[144].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[144].NumDescriptors = 1;
-            ranges[144].BaseShaderRegister = 141;
+            ranges[144].BaseShaderRegister = 140;
             ranges[144].RegisterSpace = 0;
             ranges[144].OffsetInDescriptorsFromTableStart = 144;
 
-            // _loadedTexture_140
+            // _loadedTexture_139
             ranges[145].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[145].NumDescriptors = 1;
-            ranges[145].BaseShaderRegister = 142;
+            ranges[145].BaseShaderRegister = 141;
             ranges[145].RegisterSpace = 0;
             ranges[145].OffsetInDescriptorsFromTableStart = 145;
 
-            // _loadedTexture_141
+            // _loadedTexture_140
             ranges[146].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[146].NumDescriptors = 1;
-            ranges[146].BaseShaderRegister = 143;
+            ranges[146].BaseShaderRegister = 142;
             ranges[146].RegisterSpace = 0;
             ranges[146].OffsetInDescriptorsFromTableStart = 146;
 
-            // _loadedTexture_142
+            // _loadedTexture_141
             ranges[147].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[147].NumDescriptors = 1;
-            ranges[147].BaseShaderRegister = 144;
+            ranges[147].BaseShaderRegister = 143;
             ranges[147].RegisterSpace = 0;
             ranges[147].OffsetInDescriptorsFromTableStart = 147;
 
-            // _loadedTexture_143
+            // _loadedTexture_142
             ranges[148].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[148].NumDescriptors = 1;
-            ranges[148].BaseShaderRegister = 145;
+            ranges[148].BaseShaderRegister = 144;
             ranges[148].RegisterSpace = 0;
             ranges[148].OffsetInDescriptorsFromTableStart = 148;
 
-            // _loadedTexture_144
+            // _loadedTexture_143
             ranges[149].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[149].NumDescriptors = 1;
-            ranges[149].BaseShaderRegister = 146;
+            ranges[149].BaseShaderRegister = 145;
             ranges[149].RegisterSpace = 0;
             ranges[149].OffsetInDescriptorsFromTableStart = 149;
 
-            // _loadedTexture_145
+            // _loadedTexture_144
             ranges[150].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[150].NumDescriptors = 1;
-            ranges[150].BaseShaderRegister = 147;
+            ranges[150].BaseShaderRegister = 146;
             ranges[150].RegisterSpace = 0;
             ranges[150].OffsetInDescriptorsFromTableStart = 150;
 
-            // _loadedTexture_146
+            // _loadedTexture_145
             ranges[151].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[151].NumDescriptors = 1;
-            ranges[151].BaseShaderRegister = 148;
+            ranges[151].BaseShaderRegister = 147;
             ranges[151].RegisterSpace = 0;
             ranges[151].OffsetInDescriptorsFromTableStart = 151;
 
-            // _loadedTexture_147
+            // _loadedTexture_146
             ranges[152].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[152].NumDescriptors = 1;
-            ranges[152].BaseShaderRegister = 149;
+            ranges[152].BaseShaderRegister = 148;
             ranges[152].RegisterSpace = 0;
             ranges[152].OffsetInDescriptorsFromTableStart = 152;
 
-            // _loadedTexture_148
+            // _loadedTexture_147
             ranges[153].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[153].NumDescriptors = 1;
-            ranges[153].BaseShaderRegister = 150;
+            ranges[153].BaseShaderRegister = 149;
             ranges[153].RegisterSpace = 0;
             ranges[153].OffsetInDescriptorsFromTableStart = 153;
 
-            // _loadedTexture_149
+            // _loadedTexture_148
             ranges[154].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[154].NumDescriptors = 1;
-            ranges[154].BaseShaderRegister = 151;
+            ranges[154].BaseShaderRegister = 150;
             ranges[154].RegisterSpace = 0;
             ranges[154].OffsetInDescriptorsFromTableStart = 154;
 
-            // _loadedTexture_150
+            // _loadedTexture_149
             ranges[155].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[155].NumDescriptors = 1;
-            ranges[155].BaseShaderRegister = 152;
+            ranges[155].BaseShaderRegister = 151;
             ranges[155].RegisterSpace = 0;
             ranges[155].OffsetInDescriptorsFromTableStart = 155;
 
-            // _loadedTexture_151
+            // _loadedTexture_150
             ranges[156].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[156].NumDescriptors = 1;
-            ranges[156].BaseShaderRegister = 153;
+            ranges[156].BaseShaderRegister = 152;
             ranges[156].RegisterSpace = 0;
             ranges[156].OffsetInDescriptorsFromTableStart = 156;
 
-            // _loadedTexture_152
+            // _loadedTexture_151
             ranges[157].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[157].NumDescriptors = 1;
-            ranges[157].BaseShaderRegister = 154;
+            ranges[157].BaseShaderRegister = 153;
             ranges[157].RegisterSpace = 0;
             ranges[157].OffsetInDescriptorsFromTableStart = 157;
 
-            // _loadedTexture_153
+            // _loadedTexture_152
             ranges[158].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[158].NumDescriptors = 1;
-            ranges[158].BaseShaderRegister = 155;
+            ranges[158].BaseShaderRegister = 154;
             ranges[158].RegisterSpace = 0;
             ranges[158].OffsetInDescriptorsFromTableStart = 158;
 
-            // _loadedTexture_154
+            // _loadedTexture_153
             ranges[159].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[159].NumDescriptors = 1;
-            ranges[159].BaseShaderRegister = 156;
+            ranges[159].BaseShaderRegister = 155;
             ranges[159].RegisterSpace = 0;
             ranges[159].OffsetInDescriptorsFromTableStart = 159;
 
-            // _loadedTexture_155
+            // _loadedTexture_154
             ranges[160].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[160].NumDescriptors = 1;
-            ranges[160].BaseShaderRegister = 157;
+            ranges[160].BaseShaderRegister = 156;
             ranges[160].RegisterSpace = 0;
             ranges[160].OffsetInDescriptorsFromTableStart = 160;
 
-            // _loadedTexture_156
+            // _loadedTexture_155
             ranges[161].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[161].NumDescriptors = 1;
-            ranges[161].BaseShaderRegister = 158;
+            ranges[161].BaseShaderRegister = 157;
             ranges[161].RegisterSpace = 0;
             ranges[161].OffsetInDescriptorsFromTableStart = 161;
 
-            // _loadedTexture_157
+            // _loadedTexture_156
             ranges[162].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[162].NumDescriptors = 1;
-            ranges[162].BaseShaderRegister = 159;
+            ranges[162].BaseShaderRegister = 158;
             ranges[162].RegisterSpace = 0;
             ranges[162].OffsetInDescriptorsFromTableStart = 162;
 
-            // _loadedTexture_158
+            // _loadedTexture_157
             ranges[163].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[163].NumDescriptors = 1;
-            ranges[163].BaseShaderRegister = 160;
+            ranges[163].BaseShaderRegister = 159;
             ranges[163].RegisterSpace = 0;
             ranges[163].OffsetInDescriptorsFromTableStart = 163;
 
-            // _loadedTexture_159
+            // _loadedTexture_158
             ranges[164].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[164].NumDescriptors = 1;
-            ranges[164].BaseShaderRegister = 161;
+            ranges[164].BaseShaderRegister = 160;
             ranges[164].RegisterSpace = 0;
             ranges[164].OffsetInDescriptorsFromTableStart = 164;
 
-            // _loadedTexture_160
+            // _loadedTexture_159
             ranges[165].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[165].NumDescriptors = 1;
-            ranges[165].BaseShaderRegister = 162;
+            ranges[165].BaseShaderRegister = 161;
             ranges[165].RegisterSpace = 0;
             ranges[165].OffsetInDescriptorsFromTableStart = 165;
 
-            // _loadedTexture_161
+            // _loadedTexture_160
             ranges[166].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[166].NumDescriptors = 1;
-            ranges[166].BaseShaderRegister = 163;
+            ranges[166].BaseShaderRegister = 162;
             ranges[166].RegisterSpace = 0;
             ranges[166].OffsetInDescriptorsFromTableStart = 166;
 
-            // _loadedTexture_162
+            // _loadedTexture_161
             ranges[167].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[167].NumDescriptors = 1;
-            ranges[167].BaseShaderRegister = 164;
+            ranges[167].BaseShaderRegister = 163;
             ranges[167].RegisterSpace = 0;
             ranges[167].OffsetInDescriptorsFromTableStart = 167;
 
-            // _loadedTexture_163
+            // _loadedTexture_162
             ranges[168].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[168].NumDescriptors = 1;
-            ranges[168].BaseShaderRegister = 165;
+            ranges[168].BaseShaderRegister = 164;
             ranges[168].RegisterSpace = 0;
             ranges[168].OffsetInDescriptorsFromTableStart = 168;
 
-            // _loadedTexture_164
+            // _loadedTexture_163
             ranges[169].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[169].NumDescriptors = 1;
-            ranges[169].BaseShaderRegister = 166;
+            ranges[169].BaseShaderRegister = 165;
             ranges[169].RegisterSpace = 0;
             ranges[169].OffsetInDescriptorsFromTableStart = 169;
 
-            // _loadedTexture_165
+            // _loadedTexture_164
             ranges[170].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[170].NumDescriptors = 1;
-            ranges[170].BaseShaderRegister = 167;
+            ranges[170].BaseShaderRegister = 166;
             ranges[170].RegisterSpace = 0;
             ranges[170].OffsetInDescriptorsFromTableStart = 170;
 
-            // _loadedTexture_166
+            // _loadedTexture_165
             ranges[171].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[171].NumDescriptors = 1;
-            ranges[171].BaseShaderRegister = 168;
+            ranges[171].BaseShaderRegister = 167;
             ranges[171].RegisterSpace = 0;
             ranges[171].OffsetInDescriptorsFromTableStart = 171;
 
-            // _loadedTexture_167
+            // _loadedTexture_166
             ranges[172].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[172].NumDescriptors = 1;
-            ranges[172].BaseShaderRegister = 169;
+            ranges[172].BaseShaderRegister = 168;
             ranges[172].RegisterSpace = 0;
             ranges[172].OffsetInDescriptorsFromTableStart = 172;
 
-            // _loadedTexture_168
+            // _loadedTexture_167
             ranges[173].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[173].NumDescriptors = 1;
-            ranges[173].BaseShaderRegister = 170;
+            ranges[173].BaseShaderRegister = 169;
             ranges[173].RegisterSpace = 0;
             ranges[173].OffsetInDescriptorsFromTableStart = 173;
 
-            // _loadedTexture_169
+            // _loadedTexture_168
             ranges[174].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[174].NumDescriptors = 1;
-            ranges[174].BaseShaderRegister = 171;
+            ranges[174].BaseShaderRegister = 170;
             ranges[174].RegisterSpace = 0;
             ranges[174].OffsetInDescriptorsFromTableStart = 174;
 
-            // _loadedTexture_170
+            // _loadedTexture_169
             ranges[175].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[175].NumDescriptors = 1;
-            ranges[175].BaseShaderRegister = 172;
+            ranges[175].BaseShaderRegister = 171;
             ranges[175].RegisterSpace = 0;
             ranges[175].OffsetInDescriptorsFromTableStart = 175;
 
-            // _loadedTexture_171
+            // _loadedTexture_170
             ranges[176].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[176].NumDescriptors = 1;
-            ranges[176].BaseShaderRegister = 173;
+            ranges[176].BaseShaderRegister = 172;
             ranges[176].RegisterSpace = 0;
             ranges[176].OffsetInDescriptorsFromTableStart = 176;
 
-            // _loadedTexture_172
+            // _loadedTexture_171
             ranges[177].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[177].NumDescriptors = 1;
-            ranges[177].BaseShaderRegister = 174;
+            ranges[177].BaseShaderRegister = 173;
             ranges[177].RegisterSpace = 0;
             ranges[177].OffsetInDescriptorsFromTableStart = 177;
 
-            // _loadedTexture_173
+            // _loadedTexture_172
             ranges[178].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[178].NumDescriptors = 1;
-            ranges[178].BaseShaderRegister = 175;
+            ranges[178].BaseShaderRegister = 174;
             ranges[178].RegisterSpace = 0;
             ranges[178].OffsetInDescriptorsFromTableStart = 178;
 
-            // _loadedTexture_174
+            // _loadedTexture_173
             ranges[179].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[179].NumDescriptors = 1;
-            ranges[179].BaseShaderRegister = 176;
+            ranges[179].BaseShaderRegister = 175;
             ranges[179].RegisterSpace = 0;
             ranges[179].OffsetInDescriptorsFromTableStart = 179;
 
-            // _loadedTexture_175
+            // _loadedTexture_174
             ranges[180].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[180].NumDescriptors = 1;
-            ranges[180].BaseShaderRegister = 177;
+            ranges[180].BaseShaderRegister = 176;
             ranges[180].RegisterSpace = 0;
             ranges[180].OffsetInDescriptorsFromTableStart = 180;
 
-            // _loadedTexture_176
+            // _loadedTexture_175
             ranges[181].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[181].NumDescriptors = 1;
-            ranges[181].BaseShaderRegister = 178;
+            ranges[181].BaseShaderRegister = 177;
             ranges[181].RegisterSpace = 0;
             ranges[181].OffsetInDescriptorsFromTableStart = 181;
 
-            // _loadedTexture_177
+            // _loadedTexture_176
             ranges[182].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[182].NumDescriptors = 1;
-            ranges[182].BaseShaderRegister = 179;
+            ranges[182].BaseShaderRegister = 178;
             ranges[182].RegisterSpace = 0;
             ranges[182].OffsetInDescriptorsFromTableStart = 182;
 
-            // _loadedTexture_178
+            // _loadedTexture_177
             ranges[183].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[183].NumDescriptors = 1;
-            ranges[183].BaseShaderRegister = 180;
+            ranges[183].BaseShaderRegister = 179;
             ranges[183].RegisterSpace = 0;
             ranges[183].OffsetInDescriptorsFromTableStart = 183;
 
-            // _loadedTexture_179
+            // _loadedTexture_178
             ranges[184].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[184].NumDescriptors = 1;
-            ranges[184].BaseShaderRegister = 181;
+            ranges[184].BaseShaderRegister = 180;
             ranges[184].RegisterSpace = 0;
             ranges[184].OffsetInDescriptorsFromTableStart = 184;
 
-            // _loadedTexture_180
+            // _loadedTexture_179
             ranges[185].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[185].NumDescriptors = 1;
-            ranges[185].BaseShaderRegister = 182;
+            ranges[185].BaseShaderRegister = 181;
             ranges[185].RegisterSpace = 0;
             ranges[185].OffsetInDescriptorsFromTableStart = 185;
 
-            // _loadedTexture_181
+            // _loadedTexture_180
             ranges[186].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[186].NumDescriptors = 1;
-            ranges[186].BaseShaderRegister = 183;
+            ranges[186].BaseShaderRegister = 182;
             ranges[186].RegisterSpace = 0;
             ranges[186].OffsetInDescriptorsFromTableStart = 186;
 
-            // _loadedTexture_182
+            // _loadedTexture_181
             ranges[187].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[187].NumDescriptors = 1;
-            ranges[187].BaseShaderRegister = 184;
+            ranges[187].BaseShaderRegister = 183;
             ranges[187].RegisterSpace = 0;
             ranges[187].OffsetInDescriptorsFromTableStart = 187;
 
-            // _loadedTexture_183
+            // _loadedTexture_182
             ranges[188].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[188].NumDescriptors = 1;
-            ranges[188].BaseShaderRegister = 185;
+            ranges[188].BaseShaderRegister = 184;
             ranges[188].RegisterSpace = 0;
             ranges[188].OffsetInDescriptorsFromTableStart = 188;
 
-            // _loadedTexture_184
+            // _loadedTexture_183
             ranges[189].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[189].NumDescriptors = 1;
-            ranges[189].BaseShaderRegister = 186;
+            ranges[189].BaseShaderRegister = 185;
             ranges[189].RegisterSpace = 0;
             ranges[189].OffsetInDescriptorsFromTableStart = 189;
 
-            // _loadedTexture_185
+            // _loadedTexture_184
             ranges[190].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[190].NumDescriptors = 1;
-            ranges[190].BaseShaderRegister = 187;
+            ranges[190].BaseShaderRegister = 186;
             ranges[190].RegisterSpace = 0;
             ranges[190].OffsetInDescriptorsFromTableStart = 190;
 
-            // _loadedTexture_186
+            // _loadedTexture_185
             ranges[191].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[191].NumDescriptors = 1;
-            ranges[191].BaseShaderRegister = 188;
+            ranges[191].BaseShaderRegister = 187;
             ranges[191].RegisterSpace = 0;
             ranges[191].OffsetInDescriptorsFromTableStart = 191;
 
-            // _loadedTexture_187
+            // _loadedTexture_186
             ranges[192].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[192].NumDescriptors = 1;
-            ranges[192].BaseShaderRegister = 189;
+            ranges[192].BaseShaderRegister = 188;
             ranges[192].RegisterSpace = 0;
             ranges[192].OffsetInDescriptorsFromTableStart = 192;
 
-            // _loadedTexture_188
+            // _loadedTexture_187
             ranges[193].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[193].NumDescriptors = 1;
-            ranges[193].BaseShaderRegister = 190;
+            ranges[193].BaseShaderRegister = 189;
             ranges[193].RegisterSpace = 0;
             ranges[193].OffsetInDescriptorsFromTableStart = 193;
 
-            // _loadedTexture_189
+            // _loadedTexture_188
             ranges[194].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[194].NumDescriptors = 1;
-            ranges[194].BaseShaderRegister = 191;
+            ranges[194].BaseShaderRegister = 190;
             ranges[194].RegisterSpace = 0;
             ranges[194].OffsetInDescriptorsFromTableStart = 194;
 
-            // _loadedTexture_190
+            // _loadedTexture_189
             ranges[195].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[195].NumDescriptors = 1;
-            ranges[195].BaseShaderRegister = 192;
+            ranges[195].BaseShaderRegister = 191;
             ranges[195].RegisterSpace = 0;
             ranges[195].OffsetInDescriptorsFromTableStart = 195;
 
-            // _loadedTexture_191
+            // _loadedTexture_190
             ranges[196].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[196].NumDescriptors = 1;
-            ranges[196].BaseShaderRegister = 193;
+            ranges[196].BaseShaderRegister = 192;
             ranges[196].RegisterSpace = 0;
             ranges[196].OffsetInDescriptorsFromTableStart = 196;
 
-            // _loadedTexture_192
+            // _loadedTexture_191
             ranges[197].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[197].NumDescriptors = 1;
-            ranges[197].BaseShaderRegister = 194;
+            ranges[197].BaseShaderRegister = 193;
             ranges[197].RegisterSpace = 0;
             ranges[197].OffsetInDescriptorsFromTableStart = 197;
 
-            // _loadedTexture_193
+            // _loadedTexture_192
             ranges[198].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[198].NumDescriptors = 1;
-            ranges[198].BaseShaderRegister = 195;
+            ranges[198].BaseShaderRegister = 194;
             ranges[198].RegisterSpace = 0;
             ranges[198].OffsetInDescriptorsFromTableStart = 198;
 
-            // _loadedTexture_194
+            // _loadedTexture_193
             ranges[199].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[199].NumDescriptors = 1;
-            ranges[199].BaseShaderRegister = 196;
+            ranges[199].BaseShaderRegister = 195;
             ranges[199].RegisterSpace = 0;
             ranges[199].OffsetInDescriptorsFromTableStart = 199;
 
-            // _loadedTexture_195
+            // _loadedTexture_194
             ranges[200].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[200].NumDescriptors = 1;
-            ranges[200].BaseShaderRegister = 197;
+            ranges[200].BaseShaderRegister = 196;
             ranges[200].RegisterSpace = 0;
             ranges[200].OffsetInDescriptorsFromTableStart = 200;
 
-            // _RayGenCB
-            ranges[201].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
+            // _loadedTexture_195
+            ranges[201].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[201].NumDescriptors = 1;
-            ranges[201].BaseShaderRegister = 0;
+            ranges[201].BaseShaderRegister = 197;
             ranges[201].RegisterSpace = 0;
             ranges[201].OffsetInDescriptorsFromTableStart = 201;
 
-            if(!DX12Utils::MakeRootSig(device, ranges, 202, samplers, 2, &ContextInternal::rayShader_Raytrace_rootSig, (c_debugNames ? L"Raytrace" : nullptr), Context::LogFn))
+            // _RayGenCB
+            ranges[202].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
+            ranges[202].NumDescriptors = 1;
+            ranges[202].BaseShaderRegister = 0;
+            ranges[202].RegisterSpace = 0;
+            ranges[202].OffsetInDescriptorsFromTableStart = 202;
+
+            if(!DX12Utils::MakeRootSig(device, ranges, 203, samplers, 2, &ContextInternal::rayShader_Raytrace_rootSig, (c_debugNames ? L"Raytrace" : nullptr), Context::LogFn))
                 return false;
 
             ShaderCompilationInfo shaderCompilationInfo;
@@ -1805,7 +1812,7 @@ namespace FastBokeh
                 return false;
 
             ShaderCompilationInfo shaderCompilationInfo;
-            shaderCompilationInfo.fileName = std::filesystem::path(Context::s_techniqueLocation) / "shaders" / "dof/SetupCS.hlsl";
+            shaderCompilationInfo.fileName = std::filesystem::path(Context::s_techniqueLocation) / "shaders" / "dof_GatherDOF/SetupCS.hlsl";
             shaderCompilationInfo.entryPoint = "csmain";
             shaderCompilationInfo.shaderModel = "cs_6_1";
             shaderCompilationInfo.debugName = (c_debugNames ? "GatherDOF_Setup" : "");
@@ -1844,7 +1851,7 @@ namespace FastBokeh
                 return false;
 
             ShaderCompilationInfo shaderCompilationInfo;
-            shaderCompilationInfo.fileName = std::filesystem::path(Context::s_techniqueLocation) / "shaders" / "dof/NearBorderCS.hlsl";
+            shaderCompilationInfo.fileName = std::filesystem::path(Context::s_techniqueLocation) / "shaders" / "dof_GatherDOF/NearBorderCS.hlsl";
             shaderCompilationInfo.entryPoint = "csmain";
             shaderCompilationInfo.shaderModel = "cs_6_1";
             shaderCompilationInfo.debugName = (c_debugNames ? "GatherDOF_NearBorder" : "");
@@ -2031,7 +2038,7 @@ namespace FastBokeh
                 return false;
 
             ShaderCompilationInfo shaderCompilationInfo;
-            shaderCompilationInfo.fileName = std::filesystem::path(Context::s_techniqueLocation) / "shaders" / "dof/BlurFarCS.hlsl";
+            shaderCompilationInfo.fileName = std::filesystem::path(Context::s_techniqueLocation) / "shaders" / "dof_GatherDOF/BlurFarCS.hlsl";
             shaderCompilationInfo.entryPoint = "csmain";
             shaderCompilationInfo.shaderModel = "cs_6_1";
             shaderCompilationInfo.debugName = (c_debugNames ? "GatherDOF_BlurFar" : "");
@@ -2214,7 +2221,7 @@ namespace FastBokeh
             ranges[20].RegisterSpace = 0;
             ranges[20].OffsetInDescriptorsFromTableStart = 20;
 
-            // _GatherDOF_FloodFillFarCSCB
+            // _GatherDOF_FloodFillFarCS_0CB
             ranges[21].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
             ranges[21].NumDescriptors = 1;
             ranges[21].BaseShaderRegister = 0;
@@ -2225,7 +2232,7 @@ namespace FastBokeh
                 return false;
 
             ShaderCompilationInfo shaderCompilationInfo;
-            shaderCompilationInfo.fileName = std::filesystem::path(Context::s_techniqueLocation) / "shaders" / "dof/FloodFillFarCS.hlsl";
+            shaderCompilationInfo.fileName = std::filesystem::path(Context::s_techniqueLocation) / "shaders" / "dof_GatherDOF/FloodFillFarCS_0.hlsl";
             shaderCompilationInfo.entryPoint = "csmain";
             shaderCompilationInfo.shaderModel = "cs_6_1";
             shaderCompilationInfo.debugName = (c_debugNames ? "GatherDOF_FloodFillFar" : "");
@@ -2265,7 +2272,7 @@ namespace FastBokeh
                 return false;
 
             ShaderCompilationInfo shaderCompilationInfo;
-            shaderCompilationInfo.fileName = std::filesystem::path(Context::s_techniqueLocation) / "shaders" / "dof/DownscaleTileMap_1_4.hlsl";
+            shaderCompilationInfo.fileName = std::filesystem::path(Context::s_techniqueLocation) / "shaders" / "dof_GatherDOF/DownscaleTileMap_1_4.hlsl";
             shaderCompilationInfo.entryPoint = "csmain";
             shaderCompilationInfo.shaderModel = "cs_6_1";
             shaderCompilationInfo.debugName = (c_debugNames ? "GatherDOF_DownscaleTileMap_1_4" : "");
@@ -2304,7 +2311,7 @@ namespace FastBokeh
                 return false;
 
             ShaderCompilationInfo shaderCompilationInfo;
-            shaderCompilationInfo.fileName = std::filesystem::path(Context::s_techniqueLocation) / "shaders" / "dof/DownscaleTileMap_1_4.hlsl";
+            shaderCompilationInfo.fileName = std::filesystem::path(Context::s_techniqueLocation) / "shaders" / "dof_GatherDOF/DownscaleTileMap_1_4.hlsl";
             shaderCompilationInfo.entryPoint = "csmain";
             shaderCompilationInfo.shaderModel = "cs_6_1";
             shaderCompilationInfo.debugName = (c_debugNames ? "GatherDOF_DownscaleTileMap_1_8" : "");
@@ -2343,7 +2350,7 @@ namespace FastBokeh
                 return false;
 
             ShaderCompilationInfo shaderCompilationInfo;
-            shaderCompilationInfo.fileName = std::filesystem::path(Context::s_techniqueLocation) / "shaders" / "dof/NearHaloCS.hlsl";
+            shaderCompilationInfo.fileName = std::filesystem::path(Context::s_techniqueLocation) / "shaders" / "dof_GatherDOF/NearHaloCS.hlsl";
             shaderCompilationInfo.entryPoint = "csmain";
             shaderCompilationInfo.shaderModel = "cs_6_1";
             shaderCompilationInfo.debugName = (c_debugNames ? "GatherDOF_NearHalo" : "");
@@ -2537,7 +2544,7 @@ namespace FastBokeh
                 return false;
 
             ShaderCompilationInfo shaderCompilationInfo;
-            shaderCompilationInfo.fileName = std::filesystem::path(Context::s_techniqueLocation) / "shaders" / "dof/NearBlurCS.hlsl";
+            shaderCompilationInfo.fileName = std::filesystem::path(Context::s_techniqueLocation) / "shaders" / "dof_GatherDOF/NearBlurCS.hlsl";
             shaderCompilationInfo.entryPoint = "csmain";
             shaderCompilationInfo.shaderModel = "cs_6_1";
             shaderCompilationInfo.debugName = (c_debugNames ? "GatherDOF_NearBlur" : "");
@@ -2720,7 +2727,7 @@ namespace FastBokeh
             ranges[20].RegisterSpace = 0;
             ranges[20].OffsetInDescriptorsFromTableStart = 20;
 
-            // _GatherDOF_FloodFillFarCSCB
+            // _GatherDOF_FloodFillFarCS_1CB
             ranges[21].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
             ranges[21].NumDescriptors = 1;
             ranges[21].BaseShaderRegister = 0;
@@ -2731,7 +2738,7 @@ namespace FastBokeh
                 return false;
 
             ShaderCompilationInfo shaderCompilationInfo;
-            shaderCompilationInfo.fileName = std::filesystem::path(Context::s_techniqueLocation) / "shaders" / "dof/FloodFillFarCS.hlsl";
+            shaderCompilationInfo.fileName = std::filesystem::path(Context::s_techniqueLocation) / "shaders" / "dof_GatherDOF/FloodFillFarCS_1.hlsl";
             shaderCompilationInfo.entryPoint = "csmain";
             shaderCompilationInfo.shaderModel = "cs_6_1";
             shaderCompilationInfo.debugName = (c_debugNames ? "GatherDOF_FloodFillNear" : "");
@@ -2814,7 +2821,7 @@ namespace FastBokeh
                 return false;
 
             ShaderCompilationInfo shaderCompilationInfo;
-            shaderCompilationInfo.fileName = std::filesystem::path(Context::s_techniqueLocation) / "shaders" / "dof/RecombineCS.hlsl";
+            shaderCompilationInfo.fileName = std::filesystem::path(Context::s_techniqueLocation) / "shaders" / "dof_GatherDOF/RecombineCS.hlsl";
             shaderCompilationInfo.entryPoint = "csmain";
             shaderCompilationInfo.shaderModel = "cs_6_1";
             shaderCompilationInfo.debugName = (c_debugNames ? "GatherDOF_Recombine" : "");
@@ -2860,7 +2867,7 @@ namespace FastBokeh
                 return false;
 
             ShaderCompilationInfo shaderCompilationInfo;
-            shaderCompilationInfo.fileName = std::filesystem::path(Context::s_techniqueLocation) / "shaders" / "GaussBlur/GaussBlurCS.hlsl";
+            shaderCompilationInfo.fileName = std::filesystem::path(Context::s_techniqueLocation) / "shaders" / "GaussBlur_GaussBlur/GaussBlurCS.hlsl";
             shaderCompilationInfo.entryPoint = "csmain";
             shaderCompilationInfo.shaderModel = "cs_6_1";
             shaderCompilationInfo.debugName = (c_debugNames ? "GaussBlur_DoBlur" : "");
@@ -2906,7 +2913,7 @@ namespace FastBokeh
                 return false;
 
             ShaderCompilationInfo shaderCompilationInfo;
-            shaderCompilationInfo.fileName = std::filesystem::path(Context::s_techniqueLocation) / "shaders" / "TemporalAccumulation/Accumulate.hlsl";
+            shaderCompilationInfo.fileName = std::filesystem::path(Context::s_techniqueLocation) / "shaders" / "TemporalAccumulation_TemporalAccumulation/Accumulate.hlsl";
             shaderCompilationInfo.entryPoint = "csmain";
             shaderCompilationInfo.shaderModel = "cs_6_1";
             shaderCompilationInfo.debugName = (c_debugNames ? "TemporalAccumulation_DoAccum" : "");
@@ -2952,7 +2959,7 @@ namespace FastBokeh
                 return false;
 
             ShaderCompilationInfo shaderCompilationInfo;
-            shaderCompilationInfo.fileName = std::filesystem::path(Context::s_techniqueLocation) / "shaders" / "Tonemap/Tonemap.hlsl";
+            shaderCompilationInfo.fileName = std::filesystem::path(Context::s_techniqueLocation) / "shaders" / "Tonemap_ToneMap/Tonemap.hlsl";
             shaderCompilationInfo.entryPoint = "csmain";
             shaderCompilationInfo.shaderModel = "cs_6_1";
             shaderCompilationInfo.debugName = (c_debugNames ? "ToneMap_Tonemap" : "");
@@ -3828,6 +3835,12 @@ namespace FastBokeh
         {
             s_delayedRelease.Add(m_internal.texture_LinearDepth);
             m_internal.texture_LinearDepth = nullptr;
+        }
+
+        if(m_internal.texture_DebugTex)
+        {
+            s_delayedRelease.Add(m_internal.texture_DebugTex);
+            m_internal.texture_DebugTex = nullptr;
         }
 
         if(m_output.texture_GatherDOF_Output)
@@ -5117,13 +5130,6 @@ namespace FastBokeh
             m_internal.constantBuffer__GatherDOF_BlurFarCSCB = nullptr;
         }
 
-        // _GatherDOF_FloodFillFarCSCB
-        if (m_internal.constantBuffer__GatherDOF_FloodFillFarCSCB)
-        {
-            s_delayedRelease.Add(m_internal.constantBuffer__GatherDOF_FloodFillFarCSCB);
-            m_internal.constantBuffer__GatherDOF_FloodFillFarCSCB = nullptr;
-        }
-
         // _GatherDOF_NearBlurCB
         if (m_internal.constantBuffer__GatherDOF_NearBlurCB)
         {
@@ -5158,6 +5164,20 @@ namespace FastBokeh
             s_delayedRelease.Add(m_internal.constantBuffer__ToneMap_TonemapCB);
             m_internal.constantBuffer__ToneMap_TonemapCB = nullptr;
         }
+
+        // _GatherDOF_FloodFillFarCS_0CB
+        if (m_internal.constantBuffer__GatherDOF_FloodFillFarCS_0CB)
+        {
+            s_delayedRelease.Add(m_internal.constantBuffer__GatherDOF_FloodFillFarCS_0CB);
+            m_internal.constantBuffer__GatherDOF_FloodFillFarCS_0CB = nullptr;
+        }
+
+        // _GatherDOF_FloodFillFarCS_1CB
+        if (m_internal.constantBuffer__GatherDOF_FloodFillFarCS_1CB)
+        {
+            s_delayedRelease.Add(m_internal.constantBuffer__GatherDOF_FloodFillFarCS_1CB);
+            m_internal.constantBuffer__GatherDOF_FloodFillFarCS_1CB = nullptr;
+        }
     }
 
     void Execute(Context* context, ID3D12Device* device, ID3D12GraphicsCommandList* commandList)
@@ -5165,7 +5185,7 @@ namespace FastBokeh
         // reset the timer index
         s_timerIndex = 0;
 
-        ScopedPerfEvent scopedPerf("FastBokeh", commandList, 241);
+        ScopedPerfEvent scopedPerf("FastBokeh", commandList, 243);
 
         std::chrono::high_resolution_clock::time_point startPointCPUTechnique;
         if(context->m_profile)
@@ -5302,7 +5322,7 @@ namespace FastBokeh
 
         // Transition resources for the next action
         {
-            D3D12_RESOURCE_BARRIER barriers[3];
+            D3D12_RESOURCE_BARRIER barriers[4];
 
             barriers[0].Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
             barriers[0].Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
@@ -5322,7 +5342,11 @@ namespace FastBokeh
             barriers[2].Transition.StateAfter = D3D12_RESOURCE_STATE_UNORDERED_ACCESS;
             barriers[2].Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
 
-            commandList->ResourceBarrier(3, barriers);
+            barriers[3].Type = D3D12_RESOURCE_BARRIER_TYPE_UAV;
+            barriers[3].Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+            barriers[3].UAV.pResource = context->m_internal.texture_DebugTex;
+
+            commandList->ResourceBarrier(4, barriers);
         }
 
         // Ray Shader: Raytrace
@@ -5339,211 +5363,212 @@ namespace FastBokeh
             dxrCommandList->SetPipelineState1(ContextInternal::rayShader_Raytrace_rtso);
 
             DX12Utils::ResourceDescriptor descriptors[] = {
-                { context->m_internal.texture_ColorHDR, context->m_internal.texture_ColorHDR_format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture_LinearDepth, context->m_internal.texture_LinearDepth_format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_input.buffer_Scene, DXGI_FORMAT_UNKNOWN, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::RTScene, false, context->m_input.buffer_Scene_tlasSize, 1, 0 },
-                { context->m_input.buffer_VertexBuffer, context->m_input.buffer_VertexBuffer_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Buffer, false, context->m_input.buffer_VertexBuffer_stride, context->m_input.buffer_VertexBuffer_count, 0 },
-                { context->m_internal.buffer_PixelDebug, context->m_internal.buffer_PixelDebug_format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Buffer, false, context->m_internal.buffer_PixelDebug_stride, context->m_internal.buffer_PixelDebug_count, 0 },
-                { context->m_internal.texture__loadedTexture_0, context->m_internal.texture__loadedTexture_0_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_1, context->m_internal.texture__loadedTexture_1_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_2, context->m_internal.texture__loadedTexture_2_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_3, context->m_internal.texture__loadedTexture_3_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_4, context->m_internal.texture__loadedTexture_4_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_5, context->m_internal.texture__loadedTexture_5_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_6, context->m_internal.texture__loadedTexture_6_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_7, context->m_internal.texture__loadedTexture_7_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_8, context->m_internal.texture__loadedTexture_8_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_9, context->m_internal.texture__loadedTexture_9_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_10, context->m_internal.texture__loadedTexture_10_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_11, context->m_internal.texture__loadedTexture_11_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_12, context->m_internal.texture__loadedTexture_12_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_13, context->m_internal.texture__loadedTexture_13_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_14, context->m_internal.texture__loadedTexture_14_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_15, context->m_internal.texture__loadedTexture_15_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_16, context->m_internal.texture__loadedTexture_16_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_17, context->m_internal.texture__loadedTexture_17_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_18, context->m_internal.texture__loadedTexture_18_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_19, context->m_internal.texture__loadedTexture_19_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_20, context->m_internal.texture__loadedTexture_20_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_21, context->m_internal.texture__loadedTexture_21_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_22, context->m_internal.texture__loadedTexture_22_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_23, context->m_internal.texture__loadedTexture_23_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_24, context->m_internal.texture__loadedTexture_24_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_25, context->m_internal.texture__loadedTexture_25_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_26, context->m_internal.texture__loadedTexture_26_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_27, context->m_internal.texture__loadedTexture_27_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_28, context->m_internal.texture__loadedTexture_28_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_29, context->m_internal.texture__loadedTexture_29_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_30, context->m_internal.texture__loadedTexture_30_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_31, context->m_internal.texture__loadedTexture_31_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_32, context->m_internal.texture__loadedTexture_32_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_33, context->m_internal.texture__loadedTexture_33_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_34, context->m_internal.texture__loadedTexture_34_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_35, context->m_internal.texture__loadedTexture_35_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_36, context->m_internal.texture__loadedTexture_36_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_37, context->m_internal.texture__loadedTexture_37_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_38, context->m_internal.texture__loadedTexture_38_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_39, context->m_internal.texture__loadedTexture_39_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_40, context->m_internal.texture__loadedTexture_40_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_41, context->m_internal.texture__loadedTexture_41_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_42, context->m_internal.texture__loadedTexture_42_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_43, context->m_internal.texture__loadedTexture_43_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_44, context->m_internal.texture__loadedTexture_44_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_45, context->m_internal.texture__loadedTexture_45_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_46, context->m_internal.texture__loadedTexture_46_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_47, context->m_internal.texture__loadedTexture_47_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_48, context->m_internal.texture__loadedTexture_48_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_49, context->m_internal.texture__loadedTexture_49_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_50, context->m_internal.texture__loadedTexture_50_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_51, context->m_internal.texture__loadedTexture_51_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_52, context->m_internal.texture__loadedTexture_52_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_53, context->m_internal.texture__loadedTexture_53_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_54, context->m_internal.texture__loadedTexture_54_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_55, context->m_internal.texture__loadedTexture_55_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_56, context->m_internal.texture__loadedTexture_56_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_57, context->m_internal.texture__loadedTexture_57_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_58, context->m_internal.texture__loadedTexture_58_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_59, context->m_internal.texture__loadedTexture_59_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_60, context->m_internal.texture__loadedTexture_60_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_61, context->m_internal.texture__loadedTexture_61_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_62, context->m_internal.texture__loadedTexture_62_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_63, context->m_internal.texture__loadedTexture_63_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_64, context->m_internal.texture__loadedTexture_64_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_65, context->m_internal.texture__loadedTexture_65_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_66, context->m_internal.texture__loadedTexture_66_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_67, context->m_internal.texture__loadedTexture_67_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_68, context->m_internal.texture__loadedTexture_68_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_69, context->m_internal.texture__loadedTexture_69_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_70, context->m_internal.texture__loadedTexture_70_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_71, context->m_internal.texture__loadedTexture_71_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_72, context->m_internal.texture__loadedTexture_72_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_73, context->m_internal.texture__loadedTexture_73_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_74, context->m_internal.texture__loadedTexture_74_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_75, context->m_internal.texture__loadedTexture_75_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_76, context->m_internal.texture__loadedTexture_76_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_77, context->m_internal.texture__loadedTexture_77_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_78, context->m_internal.texture__loadedTexture_78_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_79, context->m_internal.texture__loadedTexture_79_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_80, context->m_internal.texture__loadedTexture_80_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_81, context->m_internal.texture__loadedTexture_81_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_82, context->m_internal.texture__loadedTexture_82_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_83, context->m_internal.texture__loadedTexture_83_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_84, context->m_internal.texture__loadedTexture_84_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_85, context->m_internal.texture__loadedTexture_85_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_86, context->m_internal.texture__loadedTexture_86_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_87, context->m_internal.texture__loadedTexture_87_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_88, context->m_internal.texture__loadedTexture_88_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_89, context->m_internal.texture__loadedTexture_89_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_90, context->m_internal.texture__loadedTexture_90_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_91, context->m_internal.texture__loadedTexture_91_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_92, context->m_internal.texture__loadedTexture_92_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_93, context->m_internal.texture__loadedTexture_93_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_94, context->m_internal.texture__loadedTexture_94_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_95, context->m_internal.texture__loadedTexture_95_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_96, context->m_internal.texture__loadedTexture_96_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_97, context->m_internal.texture__loadedTexture_97_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_98, context->m_internal.texture__loadedTexture_98_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_99, context->m_internal.texture__loadedTexture_99_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_100, context->m_internal.texture__loadedTexture_100_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_101, context->m_internal.texture__loadedTexture_101_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_102, context->m_internal.texture__loadedTexture_102_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_103, context->m_internal.texture__loadedTexture_103_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_104, context->m_internal.texture__loadedTexture_104_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_105, context->m_internal.texture__loadedTexture_105_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_106, context->m_internal.texture__loadedTexture_106_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_107, context->m_internal.texture__loadedTexture_107_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_108, context->m_internal.texture__loadedTexture_108_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_109, context->m_internal.texture__loadedTexture_109_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_110, context->m_internal.texture__loadedTexture_110_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_111, context->m_internal.texture__loadedTexture_111_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_112, context->m_internal.texture__loadedTexture_112_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_113, context->m_internal.texture__loadedTexture_113_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_114, context->m_internal.texture__loadedTexture_114_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_115, context->m_internal.texture__loadedTexture_115_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_116, context->m_internal.texture__loadedTexture_116_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_117, context->m_internal.texture__loadedTexture_117_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_118, context->m_internal.texture__loadedTexture_118_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_119, context->m_internal.texture__loadedTexture_119_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_120, context->m_internal.texture__loadedTexture_120_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_121, context->m_internal.texture__loadedTexture_121_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_122, context->m_internal.texture__loadedTexture_122_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_123, context->m_internal.texture__loadedTexture_123_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_124, context->m_internal.texture__loadedTexture_124_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_125, context->m_internal.texture__loadedTexture_125_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_126, context->m_internal.texture__loadedTexture_126_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_127, context->m_internal.texture__loadedTexture_127_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_128, context->m_internal.texture__loadedTexture_128_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_129, context->m_internal.texture__loadedTexture_129_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_130, context->m_internal.texture__loadedTexture_130_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_131, context->m_internal.texture__loadedTexture_131_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_132, context->m_internal.texture__loadedTexture_132_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_133, context->m_internal.texture__loadedTexture_133_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_134, context->m_internal.texture__loadedTexture_134_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_135, context->m_internal.texture__loadedTexture_135_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_136, context->m_internal.texture__loadedTexture_136_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_137, context->m_internal.texture__loadedTexture_137_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_138, context->m_internal.texture__loadedTexture_138_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_139, context->m_internal.texture__loadedTexture_139_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_140, context->m_internal.texture__loadedTexture_140_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_141, context->m_internal.texture__loadedTexture_141_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_142, context->m_internal.texture__loadedTexture_142_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_143, context->m_internal.texture__loadedTexture_143_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_144, context->m_internal.texture__loadedTexture_144_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_145, context->m_internal.texture__loadedTexture_145_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_146, context->m_internal.texture__loadedTexture_146_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_147, context->m_internal.texture__loadedTexture_147_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_148, context->m_internal.texture__loadedTexture_148_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_149, context->m_internal.texture__loadedTexture_149_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_150, context->m_internal.texture__loadedTexture_150_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_151, context->m_internal.texture__loadedTexture_151_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_152, context->m_internal.texture__loadedTexture_152_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_153, context->m_internal.texture__loadedTexture_153_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_154, context->m_internal.texture__loadedTexture_154_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_155, context->m_internal.texture__loadedTexture_155_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_156, context->m_internal.texture__loadedTexture_156_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_157, context->m_internal.texture__loadedTexture_157_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_158, context->m_internal.texture__loadedTexture_158_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_159, context->m_internal.texture__loadedTexture_159_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_160, context->m_internal.texture__loadedTexture_160_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_161, context->m_internal.texture__loadedTexture_161_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_162, context->m_internal.texture__loadedTexture_162_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_163, context->m_internal.texture__loadedTexture_163_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_164, context->m_internal.texture__loadedTexture_164_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_165, context->m_internal.texture__loadedTexture_165_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_166, context->m_internal.texture__loadedTexture_166_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_167, context->m_internal.texture__loadedTexture_167_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_168, context->m_internal.texture__loadedTexture_168_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_169, context->m_internal.texture__loadedTexture_169_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_170, context->m_internal.texture__loadedTexture_170_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_171, context->m_internal.texture__loadedTexture_171_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_171_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_172, context->m_internal.texture__loadedTexture_172_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_173, context->m_internal.texture__loadedTexture_173_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_174, context->m_internal.texture__loadedTexture_174_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_175, context->m_internal.texture__loadedTexture_175_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_176, context->m_internal.texture__loadedTexture_176_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_177, context->m_internal.texture__loadedTexture_177_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_178, context->m_internal.texture__loadedTexture_178_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_179, context->m_internal.texture__loadedTexture_179_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_179_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_180, context->m_internal.texture__loadedTexture_180_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_180_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_181, context->m_internal.texture__loadedTexture_181_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_181_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_182, context->m_internal.texture__loadedTexture_182_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_182_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_183, context->m_internal.texture__loadedTexture_183_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_184, context->m_internal.texture__loadedTexture_184_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_184_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_185, context->m_internal.texture__loadedTexture_185_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_185_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_186, context->m_internal.texture__loadedTexture_186_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_187, context->m_internal.texture__loadedTexture_187_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_187_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_188, context->m_internal.texture__loadedTexture_188_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_188_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_189, context->m_internal.texture__loadedTexture_189_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_189_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_190, context->m_internal.texture__loadedTexture_190_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_190_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_191, context->m_internal.texture__loadedTexture_191_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_191_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_192, context->m_internal.texture__loadedTexture_192_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_192_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_193, context->m_internal.texture__loadedTexture_193_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_193_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_194, context->m_internal.texture__loadedTexture_194_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_194_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_195, context->m_internal.texture__loadedTexture_195_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.constantBuffer__RayGenCB, DXGI_FORMAT_UNKNOWN, DX12Utils::AccessType::CBV, DX12Utils::ResourceType::Buffer, false, 512, 1, 0 }
+                { context->m_internal.texture_ColorHDR, context->m_internal.texture_ColorHDR_format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture_LinearDepth, context->m_internal.texture_LinearDepth_format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_input.buffer_Scene, DXGI_FORMAT_UNKNOWN, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::RTScene, false, context->m_input.buffer_Scene_tlasSize, 1, 0, 0, 0, false },
+                { context->m_input.buffer_VertexBuffer, context->m_input.buffer_VertexBuffer_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Buffer, false, context->m_input.buffer_VertexBuffer_stride, context->m_input.buffer_VertexBuffer_count, 0, 0, 0, false },
+                { context->m_internal.buffer_PixelDebug, context->m_internal.buffer_PixelDebug_format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Buffer, false, context->m_internal.buffer_PixelDebug_stride, context->m_internal.buffer_PixelDebug_count, 0, 0, 0, false },
+                { context->m_internal.texture_DebugTex, context->m_internal.texture_DebugTex_format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_0, context->m_internal.texture__loadedTexture_0_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_1, context->m_internal.texture__loadedTexture_1_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_2, context->m_internal.texture__loadedTexture_2_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_3, context->m_internal.texture__loadedTexture_3_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_4, context->m_internal.texture__loadedTexture_4_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_5, context->m_internal.texture__loadedTexture_5_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_6, context->m_internal.texture__loadedTexture_6_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_7, context->m_internal.texture__loadedTexture_7_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_8, context->m_internal.texture__loadedTexture_8_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_9, context->m_internal.texture__loadedTexture_9_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_10, context->m_internal.texture__loadedTexture_10_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_11, context->m_internal.texture__loadedTexture_11_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_12, context->m_internal.texture__loadedTexture_12_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_13, context->m_internal.texture__loadedTexture_13_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_14, context->m_internal.texture__loadedTexture_14_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_15, context->m_internal.texture__loadedTexture_15_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_16, context->m_internal.texture__loadedTexture_16_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_17, context->m_internal.texture__loadedTexture_17_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_18, context->m_internal.texture__loadedTexture_18_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_19, context->m_internal.texture__loadedTexture_19_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_20, context->m_internal.texture__loadedTexture_20_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_21, context->m_internal.texture__loadedTexture_21_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_22, context->m_internal.texture__loadedTexture_22_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_23, context->m_internal.texture__loadedTexture_23_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_24, context->m_internal.texture__loadedTexture_24_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_25, context->m_internal.texture__loadedTexture_25_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_26, context->m_internal.texture__loadedTexture_26_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_27, context->m_internal.texture__loadedTexture_27_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_28, context->m_internal.texture__loadedTexture_28_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_29, context->m_internal.texture__loadedTexture_29_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_30, context->m_internal.texture__loadedTexture_30_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_31, context->m_internal.texture__loadedTexture_31_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_32, context->m_internal.texture__loadedTexture_32_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_33, context->m_internal.texture__loadedTexture_33_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_34, context->m_internal.texture__loadedTexture_34_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_35, context->m_internal.texture__loadedTexture_35_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_36, context->m_internal.texture__loadedTexture_36_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_37, context->m_internal.texture__loadedTexture_37_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_38, context->m_internal.texture__loadedTexture_38_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_39, context->m_internal.texture__loadedTexture_39_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_40, context->m_internal.texture__loadedTexture_40_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_41, context->m_internal.texture__loadedTexture_41_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_42, context->m_internal.texture__loadedTexture_42_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_43, context->m_internal.texture__loadedTexture_43_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_44, context->m_internal.texture__loadedTexture_44_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_45, context->m_internal.texture__loadedTexture_45_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_46, context->m_internal.texture__loadedTexture_46_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_47, context->m_internal.texture__loadedTexture_47_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_48, context->m_internal.texture__loadedTexture_48_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_49, context->m_internal.texture__loadedTexture_49_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_50, context->m_internal.texture__loadedTexture_50_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_51, context->m_internal.texture__loadedTexture_51_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_52, context->m_internal.texture__loadedTexture_52_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_53, context->m_internal.texture__loadedTexture_53_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_54, context->m_internal.texture__loadedTexture_54_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_55, context->m_internal.texture__loadedTexture_55_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_56, context->m_internal.texture__loadedTexture_56_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_57, context->m_internal.texture__loadedTexture_57_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_58, context->m_internal.texture__loadedTexture_58_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_59, context->m_internal.texture__loadedTexture_59_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_60, context->m_internal.texture__loadedTexture_60_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_61, context->m_internal.texture__loadedTexture_61_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_62, context->m_internal.texture__loadedTexture_62_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_63, context->m_internal.texture__loadedTexture_63_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_64, context->m_internal.texture__loadedTexture_64_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_65, context->m_internal.texture__loadedTexture_65_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_66, context->m_internal.texture__loadedTexture_66_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_67, context->m_internal.texture__loadedTexture_67_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_68, context->m_internal.texture__loadedTexture_68_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_69, context->m_internal.texture__loadedTexture_69_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_70, context->m_internal.texture__loadedTexture_70_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_71, context->m_internal.texture__loadedTexture_71_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_72, context->m_internal.texture__loadedTexture_72_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_73, context->m_internal.texture__loadedTexture_73_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_74, context->m_internal.texture__loadedTexture_74_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_75, context->m_internal.texture__loadedTexture_75_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_76, context->m_internal.texture__loadedTexture_76_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_77, context->m_internal.texture__loadedTexture_77_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_78, context->m_internal.texture__loadedTexture_78_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_79, context->m_internal.texture__loadedTexture_79_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_80, context->m_internal.texture__loadedTexture_80_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_81, context->m_internal.texture__loadedTexture_81_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_82, context->m_internal.texture__loadedTexture_82_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_83, context->m_internal.texture__loadedTexture_83_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_84, context->m_internal.texture__loadedTexture_84_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_85, context->m_internal.texture__loadedTexture_85_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_86, context->m_internal.texture__loadedTexture_86_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_87, context->m_internal.texture__loadedTexture_87_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_88, context->m_internal.texture__loadedTexture_88_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_89, context->m_internal.texture__loadedTexture_89_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_90, context->m_internal.texture__loadedTexture_90_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_91, context->m_internal.texture__loadedTexture_91_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_92, context->m_internal.texture__loadedTexture_92_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_93, context->m_internal.texture__loadedTexture_93_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_94, context->m_internal.texture__loadedTexture_94_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_95, context->m_internal.texture__loadedTexture_95_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_96, context->m_internal.texture__loadedTexture_96_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_97, context->m_internal.texture__loadedTexture_97_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_98, context->m_internal.texture__loadedTexture_98_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_99, context->m_internal.texture__loadedTexture_99_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_100, context->m_internal.texture__loadedTexture_100_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_101, context->m_internal.texture__loadedTexture_101_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_102, context->m_internal.texture__loadedTexture_102_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_103, context->m_internal.texture__loadedTexture_103_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_104, context->m_internal.texture__loadedTexture_104_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_105, context->m_internal.texture__loadedTexture_105_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_106, context->m_internal.texture__loadedTexture_106_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_107, context->m_internal.texture__loadedTexture_107_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_108, context->m_internal.texture__loadedTexture_108_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_109, context->m_internal.texture__loadedTexture_109_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_110, context->m_internal.texture__loadedTexture_110_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_111, context->m_internal.texture__loadedTexture_111_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_112, context->m_internal.texture__loadedTexture_112_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_113, context->m_internal.texture__loadedTexture_113_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_114, context->m_internal.texture__loadedTexture_114_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_115, context->m_internal.texture__loadedTexture_115_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_116, context->m_internal.texture__loadedTexture_116_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_117, context->m_internal.texture__loadedTexture_117_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_118, context->m_internal.texture__loadedTexture_118_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_119, context->m_internal.texture__loadedTexture_119_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_120, context->m_internal.texture__loadedTexture_120_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_121, context->m_internal.texture__loadedTexture_121_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_122, context->m_internal.texture__loadedTexture_122_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_123, context->m_internal.texture__loadedTexture_123_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_124, context->m_internal.texture__loadedTexture_124_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_125, context->m_internal.texture__loadedTexture_125_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_126, context->m_internal.texture__loadedTexture_126_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_127, context->m_internal.texture__loadedTexture_127_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_128, context->m_internal.texture__loadedTexture_128_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_129, context->m_internal.texture__loadedTexture_129_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_130, context->m_internal.texture__loadedTexture_130_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_131, context->m_internal.texture__loadedTexture_131_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_132, context->m_internal.texture__loadedTexture_132_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_133, context->m_internal.texture__loadedTexture_133_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_134, context->m_internal.texture__loadedTexture_134_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_135, context->m_internal.texture__loadedTexture_135_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_136, context->m_internal.texture__loadedTexture_136_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_137, context->m_internal.texture__loadedTexture_137_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_138, context->m_internal.texture__loadedTexture_138_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_139, context->m_internal.texture__loadedTexture_139_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_140, context->m_internal.texture__loadedTexture_140_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_141, context->m_internal.texture__loadedTexture_141_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_142, context->m_internal.texture__loadedTexture_142_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_143, context->m_internal.texture__loadedTexture_143_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_144, context->m_internal.texture__loadedTexture_144_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_145, context->m_internal.texture__loadedTexture_145_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_146, context->m_internal.texture__loadedTexture_146_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_147, context->m_internal.texture__loadedTexture_147_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_148, context->m_internal.texture__loadedTexture_148_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_149, context->m_internal.texture__loadedTexture_149_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_150, context->m_internal.texture__loadedTexture_150_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_151, context->m_internal.texture__loadedTexture_151_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_152, context->m_internal.texture__loadedTexture_152_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_153, context->m_internal.texture__loadedTexture_153_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_154, context->m_internal.texture__loadedTexture_154_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_155, context->m_internal.texture__loadedTexture_155_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_156, context->m_internal.texture__loadedTexture_156_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_157, context->m_internal.texture__loadedTexture_157_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_158, context->m_internal.texture__loadedTexture_158_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_159, context->m_internal.texture__loadedTexture_159_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_160, context->m_internal.texture__loadedTexture_160_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_161, context->m_internal.texture__loadedTexture_161_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_162, context->m_internal.texture__loadedTexture_162_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_163, context->m_internal.texture__loadedTexture_163_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_164, context->m_internal.texture__loadedTexture_164_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_165, context->m_internal.texture__loadedTexture_165_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_166, context->m_internal.texture__loadedTexture_166_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_167, context->m_internal.texture__loadedTexture_167_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_168, context->m_internal.texture__loadedTexture_168_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_169, context->m_internal.texture__loadedTexture_169_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_170, context->m_internal.texture__loadedTexture_170_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_171, context->m_internal.texture__loadedTexture_171_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_171_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_172, context->m_internal.texture__loadedTexture_172_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_173, context->m_internal.texture__loadedTexture_173_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_174, context->m_internal.texture__loadedTexture_174_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_175, context->m_internal.texture__loadedTexture_175_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_176, context->m_internal.texture__loadedTexture_176_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_177, context->m_internal.texture__loadedTexture_177_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_178, context->m_internal.texture__loadedTexture_178_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_179, context->m_internal.texture__loadedTexture_179_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_179_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_180, context->m_internal.texture__loadedTexture_180_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_180_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_181, context->m_internal.texture__loadedTexture_181_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_181_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_182, context->m_internal.texture__loadedTexture_182_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_182_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_183, context->m_internal.texture__loadedTexture_183_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_184, context->m_internal.texture__loadedTexture_184_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_184_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_185, context->m_internal.texture__loadedTexture_185_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_185_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_186, context->m_internal.texture__loadedTexture_186_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_187, context->m_internal.texture__loadedTexture_187_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_187_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_188, context->m_internal.texture__loadedTexture_188_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_188_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_189, context->m_internal.texture__loadedTexture_189_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_189_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_190, context->m_internal.texture__loadedTexture_190_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_190_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_191, context->m_internal.texture__loadedTexture_191_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_191_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_192, context->m_internal.texture__loadedTexture_192_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_192_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_193, context->m_internal.texture__loadedTexture_193_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_193_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_194, context->m_internal.texture__loadedTexture_194_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_194_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_195, context->m_internal.texture__loadedTexture_195_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.constantBuffer__RayGenCB, DXGI_FORMAT_UNKNOWN, DX12Utils::AccessType::CBV, DX12Utils::ResourceType::Buffer, false, 512, 1, 0, 0, 0, false }
             };
 
-            D3D12_GPU_DESCRIPTOR_HANDLE descriptorTable = GetDescriptorTable(device, s_srvHeap, descriptors, 202, Context::LogFn);
+            D3D12_GPU_DESCRIPTOR_HANDLE descriptorTable = GetDescriptorTable(device, s_srvHeap, descriptors, 203, Context::LogFn);
             commandList->SetComputeRootDescriptorTable(0, descriptorTable);
 
             unsigned int baseDispatchSize[3] = {
@@ -5633,7 +5658,7 @@ namespace FastBokeh
 
         // Compute Shader: GatherDOF_Setup
         {
-            ScopedPerfEvent scopedPerf("Compute Shader: GatherDOF_Setup", commandList, 8);
+            ScopedPerfEvent scopedPerf("Compute Shader: GatherDOF_Setup", commandList, 9);
             std::chrono::high_resolution_clock::time_point startPointCPU;
             if(context->m_profile)
             {
@@ -5645,12 +5670,12 @@ namespace FastBokeh
             commandList->SetPipelineState(ContextInternal::computeShader_GatherDOF_Setup_pso);
 
             DX12Utils::ResourceDescriptor descriptors[] = {
-                { context->m_internal.texture_ColorHDR, context->m_internal.texture_ColorHDR_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture_LinearDepth, context->m_internal.texture_LinearDepth_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture_GatherDOF_FarFieldColorCoC, context->m_internal.texture_GatherDOF_FarFieldColorCoC_format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture_GatherDOF_NearFieldColorCoC, context->m_internal.texture_GatherDOF_NearFieldColorCoC_format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture_GatherDOF_NearMaxCocTilemap, context->m_internal.texture_GatherDOF_NearMaxCocTilemap_format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.constantBuffer__GatherDOF_SetupCSCB, DXGI_FORMAT_UNKNOWN, DX12Utils::AccessType::CBV, DX12Utils::ResourceType::Buffer, false, 256, 1, 0 }
+                { context->m_internal.texture_ColorHDR, context->m_internal.texture_ColorHDR_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture_LinearDepth, context->m_internal.texture_LinearDepth_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture_GatherDOF_FarFieldColorCoC, context->m_internal.texture_GatherDOF_FarFieldColorCoC_format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture_GatherDOF_NearFieldColorCoC, context->m_internal.texture_GatherDOF_NearFieldColorCoC_format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture_GatherDOF_NearMaxCocTilemap, context->m_internal.texture_GatherDOF_NearMaxCocTilemap_format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.constantBuffer__GatherDOF_SetupCSCB, DXGI_FORMAT_UNKNOWN, DX12Utils::AccessType::CBV, DX12Utils::ResourceType::Buffer, false, 256, 1, 0, 0, 0, false }
             };
 
             D3D12_GPU_DESCRIPTOR_HANDLE descriptorTable = GetDescriptorTable(device, s_srvHeap, descriptors, 6, Context::LogFn);
@@ -5702,7 +5727,7 @@ namespace FastBokeh
         // Compute Shader: GatherDOF_NearBorder
         if(context->m_input.variable_GatherDOF_DoNearField)
         {
-            ScopedPerfEvent scopedPerf("Compute Shader: GatherDOF_NearBorder", commandList, 22);
+            ScopedPerfEvent scopedPerf("Compute Shader: GatherDOF_NearBorder", commandList, 23);
             std::chrono::high_resolution_clock::time_point startPointCPU;
             if(context->m_profile)
             {
@@ -5714,8 +5739,8 @@ namespace FastBokeh
             commandList->SetPipelineState(ContextInternal::computeShader_GatherDOF_NearBorder_pso);
 
             DX12Utils::ResourceDescriptor descriptors[] = {
-                { context->m_internal.texture_GatherDOF_NearFieldColorCoC, context->m_internal.texture_GatherDOF_NearFieldColorCoC_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture_GatherDOF_NearFieldColorCoCBorder, context->m_internal.texture_GatherDOF_NearFieldColorCoCBorder_format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 }
+                { context->m_internal.texture_GatherDOF_NearFieldColorCoC, context->m_internal.texture_GatherDOF_NearFieldColorCoC_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture_GatherDOF_NearFieldColorCoCBorder, context->m_internal.texture_GatherDOF_NearFieldColorCoCBorder_format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false }
             };
 
             D3D12_GPU_DESCRIPTOR_HANDLE descriptorTable = GetDescriptorTable(device, s_srvHeap, descriptors, 2, Context::LogFn);
@@ -5780,7 +5805,7 @@ namespace FastBokeh
         // Compute Shader: GatherDOF_BlurFar
         if(context->m_input.variable_GatherDOF_DoFarField)
         {
-            ScopedPerfEvent scopedPerf("Compute Shader: GatherDOF_BlurFar", commandList, 12);
+            ScopedPerfEvent scopedPerf("Compute Shader: GatherDOF_BlurFar", commandList, 13);
             std::chrono::high_resolution_clock::time_point startPointCPU;
             if(context->m_profile)
             {
@@ -5792,27 +5817,27 @@ namespace FastBokeh
             commandList->SetPipelineState(ContextInternal::computeShader_GatherDOF_BlurFar_pso);
 
             DX12Utils::ResourceDescriptor descriptors[] = {
-                { context->m_internal.texture_GatherDOF_FarFieldColorCoC, context->m_internal.texture_GatherDOF_FarFieldColorCoC_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture_GatherDOF_BlurredFarFieldColorAlpha, context->m_internal.texture_GatherDOF_BlurredFarFieldColorAlpha_format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_179, context->m_internal.texture__loadedTexture_179_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_179_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_180, context->m_internal.texture__loadedTexture_180_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_180_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_181, context->m_internal.texture__loadedTexture_181_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_181_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_182, context->m_internal.texture__loadedTexture_182_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_182_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_183, context->m_internal.texture__loadedTexture_183_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_171, context->m_internal.texture__loadedTexture_171_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_171_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_184, context->m_internal.texture__loadedTexture_184_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_184_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_185, context->m_internal.texture__loadedTexture_185_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_185_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_187, context->m_internal.texture__loadedTexture_187_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_187_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_188, context->m_internal.texture__loadedTexture_188_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_188_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_186, context->m_internal.texture__loadedTexture_186_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_189, context->m_internal.texture__loadedTexture_189_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_189_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_190, context->m_internal.texture__loadedTexture_190_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_190_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_191, context->m_internal.texture__loadedTexture_191_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_191_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_192, context->m_internal.texture__loadedTexture_192_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_192_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_193, context->m_internal.texture__loadedTexture_193_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_193_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_194, context->m_internal.texture__loadedTexture_194_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_194_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_195, context->m_internal.texture__loadedTexture_195_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.constantBuffer__GatherDOF_BlurFarCSCB, DXGI_FORMAT_UNKNOWN, DX12Utils::AccessType::CBV, DX12Utils::ResourceType::Buffer, false, 256, 1, 0 }
+                { context->m_internal.texture_GatherDOF_FarFieldColorCoC, context->m_internal.texture_GatherDOF_FarFieldColorCoC_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture_GatherDOF_BlurredFarFieldColorAlpha, context->m_internal.texture_GatherDOF_BlurredFarFieldColorAlpha_format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_179, context->m_internal.texture__loadedTexture_179_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_179_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_180, context->m_internal.texture__loadedTexture_180_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_180_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_181, context->m_internal.texture__loadedTexture_181_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_181_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_182, context->m_internal.texture__loadedTexture_182_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_182_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_183, context->m_internal.texture__loadedTexture_183_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_171, context->m_internal.texture__loadedTexture_171_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_171_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_184, context->m_internal.texture__loadedTexture_184_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_184_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_185, context->m_internal.texture__loadedTexture_185_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_185_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_187, context->m_internal.texture__loadedTexture_187_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_187_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_188, context->m_internal.texture__loadedTexture_188_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_188_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_186, context->m_internal.texture__loadedTexture_186_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_189, context->m_internal.texture__loadedTexture_189_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_189_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_190, context->m_internal.texture__loadedTexture_190_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_190_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_191, context->m_internal.texture__loadedTexture_191_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_191_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_192, context->m_internal.texture__loadedTexture_192_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_192_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_193, context->m_internal.texture__loadedTexture_193_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_193_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_194, context->m_internal.texture__loadedTexture_194_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_194_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_195, context->m_internal.texture__loadedTexture_195_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.constantBuffer__GatherDOF_BlurFarCSCB, DXGI_FORMAT_UNKNOWN, DX12Utils::AccessType::CBV, DX12Utils::ResourceType::Buffer, false, 256, 1, 0, 0, 0, false }
             };
 
             D3D12_GPU_DESCRIPTOR_HANDLE descriptorTable = GetDescriptorTable(device, s_srvHeap, descriptors, 21, Context::LogFn);
@@ -5840,19 +5865,66 @@ namespace FastBokeh
             }
         }
 
-        // Shader Constants: _GatherDOF_FloodFillFarCSCB
+        // Shader Constants: _GatherDOF_NearBlurCB
         {
-            context->m_internal.constantBuffer__GatherDOF_FloodFillFarCSCB_cpu.GatherDOF_AnimateNoiseTextures = context->m_input.variable_GatherDOF_AnimateNoiseTextures;
-            context->m_internal.constantBuffer__GatherDOF_FloodFillFarCSCB_cpu.GatherDOF_DoFarFieldFloodFill = context->m_input.variable_GatherDOF_DoFarFieldFloodFill;
-            context->m_internal.constantBuffer__GatherDOF_FloodFillFarCSCB_cpu.GatherDOF_DoNearFieldFloodFill = context->m_input.variable_GatherDOF_DoNearFieldFloodFill;
-            context->m_internal.constantBuffer__GatherDOF_FloodFillFarCSCB_cpu.GatherDOF_FloodFillTapCount = context->m_input.variable_GatherDOF_FloodFillTapCount;
-            context->m_internal.constantBuffer__GatherDOF_FloodFillFarCSCB_cpu.GatherDOF_FrameIndex = context->m_internal.variable_GatherDOF_FrameIndex;
-            context->m_internal.constantBuffer__GatherDOF_FloodFillFarCSCB_cpu.GatherDOF_KernelSize = context->m_input.variable_GatherDOF_KernelSize;
-            context->m_internal.constantBuffer__GatherDOF_FloodFillFarCSCB_cpu.GatherDOF_UseNoiseTextures = context->m_input.variable_GatherDOF_UseNoiseTextures;
-            context->m_internal.constantBuffer__GatherDOF_FloodFillFarCSCB_cpu.JitterNoiseTextures = context->m_input.variable_JitterNoiseTextures;
-            context->m_internal.constantBuffer__GatherDOF_FloodFillFarCSCB_cpu.LensRNGExtend = (int)context->m_input.variable_LensRNGExtend;
-            context->m_internal.constantBuffer__GatherDOF_FloodFillFarCSCB_cpu.LensRNGSource = (int)context->m_input.variable_LensRNGSource;
-            DX12Utils::CopyConstantsCPUToGPU(s_ubTracker, device, commandList, context->m_internal.constantBuffer__GatherDOF_FloodFillFarCSCB, context->m_internal.constantBuffer__GatherDOF_FloodFillFarCSCB_cpu, Context::LogFn);
+            context->m_internal.constantBuffer__GatherDOF_NearBlurCB_cpu.GatherDOF_AnimateNoiseTextures = context->m_input.variable_GatherDOF_AnimateNoiseTextures;
+            context->m_internal.constantBuffer__GatherDOF_NearBlurCB_cpu.GatherDOF_BlurTapCount = context->m_input.variable_GatherDOF_BlurTapCount;
+            context->m_internal.constantBuffer__GatherDOF_NearBlurCB_cpu.GatherDOF_FrameIndex = context->m_internal.variable_GatherDOF_FrameIndex;
+            context->m_internal.constantBuffer__GatherDOF_NearBlurCB_cpu.GatherDOF_KernelSize = context->m_input.variable_GatherDOF_KernelSize;
+            context->m_internal.constantBuffer__GatherDOF_NearBlurCB_cpu.GatherDOF_UseNoiseTextures = context->m_input.variable_GatherDOF_UseNoiseTextures;
+            context->m_internal.constantBuffer__GatherDOF_NearBlurCB_cpu.JitterNoiseTextures = context->m_input.variable_JitterNoiseTextures;
+            context->m_internal.constantBuffer__GatherDOF_NearBlurCB_cpu.LensRNGExtend = (int)context->m_input.variable_LensRNGExtend;
+            context->m_internal.constantBuffer__GatherDOF_NearBlurCB_cpu.LensRNGSource = (int)context->m_input.variable_LensRNGSource;
+            DX12Utils::CopyConstantsCPUToGPU(s_ubTracker, device, commandList, context->m_internal.constantBuffer__GatherDOF_NearBlurCB, context->m_internal.constantBuffer__GatherDOF_NearBlurCB_cpu, Context::LogFn);
+        }
+
+        // Shader Constants: _GatherDOF_RecombineCSCB
+        {
+            context->m_internal.constantBuffer__GatherDOF_RecombineCSCB_cpu.GatherDOF_DoFarField = context->m_input.variable_GatherDOF_DoFarField;
+            context->m_internal.constantBuffer__GatherDOF_RecombineCSCB_cpu.GatherDOF_DoNearField = context->m_input.variable_GatherDOF_DoNearField;
+            context->m_internal.constantBuffer__GatherDOF_RecombineCSCB_cpu.GatherDOF_FarTransitionRegion = context->m_input.variable_GatherDOF_FarTransitionRegion;
+            context->m_internal.constantBuffer__GatherDOF_RecombineCSCB_cpu.GatherDOF_FocalDistance = context->m_input.variable_GatherDOF_FocalDistance;
+            context->m_internal.constantBuffer__GatherDOF_RecombineCSCB_cpu.GatherDOF_FocalLength = context->m_input.variable_GatherDOF_FocalLength;
+            context->m_internal.constantBuffer__GatherDOF_RecombineCSCB_cpu.GatherDOF_FocalRegion = context->m_input.variable_GatherDOF_FocalRegion;
+            context->m_internal.constantBuffer__GatherDOF_RecombineCSCB_cpu.GatherDOF_NearTransitionRegion = context->m_input.variable_GatherDOF_NearTransitionRegion;
+            context->m_internal.constantBuffer__GatherDOF_RecombineCSCB_cpu.GatherDOF_Scale = context->m_input.variable_GatherDOF_Scale;
+            DX12Utils::CopyConstantsCPUToGPU(s_ubTracker, device, commandList, context->m_internal.constantBuffer__GatherDOF_RecombineCSCB, context->m_internal.constantBuffer__GatherDOF_RecombineCSCB_cpu, Context::LogFn);
+        }
+
+        // Shader Constants: _GaussBlur_GaussBlurCSCB
+        {
+            context->m_internal.constantBuffer__GaussBlur_GaussBlurCSCB_cpu.GaussBlur_Sigma = context->m_input.variable_GaussBlur_Sigma;
+            DX12Utils::CopyConstantsCPUToGPU(s_ubTracker, device, commandList, context->m_internal.constantBuffer__GaussBlur_GaussBlurCSCB, context->m_internal.constantBuffer__GaussBlur_GaussBlurCSCB_cpu, Context::LogFn);
+        }
+
+        // Shader Constants: _TemporalAccumulation_AccumulateCB
+        {
+            context->m_internal.constantBuffer__TemporalAccumulation_AccumulateCB_cpu.CameraChanged = context->m_input.variable_CameraChanged;
+            context->m_internal.constantBuffer__TemporalAccumulation_AccumulateCB_cpu.TemporalAccumulation_Alpha = context->m_input.variable_TemporalAccumulation_Alpha;
+            context->m_internal.constantBuffer__TemporalAccumulation_AccumulateCB_cpu.TemporalAccumulation_Enabled = context->m_input.variable_TemporalAccumulation_Enabled;
+            DX12Utils::CopyConstantsCPUToGPU(s_ubTracker, device, commandList, context->m_internal.constantBuffer__TemporalAccumulation_AccumulateCB, context->m_internal.constantBuffer__TemporalAccumulation_AccumulateCB_cpu, Context::LogFn);
+        }
+
+        // Shader Constants: _ToneMap_TonemapCB
+        {
+            context->m_internal.constantBuffer__ToneMap_TonemapCB_cpu.ToneMap_ExposureFStops = context->m_input.variable_ToneMap_ExposureFStops;
+            context->m_internal.constantBuffer__ToneMap_TonemapCB_cpu.ToneMap_ToneMapper = (int)context->m_input.variable_ToneMap_ToneMapper;
+            DX12Utils::CopyConstantsCPUToGPU(s_ubTracker, device, commandList, context->m_internal.constantBuffer__ToneMap_TonemapCB, context->m_internal.constantBuffer__ToneMap_TonemapCB_cpu, Context::LogFn);
+        }
+
+        // Shader Constants: _GatherDOF_FloodFillFarCS_0CB
+        {
+            context->m_internal.constantBuffer__GatherDOF_FloodFillFarCS_0CB_cpu.GatherDOF_AnimateNoiseTextures = context->m_input.variable_GatherDOF_AnimateNoiseTextures;
+            context->m_internal.constantBuffer__GatherDOF_FloodFillFarCS_0CB_cpu.GatherDOF_DoFarFieldFloodFill = context->m_input.variable_GatherDOF_DoFarFieldFloodFill;
+            context->m_internal.constantBuffer__GatherDOF_FloodFillFarCS_0CB_cpu.GatherDOF_DoNearFieldFloodFill = context->m_input.variable_GatherDOF_DoNearFieldFloodFill;
+            context->m_internal.constantBuffer__GatherDOF_FloodFillFarCS_0CB_cpu.GatherDOF_FloodFillTapCount = context->m_input.variable_GatherDOF_FloodFillTapCount;
+            context->m_internal.constantBuffer__GatherDOF_FloodFillFarCS_0CB_cpu.GatherDOF_FrameIndex = context->m_internal.variable_GatherDOF_FrameIndex;
+            context->m_internal.constantBuffer__GatherDOF_FloodFillFarCS_0CB_cpu.GatherDOF_KernelSize = context->m_input.variable_GatherDOF_KernelSize;
+            context->m_internal.constantBuffer__GatherDOF_FloodFillFarCS_0CB_cpu.GatherDOF_UseNoiseTextures = context->m_input.variable_GatherDOF_UseNoiseTextures;
+            context->m_internal.constantBuffer__GatherDOF_FloodFillFarCS_0CB_cpu.JitterNoiseTextures = context->m_input.variable_JitterNoiseTextures;
+            context->m_internal.constantBuffer__GatherDOF_FloodFillFarCS_0CB_cpu.LensRNGExtend = (int)context->m_input.variable_LensRNGExtend;
+            context->m_internal.constantBuffer__GatherDOF_FloodFillFarCS_0CB_cpu.LensRNGSource = (int)context->m_input.variable_LensRNGSource;
+            DX12Utils::CopyConstantsCPUToGPU(s_ubTracker, device, commandList, context->m_internal.constantBuffer__GatherDOF_FloodFillFarCS_0CB, context->m_internal.constantBuffer__GatherDOF_FloodFillFarCS_0CB_cpu, Context::LogFn);
         }
 
         // Transition resources for the next action
@@ -5886,7 +5958,7 @@ namespace FastBokeh
         // Compute Shader: GatherDOF_FloodFillFar
         if(context->m_input.variable_GatherDOF_DoFarField)
         {
-            ScopedPerfEvent scopedPerf("Compute Shader: GatherDOF_FloodFillFar", commandList, 14);
+            ScopedPerfEvent scopedPerf("Compute Shader: GatherDOF_FloodFillFar", commandList, 15);
             std::chrono::high_resolution_clock::time_point startPointCPU;
             if(context->m_profile)
             {
@@ -5898,28 +5970,28 @@ namespace FastBokeh
             commandList->SetPipelineState(ContextInternal::computeShader_GatherDOF_FloodFillFar_pso);
 
             DX12Utils::ResourceDescriptor descriptors[] = {
-                { context->m_internal.texture_GatherDOF_NearMaxCocTilemap, context->m_internal.texture_GatherDOF_NearMaxCocTilemap_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture_GatherDOF_BlurredFarFieldColorAlpha, context->m_internal.texture_GatherDOF_BlurredFarFieldColorAlpha_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture_GatherDOF_FloodFilledBlurredFarFieldColorAlpha, context->m_internal.texture_GatherDOF_FloodFilledBlurredFarFieldColorAlpha_format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_179, context->m_internal.texture__loadedTexture_179_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_179_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_180, context->m_internal.texture__loadedTexture_180_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_180_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_181, context->m_internal.texture__loadedTexture_181_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_181_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_182, context->m_internal.texture__loadedTexture_182_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_182_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_183, context->m_internal.texture__loadedTexture_183_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_171, context->m_internal.texture__loadedTexture_171_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_171_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_184, context->m_internal.texture__loadedTexture_184_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_184_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_185, context->m_internal.texture__loadedTexture_185_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_185_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_186, context->m_internal.texture__loadedTexture_186_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_187, context->m_internal.texture__loadedTexture_187_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_187_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_188, context->m_internal.texture__loadedTexture_188_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_188_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_189, context->m_internal.texture__loadedTexture_189_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_189_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_190, context->m_internal.texture__loadedTexture_190_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_190_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_191, context->m_internal.texture__loadedTexture_191_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_191_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_192, context->m_internal.texture__loadedTexture_192_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_192_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_193, context->m_internal.texture__loadedTexture_193_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_193_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_194, context->m_internal.texture__loadedTexture_194_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_194_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_195, context->m_internal.texture__loadedTexture_195_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.constantBuffer__GatherDOF_FloodFillFarCSCB, DXGI_FORMAT_UNKNOWN, DX12Utils::AccessType::CBV, DX12Utils::ResourceType::Buffer, false, 256, 1, 0 }
+                { context->m_internal.texture_GatherDOF_NearMaxCocTilemap, context->m_internal.texture_GatherDOF_NearMaxCocTilemap_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture_GatherDOF_BlurredFarFieldColorAlpha, context->m_internal.texture_GatherDOF_BlurredFarFieldColorAlpha_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture_GatherDOF_FloodFilledBlurredFarFieldColorAlpha, context->m_internal.texture_GatherDOF_FloodFilledBlurredFarFieldColorAlpha_format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_179, context->m_internal.texture__loadedTexture_179_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_179_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_180, context->m_internal.texture__loadedTexture_180_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_180_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_181, context->m_internal.texture__loadedTexture_181_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_181_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_182, context->m_internal.texture__loadedTexture_182_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_182_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_183, context->m_internal.texture__loadedTexture_183_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_171, context->m_internal.texture__loadedTexture_171_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_171_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_184, context->m_internal.texture__loadedTexture_184_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_184_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_185, context->m_internal.texture__loadedTexture_185_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_185_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_186, context->m_internal.texture__loadedTexture_186_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_187, context->m_internal.texture__loadedTexture_187_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_187_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_188, context->m_internal.texture__loadedTexture_188_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_188_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_189, context->m_internal.texture__loadedTexture_189_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_189_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_190, context->m_internal.texture__loadedTexture_190_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_190_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_191, context->m_internal.texture__loadedTexture_191_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_191_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_192, context->m_internal.texture__loadedTexture_192_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_192_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_193, context->m_internal.texture__loadedTexture_193_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_193_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_194, context->m_internal.texture__loadedTexture_194_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_194_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_195, context->m_internal.texture__loadedTexture_195_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.constantBuffer__GatherDOF_FloodFillFarCS_0CB, DXGI_FORMAT_UNKNOWN, DX12Utils::AccessType::CBV, DX12Utils::ResourceType::Buffer, false, 256, 1, 0, 0, 0, false }
             };
 
             D3D12_GPU_DESCRIPTOR_HANDLE descriptorTable = GetDescriptorTable(device, s_srvHeap, descriptors, 22, Context::LogFn);
@@ -5964,7 +6036,7 @@ namespace FastBokeh
         // Compute Shader: GatherDOF_DownscaleTileMap_1_4
         if(context->m_input.variable_GatherDOF_DoNearField)
         {
-            ScopedPerfEvent scopedPerf("Compute Shader: GatherDOF_DownscaleTileMap_1_4", commandList, 16);
+            ScopedPerfEvent scopedPerf("Compute Shader: GatherDOF_DownscaleTileMap_1_4", commandList, 17);
             std::chrono::high_resolution_clock::time_point startPointCPU;
             if(context->m_profile)
             {
@@ -5976,8 +6048,8 @@ namespace FastBokeh
             commandList->SetPipelineState(ContextInternal::computeShader_GatherDOF_DownscaleTileMap_1_4_pso);
 
             DX12Utils::ResourceDescriptor descriptors[] = {
-                { context->m_internal.texture_GatherDOF_NearMaxCocTilemap, context->m_internal.texture_GatherDOF_NearMaxCocTilemap_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture_GatherDOF_NearMaxCocTilemap_1_4, context->m_internal.texture_GatherDOF_NearMaxCocTilemap_1_4_format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 }
+                { context->m_internal.texture_GatherDOF_NearMaxCocTilemap, context->m_internal.texture_GatherDOF_NearMaxCocTilemap_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture_GatherDOF_NearMaxCocTilemap_1_4, context->m_internal.texture_GatherDOF_NearMaxCocTilemap_1_4_format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false }
             };
 
             D3D12_GPU_DESCRIPTOR_HANDLE descriptorTable = GetDescriptorTable(device, s_srvHeap, descriptors, 2, Context::LogFn);
@@ -6029,7 +6101,7 @@ namespace FastBokeh
         // Compute Shader: GatherDOF_DownscaleTileMap_1_8
         if(context->m_input.variable_GatherDOF_DoNearField)
         {
-            ScopedPerfEvent scopedPerf("Compute Shader: GatherDOF_DownscaleTileMap_1_8", commandList, 19);
+            ScopedPerfEvent scopedPerf("Compute Shader: GatherDOF_DownscaleTileMap_1_8", commandList, 20);
             std::chrono::high_resolution_clock::time_point startPointCPU;
             if(context->m_profile)
             {
@@ -6041,8 +6113,8 @@ namespace FastBokeh
             commandList->SetPipelineState(ContextInternal::computeShader_GatherDOF_DownscaleTileMap_1_8_pso);
 
             DX12Utils::ResourceDescriptor descriptors[] = {
-                { context->m_internal.texture_GatherDOF_NearMaxCocTilemap_1_4, context->m_internal.texture_GatherDOF_NearMaxCocTilemap_1_4_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture_GatherDOF_NearMaxCocTilemap_1_8, context->m_internal.texture_GatherDOF_NearMaxCocTilemap_1_8_format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 }
+                { context->m_internal.texture_GatherDOF_NearMaxCocTilemap_1_4, context->m_internal.texture_GatherDOF_NearMaxCocTilemap_1_4_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture_GatherDOF_NearMaxCocTilemap_1_8, context->m_internal.texture_GatherDOF_NearMaxCocTilemap_1_8_format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false }
             };
 
             D3D12_GPU_DESCRIPTOR_HANDLE descriptorTable = GetDescriptorTable(device, s_srvHeap, descriptors, 2, Context::LogFn);
@@ -6094,7 +6166,7 @@ namespace FastBokeh
         // Compute Shader: GatherDOF_NearHalo
         if(context->m_input.variable_GatherDOF_DoNearField)
         {
-            ScopedPerfEvent scopedPerf("Compute Shader: GatherDOF_NearHalo", commandList, 20);
+            ScopedPerfEvent scopedPerf("Compute Shader: GatherDOF_NearHalo", commandList, 21);
             std::chrono::high_resolution_clock::time_point startPointCPU;
             if(context->m_profile)
             {
@@ -6106,8 +6178,8 @@ namespace FastBokeh
             commandList->SetPipelineState(ContextInternal::computeShader_GatherDOF_NearHalo_pso);
 
             DX12Utils::ResourceDescriptor descriptors[] = {
-                { context->m_internal.texture_GatherDOF_NearMaxCocTilemap_1_8, context->m_internal.texture_GatherDOF_NearMaxCocTilemap_1_8_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture_GatherDOF_NearMaxCocTilemap_1_8_Halo, context->m_internal.texture_GatherDOF_NearMaxCocTilemap_1_8_Halo_format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 }
+                { context->m_internal.texture_GatherDOF_NearMaxCocTilemap_1_8, context->m_internal.texture_GatherDOF_NearMaxCocTilemap_1_8_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture_GatherDOF_NearMaxCocTilemap_1_8_Halo, context->m_internal.texture_GatherDOF_NearMaxCocTilemap_1_8_Halo_format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false }
             };
 
             D3D12_GPU_DESCRIPTOR_HANDLE descriptorTable = GetDescriptorTable(device, s_srvHeap, descriptors, 2, Context::LogFn);
@@ -6133,19 +6205,6 @@ namespace FastBokeh
                 context->m_profileData[(s_timerIndex-1)/2].m_cpu = (float)std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now() - startPointCPU).count();
                 commandList->EndQuery(context->m_internal.m_TimestampQueryHeap, D3D12_QUERY_TYPE_TIMESTAMP, s_timerIndex++);
             }
-        }
-
-        // Shader Constants: _GatherDOF_NearBlurCB
-        {
-            context->m_internal.constantBuffer__GatherDOF_NearBlurCB_cpu.GatherDOF_AnimateNoiseTextures = context->m_input.variable_GatherDOF_AnimateNoiseTextures;
-            context->m_internal.constantBuffer__GatherDOF_NearBlurCB_cpu.GatherDOF_BlurTapCount = context->m_input.variable_GatherDOF_BlurTapCount;
-            context->m_internal.constantBuffer__GatherDOF_NearBlurCB_cpu.GatherDOF_FrameIndex = context->m_internal.variable_GatherDOF_FrameIndex;
-            context->m_internal.constantBuffer__GatherDOF_NearBlurCB_cpu.GatherDOF_KernelSize = context->m_input.variable_GatherDOF_KernelSize;
-            context->m_internal.constantBuffer__GatherDOF_NearBlurCB_cpu.GatherDOF_UseNoiseTextures = context->m_input.variable_GatherDOF_UseNoiseTextures;
-            context->m_internal.constantBuffer__GatherDOF_NearBlurCB_cpu.JitterNoiseTextures = context->m_input.variable_JitterNoiseTextures;
-            context->m_internal.constantBuffer__GatherDOF_NearBlurCB_cpu.LensRNGExtend = (int)context->m_input.variable_LensRNGExtend;
-            context->m_internal.constantBuffer__GatherDOF_NearBlurCB_cpu.LensRNGSource = (int)context->m_input.variable_LensRNGSource;
-            DX12Utils::CopyConstantsCPUToGPU(s_ubTracker, device, commandList, context->m_internal.constantBuffer__GatherDOF_NearBlurCB, context->m_internal.constantBuffer__GatherDOF_NearBlurCB_cpu, Context::LogFn);
         }
 
         // Transition resources for the next action
@@ -6179,7 +6238,7 @@ namespace FastBokeh
         // Compute Shader: GatherDOF_NearBlur
         if(context->m_input.variable_GatherDOF_DoNearField)
         {
-            ScopedPerfEvent scopedPerf("Compute Shader: GatherDOF_NearBlur", commandList, 24);
+            ScopedPerfEvent scopedPerf("Compute Shader: GatherDOF_NearBlur", commandList, 25);
             std::chrono::high_resolution_clock::time_point startPointCPU;
             if(context->m_profile)
             {
@@ -6191,28 +6250,28 @@ namespace FastBokeh
             commandList->SetPipelineState(ContextInternal::computeShader_GatherDOF_NearBlur_pso);
 
             DX12Utils::ResourceDescriptor descriptors[] = {
-                { context->m_internal.texture_GatherDOF_NearFieldColorCoCBorder, context->m_internal.texture_GatherDOF_NearFieldColorCoCBorder_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture_GatherDOF_NearMaxCocTilemap_1_8_Halo, context->m_internal.texture_GatherDOF_NearMaxCocTilemap_1_8_Halo_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture_GatherDOF_NearFieldColorCoCBorderBlurred, context->m_internal.texture_GatherDOF_NearFieldColorCoCBorderBlurred_format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_179, context->m_internal.texture__loadedTexture_179_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_179_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_180, context->m_internal.texture__loadedTexture_180_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_180_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_181, context->m_internal.texture__loadedTexture_181_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_181_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_182, context->m_internal.texture__loadedTexture_182_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_182_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_183, context->m_internal.texture__loadedTexture_183_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_171, context->m_internal.texture__loadedTexture_171_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_171_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_184, context->m_internal.texture__loadedTexture_184_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_184_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_185, context->m_internal.texture__loadedTexture_185_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_185_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_186, context->m_internal.texture__loadedTexture_186_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_187, context->m_internal.texture__loadedTexture_187_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_187_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_188, context->m_internal.texture__loadedTexture_188_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_188_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_189, context->m_internal.texture__loadedTexture_189_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_189_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_190, context->m_internal.texture__loadedTexture_190_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_190_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_191, context->m_internal.texture__loadedTexture_191_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_191_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_192, context->m_internal.texture__loadedTexture_192_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_192_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_193, context->m_internal.texture__loadedTexture_193_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_193_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_194, context->m_internal.texture__loadedTexture_194_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_194_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_195, context->m_internal.texture__loadedTexture_195_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.constantBuffer__GatherDOF_NearBlurCB, DXGI_FORMAT_UNKNOWN, DX12Utils::AccessType::CBV, DX12Utils::ResourceType::Buffer, false, 256, 1, 0 }
+                { context->m_internal.texture_GatherDOF_NearFieldColorCoCBorder, context->m_internal.texture_GatherDOF_NearFieldColorCoCBorder_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture_GatherDOF_NearMaxCocTilemap_1_8_Halo, context->m_internal.texture_GatherDOF_NearMaxCocTilemap_1_8_Halo_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture_GatherDOF_NearFieldColorCoCBorderBlurred, context->m_internal.texture_GatherDOF_NearFieldColorCoCBorderBlurred_format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_179, context->m_internal.texture__loadedTexture_179_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_179_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_180, context->m_internal.texture__loadedTexture_180_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_180_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_181, context->m_internal.texture__loadedTexture_181_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_181_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_182, context->m_internal.texture__loadedTexture_182_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_182_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_183, context->m_internal.texture__loadedTexture_183_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_171, context->m_internal.texture__loadedTexture_171_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_171_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_184, context->m_internal.texture__loadedTexture_184_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_184_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_185, context->m_internal.texture__loadedTexture_185_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_185_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_186, context->m_internal.texture__loadedTexture_186_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_187, context->m_internal.texture__loadedTexture_187_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_187_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_188, context->m_internal.texture__loadedTexture_188_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_188_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_189, context->m_internal.texture__loadedTexture_189_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_189_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_190, context->m_internal.texture__loadedTexture_190_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_190_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_191, context->m_internal.texture__loadedTexture_191_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_191_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_192, context->m_internal.texture__loadedTexture_192_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_192_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_193, context->m_internal.texture__loadedTexture_193_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_193_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_194, context->m_internal.texture__loadedTexture_194_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_194_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_195, context->m_internal.texture__loadedTexture_195_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.constantBuffer__GatherDOF_NearBlurCB, DXGI_FORMAT_UNKNOWN, DX12Utils::AccessType::CBV, DX12Utils::ResourceType::Buffer, false, 256, 1, 0, 0, 0, false }
             };
 
             D3D12_GPU_DESCRIPTOR_HANDLE descriptorTable = GetDescriptorTable(device, s_srvHeap, descriptors, 22, Context::LogFn);
@@ -6240,6 +6299,21 @@ namespace FastBokeh
             }
         }
 
+        // Shader Constants: _GatherDOF_FloodFillFarCS_1CB
+        {
+            context->m_internal.constantBuffer__GatherDOF_FloodFillFarCS_1CB_cpu.GatherDOF_AnimateNoiseTextures = context->m_input.variable_GatherDOF_AnimateNoiseTextures;
+            context->m_internal.constantBuffer__GatherDOF_FloodFillFarCS_1CB_cpu.GatherDOF_DoFarFieldFloodFill = context->m_input.variable_GatherDOF_DoFarFieldFloodFill;
+            context->m_internal.constantBuffer__GatherDOF_FloodFillFarCS_1CB_cpu.GatherDOF_DoNearFieldFloodFill = context->m_input.variable_GatherDOF_DoNearFieldFloodFill;
+            context->m_internal.constantBuffer__GatherDOF_FloodFillFarCS_1CB_cpu.GatherDOF_FloodFillTapCount = context->m_input.variable_GatherDOF_FloodFillTapCount;
+            context->m_internal.constantBuffer__GatherDOF_FloodFillFarCS_1CB_cpu.GatherDOF_FrameIndex = context->m_internal.variable_GatherDOF_FrameIndex;
+            context->m_internal.constantBuffer__GatherDOF_FloodFillFarCS_1CB_cpu.GatherDOF_KernelSize = context->m_input.variable_GatherDOF_KernelSize;
+            context->m_internal.constantBuffer__GatherDOF_FloodFillFarCS_1CB_cpu.GatherDOF_UseNoiseTextures = context->m_input.variable_GatherDOF_UseNoiseTextures;
+            context->m_internal.constantBuffer__GatherDOF_FloodFillFarCS_1CB_cpu.JitterNoiseTextures = context->m_input.variable_JitterNoiseTextures;
+            context->m_internal.constantBuffer__GatherDOF_FloodFillFarCS_1CB_cpu.LensRNGExtend = (int)context->m_input.variable_LensRNGExtend;
+            context->m_internal.constantBuffer__GatherDOF_FloodFillFarCS_1CB_cpu.LensRNGSource = (int)context->m_input.variable_LensRNGSource;
+            DX12Utils::CopyConstantsCPUToGPU(s_ubTracker, device, commandList, context->m_internal.constantBuffer__GatherDOF_FloodFillFarCS_1CB, context->m_internal.constantBuffer__GatherDOF_FloodFillFarCS_1CB_cpu, Context::LogFn);
+        }
+
         // Transition resources for the next action
         {
             D3D12_RESOURCE_BARRIER barriers[2];
@@ -6264,7 +6338,7 @@ namespace FastBokeh
         // Compute Shader: GatherDOF_FloodFillNear
         if(context->m_input.variable_GatherDOF_DoNearField)
         {
-            ScopedPerfEvent scopedPerf("Compute Shader: GatherDOF_FloodFillNear", commandList, 26);
+            ScopedPerfEvent scopedPerf("Compute Shader: GatherDOF_FloodFillNear", commandList, 27);
             std::chrono::high_resolution_clock::time_point startPointCPU;
             if(context->m_profile)
             {
@@ -6276,28 +6350,28 @@ namespace FastBokeh
             commandList->SetPipelineState(ContextInternal::computeShader_GatherDOF_FloodFillNear_pso);
 
             DX12Utils::ResourceDescriptor descriptors[] = {
-                { context->m_internal.texture_GatherDOF_NearMaxCocTilemap_1_8_Halo, context->m_internal.texture_GatherDOF_NearMaxCocTilemap_1_8_Halo_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture_GatherDOF_NearFieldColorCoCBorderBlurred, context->m_internal.texture_GatherDOF_NearFieldColorCoCBorderBlurred_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture_GatherDOF_FloodFilledBlurredNearFieldColorAlpha, context->m_internal.texture_GatherDOF_FloodFilledBlurredNearFieldColorAlpha_format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_179, context->m_internal.texture__loadedTexture_179_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_179_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_180, context->m_internal.texture__loadedTexture_180_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_180_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_181, context->m_internal.texture__loadedTexture_181_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_181_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_182, context->m_internal.texture__loadedTexture_182_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_182_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_183, context->m_internal.texture__loadedTexture_183_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_171, context->m_internal.texture__loadedTexture_171_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_171_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_184, context->m_internal.texture__loadedTexture_184_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_184_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_185, context->m_internal.texture__loadedTexture_185_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_185_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_186, context->m_internal.texture__loadedTexture_186_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture__loadedTexture_187, context->m_internal.texture__loadedTexture_187_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_187_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_188, context->m_internal.texture__loadedTexture_188_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_188_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_189, context->m_internal.texture__loadedTexture_189_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_189_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_190, context->m_internal.texture__loadedTexture_190_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_190_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_191, context->m_internal.texture__loadedTexture_191_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_191_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_192, context->m_internal.texture__loadedTexture_192_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_192_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_193, context->m_internal.texture__loadedTexture_193_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_193_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_194, context->m_internal.texture__loadedTexture_194_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_194_size[2], 0 },
-                { context->m_internal.texture__loadedTexture_195, context->m_internal.texture__loadedTexture_195_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.constantBuffer__GatherDOF_FloodFillFarCSCB, DXGI_FORMAT_UNKNOWN, DX12Utils::AccessType::CBV, DX12Utils::ResourceType::Buffer, false, 256, 1, 0 }
+                { context->m_internal.texture_GatherDOF_NearMaxCocTilemap_1_8_Halo, context->m_internal.texture_GatherDOF_NearMaxCocTilemap_1_8_Halo_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture_GatherDOF_NearFieldColorCoCBorderBlurred, context->m_internal.texture_GatherDOF_NearFieldColorCoCBorderBlurred_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture_GatherDOF_FloodFilledBlurredNearFieldColorAlpha, context->m_internal.texture_GatherDOF_FloodFilledBlurredNearFieldColorAlpha_format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_179, context->m_internal.texture__loadedTexture_179_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_179_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_180, context->m_internal.texture__loadedTexture_180_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_180_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_181, context->m_internal.texture__loadedTexture_181_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_181_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_182, context->m_internal.texture__loadedTexture_182_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_182_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_183, context->m_internal.texture__loadedTexture_183_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_171, context->m_internal.texture__loadedTexture_171_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_171_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_184, context->m_internal.texture__loadedTexture_184_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_184_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_185, context->m_internal.texture__loadedTexture_185_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_185_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_186, context->m_internal.texture__loadedTexture_186_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_187, context->m_internal.texture__loadedTexture_187_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_187_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_188, context->m_internal.texture__loadedTexture_188_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_188_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_189, context->m_internal.texture__loadedTexture_189_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_189_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_190, context->m_internal.texture__loadedTexture_190_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_190_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_191, context->m_internal.texture__loadedTexture_191_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_191_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_192, context->m_internal.texture__loadedTexture_192_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_192_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_193, context->m_internal.texture__loadedTexture_193_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_193_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_194, context->m_internal.texture__loadedTexture_194_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_194_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_195, context->m_internal.texture__loadedTexture_195_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.constantBuffer__GatherDOF_FloodFillFarCS_1CB, DXGI_FORMAT_UNKNOWN, DX12Utils::AccessType::CBV, DX12Utils::ResourceType::Buffer, false, 256, 1, 0, 0, 0, false }
             };
 
             D3D12_GPU_DESCRIPTOR_HANDLE descriptorTable = GetDescriptorTable(device, s_srvHeap, descriptors, 22, Context::LogFn);
@@ -6323,19 +6397,6 @@ namespace FastBokeh
                 context->m_profileData[(s_timerIndex-1)/2].m_cpu = (float)std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now() - startPointCPU).count();
                 commandList->EndQuery(context->m_internal.m_TimestampQueryHeap, D3D12_QUERY_TYPE_TIMESTAMP, s_timerIndex++);
             }
-        }
-
-        // Shader Constants: _GatherDOF_RecombineCSCB
-        {
-            context->m_internal.constantBuffer__GatherDOF_RecombineCSCB_cpu.GatherDOF_DoFarField = context->m_input.variable_GatherDOF_DoFarField;
-            context->m_internal.constantBuffer__GatherDOF_RecombineCSCB_cpu.GatherDOF_DoNearField = context->m_input.variable_GatherDOF_DoNearField;
-            context->m_internal.constantBuffer__GatherDOF_RecombineCSCB_cpu.GatherDOF_FarTransitionRegion = context->m_input.variable_GatherDOF_FarTransitionRegion;
-            context->m_internal.constantBuffer__GatherDOF_RecombineCSCB_cpu.GatherDOF_FocalDistance = context->m_input.variable_GatherDOF_FocalDistance;
-            context->m_internal.constantBuffer__GatherDOF_RecombineCSCB_cpu.GatherDOF_FocalLength = context->m_input.variable_GatherDOF_FocalLength;
-            context->m_internal.constantBuffer__GatherDOF_RecombineCSCB_cpu.GatherDOF_FocalRegion = context->m_input.variable_GatherDOF_FocalRegion;
-            context->m_internal.constantBuffer__GatherDOF_RecombineCSCB_cpu.GatherDOF_NearTransitionRegion = context->m_input.variable_GatherDOF_NearTransitionRegion;
-            context->m_internal.constantBuffer__GatherDOF_RecombineCSCB_cpu.GatherDOF_Scale = context->m_input.variable_GatherDOF_Scale;
-            DX12Utils::CopyConstantsCPUToGPU(s_ubTracker, device, commandList, context->m_internal.constantBuffer__GatherDOF_RecombineCSCB, context->m_internal.constantBuffer__GatherDOF_RecombineCSCB_cpu, Context::LogFn);
         }
 
         // Transition resources for the next action
@@ -6368,7 +6429,7 @@ namespace FastBokeh
 
         // Compute Shader: GatherDOF_Recombine
         {
-            ScopedPerfEvent scopedPerf("Compute Shader: GatherDOF_Recombine", commandList, 28);
+            ScopedPerfEvent scopedPerf("Compute Shader: GatherDOF_Recombine", commandList, 29);
             std::chrono::high_resolution_clock::time_point startPointCPU;
             if(context->m_profile)
             {
@@ -6380,12 +6441,12 @@ namespace FastBokeh
             commandList->SetPipelineState(ContextInternal::computeShader_GatherDOF_Recombine_pso);
 
             DX12Utils::ResourceDescriptor descriptors[] = {
-                { context->m_internal.texture_GatherDOF_FloodFilledBlurredNearFieldColorAlpha, context->m_internal.texture_GatherDOF_FloodFilledBlurredNearFieldColorAlpha_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture_ColorHDR, context->m_internal.texture_ColorHDR_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture_LinearDepth, context->m_internal.texture_LinearDepth_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.texture_GatherDOF_FloodFilledBlurredFarFieldColorAlpha, context->m_internal.texture_GatherDOF_FloodFilledBlurredFarFieldColorAlpha_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_output.texture_GatherDOF_Output, context->m_output.texture_GatherDOF_Output_format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.constantBuffer__GatherDOF_RecombineCSCB, DXGI_FORMAT_UNKNOWN, DX12Utils::AccessType::CBV, DX12Utils::ResourceType::Buffer, false, 256, 1, 0 }
+                { context->m_internal.texture_GatherDOF_FloodFilledBlurredNearFieldColorAlpha, context->m_internal.texture_GatherDOF_FloodFilledBlurredNearFieldColorAlpha_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture_ColorHDR, context->m_internal.texture_ColorHDR_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture_LinearDepth, context->m_internal.texture_LinearDepth_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture_GatherDOF_FloodFilledBlurredFarFieldColorAlpha, context->m_internal.texture_GatherDOF_FloodFilledBlurredFarFieldColorAlpha_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_output.texture_GatherDOF_Output, context->m_output.texture_GatherDOF_Output_format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.constantBuffer__GatherDOF_RecombineCSCB, DXGI_FORMAT_UNKNOWN, DX12Utils::AccessType::CBV, DX12Utils::ResourceType::Buffer, false, 256, 1, 0, 0, 0, false }
             };
 
             D3D12_GPU_DESCRIPTOR_HANDLE descriptorTable = GetDescriptorTable(device, s_srvHeap, descriptors, 6, Context::LogFn);
@@ -6445,13 +6506,8 @@ namespace FastBokeh
                 commandList->EndQuery(context->m_internal.m_TimestampQueryHeap, D3D12_QUERY_TYPE_TIMESTAMP, s_timerIndex++);
             }
 
-            // Even if two buffers have the same stride and count, one could be padded for alignment differently based on use
-            unsigned int srcSize = context->m_internal.texture_ColorHDR->GetDesc().Width;
-            unsigned int destSize = context->m_output.texture_GatherDOF_Output->GetDesc().Width;
-            if (srcSize == destSize)
-                commandList->CopyResource(context->m_output.texture_GatherDOF_Output, context->m_internal.texture_ColorHDR);
-            else
-                commandList->CopyBufferRegion(context->m_output.texture_GatherDOF_Output, 0, context->m_internal.texture_ColorHDR, 0, min(srcSize, destSize));
+            // Copy the texture.
+            commandList->CopyResource(context->m_output.texture_GatherDOF_Output, context->m_internal.texture_ColorHDR);
 
             if(context->m_profile)
             {
@@ -6459,12 +6515,6 @@ namespace FastBokeh
                 context->m_profileData[(s_timerIndex-1)/2].m_cpu = (float)std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now() - startPointCPU).count();
                 commandList->EndQuery(context->m_internal.m_TimestampQueryHeap, D3D12_QUERY_TYPE_TIMESTAMP, s_timerIndex++);
             }
-        }
-
-        // Shader Constants: _GaussBlur_GaussBlurCSCB
-        {
-            context->m_internal.constantBuffer__GaussBlur_GaussBlurCSCB_cpu.GaussBlur_Sigma = context->m_input.variable_GaussBlur_Sigma;
-            DX12Utils::CopyConstantsCPUToGPU(s_ubTracker, device, commandList, context->m_internal.constantBuffer__GaussBlur_GaussBlurCSCB, context->m_internal.constantBuffer__GaussBlur_GaussBlurCSCB_cpu, Context::LogFn);
         }
 
         // Transition resources for the next action
@@ -6491,7 +6541,7 @@ namespace FastBokeh
         // Compute Shader: GaussBlur_DoBlur
         if(!context->m_input.variable_GaussBlur_Disable)
         {
-            ScopedPerfEvent scopedPerf("Compute Shader: GaussBlur_DoBlur", commandList, 29);
+            ScopedPerfEvent scopedPerf("Compute Shader: GaussBlur_DoBlur", commandList, 30);
             std::chrono::high_resolution_clock::time_point startPointCPU;
             if(context->m_profile)
             {
@@ -6503,9 +6553,9 @@ namespace FastBokeh
             commandList->SetPipelineState(ContextInternal::computeShader_GaussBlur_DoBlur_pso);
 
             DX12Utils::ResourceDescriptor descriptors[] = {
-                { context->m_output.texture_GatherDOF_Output, context->m_output.texture_GatherDOF_Output_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_output.texture_GaussBlur_Output, context->m_output.texture_GaussBlur_Output_format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.constantBuffer__GaussBlur_GaussBlurCSCB, DXGI_FORMAT_UNKNOWN, DX12Utils::AccessType::CBV, DX12Utils::ResourceType::Buffer, false, 256, 1, 0 }
+                { context->m_output.texture_GatherDOF_Output, context->m_output.texture_GatherDOF_Output_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_output.texture_GaussBlur_Output, context->m_output.texture_GaussBlur_Output_format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.constantBuffer__GaussBlur_GaussBlurCSCB, DXGI_FORMAT_UNKNOWN, DX12Utils::AccessType::CBV, DX12Utils::ResourceType::Buffer, false, 256, 1, 0, 0, 0, false }
             };
 
             D3D12_GPU_DESCRIPTOR_HANDLE descriptorTable = GetDescriptorTable(device, s_srvHeap, descriptors, 3, Context::LogFn);
@@ -6557,7 +6607,7 @@ namespace FastBokeh
         // Copy Resource: GaussBlur_DontBlur
         if(context->m_input.variable_GaussBlur_Disable)
         {
-            ScopedPerfEvent scopedPerf("Copy Resource: GaussBlur_DontBlur", commandList, 31);
+            ScopedPerfEvent scopedPerf("Copy Resource: GaussBlur_DontBlur", commandList, 32);
             std::chrono::high_resolution_clock::time_point startPointCPU;
             if(context->m_profile)
             {
@@ -6565,13 +6615,8 @@ namespace FastBokeh
                 commandList->EndQuery(context->m_internal.m_TimestampQueryHeap, D3D12_QUERY_TYPE_TIMESTAMP, s_timerIndex++);
             }
 
-            // Even if two buffers have the same stride and count, one could be padded for alignment differently based on use
-            unsigned int srcSize = context->m_output.texture_GatherDOF_Output->GetDesc().Width;
-            unsigned int destSize = context->m_output.texture_GaussBlur_Output->GetDesc().Width;
-            if (srcSize == destSize)
-                commandList->CopyResource(context->m_output.texture_GaussBlur_Output, context->m_output.texture_GatherDOF_Output);
-            else
-                commandList->CopyBufferRegion(context->m_output.texture_GaussBlur_Output, 0, context->m_output.texture_GatherDOF_Output, 0, min(srcSize, destSize));
+            // Copy the texture.
+            commandList->CopyResource(context->m_output.texture_GaussBlur_Output, context->m_output.texture_GatherDOF_Output);
 
             if(context->m_profile)
             {
@@ -6579,14 +6624,6 @@ namespace FastBokeh
                 context->m_profileData[(s_timerIndex-1)/2].m_cpu = (float)std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now() - startPointCPU).count();
                 commandList->EndQuery(context->m_internal.m_TimestampQueryHeap, D3D12_QUERY_TYPE_TIMESTAMP, s_timerIndex++);
             }
-        }
-
-        // Shader Constants: _TemporalAccumulation_AccumulateCB
-        {
-            context->m_internal.constantBuffer__TemporalAccumulation_AccumulateCB_cpu.CameraChanged = context->m_input.variable_CameraChanged;
-            context->m_internal.constantBuffer__TemporalAccumulation_AccumulateCB_cpu.TemporalAccumulation_Alpha = context->m_input.variable_TemporalAccumulation_Alpha;
-            context->m_internal.constantBuffer__TemporalAccumulation_AccumulateCB_cpu.TemporalAccumulation_Enabled = context->m_input.variable_TemporalAccumulation_Enabled;
-            DX12Utils::CopyConstantsCPUToGPU(s_ubTracker, device, commandList, context->m_internal.constantBuffer__TemporalAccumulation_AccumulateCB, context->m_internal.constantBuffer__TemporalAccumulation_AccumulateCB_cpu, Context::LogFn);
         }
 
         // Transition resources for the next action
@@ -6612,7 +6649,7 @@ namespace FastBokeh
 
         // Compute Shader: TemporalAccumulation_DoAccum
         {
-            ScopedPerfEvent scopedPerf("Compute Shader: TemporalAccumulation_DoAccum", commandList, 32);
+            ScopedPerfEvent scopedPerf("Compute Shader: TemporalAccumulation_DoAccum", commandList, 33);
             std::chrono::high_resolution_clock::time_point startPointCPU;
             if(context->m_profile)
             {
@@ -6624,9 +6661,9 @@ namespace FastBokeh
             commandList->SetPipelineState(ContextInternal::computeShader_TemporalAccumulation_DoAccum_pso);
 
             DX12Utils::ResourceDescriptor descriptors[] = {
-                { context->m_output.texture_GaussBlur_Output, context->m_output.texture_GaussBlur_Output_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_output.texture_TemporalAccumulation_Accum, context->m_output.texture_TemporalAccumulation_Accum_format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.constantBuffer__TemporalAccumulation_AccumulateCB, DXGI_FORMAT_UNKNOWN, DX12Utils::AccessType::CBV, DX12Utils::ResourceType::Buffer, false, 256, 1, 0 }
+                { context->m_output.texture_GaussBlur_Output, context->m_output.texture_GaussBlur_Output_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_output.texture_TemporalAccumulation_Accum, context->m_output.texture_TemporalAccumulation_Accum_format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.constantBuffer__TemporalAccumulation_AccumulateCB, DXGI_FORMAT_UNKNOWN, DX12Utils::AccessType::CBV, DX12Utils::ResourceType::Buffer, false, 256, 1, 0, 0, 0, false }
             };
 
             D3D12_GPU_DESCRIPTOR_HANDLE descriptorTable = GetDescriptorTable(device, s_srvHeap, descriptors, 3, Context::LogFn);
@@ -6654,13 +6691,6 @@ namespace FastBokeh
             }
         }
 
-        // Shader Constants: _ToneMap_TonemapCB
-        {
-            context->m_internal.constantBuffer__ToneMap_TonemapCB_cpu.ToneMap_ExposureFStops = context->m_input.variable_ToneMap_ExposureFStops;
-            context->m_internal.constantBuffer__ToneMap_TonemapCB_cpu.ToneMap_ToneMapper = (int)context->m_input.variable_ToneMap_ToneMapper;
-            DX12Utils::CopyConstantsCPUToGPU(s_ubTracker, device, commandList, context->m_internal.constantBuffer__ToneMap_TonemapCB, context->m_internal.constantBuffer__ToneMap_TonemapCB_cpu, Context::LogFn);
-        }
-
         // Transition resources for the next action
         {
             D3D12_RESOURCE_BARRIER barriers[2];
@@ -6681,7 +6711,7 @@ namespace FastBokeh
 
         // Compute Shader: ToneMap_Tonemap
         {
-            ScopedPerfEvent scopedPerf("Compute Shader: ToneMap_Tonemap", commandList, 35);
+            ScopedPerfEvent scopedPerf("Compute Shader: ToneMap_Tonemap", commandList, 36);
             std::chrono::high_resolution_clock::time_point startPointCPU;
             if(context->m_profile)
             {
@@ -6693,9 +6723,9 @@ namespace FastBokeh
             commandList->SetPipelineState(ContextInternal::computeShader_ToneMap_Tonemap_pso);
 
             DX12Utils::ResourceDescriptor descriptors[] = {
-                { context->m_output.texture_TemporalAccumulation_Accum, context->m_output.texture_TemporalAccumulation_Accum_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_output.texture_ToneMap_Color_SDR, context->m_output.texture_ToneMap_Color_SDR_format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0 },
-                { context->m_internal.constantBuffer__ToneMap_TonemapCB, DXGI_FORMAT_UNKNOWN, DX12Utils::AccessType::CBV, DX12Utils::ResourceType::Buffer, false, 256, 1, 0 }
+                { context->m_output.texture_TemporalAccumulation_Accum, context->m_output.texture_TemporalAccumulation_Accum_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_output.texture_ToneMap_Color_SDR, context->m_output.texture_ToneMap_Color_SDR_format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.constantBuffer__ToneMap_TonemapCB, DXGI_FORMAT_UNKNOWN, DX12Utils::AccessType::CBV, DX12Utils::ResourceType::Buffer, false, 256, 1, 0, 0, 0, false }
             };
 
             D3D12_GPU_DESCRIPTOR_HANDLE descriptorTable = GetDescriptorTable(device, s_srvHeap, descriptors, 3, Context::LogFn);
@@ -6866,6 +6896,44 @@ namespace FastBokeh
                 m_internal.texture_LinearDepth_size[2] = desiredSize[2];
                 m_internal.texture_LinearDepth_numMips = desiredNumMips;
                 m_internal.texture_LinearDepth_format = desiredFormat;
+            }
+        }
+
+        // DebugTex
+        {
+            unsigned int baseSize[3] = {
+                m_internal.texture_ColorHDR_size[0],
+                m_internal.texture_ColorHDR_size[1],
+                m_internal.texture_ColorHDR_size[2]
+            };
+
+            unsigned int desiredSize[3] = {
+                ((baseSize[0] + 0) * 1) / 1 + 0,
+                ((baseSize[1] + 0) * 1) / 1 + 0,
+                ((baseSize[2] + 0) * 1) / 1 + 0
+            };
+
+            static const unsigned int desiredNumMips = 1;
+
+            DXGI_FORMAT desiredFormat = DXGI_FORMAT_R32_FLOAT;
+
+            if(!m_internal.texture_DebugTex ||
+               m_internal.texture_DebugTex_size[0] != desiredSize[0] ||
+               m_internal.texture_DebugTex_size[1] != desiredSize[1] ||
+               m_internal.texture_DebugTex_size[2] != desiredSize[2] ||
+               m_internal.texture_DebugTex_numMips != desiredNumMips ||
+               m_internal.texture_DebugTex_format != desiredFormat)
+            {
+                dirty = true;
+                if(m_internal.texture_DebugTex)
+                    s_delayedRelease.Add(m_internal.texture_DebugTex);
+
+                m_internal.texture_DebugTex = DX12Utils::CreateTexture(device, desiredSize, desiredNumMips, desiredFormat, m_internal.texture_DebugTex_flags, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"DebugTex" : nullptr), Context::LogFn);
+                m_internal.texture_DebugTex_size[0] = desiredSize[0];
+                m_internal.texture_DebugTex_size[1] = desiredSize[1];
+                m_internal.texture_DebugTex_size[2] = desiredSize[2];
+                m_internal.texture_DebugTex_numMips = desiredNumMips;
+                m_internal.texture_DebugTex_format = desiredFormat;
             }
         }
 
@@ -16475,13 +16543,6 @@ namespace FastBokeh
             m_internal.constantBuffer__GatherDOF_BlurFarCSCB = DX12Utils::CreateBuffer(device, 256, D3D12_RESOURCE_FLAG_NONE, D3D12_RESOURCE_STATE_COMMON, D3D12_HEAP_TYPE_DEFAULT, (c_debugNames ? L"_GatherDOF_BlurFarCSCB" : nullptr), Context::LogFn);
         }
 
-        // _GatherDOF_FloodFillFarCSCB
-        if (m_internal.constantBuffer__GatherDOF_FloodFillFarCSCB == nullptr)
-        {
-            dirty = true;
-            m_internal.constantBuffer__GatherDOF_FloodFillFarCSCB = DX12Utils::CreateBuffer(device, 256, D3D12_RESOURCE_FLAG_NONE, D3D12_RESOURCE_STATE_COMMON, D3D12_HEAP_TYPE_DEFAULT, (c_debugNames ? L"_GatherDOF_FloodFillFarCSCB" : nullptr), Context::LogFn);
-        }
-
         // _GatherDOF_NearBlurCB
         if (m_internal.constantBuffer__GatherDOF_NearBlurCB == nullptr)
         {
@@ -16515,6 +16576,20 @@ namespace FastBokeh
         {
             dirty = true;
             m_internal.constantBuffer__ToneMap_TonemapCB = DX12Utils::CreateBuffer(device, 256, D3D12_RESOURCE_FLAG_NONE, D3D12_RESOURCE_STATE_COMMON, D3D12_HEAP_TYPE_DEFAULT, (c_debugNames ? L"_ToneMap_TonemapCB" : nullptr), Context::LogFn);
+        }
+
+        // _GatherDOF_FloodFillFarCS_0CB
+        if (m_internal.constantBuffer__GatherDOF_FloodFillFarCS_0CB == nullptr)
+        {
+            dirty = true;
+            m_internal.constantBuffer__GatherDOF_FloodFillFarCS_0CB = DX12Utils::CreateBuffer(device, 256, D3D12_RESOURCE_FLAG_NONE, D3D12_RESOURCE_STATE_COMMON, D3D12_HEAP_TYPE_DEFAULT, (c_debugNames ? L"_GatherDOF_FloodFillFarCS_0CB" : nullptr), Context::LogFn);
+        }
+
+        // _GatherDOF_FloodFillFarCS_1CB
+        if (m_internal.constantBuffer__GatherDOF_FloodFillFarCS_1CB == nullptr)
+        {
+            dirty = true;
+            m_internal.constantBuffer__GatherDOF_FloodFillFarCS_1CB = DX12Utils::CreateBuffer(device, 256, D3D12_RESOURCE_FLAG_NONE, D3D12_RESOURCE_STATE_COMMON, D3D12_HEAP_TYPE_DEFAULT, (c_debugNames ? L"_GatherDOF_FloodFillFarCS_1CB" : nullptr), Context::LogFn);
         }
         EnsureDrawCallPSOsCreated(device, dirty);
     }

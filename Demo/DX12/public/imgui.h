@@ -121,8 +121,9 @@ namespace FastBokeh
                 "Off",
                 "PathTraced",
                 "PostProcessing",
+                "Realistic",
             };
-            ImGui::Combo("DOF", (int*)&context->m_input.variable_DOF, labels, 3);
+            ImGui::Combo("DOF", (int*)&context->m_input.variable_DOF, labels, 4);
         }
         ImGui::InputFloat("ApertureRadius", &context->m_input.variable_ApertureRadius);
         {
@@ -176,6 +177,7 @@ namespace FastBokeh
         ImGui::Checkbox("SmallLightsColorful", &context->m_input.variable_SmallLightsColorful);
         ShowToolTip("If true, makes the small lights colorful, else makes them all the same color");
         ImGui::InputFloat("SmallLightRadius", &context->m_input.variable_SmallLightRadius);
+        ImGui::InputFloat("HighestAngleThatMakesItOutOfTheLens", &context->m_input.variable_HighestAngleThatMakesItOutOfTheLens);
         ImGui::Checkbox("GatherDOF_UseNoiseTextures", &context->m_input.variable_GatherDOF_UseNoiseTextures);
         ImGui::Checkbox("GatherDOF_AnimateNoiseTextures", &context->m_input.variable_GatherDOF_AnimateNoiseTextures);
         ImGui::Checkbox("GatherDOF_SuppressBokeh", &context->m_input.variable_GatherDOF_SuppressBokeh);

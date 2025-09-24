@@ -9,6 +9,8 @@
 #include "PCG.hlsli"
 #include "IndexToColor.hlsli"
 #include "LDSShuffler.hlsli"
+#include "s2h\\include\\s2h.hlsl"
+#include "s2h\\include\\s2h_scatter.hlsl"
 
 static const float c_maxT = 10000.0f;
 static const float PI = 3.14159265358979323846f;
@@ -1027,6 +1029,17 @@ float2 SampleICDF(float2 rng, in Texture2D<float> MarginalCDF)
 Spatially Varying Lens Simulation
 *************************************************************************************/
 
+static struct DebugInfo{
+	ContextGather ui;
+	uint3 px;
+	int2 offset;
+	float scale_debug;
+	float line_thickness;
+	float sensor_height;
+	float sensor_width;
+	float4 color;
+};
+
 struct Ray
 {
 	float3 Origin;
@@ -1079,7 +1092,8 @@ static float wideAngleLens[] = {
 	float4(0.0f, 0.0f, 0.0f, 0.0f),
 };
 
-static const float helios_sensor_width = 20.0f;
+static const uint helios_lens_element_count = 11;
+static const float helios_sensor_width = 35.0f; // sonza7riii specs Full frame (35.9 x 24 mm) sensor size
 static const float helios_max_focal_length = 58.0f; // mm
 static const float helios_scale = helios_max_focal_length / 100.0f; // helios unit scaling from patent
 static const float helios_aperture = 16.0f; // mm widest possible aperture is 16mm
@@ -1161,7 +1175,7 @@ bool intersect(float radius, float center, Ray ray, out float t, out float3 norm
 	return true;
 }
 
-bool traceLensesFromFilm(Ray ray, int elementCount, float4 lensElements[16], out Ray outRay)
+bool traceLensesFromFilm(inout DebugInfo debugInfo, Ray ray, int elementCount, float4 lensElements[16], out Ray outRay)
 {
 	float z = 0.0f; // Start at the film, z = 0
 	
@@ -1189,6 +1203,7 @@ bool traceLensesFromFilm(Ray ray, int elementCount, float4 lensElements[16], out
 			float center = z + curvatureRadius;
 			if (!intersect(curvatureRadius, center, ray, t, normal))
 			{
+				s2h_drawLine(debugInfo.ui, ray.Origin.zy * debugInfo.scale_debug, (ray.Origin + ray.Direction * 10.0f).zy * debugInfo.scale_debug, float4(1, 0, 0, 1), debugInfo.line_thickness / 2);
 				return false;
 			}
 		}
@@ -1197,8 +1212,14 @@ bool traceLensesFromFilm(Ray ray, int elementCount, float4 lensElements[16], out
 		
 		float r2 = hit.x * hit.x + hit.y * hit.y;
 
-		if (r2 > (apatureRadius * apatureRadius))
+		if (r2 > (apatureRadius * apatureRadius)){
+			s2h_drawLine(debugInfo.ui, ray.Origin.zy * debugInfo.scale_debug, (ray.Origin + ray.Direction * 10.0f).zy * debugInfo.scale_debug, float4(1, 0, 0, 1), debugInfo.line_thickness / 2);
 			return false;
+		}
+			
+
+		// draw debug line
+		s2h_drawLine(debugInfo.ui, ray.Origin.zy * debugInfo.scale_debug, hit.zy * debugInfo.scale_debug, debugInfo.color, debugInfo.line_thickness * 0.3);
 		
 		ray.Origin = hit;
 		
@@ -1216,6 +1237,133 @@ bool traceLensesFromFilm(Ray ray, int elementCount, float4 lensElements[16], out
 	return true;
 }
 
+void drawDebugHelios(inout DebugInfo debugInfo)
+{
+	// colors
+	float4 film_color = float4(0.4, 0.4, 0, 1);
+	float4 lens_color = float4(0, 0.5, 0.5, 1);
+	float4 aperture_color = float4(0, 0, 0, 1);
+	float4 text_color = float4(0, 0, 0, 1);
+	float4 bg_color = float4(1, 1, 1, 1);
+	float4 horizontal_line_color = float4(0.6, 0.6, 0.6, 1);
+	float4 stop_color = float4(0.2, 0.2, 0.2, 1);
+
+	// draw film plane
+	float2 film_center = float2(0, 0); // 2D x represents 3D z
+	float film_height_mm = debugInfo.sensor_height;
+	s2h_drawLine(debugInfo.ui, film_center + float2(0, film_height_mm * debugInfo.scale_debug / 2), film_center - float2(0, film_height_mm * debugInfo.scale_debug / 2), film_color, debugInfo.line_thickness);
+    s2h_setCursor(debugInfo.ui, float2(10, 10) + debugInfo.offset);
+    s2h_setScale(debugInfo.ui, 2.0);
+	debugInfo.ui.textColor = float4(0, 0, 0, 1);
+	s2h_printTxt(debugInfo.ui, _F, _i, _l, _m, _H);
+    s2h_printLF(debugInfo.ui);
+    s2h_printFloat(debugInfo.ui, film_height_mm);
+	s2h_printLF(debugInfo.ui);
+	s2h_printLF(debugInfo.ui);
+	s2h_printTxt(debugInfo.ui, _L, _e, _n, _s, _L);
+	s2h_printLF(debugInfo.ui);
+	s2h_printFloat(debugInfo.ui, helios_lens_length);
+	s2h_printLF(debugInfo.ui);
+	s2h_printLF(debugInfo.ui);
+	s2h_printTxt(debugInfo.ui, _L, _e, _n, _s, _D);
+	s2h_printTxt(debugInfo.ui, _2, _F, _i, _l, _m);
+	s2h_printLF(debugInfo.ui);
+	s2h_printFloat(debugInfo.ui, helios_d_to_film);
+	s2h_printLF(debugInfo.ui);
+
+	// draw horizontal line
+	s2h_drawLine(debugInfo.ui, film_center - float2(helios_d_to_film * debugInfo.scale_debug, 0), film_center - float2((helios_lens_length + helios_d_to_film) * debugInfo.scale_debug, 0), horizontal_line_color, debugInfo.line_thickness);
+
+	float z = 0.0f; // Start at the film, z = 0
+	
+	for (int i = helios_lens_element_count - 1; i >= 0; i--)
+	{
+		float4 lens_element = helios[i];
+		const float curvatureRadius = lens_element.x;
+		const float thickness = lens_element.y;
+		const float etaI = lens_element.z;
+		const float etaT = i > 0 ? helios[i - 1].z : 1.0f;
+		const float apatureRadius = lens_element.w;
+		
+		z -= thickness;
+
+		float t = 0;
+		float3 normal = float3(0, 0, 0);
+		
+		bool isStop = (curvatureRadius == 0.0f);
+		if (isStop)
+		{
+			float2 currCenter = float2(z * debugInfo.scale_debug, 0);
+			s2h_drawLine(debugInfo.ui, currCenter - float2(0, apatureRadius * debugInfo.scale_debug), currCenter + float2(0, apatureRadius * debugInfo.scale_debug), aperture_color, debugInfo.line_thickness);
+		}
+		else
+		{
+			float2 center = float2(z * debugInfo.scale_debug + curvatureRadius * debugInfo.scale_debug, 0);
+			float2 currCenter = float2(z * debugInfo.scale_debug, 0);
+			s2h_drawLine(debugInfo.ui, currCenter + float2(-debugInfo.line_thickness, apatureRadius * debugInfo.scale_debug), currCenter + float2(debugInfo.line_thickness, apatureRadius * debugInfo.scale_debug), stop_color, debugInfo.line_thickness);
+			s2h_drawLine(debugInfo.ui, currCenter - float2(-debugInfo.line_thickness, apatureRadius * debugInfo.scale_debug), currCenter - float2(debugInfo.line_thickness, apatureRadius * debugInfo.scale_debug), stop_color, debugInfo.line_thickness);
+
+			float startRadius = 0;
+			float endRadius = 0;
+			if (curvatureRadius > 0)
+			{
+				startRadius = PI - atan(apatureRadius / abs(curvatureRadius));
+				endRadius = PI + atan(apatureRadius / abs(curvatureRadius));
+			}
+			else
+			{
+				endRadius = atan(apatureRadius / abs(curvatureRadius));
+				startRadius = 2 * PI - atan(apatureRadius / abs(curvatureRadius));
+			}
+			s2h_drawArc(debugInfo.ui, center, abs(curvatureRadius * debugInfo.scale_debug), lens_color, debugInfo.line_thickness, startRadius, endRadius);
+		}
+	}
+
+	// draw example rays along diagonal of film and vary start height
+	float4 colors[] = { float4(0, 1, 1, 1), float4(1, 0, 1, 1), float4(1, 1, 0, 1)};
+	for(int j = -1; j <= 1; j++){
+
+		debugInfo.color = colors[j+1];
+
+		Ray filmRay;
+		filmRay.Origin = float3(0, film_height_mm / 3 * j, 0);
+
+		for(int i = -3; i <= 3; i++)
+		{
+			s2h_printLF(debugInfo.ui);
+			s2h_printTxt(debugInfo.ui, _j, _SPACE);
+			s2h_printInt(debugInfo.ui, j);
+			s2h_printTxt(debugInfo.ui, _COMMA, _SPACE, _i, _SPACE);
+			s2h_printInt(debugInfo.ui, i);
+			float2 apertureOffset = i / 3.0f * float2(0, 0.9f); // put not at far edge of lens, becaues it will be clipped
+			apertureOffset *= helios_lens_radius;
+			
+			float3 target = float3(apertureOffset.x, apertureOffset.y, -helios_d_to_film);
+			filmRay.Direction = normalize(target - filmRay.Origin);
+			s2h_printLF(debugInfo.ui);
+			s2h_printFloat(debugInfo.ui, filmRay.Direction.x);
+			s2h_printLF(debugInfo.ui);
+			s2h_printFloat(debugInfo.ui, filmRay.Direction.y);
+			s2h_printLF(debugInfo.ui);
+			s2h_printFloat(debugInfo.ui, filmRay.Direction.z);
+
+			Ray refracted;
+			bool hit = traceLensesFromFilm(debugInfo, filmRay, helios_lens_element_count, helios, refracted);
+			if(hit){
+				s2h_printLF(debugInfo.ui);
+				s2h_printTxt(debugInfo.ui, _H, _i, _t);
+			} else{
+				s2h_printLF(debugInfo.ui);
+				s2h_printTxt(debugInfo.ui, _M, _i, _s, _s);
+			}
+		}
+	}
+	
+	// composite over background
+	float3 linearColor = bg_color.rgb * (1.0 - debugInfo.ui.dstColor.a) + debugInfo.ui.dstColor.rgb;
+	DebugTex[debugInfo.px.xy] = float4(s2h_accurateLinearToSRGB(linearColor.rgb), 1.0);
+}
+
 // returns PDF
 float ApplyRealisticLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 px, inout uint RNG, in uint2 screenDims, in float2 screenPos)
 {
@@ -1231,9 +1379,6 @@ float ApplyRealisticLensSimulation(inout float3 rayPos, inout float3 rayDir, in 
 	float filmX = -screenPos.x * (helios_sensor_width * 0.5f);
 	float filmY = -screenPos.y * (sensor_height * 0.5f);
 
-	// Conversion between world units and millimeters for lens/film space
-	float worldToMM = 10.0f;
-
 	// Sample a random point on the aperture using polar coordinates
 	float theta = RandomFloat01(RNG) * 2 * PI;
 	float r = sqrt(RandomFloat01(RNG));
@@ -1248,15 +1393,27 @@ float ApplyRealisticLensSimulation(inout float3 rayPos, inout float3 rayDir, in 
 	float3 target = float3(apertureOffset.x, apertureOffset.y, -helios_d_to_film);
 	filmRay.Direction = normalize(target - filmRay.Origin);
 
+	// Debug draw
+	DebugInfo debugInfo;
+	debugInfo.offset = -int2(1000, 500);
+	debugInfo.px = px;
+	debugInfo.scale_debug = 8.0f;
+	debugInfo.line_thickness = 5.0f;
+	debugInfo.sensor_height = sensor_height;
+	debugInfo.sensor_width = helios_sensor_width;
+	s2h_init(debugInfo.ui, int2(debugInfo.px.xy) + debugInfo.offset);
+	drawDebugHelios(debugInfo);
+	// Debug draw end
+
 	// Trace through lens elements
 	Ray refracted;
-	if (traceLensesFromFilm(filmRay, 11, helios, refracted))
+	if (traceLensesFromFilm(debugInfo, filmRay, helios_lens_element_count, helios, refracted))
 	{
-		float invWorldToMM = 1.0f / worldToMM;
+		float mm_to_cm = 1.0f / 10;
 		rayPos = camPos +
-				 (refracted.Origin.x * invWorldToMM) * cameraRight +
-				 (refracted.Origin.y * invWorldToMM) * cameraUp +
-				 (refracted.Origin.z * invWorldToMM) * cameraForward;
+				 (refracted.Origin.x * mm_to_cm) * cameraRight +
+				 (refracted.Origin.y * mm_to_cm) * cameraUp +
+				 (refracted.Origin.z * mm_to_cm) * cameraForward;
 		rayDir = normalize(
 			 refracted.Direction.x * cameraRight +
 			 refracted.Direction.y * cameraUp +

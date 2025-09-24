@@ -53,6 +53,7 @@ namespace FastBokeh
             case DOFMode::Off: return Py_BuildValue("s", "Off");
             case DOFMode::PathTraced: return Py_BuildValue("s", "PathTraced");
             case DOFMode::PostProcessing: return Py_BuildValue("s", "PostProcessing");
+            case DOFMode::Realistic: return Py_BuildValue("s", "Realistic");
             default: return Py_BuildValue("s", "<invalid DOFMode value>");
         }
     }
@@ -654,6 +655,24 @@ namespace FastBokeh
         return Py_None;
     }
 
+    inline PyObject* Set_HighestAngleThatMakesItOutOfTheLens(PyObject* self, PyObject* args)
+    {
+        int contextIndex;
+        float value;
+
+        if (!PyArg_ParseTuple(args, "if:Set_HighestAngleThatMakesItOutOfTheLens", &contextIndex, &value))
+            return PyErr_Format(PyExc_TypeError, "type error");
+
+        Context* context = Context::GetContext(contextIndex);
+        if (!context)
+            return PyErr_Format(PyExc_IndexError, __FUNCTION__, "() : index % i is out of range(count = % i)", contextIndex, Context::GetContextCount());
+
+        context->m_input.variable_HighestAngleThatMakesItOutOfTheLens = value;
+
+        Py_INCREF(Py_None);
+        return Py_None;
+    }
+
     inline PyObject* Set_GatherDOF_UseNoiseTextures(PyObject* self, PyObject* args)
     {
         int contextIndex;
@@ -1086,6 +1105,7 @@ namespace FastBokeh
         {"Set_SmallLightsColor", Set_SmallLightsColor, METH_VARARGS, ""},
         {"Set_SmallLightsColorful", Set_SmallLightsColorful, METH_VARARGS, "If true, makes the small lights colorful, else makes them all the same color"},
         {"Set_SmallLightRadius", Set_SmallLightRadius, METH_VARARGS, ""},
+        {"Set_HighestAngleThatMakesItOutOfTheLens", Set_HighestAngleThatMakesItOutOfTheLens, METH_VARARGS, ""},
         {"Set_GatherDOF_UseNoiseTextures", Set_GatherDOF_UseNoiseTextures, METH_VARARGS, ""},
         {"Set_GatherDOF_AnimateNoiseTextures", Set_GatherDOF_AnimateNoiseTextures, METH_VARARGS, ""},
         {"Set_GatherDOF_SuppressBokeh", Set_GatherDOF_SuppressBokeh, METH_VARARGS, "If true, blurs out of focus areas, but reduces the Bokeh effect of small bright lights"},
@@ -1143,6 +1163,7 @@ namespace FastBokeh
         PyModule_AddIntConstant(module, "DOFMode_Off", 0);
         PyModule_AddIntConstant(module, "DOFMode_PathTraced", 1);
         PyModule_AddIntConstant(module, "DOFMode_PostProcessing", 2);
+        PyModule_AddIntConstant(module, "DOFMode_Realistic", 3);
         PyModule_AddIntConstant(module, "PixelJitterType_None", 0);
         PyModule_AddIntConstant(module, "PixelJitterType_PerPixel", 1);
         PyModule_AddIntConstant(module, "PixelJitterType_Global", 2);
