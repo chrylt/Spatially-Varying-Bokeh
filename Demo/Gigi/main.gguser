@@ -4,13 +4,13 @@
     "systemVars": {
         "camera": {
             "leftHanded": false,
-            "FOV": 25.0,
+            "FOV": 28.0,
             "flySpeed": 0.20000000298023225,
             "mouseSensitivity": 0.0010000000474974514,
             "startingCameraPos": [
-                443.0090637207031,
-                121.87708282470703,
-                184.83238220214845
+                462.2170104980469,
+                126.86669921875,
+                188.94212341308595
             ],
             "startingCameraAltitudeAzimuth": [
                 -0.24891315400600434,
@@ -23,13 +23,13 @@
         "resourceViewNodeIndex": 36,
         "resourceViewResourceIndex": 3,
         "cameraPos": [
-            442.654541015625,
-            121.78557586669922,
-            184.76980590820313
+            462.2170104980469,
+            126.86669921875,
+            188.94212341308595
         ],
         "cameraAltitudeAzimuth": [
-            -0.24891315400600434,
-            1.7454910278320313
+            -0.24783845245838166,
+            1.7507860660552979
         ],
         "importedResources": [
             {
@@ -57,8 +57,16 @@
                 "value": "false"
             },
             {
+                "name": "DebugToggle",
+                "value": "false"
+            },
+            {
+                "name": "ShiftHeliosPosition",
+                "value": "59.183998"
+            },
+            {
                 "name": "RenderSize",
-                "value": "1024,768"
+                "value": "1920,1080"
             },
             {
                 "name": "MaterialSet",
@@ -102,7 +110,7 @@
             },
             {
                 "name": "FocalLength",
-                "value": "43.166000"
+                "value": "44.212002"
             },
             {
                 "name": "LensRNGSource",
@@ -118,7 +126,7 @@
             },
             {
                 "name": "DOF",
-                "value": "3"
+                "value": "1"
             },
             {
                 "name": "ApertureRadius",

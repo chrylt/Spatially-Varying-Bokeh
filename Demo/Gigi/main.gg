@@ -12,6 +12,24 @@
             }
         },
         {
+            "name": "DebugToggle",
+            "type": "Bool",
+            "dflt": "0",
+            "visibility": "User"
+        },
+        {
+            "name": "ShiftHeliosPosition",
+            "comment": "Shift the position of the helios lens backward in millimeters",
+            "type": "Float",
+            "visibility": "User",
+            "UISettings": {
+                "UIHint": "Slider",
+                "min": "0",
+                "max": "100",
+                "step": "0.5"
+            }
+        },
+        {
             "name": "RenderSize",
             "type": "Uint2",
             "dflt": "512, 512",
