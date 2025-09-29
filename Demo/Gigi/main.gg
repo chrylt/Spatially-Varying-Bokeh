@@ -18,6 +18,18 @@
             "visibility": "User"
         },
         {
+            "name": "HeliosApertureStop",
+            "type": "Uint",
+            "dflt": "6",
+            "visibility": "User",
+            "UISettings": {
+                "UIHint": "Slider",
+                "min": "0",
+                "max": "6",
+                "step": "1"
+            }
+        },
+        {
             "name": "ShiftHeliosPosition",
             "comment": "Shift the position of the helios lens backward in millimeters",
             "type": "Float",
@@ -257,11 +269,6 @@
             "dflt": "1.0f",
             "visibility": "User",
             "UIGroup": "SmallLights"
-        },
-        {
-            "name": "HighestAngleThatMakesItOutOfTheLens",
-            "type": "Float",
-            "visibility": "User"
         }
     ],
     "shaders": [

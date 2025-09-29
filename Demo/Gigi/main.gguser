@@ -20,16 +20,16 @@
         "ProjMtx_textureName": "ColorHDR"
     },
     "snapshot": {
-        "resourceViewNodeIndex": 36,
-        "resourceViewResourceIndex": 3,
+        "resourceViewNodeIndex": 0,
+        "resourceViewResourceIndex": 206,
         "cameraPos": [
             462.2170104980469,
             126.86669921875,
             188.94212341308595
         ],
         "cameraAltitudeAzimuth": [
-            -0.24783845245838166,
-            1.7507860660552979
+            -0.26010239124298098,
+            1.7589242458343506
         ],
         "importedResources": [
             {
@@ -59,6 +59,10 @@
             {
                 "name": "DebugToggle",
                 "value": "false"
+            },
+            {
+                "name": "HeliosApertureStop",
+                "value": "5"
             },
             {
                 "name": "ShiftHeliosPosition",
@@ -126,7 +130,7 @@
             },
             {
                 "name": "DOF",
-                "value": "1"
+                "value": "3"
             },
             {
                 "name": "ApertureRadius",

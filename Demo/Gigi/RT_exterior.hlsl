@@ -1117,6 +1117,7 @@ static const float helios_r9 = 106.0f * helios_scale;
 static const float helios_r10 = -120.0f * helios_scale;
 
 // Lens thicknesses (mm)
+static const float helios_d0 = 3.0f; // mm measured
 static const float helios_d1 = 10.75f * helios_scale;
 static const float helios_d2 = 15.55f * helios_scale;
 static const float helios_d3 = 5.05f * helios_scale;
@@ -1147,36 +1148,40 @@ static const float helios_v5 = 48.0f;
 static const float helios_v6 = 48.0f;
 
 // Lens radius (mm)
-static const float helios_lens_r1 = 3.35f * helios_d1;
-static const float helios_lens_r2 = 3.0f * helios_d1;
-static const float helios_lens_r3 = 2.65f * helios_d1;
+static const float helios_lens_radius_unit = helios_d1 / 0.68f;
+static const float helios_lens_r0 = 17.0f; // mm measured
+static const float helios_lens_r1 = 2.3f * helios_lens_radius_unit; // 
+static const float helios_lens_r2 = 2.06f * helios_lens_radius_unit;
+static const float helios_lens_r3 = 1.45f * helios_lens_radius_unit;
+static const float helios_lens_r4 = 1.76f * helios_lens_radius_unit;
+static const float helios_lens_r5 = 1.65f * helios_lens_radius_unit;
 
 // Useful calculations
 static const float helios_lens_length = 93.04f * helios_scale; // sum of sep in mm ~53.9632
 static const float helios_d_to_aperture = 42.45 * helios_scale; // 24.621 mm
 
 // Variables
-static const float helios_aperture = helios_aperture_stops[5]; // f/11
+static const float helios_aperture = helios_aperture_stops[/*$(Variable:HeliosApertureStop)*/] * (helios_lens_r3 / 16); // assume stops relative to fully open aperture
 static const float helios_d_to_film = /*$(Variable:FocalLength)*/ - 1; // mm; -1 to match with path traced scene focal length
 
 // Lens elements array
-static const uint helios_lens_element_count = 11;
+static const uint helios_lens_element_count = 12;
 static float4 helios_lens_elements[] = {
 	// Helios 44-2 58mm/f2 lens
 	// scaled from 100 units to 58mm
-	// 		curvature radius	sep				n		opening radius	
-	float4(	helios_r1,		helios_d1, 		helios_n1, 	helios_lens_r1),
-	float4(	helios_r2,		helios_l1, 		n_air, 		helios_lens_r1),
-	float4(	helios_r3,		helios_d2, 		helios_n2, 	helios_lens_r2),
-	float4( helios_r4,		helios_d3, 		helios_n3, 	helios_lens_r2),
-	float4( helios_r5,		helios_l2 / 2,	n_air, 		helios_lens_r2),
-	float4(	no_curv, 		helios_l2 / 2, 	n_air, 		helios_aperture),
-	float4( helios_r6, 		helios_d4, 		helios_n4, 	helios_lens_r3),
-	float4( helios_r7, 		helios_d5, 		helios_n5, 	helios_lens_r3),
-	float4( helios_r8, 		helios_l3, 		n_air, 		helios_lens_r3),
-	float4( helios_r9, 		helios_d6, 		helios_n6, 	helios_lens_r3),
-	float4( helios_r10, 	helios_d_to_film, 	n_air, 	helios_lens_r3), //11
-	float4(0.0f, 0.0f, 0.0f, 0.0f),
+	// 		curvature radiii	sep					n		opening radius	
+	float4( no_curv, 		helios_d0, n_air, 	helios_lens_r0), // 0
+	float4(	helios_r1,		helios_d1, 			helios_n1, 	helios_lens_r1),
+	float4(	helios_r2,		helios_l1, 			n_air, 		helios_lens_r1),
+	float4(	helios_r3,		helios_d2, 			helios_n2, 	helios_lens_r2),
+	float4( helios_r4,		helios_d3, 			helios_n3, 	helios_lens_r2),
+	float4( helios_r5,		helios_l2 / 2,		n_air, 		helios_lens_r3),
+	float4(	no_curv, 		helios_l2 / 2, 		n_air, 		helios_aperture),
+	float4( helios_r6, 		helios_d4, 			helios_n4, 	helios_lens_r3),
+	float4( helios_r7, 		helios_d5, 			helios_n5, 	helios_lens_r4),
+	float4( helios_r8, 		helios_l3, 			n_air, 		helios_lens_r5),
+	float4( helios_r9, 		helios_d6, 			helios_n6, 	helios_lens_r5),
+	float4( helios_r10, 	helios_d_to_film, 	n_air, 		helios_lens_r5), //12
 	float4(0.0f, 0.0f, 0.0f, 0.0f),
 	float4(0.0f, 0.0f, 0.0f, 0.0f),
 	float4(0.0f, 0.0f, 0.0f, 0.0f),
@@ -1235,7 +1240,7 @@ bool intersect(float radius, float center, Ray ray, out float t, out float3 norm
 	return true;
 }
 
-bool traceLensesFromFilm(inout DebugInfo debugInfo, Ray ray, int elementCount, float4 lensElements[16], out Ray outRay)
+bool traceLensesFromFilm(inout DebugInfo debugInfo, Ray ray, in float wavelength, int elementCount, float4 lensElements[16], out Ray outRay)
 {
 	float z = 0.0f; // Start at the film, z = 0
 	
@@ -1272,11 +1277,11 @@ bool traceLensesFromFilm(inout DebugInfo debugInfo, Ray ray, int elementCount, f
 		
 		float r2 = hit.x * hit.x + hit.y * hit.y;
 
-		if (r2 > (apatureRadius * apatureRadius)){
+		if (r2 > (apatureRadius * apatureRadius)) 
+		{
 			s2h_drawLine(debugInfo.ui, ray.Origin.zy * debugInfo.scale_debug, (ray.Origin + ray.Direction * 10.0f).zy * debugInfo.scale_debug, float4(1, 0, 0, 1), debugInfo.line_thickness / 2);
 			return false;
 		}
-			
 
 		// draw debug line
 		s2h_drawLine(debugInfo.ui, ray.Origin.zy * debugInfo.scale_debug, hit.zy * debugInfo.scale_debug, debugInfo.color, debugInfo.line_thickness * 0.3);
@@ -1474,7 +1479,7 @@ void DrawExampleRays(inout DebugInfo di, float filmHeightMM)
 			filmRay.Direction = normalize(target - filmRay.Origin);
 
 			Ray refracted;
-			bool hit = traceLensesFromFilm(di, filmRay, helios_lens_element_count, helios_lens_elements, refracted);
+			bool hit = traceLensesFromFilm(di, filmRay, 1.0f, helios_lens_element_count, helios_lens_elements, refracted);
 		}
 	}
 }
@@ -1500,7 +1505,7 @@ void drawDebugHelios(inout DebugInfo debugInfo)
 }
 
 // returns PDF
-float ApplyRealisticLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 px, inout uint RNG, in uint2 screenDims, in float2 screenPos)
+float ApplyRealisticLensSimulation(inout float3 rayPos, inout float3 rayDir, in float wavelength, in uint3 px, inout uint RNG, in uint2 screenDims, in float2 screenPos)
 {
 	float3 cameraRight = mul(float4(1.0f, 0.0f, 0.0f, 0.0f), /*$(Variable:InvViewMtx)*/).xyz;
 	float3 cameraUp = mul(float4(0.0f, 1.0f, 0.0f, 0.0f), /*$(Variable:InvViewMtx)*/).xyz;
@@ -1542,7 +1547,7 @@ float ApplyRealisticLensSimulation(inout float3 rayPos, inout float3 rayDir, in 
 
 	// Trace through lens elements
 	Ray refracted;
-	if (traceLensesFromFilm(debugInfo, filmRay, helios_lens_element_count, helios_lens_elements, refracted))
+	if (traceLensesFromFilm(debugInfo, filmRay, wavelength, helios_lens_element_count, helios_lens_elements, refracted))
 	{
 		float mm_to_cm = 1.0f / 10;
 		rayPos = camPos +
@@ -1909,14 +1914,28 @@ float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 
 		float3 rayPos = /*$(Variable:CameraPos)*/;
 		float3 rayDir = normalize(world.xyz - /*$(Variable:CameraPos)*/);
 		float PDF = 1.0f;
-		if (/*$(Variable:DOF)*/ == DOFMode::Realistic)
+		float3 rayColor = float3(0.0f, 0.0f, 0.0f);
+		if (/*$(Variable:DOF)*/ == DOFMode::Realistic) {
+			// Shoot the ray for each color channel separately for chromatic aberration
+			float wavelength = 1.0f; // red
+			PDF = ApplyRealisticLensSimulation(rayPos, rayDir, wavelength, px, RNG, DispatchRaysDimensions().xy, screenPos);
+			//float red = (PDF > 0.0f) ? GetColorForRay(rayPos, rayDir, RNG, pixelDebug, rayIndex, px.xy) / PDF : 0.0f;
+
+			/*PDF = ApplyRealisticLensSimulation(rayPos, rayDir, px, RNG, DispatchRaysDimensions().xy, screenPos);
+			float green = (PDF > 0.0f) ? GetColorForRay(rayPos, rayDir, RNG, pixelDebug, rayIndex, px.xy) / PDF : 0.0f;
+
 			PDF = ApplyRealisticLensSimulation(rayPos, rayDir, px, RNG, DispatchRaysDimensions().xy, screenPos);
-		if (/*$(Variable:DOF)*/ == DOFMode::PathTraced)
+			float blue = (PDF > 0.0f) ? GetColorForRay(rayPos, rayDir, RNG, pixelDebug, rayIndex, px.xy) / PDF : 0.0f;
+			*/
+			// Combine color channels for chromatic aberration
+			rayColor = (PDF > 0.0f) ? GetColorForRay(rayPos, rayDir, RNG, pixelDebug, rayIndex, px.xy) / PDF : float3(0.0f, 0.0f, 0.0f);
+		}
+		else if (/*$(Variable:DOF)*/ == DOFMode::PathTraced) {
 			PDF = ApplyDOFLensSimulation(rayPos, rayDir, px, RNG, DispatchRaysDimensions().xy);
 
-		// Shoot the ray
-		float3 rayColor = (PDF > 0.0f) ? GetColorForRay(rayPos, rayDir, RNG, pixelDebug, rayIndex, px.xy) / PDF : float3(0.0f, 0.0f, 0.0f);
-		//rayColor *= 1000;
+			// Shoot the ray
+			rayColor = (PDF > 0.0f) ? GetColorForRay(rayPos, rayDir, RNG, pixelDebug, rayIndex, px.xy) / PDF : float3(0.0f, 0.0f, 0.0f);
+		}
 
 		// accumualate the sample
 		color = lerp(color, rayColor, 1.0f / float(rayIndex+1));
