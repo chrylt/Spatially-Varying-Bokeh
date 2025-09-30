@@ -28,8 +28,8 @@
             188.94212341308595
         ],
         "cameraAltitudeAzimuth": [
-            -0.26010239124298098,
-            1.7589242458343506
+            -0.24891315400600434,
+            1.7454910278320313
         ],
         "importedResources": [
             {
@@ -67,6 +67,10 @@
             {
                 "name": "ShiftHeliosPosition",
                 "value": "59.183998"
+            },
+            {
+                "name": "ToggleChromaticAberration",
+                "value": "true"
             },
             {
                 "name": "RenderSize",

@@ -42,6 +42,12 @@
             }
         },
         {
+            "name": "ToggleChromaticAberration",
+            "type": "Bool",
+            "dflt": "0",
+            "visibility": "User"
+        },
+        {
             "name": "RenderSize",
             "type": "Uint2",
             "dflt": "512, 512",

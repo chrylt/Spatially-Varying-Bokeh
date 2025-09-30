@@ -1029,7 +1029,7 @@ float2 SampleICDF(float2 rng, in Texture2D<float> MarginalCDF)
 Spatially Varying Lens Simulation
 *************************************************************************************/
 
-static struct DebugInfo{
+struct DebugInfo{
 	ContextGather ui;
 	uint3 px;
 	int2 offset;
@@ -1140,6 +1140,7 @@ static const float helios_n5 = 1.64238f;
 static const float helios_n6 = 1.64238f;
 
 // Abbe numbers
+static const float v_air = 89.30f;
 static const float helios_v1 = 48.0f;
 static const float helios_v2 = 56.9f;
 static const float helios_v3 = 41.2f;
@@ -1165,27 +1166,49 @@ static const float helios_aperture = helios_aperture_stops[/*$(Variable:HeliosAp
 static const float helios_d_to_film = /*$(Variable:FocalLength)*/ - 1; // mm; -1 to match with path traced scene focal length
 
 // Lens elements array
+
+struct lensElement
+{
+	float curvatureRadius; // positive = convex toward object, negative = concave toward object, 0 = flat
+	float thickness; // distance to next element
+	float n; // refractive index of element
+	float v; // Abbe number of element
+	float apertureRadius; // radius of lens element
+
+};
+
+lensElement CreateLensElement(float curvatureRadius, float thickness, float n, float v, float apertureRadius)
+{
+	lensElement le;
+	le.curvatureRadius = curvatureRadius;
+	le.thickness = thickness;
+	le.n = n;
+	le.v = v;
+	le.apertureRadius = apertureRadius;
+	return le;
+}
+
 static const uint helios_lens_element_count = 12;
-static float4 helios_lens_elements[] = {
+static lensElement helios_lens_elements[] = {
 	// Helios 44-2 58mm/f2 lens
 	// scaled from 100 units to 58mm
-	// 		curvature radiii	sep					n		opening radius	
-	float4( no_curv, 		helios_d0, n_air, 	helios_lens_r0), // 0
-	float4(	helios_r1,		helios_d1, 			helios_n1, 	helios_lens_r1),
-	float4(	helios_r2,		helios_l1, 			n_air, 		helios_lens_r1),
-	float4(	helios_r3,		helios_d2, 			helios_n2, 	helios_lens_r2),
-	float4( helios_r4,		helios_d3, 			helios_n3, 	helios_lens_r2),
-	float4( helios_r5,		helios_l2 / 2,		n_air, 		helios_lens_r3),
-	float4(	no_curv, 		helios_l2 / 2, 		n_air, 		helios_aperture),
-	float4( helios_r6, 		helios_d4, 			helios_n4, 	helios_lens_r3),
-	float4( helios_r7, 		helios_d5, 			helios_n5, 	helios_lens_r4),
-	float4( helios_r8, 		helios_l3, 			n_air, 		helios_lens_r5),
-	float4( helios_r9, 		helios_d6, 			helios_n6, 	helios_lens_r5),
-	float4( helios_r10, 	helios_d_to_film, 	n_air, 		helios_lens_r5), //12
-	float4(0.0f, 0.0f, 0.0f, 0.0f),
-	float4(0.0f, 0.0f, 0.0f, 0.0f),
-	float4(0.0f, 0.0f, 0.0f, 0.0f),
-	float4(0.0f, 0.0f, 0.0f, 0.0f),
+	// 			curvature radiii	sep					n			v			opening radius	
+	CreateLensElement( no_curv, 	helios_d0, 			n_air, 		v_air,		helios_lens_r0), // 0
+	CreateLensElement( helios_r1,	helios_d1, 			helios_n1, 	helios_v1,	helios_lens_r1),
+	CreateLensElement( helios_r2,	helios_l1, 			n_air, 		v_air,		helios_lens_r1),
+	CreateLensElement( helios_r3,	helios_d2, 			helios_n2, 	helios_v2,	helios_lens_r2),
+	CreateLensElement( helios_r4,	helios_d3, 			helios_n3, 	helios_v3,	helios_lens_r2),
+	CreateLensElement( helios_r5,	helios_l2 / 2,		n_air, 		v_air,		helios_lens_r3),
+	CreateLensElement( no_curv, 	helios_l2 / 2, 		n_air, 		v_air,		helios_aperture),
+	CreateLensElement( helios_r6, 	helios_d4, 			helios_n4, 	helios_v4,	helios_lens_r3),
+	CreateLensElement( helios_r7, 	helios_d5, 			helios_n5, 	helios_v5,	helios_lens_r4),
+	CreateLensElement( helios_r8, 	helios_l3, 			n_air, 		v_air,		helios_lens_r5),
+	CreateLensElement( helios_r9, 	helios_d6, 			helios_n6, 	helios_v6,	helios_lens_r5),
+	CreateLensElement( helios_r10, 	helios_d_to_film, 	n_air, 		v_air,		helios_lens_r5), //12
+	CreateLensElement( 0.0f, 0.0f, 0.0f, 0.0f, 0.0f ),
+	CreateLensElement( 0.0f, 0.0f, 0.0f, 0.0f, 0.0f ),
+	CreateLensElement( 0.0f, 0.0f, 0.0f, 0.0f, 0.0f ),
+	CreateLensElement( 0.0f, 0.0f, 0.0f, 0.0f, 0.0f ),
 };
 
 
@@ -1240,18 +1263,47 @@ bool intersect(float radius, float center, Ray ray, out float t, out float3 norm
 	return true;
 }
 
-bool traceLensesFromFilm(inout DebugInfo debugInfo, Ray ray, in float wavelength, int elementCount, float4 lensElements[16], out Ray outRay)
+float getEtaForWavelength(float n_D, float v_D, float wavelength)
+{
+	// calculate wavelength-dependent refractive index using Cauchy's equation
+	const float lambdaF = 486.1327f; // nm (fraunhofer F)
+	const float lambdaD = 589.2938f; // nm (fraunhofer D)
+	const float lambdaC = 656.2725f; // nm (fraunhofer C)
+	const float B = ((n_D - 1.0f) / v_D) / ((1.0f / (lambdaF * lambdaF)) - (1.0f / (lambdaC * lambdaC)));
+	const float A = n_D - B / (lambdaD * lambdaD);
+	const float eta = A + B / (wavelength * wavelength);
+	return eta;
+}
+
+bool traceLensesFromFilm(inout DebugInfo debugInfo, Ray ray, in float wavelength, int elementCount, lensElement lensElements[16], out Ray outRay)
 {
 	float z = 0.0f; // Start at the film, z = 0
 	
 	for (int i = elementCount - 1; i >= 0; i--)
 	{
-		const float curvatureRadius = lensElements[i].x;
-		const float thickness = lensElements[i].y;
-		const float etaI = lensElements[i].z;
-		const float etaT = i > 0 ? lensElements[i - 1].z : 1.0f;
-		const float apatureRadius = lensElements[i].w;
-		
+		const float curvatureRadius = lensElements[i].curvatureRadius;
+		const float thickness = lensElements[i].thickness;
+		const float nI_D = lensElements[i].n;
+		const float nT_D = i > 0 ? lensElements[i - 1].n : n_air;
+		const float vI_D = lensElements[i].v;
+		const float vT_D = i > 0 ? lensElements[i - 1].v : v_air;
+		const float apertureRadius = lensElements[i].apertureRadius;
+
+		// choose eta
+		float etaI = getEtaForWavelength(nI_D, vI_D, wavelength);
+		float etaT = getEtaForWavelength(nT_D, vT_D, wavelength);
+
+		if (wavelength == 0.0f)
+		{
+			// skip chromatic aberation
+			etaI = nI_D;
+			etaT = nT_D;
+		} else {
+			// apply chromatic aberation
+			etaI = getEtaForWavelength(nI_D, vI_D, wavelength);
+			etaT = getEtaForWavelength(nT_D, vT_D, wavelength);
+		}
+
 		z -= thickness;
 		float t = 0;
 		float3 normal = float3(0, 0, 0);
@@ -1268,7 +1320,7 @@ bool traceLensesFromFilm(inout DebugInfo debugInfo, Ray ray, in float wavelength
 			float center = z + curvatureRadius;
 			if (!intersect(curvatureRadius, center, ray, t, normal))
 			{
-				s2h_drawLine(debugInfo.ui, ray.Origin.zy * debugInfo.scale_debug, (ray.Origin + ray.Direction * 10.0f).zy * debugInfo.scale_debug, float4(1, 0, 0, 1), debugInfo.line_thickness / 2);
+				s2h_drawLine(debugInfo.ui, ray.Origin.zy * debugInfo.scale_debug, (ray.Origin + ray.Direction * 10.0f).zy * debugInfo.scale_debug, float4(1, 0, 0, 1), debugInfo.line_thickness *0.1);
 				return false;
 			}
 		}
@@ -1277,14 +1329,14 @@ bool traceLensesFromFilm(inout DebugInfo debugInfo, Ray ray, in float wavelength
 		
 		float r2 = hit.x * hit.x + hit.y * hit.y;
 
-		if (r2 > (apatureRadius * apatureRadius)) 
+		if (r2 > (apertureRadius * apertureRadius)) 
 		{
-			s2h_drawLine(debugInfo.ui, ray.Origin.zy * debugInfo.scale_debug, (ray.Origin + ray.Direction * 10.0f).zy * debugInfo.scale_debug, float4(1, 0, 0, 1), debugInfo.line_thickness / 2);
+			s2h_drawLine(debugInfo.ui, ray.Origin.zy * debugInfo.scale_debug, (ray.Origin + ray.Direction * 10.0f).zy * debugInfo.scale_debug, float4(1, 0, 0, 1), debugInfo.line_thickness *0.1);
 			return false;
 		}
 
 		// draw debug line
-		s2h_drawLine(debugInfo.ui, ray.Origin.zy * debugInfo.scale_debug, hit.zy * debugInfo.scale_debug, debugInfo.color, debugInfo.line_thickness * 0.3);
+		s2h_drawLine(debugInfo.ui, ray.Origin.zy * debugInfo.scale_debug, hit.zy * debugInfo.scale_debug, debugInfo.color, debugInfo.line_thickness * 0.1);
 		
 		ray.Origin = hit;
 		
@@ -1434,9 +1486,9 @@ void DrawLensStack(inout DebugInfo di)
 	float z = 0.0f; // start at film (z=0), go towards -z through the lens
 	for (int i = helios_lens_element_count - 1; i >= 0; --i)
 	{
-		const float curvatureRadius = helios_lens_elements[i].x;
-		const float thickness       = helios_lens_elements[i].y;
-		const float apertureRadius  = helios_lens_elements[i].w;
+		const float curvatureRadius = helios_lens_elements[i].curvatureRadius;
+		const float thickness       = helios_lens_elements[i].thickness;
+		const float apertureRadius  = helios_lens_elements[i].apertureRadius;
 
 		z -= thickness;
 
@@ -1457,31 +1509,31 @@ void DrawExampleRays(inout DebugInfo di, float filmHeightMM)
 {
 	// Example rays along film diagonal for quick visual sanity checks
 	float4 colors[] = {
-		float4(0, 1, 1, 1),
-		float4(1, 0, 1, 1),
-		float4(1, 1, 0, 1)
+		float4(1, 0, 0, 1),
+		float4(0, 1, 0, 1),
+		float4(0, 0, 1, 1)
 	};
 
-	for (int j = -1; j <= 1; ++j)
-	{
-		di.color = colors[j + 1];
+	Ray filmRay;
+	filmRay.Origin = float3(0, filmHeightMM / 2.0f, 0);
+	float2 apertureOffset = float2(0.0f, 0.5f) * helios_lens_r3;
 
-		Ray filmRay;
-		filmRay.Origin = float3(0, filmHeightMM * (1.0f / 3.0f) * j, 0);
+	float3 target = float3(apertureOffset.x, apertureOffset.y, -helios_d_to_film);
+	filmRay.Direction = normalize(target - filmRay.Origin);
 
-		for (int i = -3; i <= 3; ++i)
-		{
+	Ray refracted;
+	/*di.color = float4(1, 0.686, 0, 1);
+	const float lambdaD = 589.2938f;
+	traceLensesFromFilm(di, filmRay, lambdaD, helios_lens_element_count, helios_lens_elements, refracted);*/
 
-			// Keep offset within clear aperture to avoid clipping at the very edge
-			float2 apertureOffset = (i / 3.0f) * float2(0.0f, 0.9f) * helios_lens_r3;
+	di.color = colors[0];
+	traceLensesFromFilm(di, filmRay, 625, helios_lens_element_count, helios_lens_elements, refracted);
 
-			float3 target = float3(apertureOffset.x, apertureOffset.y, -helios_d_to_film);
-			filmRay.Direction = normalize(target - filmRay.Origin);
+	di.color = colors[1];
+	traceLensesFromFilm(di, filmRay, 500, helios_lens_element_count, helios_lens_elements, refracted);
 
-			Ray refracted;
-			bool hit = traceLensesFromFilm(di, filmRay, 1.0f, helios_lens_element_count, helios_lens_elements, refracted);
-		}
-	}
+	di.color = colors[2];
+	traceLensesFromFilm(di, filmRay, 450, helios_lens_element_count, helios_lens_elements, refracted);
 }
 
 void drawDebugHelios(inout DebugInfo debugInfo)
@@ -1916,19 +1968,26 @@ float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 
 		float PDF = 1.0f;
 		float3 rayColor = float3(0.0f, 0.0f, 0.0f);
 		if (/*$(Variable:DOF)*/ == DOFMode::Realistic) {
-			// Shoot the ray for each color channel separately for chromatic aberration
-			float wavelength = 1.0f; // red
-			PDF = ApplyRealisticLensSimulation(rayPos, rayDir, wavelength, px, RNG, DispatchRaysDimensions().xy, screenPos);
-			//float red = (PDF > 0.0f) ? GetColorForRay(rayPos, rayDir, RNG, pixelDebug, rayIndex, px.xy) / PDF : 0.0f;
-
-			/*PDF = ApplyRealisticLensSimulation(rayPos, rayDir, px, RNG, DispatchRaysDimensions().xy, screenPos);
-			float green = (PDF > 0.0f) ? GetColorForRay(rayPos, rayDir, RNG, pixelDebug, rayIndex, px.xy) / PDF : 0.0f;
-
-			PDF = ApplyRealisticLensSimulation(rayPos, rayDir, px, RNG, DispatchRaysDimensions().xy, screenPos);
-			float blue = (PDF > 0.0f) ? GetColorForRay(rayPos, rayDir, RNG, pixelDebug, rayIndex, px.xy) / PDF : 0.0f;
-			*/
-			// Combine color channels for chromatic aberration
-			rayColor = (PDF > 0.0f) ? GetColorForRay(rayPos, rayDir, RNG, pixelDebug, rayIndex, px.xy) / PDF : float3(0.0f, 0.0f, 0.0f);
+			if(!/*$(Variable:ToggleChromaticAberration)*/) {
+				// no chromatic aberration
+				PDF = ApplyRealisticLensSimulation(rayPos, rayDir, 0.0f, px, RNG, DispatchRaysDimensions().xy, screenPos);
+				rayColor = (PDF > 0.0f) ? GetColorForRay(rayPos, rayDir, RNG, pixelDebug, rayIndex, px.xy) / PDF : float3(0.0f, 0.0f, 0.0f);
+			} else {
+				// chromatic aberration
+				float3 rayColorR = float3(0.0f, 0.0f, 0.0f);
+				float3 rayColorG = float3(0.0f, 0.0f, 0.0f);
+				float3 rayColorB = float3(0.0f, 0.0f, 0.0f);
+				float wl_r = 625.0f;
+				float wl_g = 510.0f;
+				float wl_b = 440.0f;
+				float PDFR = ApplyRealisticLensSimulation(rayPos, rayDir, wl_r, px, RNG, DispatchRaysDimensions().xy, screenPos);
+				rayColorR = (PDFR > 0.0f) ? GetColorForRay(rayPos, rayDir, RNG, pixelDebug, rayIndex, px.xy) / PDFR : float3(0.0f, 0.0f, 0.0f);
+				float PDFG = ApplyRealisticLensSimulation(rayPos, rayDir, wl_g, px, RNG, DispatchRaysDimensions().xy, screenPos);
+				rayColorG = (PDFG > 0.0f) ? GetColorForRay(rayPos, rayDir, RNG, pixelDebug, rayIndex, px.xy) / PDFG : float3(0.0f, 0.0f, 0.0f);
+				float PDFB = ApplyRealisticLensSimulation(rayPos, rayDir, wl_b, px, RNG, DispatchRaysDimensions().xy, screenPos);
+				rayColorB = (PDFB > 0.0f) ? GetColorForRay(rayPos, rayDir, RNG, pixelDebug, rayIndex, px.xy) / PDFB : float3(0.0f, 0.0f, 0.0f);
+				rayColor = float3(rayColorR.r, rayColorG.g, rayColorB.b);
+			}
 		}
 		else if (/*$(Variable:DOF)*/ == DOFMode::PathTraced) {
 			PDF = ApplyDOFLensSimulation(rayPos, rayDir, px, RNG, DispatchRaysDimensions().xy);
