@@ -1069,7 +1069,7 @@ static float4 fishEyeLens[] = {
 	float4(0.0f, 0.0f, 0.0f, 0.0f),
 };
 
-static float wideAngleLens[] = {
+static float4 wideAngleLens[] = {
 	// Wide-angle (38-degree) lens. Nakamura.			
 	// MLD, p. 360"			
 	// Scaled to 22 mm from 100 mm			
@@ -1098,7 +1098,16 @@ static float wideAngleLens[] = {
 static const float sony_sensor_width = 35.9f; // sonya7riii specs Full frame (35.9 x 24 mm) sensor size
 static const float sony_sensor_height = 24.0f;
 static const float helios_max_focal_length = 58.0f; // mm
-static const float helios_aperture_stops[] = { 2.0f, 2.8f, 4.0f, 5.6f, 8.0f, 11.0f, 16.0f }; // f-stops [0; 6]
+static const float helios_aperture_stops[7] = { 2.0f, 2.8f, 4.0f, 5.6f, 8.0f, 11.0f, 16.0f }; // f-stops [0; 6]
+static const Texture2D<float> helios_aperture_textures[7] = { 
+	/*$(Image2D:Assets\NoiseTextures\UniformHexagon\UniformHexagon.png:R8_UNorm:float:false:false)*/, 
+	/*$(Image2D:Assets\NoiseTextures\UniformHexagon\UniformHexagon.png:R8_UNorm:float:false:false)*/, 
+	/*$(Image2D:Assets\NoiseTextures\UniformHexagon\UniformHexagon.png:R8_UNorm:float:false:false)*/, 
+	/*$(Image2D:Assets\NoiseTextures\UniformHexagon\UniformHexagon.png:R8_UNorm:float:false:false)*/, 
+	/*$(Image2D:Assets\NoiseTextures\UniformHexagon\UniformHexagon.png:R8_UNorm:float:false:false)*/, 
+	/*$(Image2D:Assets\NoiseTextures\UniformHexagon\UniformHexagon.png:R8_UNorm:float:false:false)*/, 
+	/*$(Image2D:Assets\NoiseTextures\UniformHexagon\UniformHexagon.png:R8_UNorm:float:false:false)*/ 
+}; // textures for aperture shapes [0; 6]
 
 // === HELIOS LENS MEASUREMENTS ===
 static const float helios_scale = helios_max_focal_length / 100.0f; // helios unit scaling from patent
@@ -1163,52 +1172,54 @@ static const float helios_d_to_aperture = 42.45 * helios_scale; // 24.621 mm
 
 // Variables
 static const float helios_aperture = helios_aperture_stops[/*$(Variable:HeliosApertureStop)*/] * (helios_lens_r3 / 16); // assume stops relative to fully open aperture
+static const Texture2D<float> helios_aperture_texture_used = helios_aperture_textures[/*$(Variable:HeliosApertureStop)*/];
 static const float helios_d_to_film = /*$(Variable:FocalLength)*/ - 1; // mm; -1 to match with path traced scene focal length
 
 // Lens elements array
 
-struct lensElement
+struct LensElement
 {
 	float curvatureRadius; // positive = convex toward object, negative = concave toward object, 0 = flat
 	float thickness; // distance to next element
 	float n; // refractive index of element
 	float v; // Abbe number of element
 	float apertureRadius; // radius of lens element
-
+	bool applyOpeningTexture; // if a texture should be used to determine the shape
 };
 
-lensElement CreateLensElement(float curvatureRadius, float thickness, float n, float v, float apertureRadius)
+LensElement createLensElement(float curvatureRadius, float thickness, float n, float v, float apertureRadius, bool applyOpeningTexture)
 {
-	lensElement le;
+	LensElement le;
 	le.curvatureRadius = curvatureRadius;
 	le.thickness = thickness;
 	le.n = n;
 	le.v = v;
 	le.apertureRadius = apertureRadius;
+	le.applyOpeningTexture = applyOpeningTexture;
 	return le;
 }
 
 static const uint helios_lens_element_count = 12;
-static lensElement helios_lens_elements[] = {
+static LensElement helios_lens_elements[] = {
 	// Helios 44-2 58mm/f2 lens
 	// scaled from 100 units to 58mm
 	// 			curvature radiii	sep					n			v			opening radius	
-	CreateLensElement( no_curv, 	helios_d0, 			n_air, 		v_air,		helios_lens_r0), // 0
-	CreateLensElement( helios_r1,	helios_d1, 			helios_n1, 	helios_v1,	helios_lens_r1),
-	CreateLensElement( helios_r2,	helios_l1, 			n_air, 		v_air,		helios_lens_r1),
-	CreateLensElement( helios_r3,	helios_d2, 			helios_n2, 	helios_v2,	helios_lens_r2),
-	CreateLensElement( helios_r4,	helios_d3, 			helios_n3, 	helios_v3,	helios_lens_r2),
-	CreateLensElement( helios_r5,	helios_l2 / 2,		n_air, 		v_air,		helios_lens_r3),
-	CreateLensElement( no_curv, 	helios_l2 / 2, 		n_air, 		v_air,		helios_aperture),
-	CreateLensElement( helios_r6, 	helios_d4, 			helios_n4, 	helios_v4,	helios_lens_r3),
-	CreateLensElement( helios_r7, 	helios_d5, 			helios_n5, 	helios_v5,	helios_lens_r4),
-	CreateLensElement( helios_r8, 	helios_l3, 			n_air, 		v_air,		helios_lens_r5),
-	CreateLensElement( helios_r9, 	helios_d6, 			helios_n6, 	helios_v6,	helios_lens_r5),
-	CreateLensElement( helios_r10, 	helios_d_to_film, 	n_air, 		v_air,		helios_lens_r5), //12
-	CreateLensElement( 0.0f, 0.0f, 0.0f, 0.0f, 0.0f ),
-	CreateLensElement( 0.0f, 0.0f, 0.0f, 0.0f, 0.0f ),
-	CreateLensElement( 0.0f, 0.0f, 0.0f, 0.0f, 0.0f ),
-	CreateLensElement( 0.0f, 0.0f, 0.0f, 0.0f, 0.0f ),
+	createLensElement( no_curv, 	helios_d0, 			n_air, 		v_air,		helios_lens_r0, 	false),
+	createLensElement( helios_r1,	helios_d1, 			helios_n1, 	helios_v1,	helios_lens_r1, 	false),
+	createLensElement( helios_r2,	helios_l1, 			n_air, 		v_air,		helios_lens_r1, 	false),
+	createLensElement( helios_r3,	helios_d2, 			helios_n2, 	helios_v2,	helios_lens_r2, 	false),
+	createLensElement( helios_r4,	helios_d3, 			helios_n3, 	helios_v3,	helios_lens_r2, 	false),
+	createLensElement( helios_r5,	helios_l2 / 2,		n_air, 		v_air,		helios_lens_r3, 	false),
+	createLensElement( no_curv, 	helios_l2 / 2, 		n_air, 		v_air,		helios_aperture, 	true),
+	createLensElement( helios_r6, 	helios_d4, 			helios_n4, 	helios_v4,	helios_lens_r3, 	false),
+	createLensElement( helios_r7, 	helios_d5, 			helios_n5, 	helios_v5,	helios_lens_r4, 	false),
+	createLensElement( helios_r8, 	helios_l3, 			n_air, 		v_air,		helios_lens_r5, 	false),
+	createLensElement( helios_r9, 	helios_d6, 			helios_n6, 	helios_v6,	helios_lens_r5, 	false),
+	createLensElement( helios_r10, 	helios_d_to_film, 	n_air, 		v_air,		helios_lens_r5, 	false), //12
+	createLensElement( 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f ),
+	createLensElement( 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f ),
+	createLensElement( 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f ),
+	createLensElement( 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f ),
 };
 
 
@@ -1275,7 +1286,9 @@ float getEtaForWavelength(float n_D, float v_D, float wavelength)
 	return eta;
 }
 
-bool traceLensesFromFilm(inout DebugInfo debugInfo, Ray ray, in float wavelength, int elementCount, lensElement lensElements[16], out Ray outRay)
+static const float kDebugLineThicknessMultiplier = 0.1f;
+
+bool traceLensesFromFilm(inout DebugInfo debugInfo, Ray ray, in float wavelength, int elementCount, LensElement lensElements[16], out Ray outRay)
 {
 	float z = 0.0f; // Start at the film, z = 0
 	
@@ -1288,6 +1301,7 @@ bool traceLensesFromFilm(inout DebugInfo debugInfo, Ray ray, in float wavelength
 		const float vI_D = lensElements[i].v;
 		const float vT_D = i > 0 ? lensElements[i - 1].v : v_air;
 		const float apertureRadius = lensElements[i].apertureRadius;
+		const bool useOpeningTexture = lensElements[i].applyOpeningTexture;
 
 		// choose eta
 		float etaI = getEtaForWavelength(nI_D, vI_D, wavelength);
@@ -1326,13 +1340,35 @@ bool traceLensesFromFilm(inout DebugInfo debugInfo, Ray ray, in float wavelength
 		}
 		
 		float3 hit = ray.Origin + t * ray.Direction;
-		
-		float r2 = hit.x * hit.x + hit.y * hit.y;
 
-		if (r2 > (apertureRadius * apertureRadius)) 
+		// Aperture / stop shape test
+		if (useOpeningTexture)
 		{
-			s2h_drawLine(debugInfo.ui, ray.Origin.zy * debugInfo.scale_debug, (ray.Origin + ray.Direction * 10.0f).zy * debugInfo.scale_debug, float4(1, 0, 0, 1), debugInfo.line_thickness *0.1);
-			return false;
+			// Normalize hit to aperture space and cull outside the aperture mask
+			float2 p = hit.xy / apertureRadius;
+
+			// Sample the aperture mask texture
+			// p is in [-1,1], so remap to [0,1] for texture lookup
+			float2 maskUV = p * 0.5f + 0.5f;
+			float maskValue = helios_aperture_texture_used.SampleLevel(PointClampSampler, maskUV, 0).r;
+
+			if (maskValue > 0.5f || (maskUV.x < 0.0f || maskUV.x > 1.0f || maskUV.y < 0.0f || maskUV.y > 1.0f))
+			{
+				// Ray is blocked by the aperture mask -> terminate tracing
+				s2h_drawLine(debugInfo.ui, ray.Origin.zy * debugInfo.scale_debug, (ray.Origin + ray.Direction * 10.0f).zy * debugInfo.scale_debug, float4(1, 0, 0, 1), debugInfo.line_thickness * kDebugLineThicknessMultiplier);
+				return false;
+			}
+		}
+		else
+		{
+			// Default circular aperture test
+			float r2 = hit.x * hit.x + hit.y * hit.y;
+			
+			if (r2 > (apertureRadius * apertureRadius)) 
+			{
+				s2h_drawLine(debugInfo.ui, ray.Origin.zy * debugInfo.scale_debug, (ray.Origin + ray.Direction * 10.0f).zy * debugInfo.scale_debug, float4(1, 0, 0, 1), debugInfo.line_thickness * 0.1);
+				return false;
+			}
 		}
 
 		// draw debug line
