@@ -1099,15 +1099,6 @@ static const float sony_sensor_width = 35.9f; // sonya7riii specs Full frame (35
 static const float sony_sensor_height = 24.0f;
 static const float helios_max_focal_length = 58.0f; // mm
 static const float helios_aperture_stops[7] = { 2.0f, 2.8f, 4.0f, 5.6f, 8.0f, 11.0f, 16.0f }; // f-stops [0; 6]
-static const Texture2D<float> helios_aperture_textures[7] = { 
-	/*$(Image2D:Assets\NoiseTextures\UniformHexagon\UniformHexagon.png:R8_UNorm:float:false:false)*/, 
-	/*$(Image2D:Assets\NoiseTextures\UniformHexagon\UniformHexagon.png:R8_UNorm:float:false:false)*/, 
-	/*$(Image2D:Assets\NoiseTextures\UniformHexagon\UniformHexagon.png:R8_UNorm:float:false:false)*/, 
-	/*$(Image2D:Assets\NoiseTextures\UniformHexagon\UniformHexagon.png:R8_UNorm:float:false:false)*/, 
-	/*$(Image2D:Assets\NoiseTextures\UniformHexagon\UniformHexagon.png:R8_UNorm:float:false:false)*/, 
-	/*$(Image2D:Assets\NoiseTextures\UniformHexagon\UniformHexagon.png:R8_UNorm:float:false:false)*/, 
-	/*$(Image2D:Assets\NoiseTextures\UniformHexagon\UniformHexagon.png:R8_UNorm:float:false:false)*/ 
-}; // textures for aperture shapes [0; 6]
 
 // === HELIOS LENS MEASUREMENTS ===
 static const float helios_scale = helios_max_focal_length / 100.0f; // helios unit scaling from patent
@@ -1172,7 +1163,6 @@ static const float helios_d_to_aperture = 42.45 * helios_scale; // 24.621 mm
 
 // Variables
 static const float helios_aperture = helios_aperture_stops[/*$(Variable:HeliosApertureStop)*/] * (helios_lens_r3 / 16); // assume stops relative to fully open aperture
-static const Texture2D<float> helios_aperture_texture_used = helios_aperture_textures[/*$(Variable:HeliosApertureStop)*/];
 static const float helios_d_to_film = /*$(Variable:FocalLength)*/ - 1; // mm; -1 to match with path traced scene focal length
 
 // Lens elements array
@@ -1221,6 +1211,21 @@ static LensElement helios_lens_elements[] = {
 	createLensElement( 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f ),
 	createLensElement( 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f ),
 };
+
+float sampleHeliosApertureMask(float2 uv)
+{
+	switch(/*$(Variable:HeliosApertureStop)*/)
+	{
+		case 0: return /*$(Image2D:Assets\LensKernels\helios_aperture_f2.png:R8_UNorm:float:false:false)*/.SampleLevel(PointClampSampler, uv, 0).r;
+		case 1: return /*$(Image2D:Assets\LensKernels\helios_aperture_f2_8.png:R8_UNorm:float:false:false)*/.SampleLevel(PointClampSampler, uv, 0).r;
+		case 2: return /*$(Image2D:Assets\LensKernels\helios_aperture_f4.png:R8_UNorm:float:false:false)*/.SampleLevel(PointClampSampler, uv, 0).r;
+		case 3: return /*$(Image2D:Assets\LensKernels\helios_aperture_f5_6.png:R8_UNorm:float:false:false)*/.SampleLevel(PointClampSampler, uv, 0).r;
+		case 4: return /*$(Image2D:Assets\LensKernels\helios_aperture_f8.png:R8_UNorm:float:false:false)*/.SampleLevel(PointClampSampler, uv, 0).r;
+		case 5: return /*$(Image2D:Assets\LensKernels\helios_aperture_f11.png:R8_UNorm:float:false:false)*/.SampleLevel(PointClampSampler, uv, 0).r;
+		case 6: return /*$(Image2D:Assets\LensKernels\helios_aperture_f16.png:R8_UNorm:float:false:false)*/.SampleLevel(PointClampSampler, uv, 0).r;
+		default: return /*$(Image2D:Assets\LensKernels\helios_aperture_f2.png:R8_UNorm:float:false:false)*/.SampleLevel(PointClampSampler, uv, 0).r;
+	}
+}
 
 
 // Ray-sphere intersection for a sphere at the origin
@@ -1350,9 +1355,9 @@ bool traceLensesFromFilm(inout DebugInfo debugInfo, Ray ray, in float wavelength
 			// Sample the aperture mask texture
 			// p is in [-1,1], so remap to [0,1] for texture lookup
 			float2 maskUV = p * 0.5f + 0.5f;
-			float maskValue = helios_aperture_texture_used.SampleLevel(PointClampSampler, maskUV, 0).r;
+			float maskValue = sampleHeliosApertureMask(maskUV);
 
-			if (maskValue > 0.5f || (maskUV.x < 0.0f || maskUV.x > 1.0f || maskUV.y < 0.0f || maskUV.y > 1.0f))
+			if (maskValue < 0.5f || (maskUV.x < 0.0f || maskUV.x > 1.0f || maskUV.y < 0.0f || maskUV.y > 1.0f))
 			{
 				// Ray is blocked by the aperture mask -> terminate tracing
 				s2h_drawLine(debugInfo.ui, ray.Origin.zy * debugInfo.scale_debug, (ray.Origin + ray.Direction * 10.0f).zy * debugInfo.scale_debug, float4(1, 0, 0, 1), debugInfo.line_thickness * kDebugLineThicknessMultiplier);

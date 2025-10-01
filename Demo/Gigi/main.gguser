@@ -20,8 +20,8 @@
         "ProjMtx_textureName": "ColorHDR"
     },
     "snapshot": {
-        "resourceViewNodeIndex": 0,
-        "resourceViewResourceIndex": 206,
+        "resourceViewNodeIndex": 36,
+        "resourceViewResourceIndex": 3,
         "cameraPos": [
             462.2170104980469,
             126.86669921875,
@@ -74,7 +74,7 @@
             },
             {
                 "name": "RenderSize",
-                "value": "1920,1080"
+                "value": "800,600"
             },
             {
                 "name": "MaterialSet",
