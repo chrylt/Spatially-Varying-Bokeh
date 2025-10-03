@@ -1029,6 +1029,64 @@ float2 SampleICDF(float2 rng, in Texture2D<float> MarginalCDF)
 Spatially Varying Lens Simulation
 *************************************************************************************/
 
+bool VisualFieldLightContributions(float3 pos, float3 dir, uint2 screenDims, out float3 lightColor)
+{
+	// Camera basis
+	float3 cameraRight = mul(float4(1.0f, 0.0f, 0.0f, 0.0f), /*$(Variable:InvViewMtx)*/).xyz;
+	float3 cameraUp    = mul(float4(0.0f, 1.0f, 0.0f, 0.0f), /*$(Variable:InvViewMtx)*/).xyz;
+	float3 cameraFwd   = mul(float4(0.0f, 0.0f, -1.0f, 0.0f), /*$(Variable:InvViewMtx)*/).xyz;
+	float3 camPos      = /*$(Variable:CameraPos)*/;
+
+	// Simple plane and field extents in world units
+	float aspect = float(screenDims.x) / float(screenDims.y);
+	static const float planeDist = 2000.0f;     // distance in front of camera
+	static const float fieldWidth = 1100.0f;    // world space
+	float fieldHeight = fieldWidth / aspect;
+
+	// Grid dimensions
+	static const int lightsX = 11;
+	static const int lightsY = 7;
+
+	// Center of light plane
+	float3 planeCenter = camPos + cameraFwd * planeDist;
+
+	float globalHitT = c_maxT;
+	bool anyHit = false;
+	int bestIndex = -1;
+
+	for (int y = 0; y < lightsY; ++y)
+	{
+		for (int x = 0; x < lightsX; ++x)
+		{
+			float u = ((float(x) + 0.5f) / float(lightsX)) * 2.0f - 1.0f; // [-1,1]
+			float v = ((float(y) + 0.5f) / float(lightsY)) * 2.0f - 1.0f; // [-1,1]
+
+			// Position on plane
+			float3 lightPos = planeCenter + (u * (fieldWidth * 0.5f)) * cameraRight + (v * (fieldHeight * 0.5f)) * cameraUp;
+
+			// Intersect ray with small light sphere
+			float3 sphereNormal;
+			float t = TestSphereTrace(pos, dir, float4(lightPos, /*$(Variable:SmallLightRadius)*/), sphereNormal);
+			if (t < 0.0f || t > globalHitT)
+				continue;
+
+			globalHitT = t;
+			bestIndex = y * lightsX + x;
+			anyHit = true;
+		}
+	}
+
+	if (!anyHit)
+	{
+		lightColor = float3(0.0f, 0.0f, 0.0f);
+		return false;
+	}
+
+	//lightColor = SmallLightColor(bestIndex) * /*$(Variable:SmallLightBrightness)*/;
+	lightColor = float3(1.0f, 1.0f, 1.0f) * /*$(Variable:SmallLightBrightness)*/;
+	return true;
+}
+
 struct DebugInfo{
 	ContextGather ui;
 	uint3 px;
@@ -1044,52 +1102,6 @@ struct Ray
 {
 	float3 Origin;
 	float3 Direction;
-};
-
-static float4 fishEyeLens[] = {
-	// Muller 16mm/f4 155.9FOV fisheye lens			
-	// MLD p164			
-	// Scaled to 10 mm from 100 mm			
-	// radius	sep	n	aperture
-	float4(30.2249f, 0.8335f, 1.620f, 30.34f),
-	float4(11.3931f, 7.4136f, 1.0f, 20.68f),
-	float4(75.2019f, 1.0654f, 1.639f, 17.80f),
-	float4(8.3349f, 11.1549f, 1.0f, 13.42f),
-	float4(9.5882f, 2.0054f, 1.654f, 9.02f),
-	float4(43.8677f, 5.3895f, 1.0f, 8.14f),
-	float4(	0.0f, 1.4163f, 0.0f, 6.08f),
-	float4(29.4541f, 2.1934f, 1.517f, 5.96f),
-	float4(-5.2265f, 0.9714f, 1.805f, 5.84f),
-	float4(-14.2884f, 0.0627f, 1.0f, 5.96f),
-	float4(-22.3726f, 0.9400f, 1.673f, 5.96f),
-	float4(-15.0404f, 25.0f,  1.0f, 6.52), // 12
-	float4(0.0f, 0.0f, 0.0f, 0.0f),
-	float4(0.0f, 0.0f, 0.0f, 0.0f),
-	float4(0.0f, 0.0f, 0.0f, 0.0f),
-	float4(0.0f, 0.0f, 0.0f, 0.0f),
-};
-
-static float4 wideAngleLens[] = {
-	// Wide-angle (38-degree) lens. Nakamura.			
-	// MLD, p. 360"			
-	// Scaled to 22 mm from 100 mm			
-	// radius   sep	      n       aperture
-	float4( 35.98738f, 1.21638f, 1.540f, 23.716f),
-	float4( 11.69718f, 9.99570f, 1.000f, 17.996f),
-	float4( 13.08714f, 5.12622f, 1.772f, 12.364f),
-	float4(-22.63294f, 1.76924f, 1.617f, 9.8120f),
-	float4( 71.05802f, 0.81840f, 1.000f, 9.1520f), 
-	float4( 0.000000f, 2.27766f, 0.000f, 8.7560f),
-	float4(-9.585840f, 2.43254f, 1.617f, 8.1840f),
-	float4(-11.28864f, 0.11506f, 1.000f, 9.1520f),
-	float4(-166.7765f, 3.09606f, 1.713f, 10.648f),
-	float4(-7.591100f,	1.32682f, 1.805f, 11.440f),
-	float4(-16.76620f, 3.98068f, 1.000f, 12.276f),
-	float4(-7.702860f, 1.21638f, 1.617f, 13.420f),
-	float4(-11.97328f, 5.00000f, 1.000f, 17.996f), //13
-	float4(0.0f, 0.0f, 0.0f, 0.0f),
-	float4(0.0f, 0.0f, 0.0f, 0.0f),
-	float4(0.0f, 0.0f, 0.0f, 0.0f),
 };
 
 // === CAMERA / LENS SPECS ===
@@ -2012,29 +2024,77 @@ float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 
 			if(!/*$(Variable:ToggleChromaticAberration)*/) {
 				// no chromatic aberration
 				PDF = ApplyRealisticLensSimulation(rayPos, rayDir, 0.0f, px, RNG, DispatchRaysDimensions().xy, screenPos);
-				rayColor = (PDF > 0.0f) ? GetColorForRay(rayPos, rayDir, RNG, pixelDebug, rayIndex, px.xy) / PDF : float3(0.0f, 0.0f, 0.0f);
+				if (/*$(Variable:BokehTest)*/)
+				{
+					float3 lc;
+					bool hit = (PDF > 0.0f) && VisualFieldLightContributions(rayPos, rayDir, DispatchRaysDimensions().xy, lc);
+					rayColor = hit ? (lc / max(PDF, 1e-6f)) : float3(0.0f, 0.0f, 0.0f);
+				}
+				else
+				{
+					rayColor = (PDF > 0.0f) ? GetColorForRay(rayPos, rayDir, RNG, pixelDebug, rayIndex, px.xy) / PDF : float3(0.0f, 0.0f, 0.0f);
+				}
 			} else {
 				// chromatic aberration
-				float3 rayColorR = float3(0.0f, 0.0f, 0.0f);
-				float3 rayColorG = float3(0.0f, 0.0f, 0.0f);
-				float3 rayColorB = float3(0.0f, 0.0f, 0.0f);
-				float wl_r = 625.0f;
-				float wl_g = 510.0f;
-				float wl_b = 440.0f;
-				float PDFR = ApplyRealisticLensSimulation(rayPos, rayDir, wl_r, px, RNG, DispatchRaysDimensions().xy, screenPos);
-				rayColorR = (PDFR > 0.0f) ? GetColorForRay(rayPos, rayDir, RNG, pixelDebug, rayIndex, px.xy) / PDFR : float3(0.0f, 0.0f, 0.0f);
-				float PDFG = ApplyRealisticLensSimulation(rayPos, rayDir, wl_g, px, RNG, DispatchRaysDimensions().xy, screenPos);
-				rayColorG = (PDFG > 0.0f) ? GetColorForRay(rayPos, rayDir, RNG, pixelDebug, rayIndex, px.xy) / PDFG : float3(0.0f, 0.0f, 0.0f);
-				float PDFB = ApplyRealisticLensSimulation(rayPos, rayDir, wl_b, px, RNG, DispatchRaysDimensions().xy, screenPos);
-				rayColorB = (PDFB > 0.0f) ? GetColorForRay(rayPos, rayDir, RNG, pixelDebug, rayIndex, px.xy) / PDFB : float3(0.0f, 0.0f, 0.0f);
-				rayColor = float3(rayColorR.r, rayColorG.g, rayColorB.b);
+				if (/*$(Variable:BokehTest)*/)
+				{
+					float3 rc = float3(0.0f, 0.0f, 0.0f);
+					// Red
+					{
+						float PDFR = ApplyRealisticLensSimulation(rayPos, rayDir, 625.0f, px, RNG, DispatchRaysDimensions().xy, screenPos);
+						float3 lcR = float3(0.0f, 0.0f, 0.0f);
+						bool hitR = (PDFR > 0.0f) && VisualFieldLightContributions(rayPos, rayDir, DispatchRaysDimensions().xy, lcR);
+						rc.r = hitR ? (lcR.r / max(PDFR, 1e-6f)) : 0.0f;
+					}
+					// Green
+					{
+						float PDFG = ApplyRealisticLensSimulation(rayPos, rayDir, 510.0f, px, RNG, DispatchRaysDimensions().xy, screenPos);
+						float3 lcG = float3(0.0f, 0.0f, 0.0f);
+						bool hitG = (PDFG > 0.0f) && VisualFieldLightContributions(rayPos, rayDir, DispatchRaysDimensions().xy, lcG);
+						rc.g = hitG ? (lcG.g / max(PDFG, 1e-6f)) : 0.0f;
+					}
+					// Blue
+					{
+						float PDFB = ApplyRealisticLensSimulation(rayPos, rayDir, 440.0f, px, RNG, DispatchRaysDimensions().xy, screenPos);
+						float3 lcB = float3(0.0f, 0.0f, 0.0f);
+						bool hitB = (PDFB > 0.0f) && VisualFieldLightContributions(rayPos, rayDir, DispatchRaysDimensions().xy, lcB);
+						rc.b = hitB ? (lcB.b / max(PDFB, 1e-6f)) : 0.0f;
+					}
+					
+					rayColor = rc;
+				}
+				else
+				{
+					float3 rayColorR = float3(0.0f, 0.0f, 0.0f);
+					float3 rayColorG = float3(0.0f, 0.0f, 0.0f);
+					float3 rayColorB = float3(0.0f, 0.0f, 0.0f);
+					float wl_r = 625.0f;
+					float wl_g = 510.0f;
+					float wl_b = 440.0f;
+					float PDFR = ApplyRealisticLensSimulation(rayPos, rayDir, wl_r, px, RNG, DispatchRaysDimensions().xy, screenPos);
+					rayColorR = (PDFR > 0.0f) ? GetColorForRay(rayPos, rayDir, RNG, pixelDebug, rayIndex, px.xy) / PDFR : float3(0.0f, 0.0f, 0.0f);
+					float PDFG = ApplyRealisticLensSimulation(rayPos, rayDir, wl_g, px, RNG, DispatchRaysDimensions().xy, screenPos);
+					rayColorG = (PDFG > 0.0f) ? GetColorForRay(rayPos, rayDir, RNG, pixelDebug, rayIndex, px.xy) / PDFG : float3(0.0f, 0.0f, 0.0f);
+					float PDFB = ApplyRealisticLensSimulation(rayPos, rayDir, wl_b, px, RNG, DispatchRaysDimensions().xy, screenPos);
+					rayColorB = (PDFB > 0.0f) ? GetColorForRay(rayPos, rayDir, RNG, pixelDebug, rayIndex, px.xy) / PDFB : float3(0.0f, 0.0f, 0.0f);
+					rayColor = float3(rayColorR.r, rayColorG.g, rayColorB.b);
+				}
 			}
 		}
 		else if (/*$(Variable:DOF)*/ == DOFMode::PathTraced) {
 			PDF = ApplyDOFLensSimulation(rayPos, rayDir, px, RNG, DispatchRaysDimensions().xy);
 
-			// Shoot the ray
-			rayColor = (PDF > 0.0f) ? GetColorForRay(rayPos, rayDir, RNG, pixelDebug, rayIndex, px.xy) / PDF : float3(0.0f, 0.0f, 0.0f);
+			if (/*$(Variable:BokehTest)*/)
+			{
+				float3 lc;
+				bool hit = (PDF > 0.0f) && VisualFieldLightContributions(rayPos, rayDir, DispatchRaysDimensions().xy, lc);
+				rayColor = hit ? (lc / max(PDF, 1e-6f)) : float3(0.0f, 0.0f, 0.0f);
+			}
+			else
+			{
+				// Shoot the ray against scene
+				rayColor = (PDF > 0.0f) ? GetColorForRay(rayPos, rayDir, RNG, pixelDebug, rayIndex, px.xy) / PDF : float3(0.0f, 0.0f, 0.0f);
+			}
 		}
 
 		// accumualate the sample

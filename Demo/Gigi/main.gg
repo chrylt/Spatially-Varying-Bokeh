@@ -4,6 +4,12 @@
     "version": "1.0",
     "variables": [
         {
+            "name": "BokehTest",
+            "type": "Bool",
+            "dflt": "0",
+            "visibility": "User"
+        },
+        {
             "name": "Reset",
             "type": "Bool",
             "visibility": "User",

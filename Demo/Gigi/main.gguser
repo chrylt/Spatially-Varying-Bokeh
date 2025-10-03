@@ -36,7 +36,7 @@
                 "nodeName": "Scene",
                 "isATexture": false,
                 "buffer": {
-                    "fileName": "Assets\\Interior\\Interior.bin",
+                    "fileName": "..\\..\\..\\importance-sampled-FAST-noise\\Demo\\Gigi\\Assets\\Interior\\Interior.bin",
                     "structIndex": 0,
                     "BLASOpaque": true
                 }
@@ -45,13 +45,17 @@
                 "nodeName": "VertexBuffer",
                 "isATexture": false,
                 "buffer": {
-                    "fileName": "Assets\\Interior\\Interior.bin",
+                    "fileName": "..\\..\\..\\importance-sampled-FAST-noise\\Demo\\Gigi\\Assets\\Interior\\Interior.bin",
                     "structIndex": 0,
                     "BLASOpaque": true
                 }
             }
         ],
         "savedVariables": [
+            {
+                "name": "BokehTest",
+                "value": "true"
+            },
             {
                 "name": "Reset",
                 "value": "false"
@@ -66,7 +70,7 @@
             },
             {
                 "name": "ShiftHeliosPosition",
-                "value": "59.183998"
+                "value": "51.742001"
             },
             {
                 "name": "ToggleChromaticAberration",
@@ -118,7 +122,7 @@
             },
             {
                 "name": "FocalLength",
-                "value": "44.212002"
+                "value": "42.092999"
             },
             {
                 "name": "LensRNGSource",
@@ -170,7 +174,7 @@
             },
             {
                 "name": "SmallLightBrightness",
-                "value": "200.000000"
+                "value": "500.000000"
             },
             {
                 "name": "SmallLightsColor",
