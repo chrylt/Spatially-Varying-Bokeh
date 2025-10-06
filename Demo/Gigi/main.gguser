@@ -28,8 +28,8 @@
             188.94212341308595
         ],
         "cameraAltitudeAzimuth": [
-            -0.2539154887199402,
-            1.7461187839508057
+            -0.24891315400600434,
+            1.7454910278320313
         ],
         "importedResources": [
             {
@@ -66,11 +66,11 @@
             },
             {
                 "name": "HeliosApertureStop",
-                "value": "6"
+                "value": "3"
             },
             {
                 "name": "ShiftHeliosPosition",
-                "value": "51.742001"
+                "value": "0.000000"
             },
             {
                 "name": "ToggleChromaticAberration",
@@ -122,7 +122,7 @@
             },
             {
                 "name": "FocalLength",
-                "value": "43.556000"
+                "value": "43.164001"
             },
             {
                 "name": "LensRNGSource",

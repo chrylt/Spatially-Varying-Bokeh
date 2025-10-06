@@ -449,6 +449,18 @@
     ],
     "fileCopies": [
         {
+            "fileName": "LensSimulation.hlsli",
+            "type": "Shader"
+        },
+        {
+            "fileName": "CameraLensData.hlsli",
+            "type": "Shader"
+        },
+        {
+            "fileName": "DrawDebugLens.hlsli",
+            "type": "Shader"
+        },
+        {
             "fileName": "PCG.hlsli",
             "type": "Shader"
         },
@@ -499,6 +511,14 @@
             "fileName": "Assets\\readme.txt",
             "type": "Asset",
             "binary": true
+        },
+        {
+            "fileName": "common_structs.hlsli",
+            "type": "Shader"
+        },
+        {
+            "fileName": "DrawBokehConfig.hlsli",
+            "type": "Shader"
         }
     ],
     "nodes": [
