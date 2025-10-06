@@ -1142,6 +1142,10 @@ static const float helios_l1 = 1.65f * helios_scale;
 static const float helios_l2 = 18.9f * helios_scale;
 static const float helios_l3 = 0.97f * helios_scale;
 
+// measured (mm)
+static const float helios_measured_lens_diameter = 25.0f; // mm
+static const float helios_measured_aperture[] = { 3.0f, 8.0f, 12.0f, 15.0f, 17.2f, 19.0f, 20.0f }; // mm
+
 // Refractive indices
 static const float n_air = 1.0f;
 static const float helios_n1 = 1.64238f;
@@ -1162,20 +1166,29 @@ static const float helios_v6 = 48.0f;
 
 // Lens radius (mm)
 static const float helios_lens_radius_unit = helios_d1 / 0.68f;
-static const float helios_lens_r0 = 17.0f; // mm measured
+static const float helios_lens_r0 = 30.0f / 2; // mm measured
 static const float helios_lens_r1 = 2.3f * helios_lens_radius_unit; // 
 static const float helios_lens_r2 = 2.06f * helios_lens_radius_unit;
 static const float helios_lens_r3 = 1.45f * helios_lens_radius_unit;
 static const float helios_lens_r4 = 1.76f * helios_lens_radius_unit;
 static const float helios_lens_r5 = 1.65f * helios_lens_radius_unit;
+static const float helios_lens_r5_mm = 20.0f / 2; // mm measured
+static const float helios_lens_r6_mm = 19.0f / 2; // mm measured
+static const float helios_lens_r10_mm = 25.0f / 2; // mm measured
 
 // Useful calculations
-static const float helios_lens_length = 93.04f * helios_scale; // sum of sep in mm ~53.9632
+static const float helios_lens_length = helios_d1 + helios_d2 + helios_d3 + helios_d4 + helios_d5 + helios_d6 + helios_l1 + helios_l2 + helios_l3; // sum of sep in mm ~53.9632
 static const float helios_d_to_aperture = 42.45 * helios_scale; // 24.621 mm
 
 // Variables
 static const float helios_aperture = helios_aperture_stops[/*$(Variable:HeliosApertureStop)*/] * (helios_lens_r3 / 16); // assume stops relative to fully open aperture
 static const float helios_d_to_film = /*$(Variable:FocalLength)*/ - 1; // mm; -1 to match with path traced scene focal length
+// focal length variation in reality measured: 9mm
+// measured 18mm distance from aperture to r10 center
+// adapter length 26mm added distance to film
+// measured 16mm adapter to film
+// measured 19mm r10 to adapter end
+// measured 28mm r10 to adapter at infinity focus
 
 // Lens elements array
 
@@ -1977,6 +1990,129 @@ float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 
 	return PDF;
 }
 
+// Shade either the debug bokeh targets or the scene, dividing by PDF as needed
+float3 ShadePrimarySample(
+	float3 rayPos,
+	float3 rayDir,
+	float  PDF,
+	uint2  screenDims,
+	inout Struct_PixelDebugStruct pixelDebug,
+	uint   rayIndex,
+	uint3  px,
+	inout uint RNG)
+{
+	if (/*$(Variable:BokehTest)*/)
+	{
+		float3 lc;
+		bool hit = (PDF > 0.0f) && VisualFieldLightContributions(rayPos, rayDir, screenDims, lc);
+		return hit ? (lc / max(PDF, 1e-6f)) : float3(0.0f, 0.0f, 0.0f);
+	}
+	else
+	{
+		return (PDF > 0.0f) ? GetColorForRay(rayPos, rayDir, RNG, pixelDebug, rayIndex, px.xy) / PDF : float3(0.0f, 0.0f, 0.0f);
+	}
+}
+
+// Realistic lens, single wavelength (no chromatic splitting)
+float3 TraceRealisticMonochrome(
+	float3 baseRayPos,
+	float3 baseRayDir,
+	float2 screenPos,
+	uint2  screenDims,
+	uint3  px,
+	inout uint RNG,
+	inout Struct_PixelDebugStruct pixelDebug,
+	uint   rayIndex)
+{
+	float3 rayPos = baseRayPos;
+	float3 rayDir = baseRayDir;
+	float  PDF    = ApplyRealisticLensSimulation(rayPos, rayDir, 0.0f, px, RNG, screenDims, screenPos);
+	return ShadePrimarySample(rayPos, rayDir, PDF, screenDims, pixelDebug, rayIndex, px, RNG);
+}
+
+// Realistic lens with simple RGB chromatic aberration splitting
+float3 TraceRealisticChromatic(
+	float3 baseRayPos,
+	float3 baseRayDir,
+	float2 screenPos,
+	uint2  screenDims,
+	uint3  px,
+	inout uint RNG,
+	inout Struct_PixelDebugStruct pixelDebug,
+	uint   rayIndex)
+{
+	// Representative wavelengths for RGB (nm)
+	const float wl_r = 625.0f;
+	const float wl_g = 510.0f;
+	const float wl_b = 440.0f;
+
+	if (/*$(Variable:BokehTest)*/)
+	{
+		float3 rc = float3(0.0f, 0.0f, 0.0f);
+
+		// Red channel
+		{
+			float3 rayPos = baseRayPos;
+			float3 rayDir = baseRayDir;
+			float  PDFR   = ApplyRealisticLensSimulation(rayPos, rayDir, wl_r, px, RNG, screenDims, screenPos);
+			float3 lcR    = float3(0.0f, 0.0f, 0.0f);
+			bool   hitR   = (PDFR > 0.0f) && VisualFieldLightContributions(rayPos, rayDir, screenDims, lcR);
+			rc.r = hitR ? (lcR.r / max(PDFR, 1e-6f)) : 0.0f;
+		}
+		// Green channel
+		{
+			float3 rayPos = baseRayPos;
+			float3 rayDir = baseRayDir;
+			float  PDFG   = ApplyRealisticLensSimulation(rayPos, rayDir, wl_g, px, RNG, screenDims, screenPos);
+			float3 lcG    = float3(0.0f, 0.0f, 0.0f);
+			bool   hitG   = (PDFG > 0.0f) && VisualFieldLightContributions(rayPos, rayDir, screenDims, lcG);
+			rc.g = hitG ? (lcG.g / max(PDFG, 1e-6f)) : 0.0f;
+		}
+		// Blue channel
+		{
+			float3 rayPos = baseRayPos;
+			float3 rayDir = baseRayDir;
+			float  PDFB   = ApplyRealisticLensSimulation(rayPos, rayDir, wl_b, px, RNG, screenDims, screenPos);
+			float3 lcB    = float3(0.0f, 0.0f, 0.0f);
+			bool   hitB   = (PDFB > 0.0f) && VisualFieldLightContributions(rayPos, rayDir, screenDims, lcB);
+			rc.b = hitB ? (lcB.b / max(PDFB, 1e-6f)) : 0.0f;
+		}
+
+		return rc;
+	}
+	else
+	{
+		float3 cR = 0.0f;
+		float3 cG = 0.0f;
+		float3 cB = 0.0f;
+
+		// Red
+		{
+			float3 rayPos = baseRayPos;
+			float3 rayDir = baseRayDir;
+			float  PDFR   = ApplyRealisticLensSimulation(rayPos, rayDir, wl_r, px, RNG, screenDims, screenPos);
+			cR = ShadePrimarySample(rayPos, rayDir, PDFR, screenDims, pixelDebug, rayIndex, px, RNG);
+		}
+		// Green
+		{
+			float3 rayPos = baseRayPos;
+			float3 rayDir = baseRayDir;
+			float  PDFG   = ApplyRealisticLensSimulation(rayPos, rayDir, wl_g, px, RNG, screenDims, screenPos);
+			cG = ShadePrimarySample(rayPos, rayDir, PDFG, screenDims, pixelDebug, rayIndex, px, RNG);
+		}
+		// Blue
+		{
+			float3 rayPos = baseRayPos;
+			float3 rayDir = baseRayDir;
+			float  PDFB   = ApplyRealisticLensSimulation(rayPos, rayDir, wl_b, px, RNG, screenDims, screenPos);
+			cB = ShadePrimarySample(rayPos, rayDir, PDFB, screenDims, pixelDebug, rayIndex, px, RNG);
+		}
+
+		// Compose channels from their respective wavelength traces
+		return float3(cR.r, cG.g, cB.b);
+	}
+}
+
 /*$(_raygeneration:RayGen)*/
 {
 	const float2 dimensions = float2(DispatchRaysDimensions().xy);
@@ -2016,85 +2152,27 @@ float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 
 		world.xyz /= world.w;
 
 		// Apply depth of field through lens simulation
-		float3 rayPos = /*$(Variable:CameraPos)*/;
-		float3 rayDir = normalize(world.xyz - /*$(Variable:CameraPos)*/);
-		float PDF = 1.0f;
-		float3 rayColor = float3(0.0f, 0.0f, 0.0f);
-		if (/*$(Variable:DOF)*/ == DOFMode::Realistic) {
-			if(!/*$(Variable:ToggleChromaticAberration)*/) {
-				// no chromatic aberration
-				PDF = ApplyRealisticLensSimulation(rayPos, rayDir, 0.0f, px, RNG, DispatchRaysDimensions().xy, screenPos);
-				if (/*$(Variable:BokehTest)*/)
-				{
-					float3 lc;
-					bool hit = (PDF > 0.0f) && VisualFieldLightContributions(rayPos, rayDir, DispatchRaysDimensions().xy, lc);
-					rayColor = hit ? (lc / max(PDF, 1e-6f)) : float3(0.0f, 0.0f, 0.0f);
-				}
-				else
-				{
-					rayColor = (PDF > 0.0f) ? GetColorForRay(rayPos, rayDir, RNG, pixelDebug, rayIndex, px.xy) / PDF : float3(0.0f, 0.0f, 0.0f);
-				}
-			} else {
-				// chromatic aberration
-				if (/*$(Variable:BokehTest)*/)
-				{
-					float3 rc = float3(0.0f, 0.0f, 0.0f);
-					// Red
-					{
-						float PDFR = ApplyRealisticLensSimulation(rayPos, rayDir, 625.0f, px, RNG, DispatchRaysDimensions().xy, screenPos);
-						float3 lcR = float3(0.0f, 0.0f, 0.0f);
-						bool hitR = (PDFR > 0.0f) && VisualFieldLightContributions(rayPos, rayDir, DispatchRaysDimensions().xy, lcR);
-						rc.r = hitR ? (lcR.r / max(PDFR, 1e-6f)) : 0.0f;
-					}
-					// Green
-					{
-						float PDFG = ApplyRealisticLensSimulation(rayPos, rayDir, 510.0f, px, RNG, DispatchRaysDimensions().xy, screenPos);
-						float3 lcG = float3(0.0f, 0.0f, 0.0f);
-						bool hitG = (PDFG > 0.0f) && VisualFieldLightContributions(rayPos, rayDir, DispatchRaysDimensions().xy, lcG);
-						rc.g = hitG ? (lcG.g / max(PDFG, 1e-6f)) : 0.0f;
-					}
-					// Blue
-					{
-						float PDFB = ApplyRealisticLensSimulation(rayPos, rayDir, 440.0f, px, RNG, DispatchRaysDimensions().xy, screenPos);
-						float3 lcB = float3(0.0f, 0.0f, 0.0f);
-						bool hitB = (PDFB > 0.0f) && VisualFieldLightContributions(rayPos, rayDir, DispatchRaysDimensions().xy, lcB);
-						rc.b = hitB ? (lcB.b / max(PDFB, 1e-6f)) : 0.0f;
-					}
-					
-					rayColor = rc;
-				}
-				else
-				{
-					float3 rayColorR = float3(0.0f, 0.0f, 0.0f);
-					float3 rayColorG = float3(0.0f, 0.0f, 0.0f);
-					float3 rayColorB = float3(0.0f, 0.0f, 0.0f);
-					float wl_r = 625.0f;
-					float wl_g = 510.0f;
-					float wl_b = 440.0f;
-					float PDFR = ApplyRealisticLensSimulation(rayPos, rayDir, wl_r, px, RNG, DispatchRaysDimensions().xy, screenPos);
-					rayColorR = (PDFR > 0.0f) ? GetColorForRay(rayPos, rayDir, RNG, pixelDebug, rayIndex, px.xy) / PDFR : float3(0.0f, 0.0f, 0.0f);
-					float PDFG = ApplyRealisticLensSimulation(rayPos, rayDir, wl_g, px, RNG, DispatchRaysDimensions().xy, screenPos);
-					rayColorG = (PDFG > 0.0f) ? GetColorForRay(rayPos, rayDir, RNG, pixelDebug, rayIndex, px.xy) / PDFG : float3(0.0f, 0.0f, 0.0f);
-					float PDFB = ApplyRealisticLensSimulation(rayPos, rayDir, wl_b, px, RNG, DispatchRaysDimensions().xy, screenPos);
-					rayColorB = (PDFB > 0.0f) ? GetColorForRay(rayPos, rayDir, RNG, pixelDebug, rayIndex, px.xy) / PDFB : float3(0.0f, 0.0f, 0.0f);
-					rayColor = float3(rayColorR.r, rayColorG.g, rayColorB.b);
-				}
-			}
-		}
-		else if (/*$(Variable:DOF)*/ == DOFMode::PathTraced) {
-			PDF = ApplyDOFLensSimulation(rayPos, rayDir, px, RNG, DispatchRaysDimensions().xy);
+		float3 baseRayPos = /*$(Variable:CameraPos)*/;
+		float3 baseRayDir = normalize(world.xyz - /*$(Variable:CameraPos)*/);
+		float3 rayColor   = float3(0.0f, 0.0f, 0.0f);
 
-			if (/*$(Variable:BokehTest)*/)
+		if (/*$(Variable:DOF)*/ == DOFMode::Realistic)
+		{
+			if (!/*$(Variable:ToggleChromaticAberration)*/)
 			{
-				float3 lc;
-				bool hit = (PDF > 0.0f) && VisualFieldLightContributions(rayPos, rayDir, DispatchRaysDimensions().xy, lc);
-				rayColor = hit ? (lc / max(PDF, 1e-6f)) : float3(0.0f, 0.0f, 0.0f);
+				rayColor = TraceRealisticMonochrome(baseRayPos, baseRayDir, screenPos, DispatchRaysDimensions().xy, px, RNG, pixelDebug, rayIndex);
 			}
 			else
 			{
-				// Shoot the ray against scene
-				rayColor = (PDF > 0.0f) ? GetColorForRay(rayPos, rayDir, RNG, pixelDebug, rayIndex, px.xy) / PDF : float3(0.0f, 0.0f, 0.0f);
+				rayColor = TraceRealisticChromatic(baseRayPos, baseRayDir, screenPos, DispatchRaysDimensions().xy, px, RNG, pixelDebug, rayIndex);
 			}
+		}
+		else if (/*$(Variable:DOF)*/ == DOFMode::PathTraced)
+		{
+			float3 rayPos = baseRayPos;
+			float3 rayDir = baseRayDir;
+			float  PDF    = ApplyDOFLensSimulation(rayPos, rayDir, px, RNG, DispatchRaysDimensions().xy);
+			rayColor      = ShadePrimarySample(rayPos, rayDir, PDF, DispatchRaysDimensions().xy, pixelDebug, rayIndex, px, RNG);
 		}
 
 		// accumualate the sample
