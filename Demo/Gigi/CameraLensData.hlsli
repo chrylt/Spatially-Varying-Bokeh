@@ -148,7 +148,7 @@ static LensElement lens_elements[] = {
 	// Helios 44-2 58mm/f2 lens OR BIOTAR 58mm/f2 lens
 	// scaled from 100 units to 58mm
 	// 			curvature radiii	    separation			n			v			opening radius	
-	createLensElement( no_curv, 	    d0, 		    	n_air, 		v_air, 		r0_size, 		    false),
+	createLensElement( no_curv, 	    d0, 		    n_air, 		v_air, 		r0_size, 		    false),
 	createLensElement( r1_curv,	        d1, 			biotar_n1, 	biotar_v1,	r1_size, 		    false),
 	createLensElement( r2_curv,	        l1, 			n_air, 		v_air, 		r2_size, 		    false),
 	createLensElement( r3_curv,	        d2, 			biotar_n2, 	biotar_v2,	r3_size, 		    false),
