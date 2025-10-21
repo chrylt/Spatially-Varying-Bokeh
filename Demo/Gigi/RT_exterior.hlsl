@@ -1412,6 +1412,10 @@ float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 
 		{
 			float  PDF    = ApplyDOFLensSimulation(baseRay.Origin, baseRay.Direction, px, RNG, DispatchRaysDimensions().xy);
 			rayColor      = ShadePrimarySample(baseRay, PDF, DispatchRaysDimensions().xy, pixelDebug, rayIndex, px, RNG);
+		} else if (/*$(Variable:DOF)*/ == DOFMode::Off)
+		{
+			float  PDF    = 1.0f;
+			rayColor      = ShadePrimarySample(baseRay, PDF, DispatchRaysDimensions().xy, pixelDebug, rayIndex, px, RNG);
 		}
 
 		// accumulate the sample
