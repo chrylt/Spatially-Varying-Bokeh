@@ -229,6 +229,9 @@ int main(int argc, char** argv)
 
 	std::mt19937 rng(seed);
 
+	if (!Process("BokehPointSets/bokehInv", "BokehOut/bokehInv", rng))
+		return 1;
+
 	if (!Process("PointSets/UniformStar", "out/UniformStar", rng))
 		return 1;
 

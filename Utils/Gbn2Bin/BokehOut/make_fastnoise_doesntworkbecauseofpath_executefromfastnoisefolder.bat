@@ -1,0 +1,1 @@
+..\..\..\..\fastnoise\FastNoise.exe Vector2 Uniform gauss 1.0 exponential 0.1 0.1 separate 0.5 128 128 32 bokehInv -split -init bokehInv.bin -progress 1
