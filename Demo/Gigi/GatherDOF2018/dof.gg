@@ -1,6 +1,6 @@
 {
     "$schema": "gigischema.json",
-    "version": "0.99b",
+    "version": "1.0",
     "variables": [
         {
             "name": "UseNoiseTextures",
@@ -61,7 +61,13 @@
             "comment": "Focal length in mm (Camera property e.g. 75mm)",
             "type": "Float",
             "dflt": "75.0f",
-            "visibility": "User"
+            "visibility": "User",
+            "UISettings": {
+                "UIHint": "Slider",
+                "min": "-2000",
+                "max": "2000",
+                "step": "1"
+            }
         },
         {
             "name": "NearTransitionRegion",
@@ -155,31 +161,31 @@
             "resources": [
                 {
                     "name": "Color",
-                    "type": "Texture",
-                    "access": "SRV"
+                    "access": "SRV",
+                    "type": "Texture"
                 },
                 {
                     "name": "Depth",
-                    "type": "Texture",
                     "access": "SRV",
+                    "type": "Texture",
                     "texture": {
                         "viewType": "Float"
                     }
                 },
                 {
                     "name": "FarFieldColorCoC",
-                    "type": "Texture",
-                    "access": "UAV"
+                    "access": "UAV",
+                    "type": "Texture"
                 },
                 {
                     "name": "NearFieldColorCoC",
-                    "type": "Texture",
-                    "access": "UAV"
+                    "access": "UAV",
+                    "type": "Texture"
                 },
                 {
                     "name": "NearMaxCocTilemap",
-                    "type": "Texture",
-                    "access": "UAV"
+                    "access": "UAV",
+                    "type": "Texture"
                 }
             ]
         },
@@ -190,13 +196,13 @@
             "resources": [
                 {
                     "name": "FarFieldColorCoC",
-                    "type": "Texture",
-                    "access": "SRV"
+                    "access": "SRV",
+                    "type": "Texture"
                 },
                 {
                     "name": "BlurredFarFieldColorAlpha",
-                    "type": "Texture",
-                    "access": "UAV"
+                    "access": "UAV",
+                    "type": "Texture"
                 }
             ],
             "samplers": [
@@ -213,18 +219,18 @@
             "resources": [
                 {
                     "name": "MaxCoCTileMap",
-                    "type": "Texture",
-                    "access": "SRV"
+                    "access": "SRV",
+                    "type": "Texture"
                 },
                 {
                     "name": "ColorCoc",
-                    "type": "Texture",
-                    "access": "SRV"
+                    "access": "SRV",
+                    "type": "Texture"
                 },
                 {
                     "name": "BlurredFieldColorAlpha",
-                    "type": "Texture",
-                    "access": "UAV"
+                    "access": "UAV",
+                    "type": "Texture"
                 }
             ],
             "samplers": [
@@ -241,16 +247,16 @@
             "resources": [
                 {
                     "name": "Source",
-                    "type": "Texture",
                     "access": "SRV",
+                    "type": "Texture",
                     "texture": {
                         "viewType": "Float"
                     }
                 },
                 {
                     "name": "Dest",
-                    "type": "Texture",
                     "access": "UAV",
+                    "type": "Texture",
                     "texture": {
                         "viewType": "Float"
                     }
@@ -264,16 +270,16 @@
             "resources": [
                 {
                     "name": "NearMaxCocTilemap_1_8",
-                    "type": "Texture",
                     "access": "SRV",
+                    "type": "Texture",
                     "texture": {
                         "viewType": "Float"
                     }
                 },
                 {
                     "name": "NearMaxCocTilemap_1_8_Halo",
-                    "type": "Texture",
                     "access": "UAV",
+                    "type": "Texture",
                     "texture": {
                         "viewType": "Float"
                     }
@@ -287,13 +293,13 @@
             "resources": [
                 {
                     "name": "NearFieldColorCoC",
-                    "type": "Texture",
-                    "access": "SRV"
+                    "access": "SRV",
+                    "type": "Texture"
                 },
                 {
                     "name": "NearFieldColorCoCBorder",
-                    "type": "Texture",
-                    "access": "UAV"
+                    "access": "UAV",
+                    "type": "Texture"
                 }
             ]
         },
@@ -304,21 +310,21 @@
             "resources": [
                 {
                     "name": "NearFieldColorCoCBorder",
-                    "type": "Texture",
-                    "access": "SRV"
+                    "access": "SRV",
+                    "type": "Texture"
                 },
                 {
                     "name": "NearmaxCoCTilemap_1_8_Halo",
-                    "type": "Texture",
                     "access": "SRV",
+                    "type": "Texture",
                     "texture": {
                         "viewType": "Float"
                     }
                 },
                 {
                     "name": "NearFieldColorCoCBorderBlurred",
-                    "type": "Texture",
-                    "access": "UAV"
+                    "access": "UAV",
+                    "type": "Texture"
                 }
             ],
             "samplers": [
@@ -335,31 +341,31 @@
             "resources": [
                 {
                     "name": "NearField",
-                    "type": "Texture",
-                    "access": "SRV"
+                    "access": "SRV",
+                    "type": "Texture"
                 },
                 {
                     "name": "Color",
-                    "type": "Texture",
-                    "access": "SRV"
+                    "access": "SRV",
+                    "type": "Texture"
                 },
                 {
                     "name": "Depth",
-                    "type": "Texture",
                     "access": "SRV",
+                    "type": "Texture",
                     "texture": {
                         "viewType": "Float"
                     }
                 },
                 {
                     "name": "FarField",
-                    "type": "Texture",
-                    "access": "SRV"
+                    "access": "SRV",
+                    "type": "Texture"
                 },
                 {
                     "name": "Output",
-                    "type": "Texture",
-                    "access": "UAV"
+                    "access": "UAV",
+                    "type": "Texture"
                 }
             ],
             "samplers": [
@@ -622,14 +628,14 @@
                 ],
                 "connections": [
                     {
-                        "srcPin": "ColorCoc",
-                        "dstNode": "BlurFar",
-                        "dstPin": "BlurredFarFieldColorAlpha"
-                    },
-                    {
                         "srcPin": "MaxCoCTileMap",
                         "dstNode": "Setup",
                         "dstPin": "NearMaxCocTilemap"
+                    },
+                    {
+                        "srcPin": "ColorCoc",
+                        "dstNode": "BlurFar",
+                        "dstPin": "BlurredFarFieldColorAlpha"
                     },
                     {
                         "srcPin": "BlurredFieldColorAlpha",
@@ -870,17 +876,14 @@
                 ],
                 "connections": [
                     {
-                        "srcPin": "NearFieldColorCoCBorder",
-                        "dstNode": "NearFieldColorCoCBorder",
-                        "dstPin": "resource"
-                    },
-                    {
-                        "srcPin": "NearFieldColorCoCBorder"
-                    },
-                    {
                         "srcPin": "NearFieldColorCoC",
                         "dstNode": "Setup",
                         "dstPin": "NearFieldColorCoC"
+                    },
+                    {
+                        "srcPin": "NearFieldColorCoCBorder",
+                        "dstNode": "NearFieldColorCoCBorder",
+                        "dstPin": "resource"
                     }
                 ],
                 "shader": {
@@ -934,9 +937,9 @@
                 ],
                 "connections": [
                     {
-                        "srcPin": "NearFieldColorCoCBorderBlurred",
-                        "dstNode": "NearFieldColorCoCBorderBlurred",
-                        "dstPin": "resource"
+                        "srcPin": "NearFieldColorCoCBorder",
+                        "dstNode": "NearBorder",
+                        "dstPin": "NearFieldColorCoCBorder"
                     },
                     {
                         "srcPin": "NearmaxCoCTilemap_1_8_Halo",
@@ -944,12 +947,9 @@
                         "dstPin": "NearMaxCocTilemap_1_8_Halo"
                     },
                     {
-                        "srcPin": "NearFieldColorCoCBorderBlurred"
-                    },
-                    {
-                        "srcPin": "NearFieldColorCoCBorder",
-                        "dstNode": "NearBorder",
-                        "dstPin": "NearFieldColorCoCBorder"
+                        "srcPin": "NearFieldColorCoCBorderBlurred",
+                        "dstNode": "NearFieldColorCoCBorderBlurred",
+                        "dstPin": "resource"
                     }
                 ],
                 "shader": {
@@ -1003,14 +1003,14 @@
                 ],
                 "connections": [
                     {
-                        "srcPin": "ColorCoc",
-                        "dstNode": "NearBlur",
-                        "dstPin": "NearFieldColorCoCBorderBlurred"
-                    },
-                    {
                         "srcPin": "MaxCoCTileMap",
                         "dstNode": "NearBlur",
                         "dstPin": "NearmaxCoCTilemap_1_8_Halo"
+                    },
+                    {
+                        "srcPin": "ColorCoc",
+                        "dstNode": "NearBlur",
+                        "dstPin": "NearFieldColorCoCBorderBlurred"
                     },
                     {
                         "srcPin": "BlurredFieldColorAlpha",
@@ -1073,9 +1073,19 @@
                 ],
                 "connections": [
                     {
+                        "srcPin": "NearField",
+                        "dstNode": "FloodFillNear",
+                        "dstPin": "BlurredFieldColorAlpha"
+                    },
+                    {
                         "srcPin": "Color",
                         "dstNode": "Setup",
                         "dstPin": "Color"
+                    },
+                    {
+                        "srcPin": "Depth",
+                        "dstNode": "Setup",
+                        "dstPin": "Depth"
                     },
                     {
                         "srcPin": "FarField",
@@ -1083,19 +1093,9 @@
                         "dstPin": "BlurredFieldColorAlpha"
                     },
                     {
-                        "srcPin": "NearField",
-                        "dstNode": "FloodFillNear",
-                        "dstPin": "BlurredFieldColorAlpha"
-                    },
-                    {
                         "srcPin": "Output",
                         "dstNode": "Output",
                         "dstPin": "resource"
-                    },
-                    {
-                        "srcPin": "Depth",
-                        "dstNode": "Setup",
-                        "dstPin": "Depth"
                     }
                 ],
                 "shader": {

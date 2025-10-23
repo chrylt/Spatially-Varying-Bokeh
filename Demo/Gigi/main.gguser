@@ -54,7 +54,7 @@
         "savedVariables": [
             {
                 "name": "BokehTest",
-                "value": "true"
+                "value": "false"
             },
             {
                 "name": "Reset",
@@ -66,7 +66,7 @@
             },
             {
                 "name": "HeliosApertureStop",
-                "value": "4"
+                "value": "6"
             },
             {
                 "name": "ShiftHeliosPosition",
@@ -78,7 +78,7 @@
             },
             {
                 "name": "RenderSize",
-                "value": "400,300"
+                "value": "800,600"
             },
             {
                 "name": "MaterialSet",
@@ -122,15 +122,15 @@
             },
             {
                 "name": "FocalLength",
-                "value": "42.042000"
+                "value": "30.791000"
             },
             {
                 "name": "LensRNGSource",
-                "value": "0"
+                "value": "4"
             },
             {
                 "name": "LensRNGExtend",
-                "value": "0"
+                "value": "3"
             },
             {
                 "name": "JitterNoiseTextures",
@@ -138,11 +138,11 @@
             },
             {
                 "name": "DOF",
-                "value": "3"
+                "value": "2"
             },
             {
                 "name": "ApertureRadius",
-                "value": "1.000000"
+                "value": "0.750000"
             },
             {
                 "name": "AnamorphicScaling",
@@ -174,7 +174,7 @@
             },
             {
                 "name": "SmallLightBrightness",
-                "value": "100.000000"
+                "value": "500.000000"
             },
             {
                 "name": "SmallLightsColor",
@@ -186,7 +186,7 @@
             },
             {
                 "name": "SmallLightRadius",
-                "value": "2.000000"
+                "value": "1.000000"
             },
             {
                 "name": "GatherDOF_UseNoiseTextures",
@@ -202,7 +202,7 @@
             },
             {
                 "name": "GatherDOF_FocalDistance",
-                "value": "500.000000"
+                "value": "40.000000"
             },
             {
                 "name": "GatherDOF_FocalRegion",
@@ -210,7 +210,7 @@
             },
             {
                 "name": "GatherDOF_FocalLength",
-                "value": "75.000000"
+                "value": "75.413002"
             },
             {
                 "name": "GatherDOF_NearTransitionRegion",
@@ -246,7 +246,7 @@
             },
             {
                 "name": "GatherDOF_BlurTapCount",
-                "value": "4"
+                "value": "16"
             },
             {
                 "name": "GatherDOF_FloodFillTapCount",

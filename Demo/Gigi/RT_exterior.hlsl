@@ -777,7 +777,7 @@ float3 SmallLightColor(int index)
 	return ret;
 }
 
-bool SmallLightContributions(float3 pos, float3 dir, float maxT, out float3 lightColor)
+bool SmallLightContributions(float3 pos, float3 dir, inout Struct_PixelDebugStruct pixelDebug, float maxT, out float3 lightColor, bool writeDebugHitT)
 {
 	// corner 878,380, 419
 	// 815, 380, 395
@@ -828,6 +828,10 @@ bool SmallLightContributions(float3 pos, float3 dir, float maxT, out float3 ligh
 		return false;
 	}
 
+	if (writeDebugHitT)
+	{
+		pixelDebug.HitT = globalHitT;
+	}
 	return true;
 }
 
@@ -837,7 +841,7 @@ float3 GetColorForRay(float3 pos, float3 dir, inout uint RNG, inout Struct_Pixel
 	float3 color = float3(0.0f, 0.0f, 0.0f);
 
 	// show small lights for primary ray
-	if(SmallLightContributions(pos, dir, c_maxT, color))
+	if(SmallLightContributions(pos, dir, pixelDebug, c_maxT, color, rayIndex == 0))
 		return color;
 
 	for (uint bounceIndex = 0; bounceIndex < /*$(Variable:NumBounces)*/; ++bounceIndex)
@@ -861,7 +865,7 @@ float3 GetColorForRay(float3 pos, float3 dir, inout uint RNG, inout Struct_Pixel
 
 		// see if the ray hit the small lights
 		float3 smallLightColor = float3(0.0f, 0.0f, 0.0f);
-		if(SmallLightContributions(ray.Origin, ray.Direction, (payload.hitT < 0.0f ? c_maxT : payload.hitT), smallLightColor))
+		if(SmallLightContributions(ray.Origin, ray.Direction, pixelDebug, (payload.hitT < 0.0f ? c_maxT : payload.hitT), smallLightColor, false))
 		{
 			color += smallLightColor * throughput;
 			return color;
@@ -1060,6 +1064,8 @@ float2 SampleICDF(float2 rng, in Texture2D<float> MarginalCDF)
 // returns PDF
 float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 px, inout uint RNG, in uint2 screenDims)
 {
+	if (/*$(Variable:DOF)*/ != DOFMode::PathTraced)
+		return 1.0f;
 
 	float3 cameraRight = mul(float4(1.0f, 0.0f, 0.0f, 0.0f), /*$(Variable:InvViewMtx)*/).xyz;
 	float3 cameraUp = mul(float4(0.0f, 1.0f, 0.0f, 0.0f), /*$(Variable:InvViewMtx)*/).xyz;
@@ -1408,13 +1414,9 @@ float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 
 			else
 				rayColor = TraceRealisticChromatic(baseRay, screenPos, DispatchRaysDimensions().xy, px, RNG, pixelDebug, rayIndex);
 		}
-		else if (/*$(Variable:DOF)*/ == DOFMode::PathTraced)
+		else if (/*$(Variable:DOF)*/ == DOFMode::PathTraced || /*$(Variable:DOF)*/ == DOFMode::Off || /*$(Variable:DOF)*/ == DOFMode::PostProcessing)
 		{
 			float  PDF    = ApplyDOFLensSimulation(baseRay.Origin, baseRay.Direction, px, RNG, DispatchRaysDimensions().xy);
-			rayColor      = ShadePrimarySample(baseRay, PDF, DispatchRaysDimensions().xy, pixelDebug, rayIndex, px, RNG);
-		} else if (/*$(Variable:DOF)*/ == DOFMode::Off)
-		{
-			float  PDF    = 1.0f;
 			rayColor      = ShadePrimarySample(baseRay, PDF, DispatchRaysDimensions().xy, pixelDebug, rayIndex, px, RNG);
 		}
 
@@ -1432,6 +1434,7 @@ float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 
 	// Write the temporally accumulated color
 	Output[px.xy] = float4(color, 1.0f);
 	LinearDepth[px.xy] = pixelDebug.HitT;
+	DebugTex[px.xy] = float4(pixelDebug.HitT / 700, pixelDebug.HitT / 700, pixelDebug.HitT / 700, 1.0f);
 
 	// Write pixel debug information for whatever pixel was clicked on
 	if (all(uint2(/*$(Variable:MouseState)*/.xy) == px.xy))
