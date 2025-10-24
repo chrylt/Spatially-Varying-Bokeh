@@ -10,39 +10,53 @@
 #include "PCG.hlsli"
 #include "LDSShuffler.hlsli"
 
-float2 ReadVec2STTextureRaw(in uint3 pxAndFrame, in Texture2DArray<float2> tex)
+uint3 AdjustNoiseTextureCoords(uint3 pxAndFrame, uint3 dims)
 {
-    uint3 dims;
-    tex.GetDimensions(dims.x, dims.y, dims.z);
-
-    // Extend the noise texture over time
+	uint3 coords = pxAndFrame;
 	uint cycleCount = pxAndFrame.z / dims.z;
+
 	switch(/*$(Variable:LensRNGExtend)*/)
 	{
 		case NoiseTexExtends::None: break;
 		case NoiseTexExtends::White:
 		{
 			uint OffsetRNG = HashInit(uint3(0x1337, 0xbeef, cycleCount));
-			pxAndFrame.x += HashPCG(OffsetRNG);
-			pxAndFrame.y += HashPCG(OffsetRNG);
+			coords.x += HashPCG(OffsetRNG);
+			coords.y += HashPCG(OffsetRNG);
 			break;
 		}
 		case NoiseTexExtends::Shuffle1D:
 		{
 			uint shuffleIndex = LDSShuffle1D_GetValueAtIndex(cycleCount, 16384, 10127, 435);
-			pxAndFrame.x += shuffleIndex % dims.x;
-			pxAndFrame.y += shuffleIndex / dims.x;
+			coords.x += shuffleIndex % dims.x;
+			coords.y += shuffleIndex / dims.x;
 			break;
 		}
 		case NoiseTexExtends::Shuffle1DHilbert:
 		{
 			uint shuffleIndex = LDSShuffle1D_GetValueAtIndex(cycleCount, 16384, 10127, 435);
-			pxAndFrame.xy += Convert1DTo2D_Hilbert(shuffleIndex, 16384);
+			coords.xy += Convert1DTo2D_Hilbert(shuffleIndex, 16384);
 			break;
 		}
 	}
 
-    return tex[pxAndFrame % dims].rg;
+	return coords % dims;
+}
+
+float2 ReadVec2STTextureRaw(in uint3 pxAndFrame, in Texture2DArray<float2> tex)
+{
+	uint3 dims;
+	tex.GetDimensions(dims.x, dims.y, dims.z);
+	uint3 sampleCoord = AdjustNoiseTextureCoords(pxAndFrame, dims);
+	return tex[sampleCoord].rg;
+}
+
+float ReadFloatSTTextureRaw(in uint3 pxAndFrame, in Texture2DArray<float> tex)
+{
+	uint3 dims;
+	tex.GetDimensions(dims.x, dims.y, dims.z);
+	uint3 sampleCoord = AdjustNoiseTextureCoords(pxAndFrame, dims);
+	return tex[sampleCoord];
 }
 
 float2 ReadVec2STTexture(in uint3 pxAndFrame, in Texture2DArray<float2> tex)
@@ -111,8 +125,10 @@ float2 SampleICDF(float2 rng, in Texture2D<float> MarginalCDF)
     return uv * 2.0f - 1.0f;
 }
 
-float2 GetApertureSamplePoint(uint3 pxAndFrame, int u, int v, int maxuv, in float4 KernelSize)
+float2 GetApertureSamplePoint(uint3 pxAndFrame, int u, int v, int maxuv, in float4 KernelSize, out float sampleWeight)
 {
+	sampleWeight = 1.0f;
+
 	if (!/*$(Variable:UseNoiseTextures)*/)
 	{
 		float2 uv = float2(u, v) / (maxuv.xx - 1); // map to [0, 1]
@@ -223,6 +239,12 @@ float2 GetApertureSamplePoint(uint3 pxAndFrame, int u, int v, int maxuv, in floa
             float2 rng = ReadVec2STTextureRaw(pxAndSampleIndex, /*$(Image2DArray:Assets\NoiseTextures\FAST\vector2_uniform_gauss1_0_Gauss10_separate05_%i.png:RG8_UNorm:float2:false:false)*/);
             return SampleICDF(rng, /*$(Image2D:Assets\NoiseTextures\Lens_kernel_compositingpro.204\Lens_kernel_compositingpro.204.icdf.exr:R32_Float:float:false:false)*/);
         }
+		case LensRNG::bokeh:
+		{
+			float2 offset = ReadVec2STTexture(pxAndSampleIndex, /*$(Image2DArray:Assets\NoiseTextures\bokeh\bokehInv_%i.png:RG8_UNorm:float2:false:false)*/);
+			sampleWeight = /*$(Image2D:Assets\NoiseTextures\bokeh\bokeh_crop.png:R8_UNorm:float:false:false)*/.SampleLevel(linearClampSampler, 0.5 * offset + 0.5, 0).r;
+			return offset;
+        }
 	}
 
 	return float2(0.0f, 0.0f);
@@ -269,7 +291,8 @@ float2 GetApertureSamplePoint(uint3 pxAndFrame, int u, int v, int maxuv, in floa
 		{
 			for (int v = 0; v < TAP_COUNT; ++v)
 			{
-				float2 uv = GetApertureSamplePoint(pxAndFrame, u, v, TAP_COUNT, KernelSize);
+				float sampleWeight = 1.0f;
+				float2 uv = GetApertureSamplePoint(pxAndFrame, u, v, TAP_COUNT, KernelSize, sampleWeight);
 				uv /= float2(FarFieldColorCoCSize);
 
 				//float2 uv = float2(u, v) / (TAP_COUNT - 1); // map to [0, 1]
@@ -279,9 +302,9 @@ float2 GetApertureSamplePoint(uint3 pxAndFrame, int u, int v, int maxuv, in floa
 				float4 tapColor = FarFieldColorCoC.SampleLevel(linearClampSampler, uv, 0); //Texture2DSampleLevel(PostprocessInput0, PostprocessInput0Sampler, uv, 0);
 				
 				// Weighted by CoC. Gives more influence to taps with a CoC higher than us.
-				float TapWeight = tapColor.w * saturate(1.0f - (PixelCoC - tapColor.w)); 
+				float TapWeight = sampleWeight * tapColor.w * saturate(1.0f - (PixelCoC - tapColor.w)); 
 				
-				ResultColor +=  tapColor.xyz * TapWeight; 
+				ResultColor +=  tapColor.xyz * TapWeight;
 				Weight += TapWeight;
 			}
 		}

@@ -223,6 +223,10 @@ float2 GetApertureSamplePoint(uint3 pxAndFrame, int u, int v, int maxuv, in floa
             float2 rng = ReadVec2STTextureRaw(pxAndSampleIndex, /*$(Image2DArray:Assets\NoiseTextures\FAST\vector2_uniform_gauss1_0_Gauss10_separate05_%i.png:RG8_UNorm:float2:false:false)*/);
             return SampleICDF(rng, /*$(Image2D:Assets\NoiseTextures\Lens_kernel_compositingpro.204\Lens_kernel_compositingpro.204.icdf.exr:R32_Float:float:false:false)*/);
         }
+		case LensRNG::bokeh:
+		{
+			return ReadVec2STTexture(pxAndSampleIndex, /*$(Image2DArray:Assets\NoiseTextures\bokeh\bokehInv_%i.png:RG8_UNorm:float2:false:false)*/);
+        }
 	}
 
 	return float2(0.0f, 0.0f);

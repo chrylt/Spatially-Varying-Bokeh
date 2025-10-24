@@ -54,7 +54,7 @@
         "savedVariables": [
             {
                 "name": "BokehTest",
-                "value": "false"
+                "value": "true"
             },
             {
                 "name": "Reset",
@@ -122,11 +122,11 @@
             },
             {
                 "name": "FocalLength",
-                "value": "30.791000"
+                "value": "42.078999"
             },
             {
                 "name": "LensRNGSource",
-                "value": "4"
+                "value": "21"
             },
             {
                 "name": "LensRNGExtend",
@@ -138,7 +138,7 @@
             },
             {
                 "name": "DOF",
-                "value": "2"
+                "value": "3"
             },
             {
                 "name": "ApertureRadius",
@@ -174,7 +174,7 @@
             },
             {
                 "name": "SmallLightBrightness",
-                "value": "500.000000"
+                "value": "100.000000"
             },
             {
                 "name": "SmallLightsColor",
@@ -186,7 +186,7 @@
             },
             {
                 "name": "SmallLightRadius",
-                "value": "1.000000"
+                "value": "2.000000"
             },
             {
                 "name": "GatherDOF_UseNoiseTextures",
@@ -242,11 +242,11 @@
             },
             {
                 "name": "GatherDOF_KernelSize",
-                "value": "20.000000,1.570000,6.000000,0.000000"
+                "value": "40.000000,1.570000,6.000000,0.000000"
             },
             {
                 "name": "GatherDOF_BlurTapCount",
-                "value": "16"
+                "value": "15"
             },
             {
                 "name": "GatherDOF_FloodFillTapCount",
@@ -266,7 +266,7 @@
             },
             {
                 "name": "TemporalAccumulation_Enabled",
-                "value": "false"
+                "value": "true"
             },
             {
                 "name": "ToneMap_ExposureFStops",

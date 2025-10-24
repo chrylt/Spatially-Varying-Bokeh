@@ -1175,6 +1175,9 @@
                 },
                 {
                     "label": "LKCP204ICDF_Blue"
+                },
+                {
+                    "label": "bokeh"
                 }
             ]
         },
