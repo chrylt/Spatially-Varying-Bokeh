@@ -46,7 +46,7 @@
             "name": "FocalDistance",
             "comment": "Anything closer than this is considered near field",
             "type": "Float",
-            "dflt": "500.0f",
+            "dflt": "600.0f",
             "visibility": "User"
         },
         {

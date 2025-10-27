@@ -68,8 +68,6 @@ float getEtaForWavelength(float n_D, float v_D, float wavelength)
 	return eta;
 }
 
-
-
 bool traceLensesFromFilm(inout DebugInfo debugInfo, Ray ray, in float wavelength, int elementCount, LensElement lensElements[16], out Ray outRay)
 {
 	float z = 0.0f; // Start at the film, z = 0
@@ -199,7 +197,6 @@ float ApplyRealisticLensSimulation(inout Ray ray, float wavelength, uint3 px, in
 	float r = sqrt(RandomFloat01(RNG));
 	float2 apertureOffset = float2(cos(theta), sin(theta)) * r;
 	apertureOffset *= r1_size;
-;
 
 	// Construct film-space ray with the sampled aperture offset
 	Ray filmRay;
@@ -210,7 +207,7 @@ float ApplyRealisticLensSimulation(inout Ray ray, float wavelength, uint3 px, in
 	// Debug draw
 	DebugInfo debugInfo;
 	if(t_debug_toggle) {
-		debugInfo.offset = -int2(800, 400);
+		debugInfo.offset = -int2(750, 300);
 		debugInfo.px = px;
 		debugInfo.scale_debug = 6.0f;
 		debugInfo.line_thickness = 5.0f;
@@ -242,26 +239,26 @@ float ApplyRealisticLensSimulation(inout Ray ray, float wavelength, uint3 px, in
 	return 0.0f;
 }
 
-// Shade either the debug bokeh targets or the scene, dividing by PDF as needed
-float3 ShadePrimarySample(
+// Scene shading divides by PDF to keep Monte Carlo estimator unbiased
+float3 ShadeSceneSample(
 	Ray    ray,
 	float  PDF,
-	uint2  screenDims,
 	inout Struct_PixelDebugStruct pixelDebug,
 	uint   rayIndex,
 	uint3  px,
 	inout uint RNG)
 {
-	if (t_bokeh_test)
-	{
-		float3 lc;
-		bool hit = (PDF > 0.0f) && VisualFieldLightContributions(ray.Origin, ray.Direction, screenDims, lc);
-		return hit ? (lc / max(PDF, 1e-6f)) : float3(0.0f, 0.0f, 0.0f);
-	}
-	else
-	{
-		return (PDF > 0.0f) ? GetColorForRay(ray.Origin, ray.Direction, RNG, pixelDebug, rayIndex, px.xy) / PDF : float3(0.0f, 0.0f, 0.0f);
-	}
+	return (PDF > 0.0f) ? GetColorForRay(ray.Origin, ray.Direction, RNG, pixelDebug, rayIndex, px.xy) / PDF : float3(0.0f, 0.0f, 0.0f);
+}
+
+float3 ShadeVisualFieldSample(
+	Ray   ray,
+	float PDF,
+	uint2 screenDims)
+{
+	float3 lightColor = float3(0.0f, 0.0f, 0.0f);
+	bool hit = (PDF > 0.0f) && VisualFieldLightContributions(ray.Origin, ray.Direction, screenDims, lightColor);
+	return hit ? (lightColor / max(PDF, 1e-6f)) : float3(0.0f, 0.0f, 0.0f);
 }
 
 // Realistic lens, single wavelength (no chromatic splitting)
@@ -272,11 +269,14 @@ float3 TraceRealisticMonochrome(
 	uint3  px,
 	inout uint RNG,
 	inout Struct_PixelDebugStruct pixelDebug,
-	uint   rayIndex)
+	uint   rayIndex,
+	bool   bokehView)
 {
 	Ray ray = baseRay;
 	float PDF = ApplyRealisticLensSimulation(ray, 0.0f, px, RNG, screenDims, screenPos);
-	return ShadePrimarySample(ray, PDF, screenDims, pixelDebug, rayIndex, px, RNG);
+	return bokehView
+		? ShadeVisualFieldSample(ray, PDF, screenDims)
+		: ShadeSceneSample(ray, PDF, pixelDebug, rayIndex, px, RNG);
 }
 
 // Realistic lens with simple RGB chromatic aberration splitting
@@ -287,7 +287,8 @@ float3 TraceRealisticChromatic(
 	uint3  px,
 	inout uint RNG,
 	inout Struct_PixelDebugStruct pixelDebug,
-	uint   rayIndex)
+	uint   rayIndex,
+	bool   bokehView)
 {
 	// Representative wavelengths for RGB (nm)
 	const float wl_r = 625.0f;
@@ -296,8 +297,7 @@ float3 TraceRealisticChromatic(
 
 	const float wavelengths[3] = { wl_r, wl_g, wl_b };
 
-	// Bokeh test path
-	if (t_bokeh_test)
+	if (bokehView)
 	{
 		float3 rc = 0.0f;
 		[unroll]
@@ -319,7 +319,7 @@ float3 TraceRealisticChromatic(
 	{
 		Ray ray = baseRay;
 		float PDF = ApplyRealisticLensSimulation(ray, wavelengths[i], px, RNG, screenDims, screenPos);
-		channelSamples[i] = ShadePrimarySample(ray, PDF, screenDims, pixelDebug, rayIndex, px, RNG);
+		channelSamples[i] = ShadeSceneSample(ray, PDF, pixelDebug, rayIndex, px, RNG);
 	}
 	return float3(channelSamples[0].r, channelSamples[1].g, channelSamples[2].b);
 }

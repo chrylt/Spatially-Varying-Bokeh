@@ -20,8 +20,8 @@
         "ProjMtx_textureName": "ColorHDR"
     },
     "snapshot": {
-        "resourceViewNodeIndex": 36,
-        "resourceViewResourceIndex": 3,
+        "resourceViewNodeIndex": 0,
+        "resourceViewResourceIndex": 219,
         "cameraPos": [
             462.2170104980469,
             126.86669921875,
@@ -53,16 +53,44 @@
         ],
         "savedVariables": [
             {
-                "name": "BokehTest",
+                "name": "FocusDistance",
+                "value": "45.000000"
+            },
+            {
+                "name": "RenderPinhole",
                 "value": "true"
+            },
+            {
+                "name": "RenderThinLensDoF",
+                "value": "false"
+            },
+            {
+                "name": "RenderLensSimulationDoF",
+                "value": "true"
+            },
+            {
+                "name": "RenderBokehConfig",
+                "value": "false"
             },
             {
                 "name": "Reset",
                 "value": "false"
             },
             {
+                "name": "RenderSize",
+                "value": "800,600"
+            },
+            {
+                "name": "Accumulate",
+                "value": "true"
+            },
+            {
+                "name": "Animate",
+                "value": "true"
+            },
+            {
                 "name": "DebugToggle",
-                "value": "false"
+                "value": "true"
             },
             {
                 "name": "HeliosApertureStop",
@@ -77,20 +105,8 @@
                 "value": "false"
             },
             {
-                "name": "RenderSize",
-                "value": "800,600"
-            },
-            {
                 "name": "MaterialSet",
                 "value": "1"
-            },
-            {
-                "name": "Accumulate",
-                "value": "true"
-            },
-            {
-                "name": "Animate",
-                "value": "true"
             },
             {
                 "name": "SamplesPerPixelPerFrame",
@@ -122,11 +138,11 @@
             },
             {
                 "name": "FocalLength",
-                "value": "42.078999"
+                "value": "46.331001"
             },
             {
                 "name": "LensRNGSource",
-                "value": "21"
+                "value": "1"
             },
             {
                 "name": "LensRNGExtend",
@@ -137,12 +153,8 @@
                 "value": "false"
             },
             {
-                "name": "DOF",
-                "value": "3"
-            },
-            {
                 "name": "ApertureRadius",
-                "value": "0.750000"
+                "value": "1.000000"
             },
             {
                 "name": "AnamorphicScaling",
@@ -202,11 +214,11 @@
             },
             {
                 "name": "GatherDOF_FocalDistance",
-                "value": "40.000000"
+                "value": "45.000000"
             },
             {
                 "name": "GatherDOF_FocalRegion",
-                "value": "100.000000"
+                "value": "0.100000"
             },
             {
                 "name": "GatherDOF_FocalLength",
@@ -246,19 +258,11 @@
             },
             {
                 "name": "GatherDOF_BlurTapCount",
-                "value": "15"
+                "value": "12"
             },
             {
                 "name": "GatherDOF_FloodFillTapCount",
                 "value": "4"
-            },
-            {
-                "name": "GaussBlur_Sigma",
-                "value": "1.000000"
-            },
-            {
-                "name": "GaussBlur_Disable",
-                "value": "true"
             },
             {
                 "name": "TemporalAccumulation_Alpha",
@@ -266,7 +270,7 @@
             },
             {
                 "name": "TemporalAccumulation_Enabled",
-                "value": "true"
+                "value": "false"
             },
             {
                 "name": "ToneMap_ExposureFStops",

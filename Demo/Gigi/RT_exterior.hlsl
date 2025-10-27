@@ -18,13 +18,18 @@ static const float c_maxT = 10000.0f;
 // bridge tokens to include files
 static const uint t_aperture_stop = /*$(Variable:HeliosApertureStop)*/;
 static const float t_focal_length = /*$(Variable:FocalLength)*/;
+static const float t_focus_distance = /*$(Variable:FocusDistance)*/;
 static const float4x4 t_invViewMtx = /*$(Variable:InvViewMtx)*/;
 static const float3 t_cameraPos = /*$(Variable:CameraPos)*/;
 static const float t_lens_position_shift = /*$(Variable:ShiftHeliosPosition)*/;
 static const bool t_debug_toggle = /*$(Variable:DebugToggle)*/;
 static const float t_smallLightRadius = /*$(Variable:SmallLightRadius)*/;
 static const float t_smallLightBrightness = /*$(Variable:SmallLightBrightness)*/;
-static const bool t_bokeh_test = /*$(Variable:BokehTest)*/;
+static const bool t_renderPinhole = /*$(Variable:RenderPinhole)*/;
+static const bool t_renderThinLensDoF = /*$(Variable:RenderThinLensDoF)*/;
+static const bool t_renderLensSimulationDoF = /*$(Variable:RenderLensSimulationDoF)*/;
+static const bool t_renderBokehConfig = /*$(Variable:RenderBokehConfig)*/;
+static const int t_bokehConfigMode = /*$(Variable:BokehConfigMode)*/;
 
 float sampleHeliosApertureMask(float2 uv)
 {
@@ -1064,8 +1069,6 @@ float2 SampleICDF(float2 rng, in Texture2D<float> MarginalCDF)
 // returns PDF
 float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 px, inout uint RNG, in uint2 screenDims)
 {
-	if (/*$(Variable:DOF)*/ != DOFMode::PathTraced)
-		return 1.0f;
 
 	float3 cameraRight = mul(float4(1.0f, 0.0f, 0.0f, 0.0f), /*$(Variable:InvViewMtx)*/).xyz;
 	float3 cameraUp = mul(float4(0.0f, 1.0f, 0.0f, 0.0f), /*$(Variable:InvViewMtx)*/).xyz;
@@ -1366,26 +1369,33 @@ float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 
 
 /*$(_raygeneration:RayGen)*/
 {
-	const float2 dimensions = float2(DispatchRaysDimensions().xy);
-	Struct_PixelDebugStruct pixelDebug = (Struct_PixelDebugStruct)0;
-	uint3 px;
+	const uint2 dispatchDimsUInt = DispatchRaysDimensions().xy;
+	const float2 dispatchDims = float2(dispatchDimsUInt);
+	const uint2 pixelCoord = DispatchRaysIndex().xy;
 
-	// Average N rays per pixel into "color"
-	float3 color = float3(0.0f, 0.0f, 0.0f);
+	Struct_PixelDebugStruct pinholeDebug = (Struct_PixelDebugStruct)0;
+	Struct_PixelDebugStruct thinLensDebug = (Struct_PixelDebugStruct)0;
+	Struct_PixelDebugStruct lensSimDebug = (Struct_PixelDebugStruct)0;
+	Struct_PixelDebugStruct bokehDebug = (Struct_PixelDebugStruct)0;
+
+	float3 pinholeColor = float3(0.0f, 0.0f, 0.0f);
+	float3 thinLensColor = float3(0.0f, 0.0f, 0.0f);
+	float3 lensSimColor = float3(0.0f, 0.0f, 0.0f);
+	float3 bokehColor = float3(0.0f, 0.0f, 0.0f);
+
 	for (uint rayIndex = 0; rayIndex < /*$(Variable:SamplesPerPixelPerFrame)*/; ++rayIndex)
 	{
-		px = uint3(DispatchRaysIndex().xy, /*$(Variable:FrameIndex)*/ * /*$(Variable:SamplesPerPixelPerFrame)*/ + rayIndex);
-		uint RNG = HashInit(px);
+		uint3 px = uint3(pixelCoord, /*$(Variable:FrameIndex)*/ * /*$(Variable:SamplesPerPixelPerFrame)*/ + rayIndex);
+		uint rngBase = HashInit(px);
+		uint rngForJitter = rngBase;
 
-		// Calculate the ray target in screen space
-		// Use sub pixel jitter to integrate over the whole pixel for anti aliasing.
 		float2 pixelJitter = float2(0.5f, 0.5f);
 		switch(/*$(Variable:JitterPixels)*/)
 		{
 			case PixelJitterType::None: break;
 			case PixelJitterType::PerPixel:
 			{
-				pixelJitter = float2(RandomFloat01(RNG), RandomFloat01(RNG));
+				pixelJitter = float2(RandomFloat01(rngForJitter), RandomFloat01(rngForJitter));
 				break;
 			}
 			case PixelJitterType::Global:
@@ -1395,52 +1405,140 @@ float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 
 				break;
 			}
 		}
-		float2 screenPos = (float2(px.xy)+pixelJitter) / dimensions * 2.0 - 1.0;
+
+		float2 screenPos = (float2(pixelCoord) + pixelJitter) / dispatchDims * 2.0f - 1.0f;
 		screenPos.y = -screenPos.y;
 
-		// Convert the ray target into world space
-		float4 world = mul(float4(screenPos, /*$(Variable:DepthNearPlane)*/, 1), /*$(Variable:InvViewProjMtx)*/);
+		float4 world = mul(float4(screenPos, /*$(Variable:DepthNearPlane)*/, 1.0f), /*$(Variable:InvViewProjMtx)*/);
 		world.xyz /= world.w;
 
-		// Apply depth of field through lens simulation
 		Ray baseRay;
 		baseRay.Origin = /*$(Variable:CameraPos)*/;
 		baseRay.Direction = normalize(world.xyz - /*$(Variable:CameraPos)*/);
-		float3 rayColor   = float3(0.0f, 0.0f, 0.0f);
-		if (/*$(Variable:DOF)*/ == DOFMode::Realistic)
+
+		float sampleWeight = 1.0f / float(rayIndex + 1);
+
+		uint rngPinhole = rngForJitter;
+		uint rngThinLens = wang_hash(rngPinhole);
+		uint rngLensSimulation = wang_hash(rngThinLens);
+		uint rngBokeh = wang_hash(rngLensSimulation);
+
+		if (t_renderPinhole)
 		{
-			if (!/*$(Variable:ToggleChromaticAberration)*/)
-				rayColor = TraceRealisticMonochrome(baseRay, screenPos, DispatchRaysDimensions().xy, px, RNG, pixelDebug, rayIndex);
-			else
-				rayColor = TraceRealisticChromatic(baseRay, screenPos, DispatchRaysDimensions().xy, px, RNG, pixelDebug, rayIndex);
-		}
-		else if (/*$(Variable:DOF)*/ == DOFMode::PathTraced || /*$(Variable:DOF)*/ == DOFMode::Off || /*$(Variable:DOF)*/ == DOFMode::PostProcessing)
-		{
-			float  PDF    = ApplyDOFLensSimulation(baseRay.Origin, baseRay.Direction, px, RNG, DispatchRaysDimensions().xy);
-			rayColor      = ShadePrimarySample(baseRay, PDF, DispatchRaysDimensions().xy, pixelDebug, rayIndex, px, RNG);
+			float3 sampleColor = ShadeSceneSample(baseRay, 1.0f, pinholeDebug, rayIndex, px, rngPinhole);
+			pinholeColor = lerp(pinholeColor, sampleColor, sampleWeight);
 		}
 
-		// accumulate the sample
-		color = lerp(color, rayColor, 1.0f / float(rayIndex+1));
+		bool generateThinLens = t_renderThinLensDoF || (t_renderBokehConfig && t_bokehConfigMode == BokehConfigState::ThinLens);
+		Ray thinRay = (Ray)0;
+		float thinPDF = 1.0f;
+		bool thinLensSampleValid = false;
+		if (generateThinLens)
+		{
+			float3 thinOrigin = baseRay.Origin;
+			float3 thinDirection = baseRay.Direction;
+			thinPDF = ApplyDOFLensSimulation(thinOrigin, thinDirection, px, rngThinLens, dispatchDimsUInt);
+			thinRay.Origin = thinOrigin;
+			thinRay.Direction = thinDirection;
+			thinLensSampleValid = true;
+
+			if (t_renderThinLensDoF)
+			{
+				float3 sampleColor = ShadeSceneSample(thinRay, thinPDF, thinLensDebug, rayIndex, px, rngThinLens);
+				thinLensColor = lerp(thinLensColor, sampleColor, sampleWeight);
+			}
+		}
+
+		if (t_renderLensSimulationDoF)
+		{
+			uint rngLensScene = rngLensSimulation;
+			float3 sampleColor = (/*$(Variable:ToggleChromaticAberration)*/)
+				? TraceRealisticChromatic(baseRay, screenPos, dispatchDimsUInt, px, rngLensScene, lensSimDebug, rayIndex, false)
+				: TraceRealisticMonochrome(baseRay, screenPos, dispatchDimsUInt, px, rngLensScene, lensSimDebug, rayIndex, false);
+			lensSimColor = lerp(lensSimColor, sampleColor, sampleWeight);
+		}
+
+		if (t_renderBokehConfig)
+		{
+			float3 sampleColor = float3(0.0f, 0.0f, 0.0f);
+
+			switch (t_bokehConfigMode)
+			{
+				case BokehConfigState::NoDoF:
+				{
+					sampleColor = ShadeVisualFieldSample(baseRay, 1.0f, dispatchDimsUInt);
+					break;
+				}
+				case BokehConfigState::ThinLens:
+				{
+					if (!thinLensSampleValid)
+					{
+						float3 thinOrigin = baseRay.Origin;
+						float3 thinDirection = baseRay.Direction;
+						thinPDF = ApplyDOFLensSimulation(thinOrigin, thinDirection, px, rngThinLens, dispatchDimsUInt);
+						thinRay.Origin = thinOrigin;
+						thinRay.Direction = thinDirection;
+						thinLensSampleValid = true;
+					}
+					sampleColor = ShadeVisualFieldSample(thinRay, thinPDF, dispatchDimsUInt);
+					break;
+				}
+				case BokehConfigState::RealisticLens:
+				{
+					uint rngLensBokeh = rngBokeh;
+					sampleColor = (/*$(Variable:ToggleChromaticAberration)*/)
+						? TraceRealisticChromatic(baseRay, screenPos, dispatchDimsUInt, px, rngLensBokeh, bokehDebug, rayIndex, true)
+						: TraceRealisticMonochrome(baseRay, screenPos, dispatchDimsUInt, px, rngLensBokeh, bokehDebug, rayIndex, true);
+					break;
+				}
+				default:
+				{
+					break;
+				}
+			}
+
+			bokehColor = lerp(bokehColor, sampleColor, sampleWeight);
+		}
 	}
 
-	// Temporally accumulate "color"
-	float3 oldColor = Output[px.xy].rgb;
 	static const uint c_minFrameIndex = 5;
-	float alpha = (/*$(Variable:FrameIndex)*/ < c_minFrameIndex || !/*$(Variable:Accumulate)*/ || !/*$(Variable:Animate)*/) ? 1.0f : 1.0f / float(/*$(Variable:FrameIndex)*/ - c_minFrameIndex +1);
+	float accumulationAlpha = (/*$(Variable:FrameIndex)*/ < c_minFrameIndex || !/*$(Variable:Accumulate)*/ || !/*$(Variable:Animate)*/)
+		? 1.0f
+		: 1.0f / float(/*$(Variable:FrameIndex)*/ - c_minFrameIndex + 1);
 
-	color = lerp(oldColor, color, alpha);
-
-	// Write the temporally accumulated color
-	Output[px.xy] = float4(color, 1.0f);
-	LinearDepth[px.xy] = pixelDebug.HitT;
-	DebugTex[px.xy] = float4(pixelDebug.HitT / 700, pixelDebug.HitT / 700, pixelDebug.HitT / 700, 1.0f);
-
-	// Write pixel debug information for whatever pixel was clicked on
-	if (all(uint2(/*$(Variable:MouseState)*/.xy) == px.xy))
+	if (t_renderPinhole)
 	{
-		pixelDebug.MousePos = /*$(Variable:MouseState)*/.xy;
-		PixelDebug[0] = pixelDebug;
+		float3 oldColor = PinholeOut[pixelCoord].rgb;
+		float3 blended = lerp(oldColor, pinholeColor, accumulationAlpha);
+		PinholeOut[pixelCoord] = float4(blended, 1.0f);
+		LinearDepth[pixelCoord] = pinholeDebug.HitT;
+	}
+
+	if (t_renderThinLensDoF)
+	{
+		float3 oldColor = ThinlensOut[pixelCoord].rgb;
+		float3 blended = lerp(oldColor, thinLensColor, accumulationAlpha);
+		ThinlensOut[pixelCoord] = float4(blended, 1.0f);
+	}
+
+	if (t_renderLensSimulationDoF)
+	{
+		float3 oldColor = LensSimulationOut[pixelCoord].rgb;
+		float3 blended = lerp(oldColor, lensSimColor, accumulationAlpha);
+		LensSimulationOut[pixelCoord] = float4(blended, 1.0f);
+	}
+
+	if (t_renderBokehConfig)
+	{
+		float3 oldColor = BokehConfigOut[pixelCoord].rgb;
+		float3 blended = lerp(oldColor, bokehColor, accumulationAlpha);
+		BokehConfigOut[pixelCoord] = float4(blended, 1.0f);
+	}
+
+	if (all(uint2(/*$(Variable:MouseState)*/.xy) == pixelCoord))
+	{
+		pinholeDebug.MousePos = /*$(Variable:MouseState)*/.xy;
+		PixelDebug[0] = pinholeDebug;
 	}
 }
 

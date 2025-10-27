@@ -64,7 +64,7 @@ void DrawAxisBaseline(inout DebugInfo di)
 
 	// Horizontal line from -d_to_film to -(lens_length + d_to_film)
 	float2 a = ToDebug(-d_to_film, 0, S);
-	float2 b = ToDebug(-(helios_lens_length_measured + d_to_film), 0, S);
+	float2 b = ToDebug(-(biotar_lens_length_mm + d_to_film), 0, S);
 	s2h_drawLine(di.ui, a, b, kHorizontalLineColor, di.line_thickness);
 }
 
@@ -186,7 +186,7 @@ void drawDebugHelios(inout DebugInfo debugInfo)
 
 	// Film and UI header
 	DrawFilmPlane(debugInfo, filmHeightMM);
-	UIPrintHeader(debugInfo, filmHeightMM);
+	//UIPrintHeader(debugInfo, filmHeightMM);
 
 	// Baseline and lens stack
 	DrawAxisBaseline(debugInfo);
@@ -197,5 +197,5 @@ void drawDebugHelios(inout DebugInfo debugInfo)
 
 	// Composite over background
 	float3 linearColor = kBackgroundColor.rgb * (1.0 - debugInfo.ui.dstColor.a) + debugInfo.ui.dstColor.rgb;
-	DebugTex[debugInfo.px.xy] = float4(s2h_accurateLinearToSRGB(linearColor.rgb), 1.0);
+	DebugLensOut[debugInfo.px.xy] = float4(s2h_accurateLinearToSRGB(linearColor.rgb), 1.0);
 }

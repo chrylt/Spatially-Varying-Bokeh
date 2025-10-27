@@ -4,10 +4,40 @@
     "version": "1.0",
     "variables": [
         {
-            "name": "BokehTest",
+            "name": "FocusDistance",
+            "comment": "Distance of focus in scene units (cm)",
+            "type": "Float",
+            "dflt": "45",
+            "visibility": "User",
+            "UIGroup": "LensSimulationDoF"
+        },
+        {
+            "name": "RenderPinhole",
+            "type": "Bool",
+            "dflt": "1",
+            "visibility": "User",
+            "UIGroup": "Pinhole"
+        },
+        {
+            "name": "RenderThinLensDoF",
             "type": "Bool",
             "dflt": "0",
-            "visibility": "User"
+            "visibility": "User",
+            "UIGroup": "ThinLensDoF"
+        },
+        {
+            "name": "RenderLensSimulationDoF",
+            "type": "Bool",
+            "dflt": "0",
+            "visibility": "User",
+            "UIGroup": "LensSimulationDoF"
+        },
+        {
+            "name": "RenderBokehConfig",
+            "type": "Bool",
+            "dflt": "0",
+            "visibility": "User",
+            "UIGroup": "BokehConfig"
         },
         {
             "name": "Reset",
@@ -18,53 +48,10 @@
             }
         },
         {
-            "name": "DebugToggle",
-            "type": "Bool",
-            "dflt": "0",
-            "visibility": "User"
-        },
-        {
-            "name": "HeliosApertureStop",
-            "type": "Uint",
-            "dflt": "6",
-            "visibility": "User",
-            "UISettings": {
-                "UIHint": "Slider",
-                "min": "0",
-                "max": "6",
-                "step": "1"
-            }
-        },
-        {
-            "name": "ShiftHeliosPosition",
-            "comment": "Shift the position of the helios lens backward in millimeters",
-            "type": "Float",
-            "visibility": "User",
-            "UISettings": {
-                "UIHint": "Slider",
-                "min": "0",
-                "max": "100",
-                "step": "0.5"
-            }
-        },
-        {
-            "name": "ToggleChromaticAberration",
-            "type": "Bool",
-            "dflt": "0",
-            "visibility": "User"
-        },
-        {
             "name": "RenderSize",
             "type": "Uint2",
             "dflt": "512, 512",
             "visibility": "User"
-        },
-        {
-            "name": "MaterialSet",
-            "type": "Int",
-            "dflt": "None",
-            "visibility": "User",
-            "Enum": "MaterialSets"
         },
         {
             "name": "Accumulate",
@@ -77,6 +64,62 @@
             "type": "Bool",
             "dflt": "true",
             "visibility": "User"
+        },
+        {
+            "name": "BokehConfigMode",
+            "type": "Int",
+            "dflt": "0",
+            "visibility": "User",
+            "Enum": "BokehConfigState",
+            "UIGroup": "BokehConfig"
+        },
+        {
+            "name": "DebugToggle",
+            "type": "Bool",
+            "dflt": "0",
+            "visibility": "User",
+            "UIGroup": "LensSimulationDoF"
+        },
+        {
+            "name": "HeliosApertureStop",
+            "type": "Uint",
+            "dflt": "6",
+            "visibility": "User",
+            "UISettings": {
+                "UIHint": "Slider",
+                "min": "0",
+                "max": "6",
+                "step": "1"
+            },
+            "UIGroup": "LensSimulationDoF"
+        },
+        {
+            "name": "ShiftHeliosPosition",
+            "comment": "Shift the position of the helios lens backward in millimeters",
+            "type": "Float",
+            "visibility": "User",
+            "UISettings": {
+                "UIHint": "Slider",
+                "min": "0",
+                "max": "100",
+                "step": "0.5"
+            },
+            "UIGroup": "LensSimulationDoF"
+        },
+        {
+            "name": "ToggleChromaticAberration",
+            "type": "Bool",
+            "dflt": "0",
+            "visibility": "User",
+            "UIGroup": "LensSimulationDoF"
+        },
+        {
+            "name": "MaterialSet",
+            "type": "Int",
+            "dflt": "None",
+            "visibility": "User",
+            "Enum": "MaterialSets",
+            "UIGroup": "Scene"
         },
         {
             "name": "SamplesPerPixelPerFrame",
@@ -141,14 +184,16 @@
             "comment": "if true, returns albedo * AlbedoModeAlbedoMultiplier + emissive at primary hit",
             "type": "Bool",
             "dflt": "1.0f",
-            "visibility": "User"
+            "visibility": "User",
+            "UIGroup": "Scene"
         },
         {
             "name": "AlbedoModeAlbedoMultiplier",
             "comment": "How much to multiply albedo by in albedo mode, to darken it or lighten it",
             "type": "Float",
             "dflt": "0.5f",
-            "visibility": "User"
+            "visibility": "User",
+            "UIGroup": "Scene"
         },
         {
             "name": "FocalLength",
@@ -160,14 +205,16 @@
                 "min": "5",
                 "max": "60",
                 "step": "0.1"
-            }
+            },
+            "UIGroup": "ThinLensDoF"
         },
         {
             "name": "LensRNGSource",
             "type": "Int",
             "dflt": "UniformCircleWhite",
             "visibility": "User",
-            "Enum": "LensRNG"
+            "Enum": "LensRNG",
+            "UIGroup": "ThinLensDoF"
         },
         {
             "name": "LensRNGExtend",
@@ -175,7 +222,8 @@
             "type": "Int",
             "dflt": "None",
             "visibility": "User",
-            "Enum": "NoiseTexExtends"
+            "Enum": "NoiseTexExtends",
+            "UIGroup": "ThinLensDoF"
         },
         {
             "name": "JitterNoiseTextures",
@@ -183,13 +231,6 @@
             "type": "Bool",
             "dflt": "false",
             "visibility": "User"
-        },
-        {
-            "name": "DOF",
-            "type": "Int",
-            "dflt": "Off",
-            "visibility": "User",
-            "Enum": "DOFMode"
         },
         {
             "name": "InvViewMtx",
@@ -200,35 +241,40 @@
             "name": "ApertureRadius",
             "type": "Float",
             "dflt": "1.0f",
-            "visibility": "User"
+            "visibility": "User",
+            "UIGroup": "ThinLensDoF"
         },
         {
             "name": "AnamorphicScaling",
             "comment": "Defaults to 1.0, 1.0 for no anamorphic effects. Elongates the aperture, does not simulate anamorphic elements.",
             "type": "Float2",
             "dflt": "1.0f, 1.0f",
-            "visibility": "User"
+            "visibility": "User",
+            "UIGroup": "ThinLensDoF"
         },
         {
             "name": "PetzvalScaling",
             "comment": "Scales bokeh on each axis depending on screen position. Fakes the effect. Defaults to 1.0, 1.0 for no elongation.",
             "type": "Float2",
             "dflt": "1.0f, 1.0f",
-            "visibility": "User"
+            "visibility": "User",
+            "UIGroup": "ThinLensDoF"
         },
         {
             "name": "OcclusionSettings",
             "comment": "Pushes the bounding square of the lens outwards and clips against a unit circle. 1,1,1 means no occlusion. x is how far from the center of the screen to start moving the square. 0 is center, 1 is the corner.  y is how much to scale the lens bounding square by.  z is how far to move the square, as the pixel is farther from where the occlusion begins. Reasonable settings are 0, 0.1, 1.25.",
             "type": "Float3",
             "dflt": "1.0f, 1.0f, 1.0f",
-            "visibility": "User"
+            "visibility": "User",
+            "UIGroup": "ThinLensDoF"
         },
         {
             "name": "NoImportanceSampling",
             "comment": "If true, the FAST noise textures will not be used, and ",
             "type": "Bool",
             "dflt": "false",
-            "visibility": "User"
+            "visibility": "User",
+            "UIGroup": "ThinLensDoF"
         },
         {
             "name": "SkyColor",
@@ -237,19 +283,22 @@
             "visibility": "User",
             "UISettings": {
                 "UIHint": "Color"
-            }
+            },
+            "UIGroup": "Scene"
         },
         {
             "name": "SkyBrightness",
             "type": "Float",
             "dflt": "10.0f",
-            "visibility": "User"
+            "visibility": "User",
+            "UIGroup": "Scene"
         },
         {
             "name": "MaterialEmissiveMultiplier",
             "type": "Float",
             "dflt": "1.0f",
-            "visibility": "User"
+            "visibility": "User",
+            "UIGroup": "Scene"
         },
         {
             "name": "SmallLightBrightness",
@@ -291,7 +340,31 @@
             "entryPoint": "RayGen",
             "resources": [
                 {
-                    "name": "Output",
+                    "name": "PinholeOut",
+                    "access": "UAV",
+                    "type": "Texture",
+                    "buffer": {
+                        "PODAsStructuredBuffer": false
+                    }
+                },
+                {
+                    "name": "ThinlensOut",
+                    "access": "UAV",
+                    "type": "Texture",
+                    "buffer": {
+                        "PODAsStructuredBuffer": false
+                    }
+                },
+                {
+                    "name": "LensSimulationOut",
+                    "access": "UAV",
+                    "type": "Texture",
+                    "buffer": {
+                        "PODAsStructuredBuffer": false
+                    }
+                },
+                {
+                    "name": "BokehConfigOut",
                     "access": "UAV",
                     "type": "Texture",
                     "buffer": {
@@ -337,7 +410,7 @@
                     }
                 },
                 {
-                    "name": "DebugTex",
+                    "name": "DebugLensOut",
                     "access": "UAV",
                     "type": "Texture"
                 }
@@ -526,10 +599,13 @@
             "actionRayShader": {
                 "name": "Raytrace",
                 "editorPos": [
-                    -299.0,
-                    -718.0
+                    -236.0,
+                    -707.0
                 ],
                 "linkProperties": [
+                    {},
+                    {},
+                    {},
                     {},
                     {},
                     {},
@@ -539,8 +615,23 @@
                 ],
                 "connections": [
                     {
-                        "srcPin": "Output",
+                        "srcPin": "PinholeOut",
                         "dstNode": "ColorHDR",
+                        "dstPin": "resource"
+                    },
+                    {
+                        "srcPin": "ThinlensOut",
+                        "dstNode": "ColorHDR ",
+                        "dstPin": "resource"
+                    },
+                    {
+                        "srcPin": "LensSimulationOut",
+                        "dstNode": "ColorHDR  ",
+                        "dstPin": "resource"
+                    },
+                    {
+                        "srcPin": "BokehConfigOut",
+                        "dstNode": "ColorHDR   ",
                         "dstPin": "resource"
                     },
                     {
@@ -564,7 +655,7 @@
                         "dstPin": "resource"
                     },
                     {
-                        "srcPin": "DebugTex",
+                        "srcPin": "DebugLensOut",
                         "dstNode": "DebugTex",
                         "dstPin": "resource"
                     }
@@ -583,8 +674,8 @@
             "resourceTexture": {
                 "name": "ColorHDR",
                 "editorPos": [
-                    -453.0,
-                    -766.0
+                    -229.0,
+                    -894.0
                 ],
                 "transient": false,
                 "format": {
@@ -601,8 +692,8 @@
             "resourceBuffer": {
                 "name": "PixelDebug",
                 "editorPos": [
-                    -469.0,
-                    -574.0
+                    -453.0,
+                    -526.0
                 ],
                 "format": {
                     "structureType": {
@@ -616,7 +707,7 @@
                 "name": "LinearDepth",
                 "editorPos": [
                     -469.0,
-                    -718.0
+                    -702.0
                 ],
                 "transient": false,
                 "format": {
@@ -633,8 +724,8 @@
             "actionSubGraph": {
                 "name": "GatherDOF",
                 "editorPos": [
-                    -121.0,
-                    -718.0
+                    53.0,
+                    -724.0
                 ],
                 "linkProperties": [
                     {},
@@ -645,7 +736,7 @@
                     {
                         "srcPin": "Color",
                         "dstNode": "Raytrace",
-                        "dstPin": "Output"
+                        "dstPin": "PinholeOut"
                     },
                     {
                         "srcPin": "LinearDepth",
@@ -843,37 +934,11 @@
             }
         },
         {
-            "actionCopyResource": {
-                "name": "CopyHDR",
-                "editorPos": [
-                    21.0,
-                    -705.0
-                ],
-                "condition": {
-                    "variable1": "DOF",
-                    "comparison": "NotEquals",
-                    "value2": "PostProcessing"
-                },
-                "linkProperties": [
-                    {},
-                    {}
-                ],
-                "source": {
-                    "node": "GatherDOF",
-                    "pin": "Color"
-                },
-                "dest": {
-                    "node": "GatherDOF",
-                    "pin": "Output"
-                }
-            }
-        },
-        {
             "resourceBuffer": {
                 "name": "Scene",
                 "editorPos": [
                     -469.0,
-                    -670.0
+                    -622.0
                 ],
                 "visibility": "Imported"
             }
@@ -883,87 +948,17 @@
                 "name": "VertexBuffer",
                 "editorPos": [
                     -473.0,
-                    -622.0
+                    -574.0
                 ],
                 "visibility": "Imported"
             }
         },
         {
             "actionSubGraph": {
-                "name": "GaussBlur",
-                "editorPos": [
-                    150.0,
-                    -705.0
-                ],
-                "linkProperties": [
-                    {},
-                    {}
-                ],
-                "connections": [
-                    {
-                        "srcPin": "Input",
-                        "dstNode": "CopyHDR",
-                        "dstPin": "dest"
-                    },
-                    {
-                        "srcPin": "Output"
-                    }
-                ],
-                "fileName": "GaussBlur\\GaussBlur.gg",
-                "subGraphData": {
-                    "importedResources": [
-                        "Input"
-                    ],
-                    "exportedResources": [
-                        "Output"
-                    ],
-                    "variables": [
-                        {
-                            "name": "Sigma",
-                            "visibility": "User"
-                        },
-                        {
-                            "name": "Support",
-                            "visibility": "User"
-                        },
-                        {
-                            "name": "sRGB",
-                            "visibility": "User"
-                        },
-                        {
-                            "name": "Disable",
-                            "visibility": "User"
-                        }
-                    ]
-                },
-                "variableSettings": [
-                    {
-                        "name": "Sigma",
-                        "visibility": "User"
-                    },
-                    {
-                        "name": "Support",
-                        "visibility": "User",
-                        "replaceWithValue": "0.995f"
-                    },
-                    {
-                        "name": "sRGB",
-                        "visibility": "User",
-                        "replaceWithValue": "false"
-                    },
-                    {
-                        "name": "Disable",
-                        "visibility": "User"
-                    }
-                ]
-            }
-        },
-        {
-            "actionSubGraph": {
                 "name": "ToneMap",
                 "editorPos": [
-                    453.0,
-                    -702.0
+                    434.0,
+                    -670.0
                 ],
                 "linkProperties": [
                     {},
@@ -1014,8 +1009,8 @@
             "actionSubGraph": {
                 "name": "TemporalAccumulation",
                 "editorPos": [
-                    261.0,
-                    -702.0
+                    213.0,
+                    -705.0
                 ],
                 "linkProperties": [
                     {},
@@ -1024,7 +1019,7 @@
                 "connections": [
                     {
                         "srcPin": "Input",
-                        "dstNode": "GaussBlur",
+                        "dstNode": "GatherDOF",
                         "dstPin": "Output"
                     },
                     {
@@ -1075,8 +1070,8 @@
             "resourceTexture": {
                 "name": "DebugTex",
                 "editorPos": [
-                    -405.0,
-                    -478.0
+                    -421.0,
+                    -462.0
                 ],
                 "transient": false,
                 "format": {
@@ -1086,6 +1081,60 @@
                     "node": {
                         "name": "ColorHDR"
                     },
+                    "variable": {
+                        "name": "RenderSize"
+                    }
+                }
+            }
+        },
+        {
+            "resourceTexture": {
+                "name": "ColorHDR ",
+                "editorPos": [
+                    -344.0,
+                    -862.0
+                ],
+                "transient": false,
+                "format": {
+                    "format": "RGBA32_Float"
+                },
+                "size": {
+                    "variable": {
+                        "name": "RenderSize"
+                    }
+                }
+            }
+        },
+        {
+            "resourceTexture": {
+                "name": "ColorHDR  ",
+                "editorPos": [
+                    -443.0,
+                    -830.0
+                ],
+                "transient": false,
+                "format": {
+                    "format": "RGBA32_Float"
+                },
+                "size": {
+                    "variable": {
+                        "name": "RenderSize"
+                    }
+                }
+            }
+        },
+        {
+            "resourceTexture": {
+                "name": "ColorHDR   ",
+                "editorPos": [
+                    -494.0,
+                    -782.0
+                ],
+                "transient": false,
+                "format": {
+                    "format": "RGBA32_Float"
+                },
+                "size": {
                     "variable": {
                         "name": "RenderSize"
                     }
@@ -1166,19 +1215,16 @@
             ]
         },
         {
-            "name": "DOFMode",
+            "name": "BokehConfigState",
             "items": [
                 {
-                    "label": "Off"
+                    "label": "NoDoF"
                 },
                 {
-                    "label": "PathTraced"
+                    "label": "ThinLens"
                 },
                 {
-                    "label": "PostProcessing"
-                },
-                {
-                    "label": "Realistic"
+                    "label": "RealisticLens"
                 }
             ]
         },

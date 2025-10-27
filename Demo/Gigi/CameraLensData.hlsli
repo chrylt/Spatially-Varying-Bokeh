@@ -77,7 +77,8 @@ static const float biotar_lens_length_p = biotar_d1_p + biotar_d2_p + biotar_d3_
 // Conversions
 //static const float patent_to_mm = helios_lens_length_measured / helios_lens_length_p; // mm per patent unit
 static const float patent_to_mm = 0.58f;
-static const float helios_to_biotar_mm = (biotar_lens_length_p * patent_to_mm) / helios_lens_length_measured; // should be close to patent_to_mm but not exactly the same
+static const float biotar_lens_length_mm = biotar_lens_length_p * patent_to_mm;
+static const float helios_to_biotar_mm = biotar_lens_length_mm / helios_lens_length_measured; // should be close to patent_to_mm but not exactly the same
 
 // decide on which measures to use (in mm)
 // curvature radii
@@ -119,7 +120,7 @@ static const float l3 = biotar_l3_p * patent_to_mm;
 
 // Variables
 static const float helios_aperture = helios_measured_aperture[t_aperture_stop] * 0.5f * helios_to_biotar_mm; // directly take measured aperture size (kept helios_ prefix because measured)
-static const float d_to_film = t_focal_length; // mm, by measurements helios_d_to_film should be in [35mm; 44mm] range
+static const float d_to_film = 335.598 / (t_focus_distance + 15.4) + 37.887; // mm, by empirically fitted curve
 
 struct LensElement
 {
