@@ -72,9 +72,6 @@ namespace FastBokeh
     ID3D12PipelineState* ContextInternal::computeShader_GatherDOF_Recombine_pso = nullptr;
     ID3D12RootSignature* ContextInternal::computeShader_GatherDOF_Recombine_rootSig = nullptr;
 
-    ID3D12PipelineState* ContextInternal::computeShader_GaussBlur_DoBlur_pso = nullptr;
-    ID3D12RootSignature* ContextInternal::computeShader_GaussBlur_DoBlur_rootSig = nullptr;
-
     ID3D12PipelineState* ContextInternal::computeShader_TemporalAccumulation_DoAccum_pso = nullptr;
     ID3D12RootSignature* ContextInternal::computeShader_TemporalAccumulation_DoAccum_rootSig = nullptr;
 
@@ -129,1430 +126,1500 @@ namespace FastBokeh
             samplers[1].RegisterSpace = 0;
             samplers[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 
-            D3D12_DESCRIPTOR_RANGE ranges[203];
+            D3D12_DESCRIPTOR_RANGE ranges[213];
 
-            // Output
+            // PinholeOut
             ranges[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
             ranges[0].NumDescriptors = 1;
             ranges[0].BaseShaderRegister = 0;
             ranges[0].RegisterSpace = 0;
             ranges[0].OffsetInDescriptorsFromTableStart = 0;
 
-            // LinearDepth
+            // ThinlensOut
             ranges[1].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
             ranges[1].NumDescriptors = 1;
             ranges[1].BaseShaderRegister = 1;
             ranges[1].RegisterSpace = 0;
             ranges[1].OffsetInDescriptorsFromTableStart = 1;
 
-            // Scene
-            ranges[2].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+            // LensSimulationOut
+            ranges[2].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
             ranges[2].NumDescriptors = 1;
-            ranges[2].BaseShaderRegister = 0;
+            ranges[2].BaseShaderRegister = 2;
             ranges[2].RegisterSpace = 0;
             ranges[2].OffsetInDescriptorsFromTableStart = 2;
 
-            // VertexBuffer
-            ranges[3].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+            // BokehConfigOut
+            ranges[3].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
             ranges[3].NumDescriptors = 1;
-            ranges[3].BaseShaderRegister = 1;
+            ranges[3].BaseShaderRegister = 3;
             ranges[3].RegisterSpace = 0;
             ranges[3].OffsetInDescriptorsFromTableStart = 3;
 
-            // PixelDebug
+            // LinearDepth
             ranges[4].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
             ranges[4].NumDescriptors = 1;
-            ranges[4].BaseShaderRegister = 2;
+            ranges[4].BaseShaderRegister = 4;
             ranges[4].RegisterSpace = 0;
             ranges[4].OffsetInDescriptorsFromTableStart = 4;
 
-            // DebugTex
-            ranges[5].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
+            // Scene
+            ranges[5].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[5].NumDescriptors = 1;
-            ranges[5].BaseShaderRegister = 3;
+            ranges[5].BaseShaderRegister = 0;
             ranges[5].RegisterSpace = 0;
             ranges[5].OffsetInDescriptorsFromTableStart = 5;
 
-            // _loadedTexture_0
+            // VertexBuffer
             ranges[6].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[6].NumDescriptors = 1;
-            ranges[6].BaseShaderRegister = 2;
+            ranges[6].BaseShaderRegister = 1;
             ranges[6].RegisterSpace = 0;
             ranges[6].OffsetInDescriptorsFromTableStart = 6;
 
-            // _loadedTexture_1
-            ranges[7].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+            // PixelDebug
+            ranges[7].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
             ranges[7].NumDescriptors = 1;
-            ranges[7].BaseShaderRegister = 3;
+            ranges[7].BaseShaderRegister = 5;
             ranges[7].RegisterSpace = 0;
             ranges[7].OffsetInDescriptorsFromTableStart = 7;
 
-            // _loadedTexture_2
-            ranges[8].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+            // DebugLensOut
+            ranges[8].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
             ranges[8].NumDescriptors = 1;
-            ranges[8].BaseShaderRegister = 4;
+            ranges[8].BaseShaderRegister = 6;
             ranges[8].RegisterSpace = 0;
             ranges[8].OffsetInDescriptorsFromTableStart = 8;
 
-            // _loadedTexture_3
+            // _loadedTexture_0
             ranges[9].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[9].NumDescriptors = 1;
-            ranges[9].BaseShaderRegister = 5;
+            ranges[9].BaseShaderRegister = 2;
             ranges[9].RegisterSpace = 0;
             ranges[9].OffsetInDescriptorsFromTableStart = 9;
 
-            // _loadedTexture_4
+            // _loadedTexture_1
             ranges[10].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[10].NumDescriptors = 1;
-            ranges[10].BaseShaderRegister = 6;
+            ranges[10].BaseShaderRegister = 3;
             ranges[10].RegisterSpace = 0;
             ranges[10].OffsetInDescriptorsFromTableStart = 10;
 
-            // _loadedTexture_5
+            // _loadedTexture_2
             ranges[11].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[11].NumDescriptors = 1;
-            ranges[11].BaseShaderRegister = 7;
+            ranges[11].BaseShaderRegister = 4;
             ranges[11].RegisterSpace = 0;
             ranges[11].OffsetInDescriptorsFromTableStart = 11;
 
-            // _loadedTexture_6
+            // _loadedTexture_3
             ranges[12].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[12].NumDescriptors = 1;
-            ranges[12].BaseShaderRegister = 8;
+            ranges[12].BaseShaderRegister = 5;
             ranges[12].RegisterSpace = 0;
             ranges[12].OffsetInDescriptorsFromTableStart = 12;
 
-            // _loadedTexture_7
+            // _loadedTexture_4
             ranges[13].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[13].NumDescriptors = 1;
-            ranges[13].BaseShaderRegister = 9;
+            ranges[13].BaseShaderRegister = 6;
             ranges[13].RegisterSpace = 0;
             ranges[13].OffsetInDescriptorsFromTableStart = 13;
 
-            // _loadedTexture_8
+            // _loadedTexture_5
             ranges[14].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[14].NumDescriptors = 1;
-            ranges[14].BaseShaderRegister = 10;
+            ranges[14].BaseShaderRegister = 7;
             ranges[14].RegisterSpace = 0;
             ranges[14].OffsetInDescriptorsFromTableStart = 14;
 
-            // _loadedTexture_9
+            // _loadedTexture_6
             ranges[15].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[15].NumDescriptors = 1;
-            ranges[15].BaseShaderRegister = 11;
+            ranges[15].BaseShaderRegister = 8;
             ranges[15].RegisterSpace = 0;
             ranges[15].OffsetInDescriptorsFromTableStart = 15;
 
-            // _loadedTexture_10
+            // _loadedTexture_7
             ranges[16].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[16].NumDescriptors = 1;
-            ranges[16].BaseShaderRegister = 12;
+            ranges[16].BaseShaderRegister = 9;
             ranges[16].RegisterSpace = 0;
             ranges[16].OffsetInDescriptorsFromTableStart = 16;
 
-            // _loadedTexture_11
+            // _loadedTexture_8
             ranges[17].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[17].NumDescriptors = 1;
-            ranges[17].BaseShaderRegister = 13;
+            ranges[17].BaseShaderRegister = 10;
             ranges[17].RegisterSpace = 0;
             ranges[17].OffsetInDescriptorsFromTableStart = 17;
 
-            // _loadedTexture_12
+            // _loadedTexture_9
             ranges[18].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[18].NumDescriptors = 1;
-            ranges[18].BaseShaderRegister = 14;
+            ranges[18].BaseShaderRegister = 11;
             ranges[18].RegisterSpace = 0;
             ranges[18].OffsetInDescriptorsFromTableStart = 18;
 
-            // _loadedTexture_13
+            // _loadedTexture_10
             ranges[19].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[19].NumDescriptors = 1;
-            ranges[19].BaseShaderRegister = 15;
+            ranges[19].BaseShaderRegister = 12;
             ranges[19].RegisterSpace = 0;
             ranges[19].OffsetInDescriptorsFromTableStart = 19;
 
-            // _loadedTexture_14
+            // _loadedTexture_11
             ranges[20].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[20].NumDescriptors = 1;
-            ranges[20].BaseShaderRegister = 16;
+            ranges[20].BaseShaderRegister = 13;
             ranges[20].RegisterSpace = 0;
             ranges[20].OffsetInDescriptorsFromTableStart = 20;
 
-            // _loadedTexture_15
+            // _loadedTexture_12
             ranges[21].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[21].NumDescriptors = 1;
-            ranges[21].BaseShaderRegister = 17;
+            ranges[21].BaseShaderRegister = 14;
             ranges[21].RegisterSpace = 0;
             ranges[21].OffsetInDescriptorsFromTableStart = 21;
 
-            // _loadedTexture_16
+            // _loadedTexture_13
             ranges[22].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[22].NumDescriptors = 1;
-            ranges[22].BaseShaderRegister = 18;
+            ranges[22].BaseShaderRegister = 15;
             ranges[22].RegisterSpace = 0;
             ranges[22].OffsetInDescriptorsFromTableStart = 22;
 
-            // _loadedTexture_17
+            // _loadedTexture_14
             ranges[23].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[23].NumDescriptors = 1;
-            ranges[23].BaseShaderRegister = 19;
+            ranges[23].BaseShaderRegister = 16;
             ranges[23].RegisterSpace = 0;
             ranges[23].OffsetInDescriptorsFromTableStart = 23;
 
-            // _loadedTexture_18
+            // _loadedTexture_15
             ranges[24].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[24].NumDescriptors = 1;
-            ranges[24].BaseShaderRegister = 20;
+            ranges[24].BaseShaderRegister = 17;
             ranges[24].RegisterSpace = 0;
             ranges[24].OffsetInDescriptorsFromTableStart = 24;
 
-            // _loadedTexture_19
+            // _loadedTexture_16
             ranges[25].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[25].NumDescriptors = 1;
-            ranges[25].BaseShaderRegister = 21;
+            ranges[25].BaseShaderRegister = 18;
             ranges[25].RegisterSpace = 0;
             ranges[25].OffsetInDescriptorsFromTableStart = 25;
 
-            // _loadedTexture_20
+            // _loadedTexture_17
             ranges[26].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[26].NumDescriptors = 1;
-            ranges[26].BaseShaderRegister = 22;
+            ranges[26].BaseShaderRegister = 19;
             ranges[26].RegisterSpace = 0;
             ranges[26].OffsetInDescriptorsFromTableStart = 26;
 
-            // _loadedTexture_21
+            // _loadedTexture_18
             ranges[27].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[27].NumDescriptors = 1;
-            ranges[27].BaseShaderRegister = 23;
+            ranges[27].BaseShaderRegister = 20;
             ranges[27].RegisterSpace = 0;
             ranges[27].OffsetInDescriptorsFromTableStart = 27;
 
-            // _loadedTexture_22
+            // _loadedTexture_19
             ranges[28].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[28].NumDescriptors = 1;
-            ranges[28].BaseShaderRegister = 24;
+            ranges[28].BaseShaderRegister = 21;
             ranges[28].RegisterSpace = 0;
             ranges[28].OffsetInDescriptorsFromTableStart = 28;
 
-            // _loadedTexture_23
+            // _loadedTexture_20
             ranges[29].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[29].NumDescriptors = 1;
-            ranges[29].BaseShaderRegister = 25;
+            ranges[29].BaseShaderRegister = 22;
             ranges[29].RegisterSpace = 0;
             ranges[29].OffsetInDescriptorsFromTableStart = 29;
 
-            // _loadedTexture_24
+            // _loadedTexture_21
             ranges[30].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[30].NumDescriptors = 1;
-            ranges[30].BaseShaderRegister = 26;
+            ranges[30].BaseShaderRegister = 23;
             ranges[30].RegisterSpace = 0;
             ranges[30].OffsetInDescriptorsFromTableStart = 30;
 
-            // _loadedTexture_25
+            // _loadedTexture_22
             ranges[31].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[31].NumDescriptors = 1;
-            ranges[31].BaseShaderRegister = 27;
+            ranges[31].BaseShaderRegister = 24;
             ranges[31].RegisterSpace = 0;
             ranges[31].OffsetInDescriptorsFromTableStart = 31;
 
-            // _loadedTexture_26
+            // _loadedTexture_23
             ranges[32].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[32].NumDescriptors = 1;
-            ranges[32].BaseShaderRegister = 28;
+            ranges[32].BaseShaderRegister = 25;
             ranges[32].RegisterSpace = 0;
             ranges[32].OffsetInDescriptorsFromTableStart = 32;
 
-            // _loadedTexture_27
+            // _loadedTexture_24
             ranges[33].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[33].NumDescriptors = 1;
-            ranges[33].BaseShaderRegister = 29;
+            ranges[33].BaseShaderRegister = 26;
             ranges[33].RegisterSpace = 0;
             ranges[33].OffsetInDescriptorsFromTableStart = 33;
 
-            // _loadedTexture_28
+            // _loadedTexture_25
             ranges[34].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[34].NumDescriptors = 1;
-            ranges[34].BaseShaderRegister = 30;
+            ranges[34].BaseShaderRegister = 27;
             ranges[34].RegisterSpace = 0;
             ranges[34].OffsetInDescriptorsFromTableStart = 34;
 
-            // _loadedTexture_29
+            // _loadedTexture_26
             ranges[35].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[35].NumDescriptors = 1;
-            ranges[35].BaseShaderRegister = 31;
+            ranges[35].BaseShaderRegister = 28;
             ranges[35].RegisterSpace = 0;
             ranges[35].OffsetInDescriptorsFromTableStart = 35;
 
-            // _loadedTexture_30
+            // _loadedTexture_27
             ranges[36].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[36].NumDescriptors = 1;
-            ranges[36].BaseShaderRegister = 32;
+            ranges[36].BaseShaderRegister = 29;
             ranges[36].RegisterSpace = 0;
             ranges[36].OffsetInDescriptorsFromTableStart = 36;
 
-            // _loadedTexture_31
+            // _loadedTexture_28
             ranges[37].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[37].NumDescriptors = 1;
-            ranges[37].BaseShaderRegister = 33;
+            ranges[37].BaseShaderRegister = 30;
             ranges[37].RegisterSpace = 0;
             ranges[37].OffsetInDescriptorsFromTableStart = 37;
 
-            // _loadedTexture_32
+            // _loadedTexture_29
             ranges[38].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[38].NumDescriptors = 1;
-            ranges[38].BaseShaderRegister = 34;
+            ranges[38].BaseShaderRegister = 31;
             ranges[38].RegisterSpace = 0;
             ranges[38].OffsetInDescriptorsFromTableStart = 38;
 
-            // _loadedTexture_33
+            // _loadedTexture_30
             ranges[39].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[39].NumDescriptors = 1;
-            ranges[39].BaseShaderRegister = 35;
+            ranges[39].BaseShaderRegister = 32;
             ranges[39].RegisterSpace = 0;
             ranges[39].OffsetInDescriptorsFromTableStart = 39;
 
-            // _loadedTexture_34
+            // _loadedTexture_31
             ranges[40].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[40].NumDescriptors = 1;
-            ranges[40].BaseShaderRegister = 36;
+            ranges[40].BaseShaderRegister = 33;
             ranges[40].RegisterSpace = 0;
             ranges[40].OffsetInDescriptorsFromTableStart = 40;
 
-            // _loadedTexture_35
+            // _loadedTexture_32
             ranges[41].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[41].NumDescriptors = 1;
-            ranges[41].BaseShaderRegister = 37;
+            ranges[41].BaseShaderRegister = 34;
             ranges[41].RegisterSpace = 0;
             ranges[41].OffsetInDescriptorsFromTableStart = 41;
 
-            // _loadedTexture_36
+            // _loadedTexture_33
             ranges[42].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[42].NumDescriptors = 1;
-            ranges[42].BaseShaderRegister = 38;
+            ranges[42].BaseShaderRegister = 35;
             ranges[42].RegisterSpace = 0;
             ranges[42].OffsetInDescriptorsFromTableStart = 42;
 
-            // _loadedTexture_37
+            // _loadedTexture_34
             ranges[43].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[43].NumDescriptors = 1;
-            ranges[43].BaseShaderRegister = 39;
+            ranges[43].BaseShaderRegister = 36;
             ranges[43].RegisterSpace = 0;
             ranges[43].OffsetInDescriptorsFromTableStart = 43;
 
-            // _loadedTexture_38
+            // _loadedTexture_35
             ranges[44].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[44].NumDescriptors = 1;
-            ranges[44].BaseShaderRegister = 40;
+            ranges[44].BaseShaderRegister = 37;
             ranges[44].RegisterSpace = 0;
             ranges[44].OffsetInDescriptorsFromTableStart = 44;
 
-            // _loadedTexture_39
+            // _loadedTexture_36
             ranges[45].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[45].NumDescriptors = 1;
-            ranges[45].BaseShaderRegister = 41;
+            ranges[45].BaseShaderRegister = 38;
             ranges[45].RegisterSpace = 0;
             ranges[45].OffsetInDescriptorsFromTableStart = 45;
 
-            // _loadedTexture_40
+            // _loadedTexture_37
             ranges[46].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[46].NumDescriptors = 1;
-            ranges[46].BaseShaderRegister = 42;
+            ranges[46].BaseShaderRegister = 39;
             ranges[46].RegisterSpace = 0;
             ranges[46].OffsetInDescriptorsFromTableStart = 46;
 
-            // _loadedTexture_41
+            // _loadedTexture_38
             ranges[47].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[47].NumDescriptors = 1;
-            ranges[47].BaseShaderRegister = 43;
+            ranges[47].BaseShaderRegister = 40;
             ranges[47].RegisterSpace = 0;
             ranges[47].OffsetInDescriptorsFromTableStart = 47;
 
-            // _loadedTexture_42
+            // _loadedTexture_39
             ranges[48].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[48].NumDescriptors = 1;
-            ranges[48].BaseShaderRegister = 44;
+            ranges[48].BaseShaderRegister = 41;
             ranges[48].RegisterSpace = 0;
             ranges[48].OffsetInDescriptorsFromTableStart = 48;
 
-            // _loadedTexture_43
+            // _loadedTexture_40
             ranges[49].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[49].NumDescriptors = 1;
-            ranges[49].BaseShaderRegister = 45;
+            ranges[49].BaseShaderRegister = 42;
             ranges[49].RegisterSpace = 0;
             ranges[49].OffsetInDescriptorsFromTableStart = 49;
 
-            // _loadedTexture_44
+            // _loadedTexture_41
             ranges[50].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[50].NumDescriptors = 1;
-            ranges[50].BaseShaderRegister = 46;
+            ranges[50].BaseShaderRegister = 43;
             ranges[50].RegisterSpace = 0;
             ranges[50].OffsetInDescriptorsFromTableStart = 50;
 
-            // _loadedTexture_45
+            // _loadedTexture_42
             ranges[51].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[51].NumDescriptors = 1;
-            ranges[51].BaseShaderRegister = 47;
+            ranges[51].BaseShaderRegister = 44;
             ranges[51].RegisterSpace = 0;
             ranges[51].OffsetInDescriptorsFromTableStart = 51;
 
-            // _loadedTexture_46
+            // _loadedTexture_43
             ranges[52].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[52].NumDescriptors = 1;
-            ranges[52].BaseShaderRegister = 48;
+            ranges[52].BaseShaderRegister = 45;
             ranges[52].RegisterSpace = 0;
             ranges[52].OffsetInDescriptorsFromTableStart = 52;
 
-            // _loadedTexture_47
+            // _loadedTexture_44
             ranges[53].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[53].NumDescriptors = 1;
-            ranges[53].BaseShaderRegister = 49;
+            ranges[53].BaseShaderRegister = 46;
             ranges[53].RegisterSpace = 0;
             ranges[53].OffsetInDescriptorsFromTableStart = 53;
 
-            // _loadedTexture_48
+            // _loadedTexture_45
             ranges[54].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[54].NumDescriptors = 1;
-            ranges[54].BaseShaderRegister = 50;
+            ranges[54].BaseShaderRegister = 47;
             ranges[54].RegisterSpace = 0;
             ranges[54].OffsetInDescriptorsFromTableStart = 54;
 
-            // _loadedTexture_49
+            // _loadedTexture_46
             ranges[55].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[55].NumDescriptors = 1;
-            ranges[55].BaseShaderRegister = 51;
+            ranges[55].BaseShaderRegister = 48;
             ranges[55].RegisterSpace = 0;
             ranges[55].OffsetInDescriptorsFromTableStart = 55;
 
-            // _loadedTexture_50
+            // _loadedTexture_47
             ranges[56].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[56].NumDescriptors = 1;
-            ranges[56].BaseShaderRegister = 52;
+            ranges[56].BaseShaderRegister = 49;
             ranges[56].RegisterSpace = 0;
             ranges[56].OffsetInDescriptorsFromTableStart = 56;
 
-            // _loadedTexture_51
+            // _loadedTexture_48
             ranges[57].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[57].NumDescriptors = 1;
-            ranges[57].BaseShaderRegister = 53;
+            ranges[57].BaseShaderRegister = 50;
             ranges[57].RegisterSpace = 0;
             ranges[57].OffsetInDescriptorsFromTableStart = 57;
 
-            // _loadedTexture_52
+            // _loadedTexture_49
             ranges[58].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[58].NumDescriptors = 1;
-            ranges[58].BaseShaderRegister = 54;
+            ranges[58].BaseShaderRegister = 51;
             ranges[58].RegisterSpace = 0;
             ranges[58].OffsetInDescriptorsFromTableStart = 58;
 
-            // _loadedTexture_53
+            // _loadedTexture_50
             ranges[59].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[59].NumDescriptors = 1;
-            ranges[59].BaseShaderRegister = 55;
+            ranges[59].BaseShaderRegister = 52;
             ranges[59].RegisterSpace = 0;
             ranges[59].OffsetInDescriptorsFromTableStart = 59;
 
-            // _loadedTexture_54
+            // _loadedTexture_51
             ranges[60].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[60].NumDescriptors = 1;
-            ranges[60].BaseShaderRegister = 56;
+            ranges[60].BaseShaderRegister = 53;
             ranges[60].RegisterSpace = 0;
             ranges[60].OffsetInDescriptorsFromTableStart = 60;
 
-            // _loadedTexture_55
+            // _loadedTexture_52
             ranges[61].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[61].NumDescriptors = 1;
-            ranges[61].BaseShaderRegister = 57;
+            ranges[61].BaseShaderRegister = 54;
             ranges[61].RegisterSpace = 0;
             ranges[61].OffsetInDescriptorsFromTableStart = 61;
 
-            // _loadedTexture_56
+            // _loadedTexture_53
             ranges[62].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[62].NumDescriptors = 1;
-            ranges[62].BaseShaderRegister = 58;
+            ranges[62].BaseShaderRegister = 55;
             ranges[62].RegisterSpace = 0;
             ranges[62].OffsetInDescriptorsFromTableStart = 62;
 
-            // _loadedTexture_57
+            // _loadedTexture_54
             ranges[63].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[63].NumDescriptors = 1;
-            ranges[63].BaseShaderRegister = 59;
+            ranges[63].BaseShaderRegister = 56;
             ranges[63].RegisterSpace = 0;
             ranges[63].OffsetInDescriptorsFromTableStart = 63;
 
-            // _loadedTexture_58
+            // _loadedTexture_55
             ranges[64].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[64].NumDescriptors = 1;
-            ranges[64].BaseShaderRegister = 60;
+            ranges[64].BaseShaderRegister = 57;
             ranges[64].RegisterSpace = 0;
             ranges[64].OffsetInDescriptorsFromTableStart = 64;
 
-            // _loadedTexture_59
+            // _loadedTexture_56
             ranges[65].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[65].NumDescriptors = 1;
-            ranges[65].BaseShaderRegister = 61;
+            ranges[65].BaseShaderRegister = 58;
             ranges[65].RegisterSpace = 0;
             ranges[65].OffsetInDescriptorsFromTableStart = 65;
 
-            // _loadedTexture_60
+            // _loadedTexture_57
             ranges[66].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[66].NumDescriptors = 1;
-            ranges[66].BaseShaderRegister = 62;
+            ranges[66].BaseShaderRegister = 59;
             ranges[66].RegisterSpace = 0;
             ranges[66].OffsetInDescriptorsFromTableStart = 66;
 
-            // _loadedTexture_61
+            // _loadedTexture_58
             ranges[67].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[67].NumDescriptors = 1;
-            ranges[67].BaseShaderRegister = 63;
+            ranges[67].BaseShaderRegister = 60;
             ranges[67].RegisterSpace = 0;
             ranges[67].OffsetInDescriptorsFromTableStart = 67;
 
-            // _loadedTexture_62
+            // _loadedTexture_59
             ranges[68].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[68].NumDescriptors = 1;
-            ranges[68].BaseShaderRegister = 64;
+            ranges[68].BaseShaderRegister = 61;
             ranges[68].RegisterSpace = 0;
             ranges[68].OffsetInDescriptorsFromTableStart = 68;
 
-            // _loadedTexture_63
+            // _loadedTexture_60
             ranges[69].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[69].NumDescriptors = 1;
-            ranges[69].BaseShaderRegister = 65;
+            ranges[69].BaseShaderRegister = 62;
             ranges[69].RegisterSpace = 0;
             ranges[69].OffsetInDescriptorsFromTableStart = 69;
 
-            // _loadedTexture_64
+            // _loadedTexture_61
             ranges[70].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[70].NumDescriptors = 1;
-            ranges[70].BaseShaderRegister = 66;
+            ranges[70].BaseShaderRegister = 63;
             ranges[70].RegisterSpace = 0;
             ranges[70].OffsetInDescriptorsFromTableStart = 70;
 
-            // _loadedTexture_65
+            // _loadedTexture_62
             ranges[71].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[71].NumDescriptors = 1;
-            ranges[71].BaseShaderRegister = 67;
+            ranges[71].BaseShaderRegister = 64;
             ranges[71].RegisterSpace = 0;
             ranges[71].OffsetInDescriptorsFromTableStart = 71;
 
-            // _loadedTexture_66
+            // _loadedTexture_63
             ranges[72].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[72].NumDescriptors = 1;
-            ranges[72].BaseShaderRegister = 68;
+            ranges[72].BaseShaderRegister = 65;
             ranges[72].RegisterSpace = 0;
             ranges[72].OffsetInDescriptorsFromTableStart = 72;
 
-            // _loadedTexture_67
+            // _loadedTexture_64
             ranges[73].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[73].NumDescriptors = 1;
-            ranges[73].BaseShaderRegister = 69;
+            ranges[73].BaseShaderRegister = 66;
             ranges[73].RegisterSpace = 0;
             ranges[73].OffsetInDescriptorsFromTableStart = 73;
 
-            // _loadedTexture_68
+            // _loadedTexture_65
             ranges[74].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[74].NumDescriptors = 1;
-            ranges[74].BaseShaderRegister = 70;
+            ranges[74].BaseShaderRegister = 67;
             ranges[74].RegisterSpace = 0;
             ranges[74].OffsetInDescriptorsFromTableStart = 74;
 
-            // _loadedTexture_69
+            // _loadedTexture_66
             ranges[75].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[75].NumDescriptors = 1;
-            ranges[75].BaseShaderRegister = 71;
+            ranges[75].BaseShaderRegister = 68;
             ranges[75].RegisterSpace = 0;
             ranges[75].OffsetInDescriptorsFromTableStart = 75;
 
-            // _loadedTexture_70
+            // _loadedTexture_67
             ranges[76].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[76].NumDescriptors = 1;
-            ranges[76].BaseShaderRegister = 72;
+            ranges[76].BaseShaderRegister = 69;
             ranges[76].RegisterSpace = 0;
             ranges[76].OffsetInDescriptorsFromTableStart = 76;
 
-            // _loadedTexture_71
+            // _loadedTexture_68
             ranges[77].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[77].NumDescriptors = 1;
-            ranges[77].BaseShaderRegister = 73;
+            ranges[77].BaseShaderRegister = 70;
             ranges[77].RegisterSpace = 0;
             ranges[77].OffsetInDescriptorsFromTableStart = 77;
 
-            // _loadedTexture_72
+            // _loadedTexture_69
             ranges[78].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[78].NumDescriptors = 1;
-            ranges[78].BaseShaderRegister = 74;
+            ranges[78].BaseShaderRegister = 71;
             ranges[78].RegisterSpace = 0;
             ranges[78].OffsetInDescriptorsFromTableStart = 78;
 
-            // _loadedTexture_73
+            // _loadedTexture_70
             ranges[79].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[79].NumDescriptors = 1;
-            ranges[79].BaseShaderRegister = 75;
+            ranges[79].BaseShaderRegister = 72;
             ranges[79].RegisterSpace = 0;
             ranges[79].OffsetInDescriptorsFromTableStart = 79;
 
-            // _loadedTexture_74
+            // _loadedTexture_71
             ranges[80].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[80].NumDescriptors = 1;
-            ranges[80].BaseShaderRegister = 76;
+            ranges[80].BaseShaderRegister = 73;
             ranges[80].RegisterSpace = 0;
             ranges[80].OffsetInDescriptorsFromTableStart = 80;
 
-            // _loadedTexture_75
+            // _loadedTexture_72
             ranges[81].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[81].NumDescriptors = 1;
-            ranges[81].BaseShaderRegister = 77;
+            ranges[81].BaseShaderRegister = 74;
             ranges[81].RegisterSpace = 0;
             ranges[81].OffsetInDescriptorsFromTableStart = 81;
 
-            // _loadedTexture_76
+            // _loadedTexture_73
             ranges[82].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[82].NumDescriptors = 1;
-            ranges[82].BaseShaderRegister = 78;
+            ranges[82].BaseShaderRegister = 75;
             ranges[82].RegisterSpace = 0;
             ranges[82].OffsetInDescriptorsFromTableStart = 82;
 
-            // _loadedTexture_77
+            // _loadedTexture_74
             ranges[83].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[83].NumDescriptors = 1;
-            ranges[83].BaseShaderRegister = 79;
+            ranges[83].BaseShaderRegister = 76;
             ranges[83].RegisterSpace = 0;
             ranges[83].OffsetInDescriptorsFromTableStart = 83;
 
-            // _loadedTexture_78
+            // _loadedTexture_75
             ranges[84].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[84].NumDescriptors = 1;
-            ranges[84].BaseShaderRegister = 80;
+            ranges[84].BaseShaderRegister = 77;
             ranges[84].RegisterSpace = 0;
             ranges[84].OffsetInDescriptorsFromTableStart = 84;
 
-            // _loadedTexture_79
+            // _loadedTexture_76
             ranges[85].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[85].NumDescriptors = 1;
-            ranges[85].BaseShaderRegister = 81;
+            ranges[85].BaseShaderRegister = 78;
             ranges[85].RegisterSpace = 0;
             ranges[85].OffsetInDescriptorsFromTableStart = 85;
 
-            // _loadedTexture_80
+            // _loadedTexture_77
             ranges[86].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[86].NumDescriptors = 1;
-            ranges[86].BaseShaderRegister = 82;
+            ranges[86].BaseShaderRegister = 79;
             ranges[86].RegisterSpace = 0;
             ranges[86].OffsetInDescriptorsFromTableStart = 86;
 
-            // _loadedTexture_81
+            // _loadedTexture_78
             ranges[87].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[87].NumDescriptors = 1;
-            ranges[87].BaseShaderRegister = 83;
+            ranges[87].BaseShaderRegister = 80;
             ranges[87].RegisterSpace = 0;
             ranges[87].OffsetInDescriptorsFromTableStart = 87;
 
-            // _loadedTexture_82
+            // _loadedTexture_79
             ranges[88].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[88].NumDescriptors = 1;
-            ranges[88].BaseShaderRegister = 84;
+            ranges[88].BaseShaderRegister = 81;
             ranges[88].RegisterSpace = 0;
             ranges[88].OffsetInDescriptorsFromTableStart = 88;
 
-            // _loadedTexture_83
+            // _loadedTexture_80
             ranges[89].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[89].NumDescriptors = 1;
-            ranges[89].BaseShaderRegister = 85;
+            ranges[89].BaseShaderRegister = 82;
             ranges[89].RegisterSpace = 0;
             ranges[89].OffsetInDescriptorsFromTableStart = 89;
 
-            // _loadedTexture_84
+            // _loadedTexture_81
             ranges[90].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[90].NumDescriptors = 1;
-            ranges[90].BaseShaderRegister = 86;
+            ranges[90].BaseShaderRegister = 83;
             ranges[90].RegisterSpace = 0;
             ranges[90].OffsetInDescriptorsFromTableStart = 90;
 
-            // _loadedTexture_85
+            // _loadedTexture_82
             ranges[91].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[91].NumDescriptors = 1;
-            ranges[91].BaseShaderRegister = 87;
+            ranges[91].BaseShaderRegister = 84;
             ranges[91].RegisterSpace = 0;
             ranges[91].OffsetInDescriptorsFromTableStart = 91;
 
-            // _loadedTexture_86
+            // _loadedTexture_83
             ranges[92].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[92].NumDescriptors = 1;
-            ranges[92].BaseShaderRegister = 88;
+            ranges[92].BaseShaderRegister = 85;
             ranges[92].RegisterSpace = 0;
             ranges[92].OffsetInDescriptorsFromTableStart = 92;
 
-            // _loadedTexture_87
+            // _loadedTexture_84
             ranges[93].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[93].NumDescriptors = 1;
-            ranges[93].BaseShaderRegister = 89;
+            ranges[93].BaseShaderRegister = 86;
             ranges[93].RegisterSpace = 0;
             ranges[93].OffsetInDescriptorsFromTableStart = 93;
 
-            // _loadedTexture_88
+            // _loadedTexture_85
             ranges[94].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[94].NumDescriptors = 1;
-            ranges[94].BaseShaderRegister = 90;
+            ranges[94].BaseShaderRegister = 87;
             ranges[94].RegisterSpace = 0;
             ranges[94].OffsetInDescriptorsFromTableStart = 94;
 
-            // _loadedTexture_89
+            // _loadedTexture_86
             ranges[95].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[95].NumDescriptors = 1;
-            ranges[95].BaseShaderRegister = 91;
+            ranges[95].BaseShaderRegister = 88;
             ranges[95].RegisterSpace = 0;
             ranges[95].OffsetInDescriptorsFromTableStart = 95;
 
-            // _loadedTexture_90
+            // _loadedTexture_87
             ranges[96].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[96].NumDescriptors = 1;
-            ranges[96].BaseShaderRegister = 92;
+            ranges[96].BaseShaderRegister = 89;
             ranges[96].RegisterSpace = 0;
             ranges[96].OffsetInDescriptorsFromTableStart = 96;
 
-            // _loadedTexture_91
+            // _loadedTexture_88
             ranges[97].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[97].NumDescriptors = 1;
-            ranges[97].BaseShaderRegister = 93;
+            ranges[97].BaseShaderRegister = 90;
             ranges[97].RegisterSpace = 0;
             ranges[97].OffsetInDescriptorsFromTableStart = 97;
 
-            // _loadedTexture_92
+            // _loadedTexture_89
             ranges[98].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[98].NumDescriptors = 1;
-            ranges[98].BaseShaderRegister = 94;
+            ranges[98].BaseShaderRegister = 91;
             ranges[98].RegisterSpace = 0;
             ranges[98].OffsetInDescriptorsFromTableStart = 98;
 
-            // _loadedTexture_93
+            // _loadedTexture_90
             ranges[99].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[99].NumDescriptors = 1;
-            ranges[99].BaseShaderRegister = 95;
+            ranges[99].BaseShaderRegister = 92;
             ranges[99].RegisterSpace = 0;
             ranges[99].OffsetInDescriptorsFromTableStart = 99;
 
-            // _loadedTexture_94
+            // _loadedTexture_91
             ranges[100].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[100].NumDescriptors = 1;
-            ranges[100].BaseShaderRegister = 96;
+            ranges[100].BaseShaderRegister = 93;
             ranges[100].RegisterSpace = 0;
             ranges[100].OffsetInDescriptorsFromTableStart = 100;
 
-            // _loadedTexture_95
+            // _loadedTexture_92
             ranges[101].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[101].NumDescriptors = 1;
-            ranges[101].BaseShaderRegister = 97;
+            ranges[101].BaseShaderRegister = 94;
             ranges[101].RegisterSpace = 0;
             ranges[101].OffsetInDescriptorsFromTableStart = 101;
 
-            // _loadedTexture_96
+            // _loadedTexture_93
             ranges[102].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[102].NumDescriptors = 1;
-            ranges[102].BaseShaderRegister = 98;
+            ranges[102].BaseShaderRegister = 95;
             ranges[102].RegisterSpace = 0;
             ranges[102].OffsetInDescriptorsFromTableStart = 102;
 
-            // _loadedTexture_97
+            // _loadedTexture_94
             ranges[103].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[103].NumDescriptors = 1;
-            ranges[103].BaseShaderRegister = 99;
+            ranges[103].BaseShaderRegister = 96;
             ranges[103].RegisterSpace = 0;
             ranges[103].OffsetInDescriptorsFromTableStart = 103;
 
-            // _loadedTexture_98
+            // _loadedTexture_95
             ranges[104].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[104].NumDescriptors = 1;
-            ranges[104].BaseShaderRegister = 100;
+            ranges[104].BaseShaderRegister = 97;
             ranges[104].RegisterSpace = 0;
             ranges[104].OffsetInDescriptorsFromTableStart = 104;
 
-            // _loadedTexture_99
+            // _loadedTexture_96
             ranges[105].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[105].NumDescriptors = 1;
-            ranges[105].BaseShaderRegister = 101;
+            ranges[105].BaseShaderRegister = 98;
             ranges[105].RegisterSpace = 0;
             ranges[105].OffsetInDescriptorsFromTableStart = 105;
 
-            // _loadedTexture_100
+            // _loadedTexture_97
             ranges[106].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[106].NumDescriptors = 1;
-            ranges[106].BaseShaderRegister = 102;
+            ranges[106].BaseShaderRegister = 99;
             ranges[106].RegisterSpace = 0;
             ranges[106].OffsetInDescriptorsFromTableStart = 106;
 
-            // _loadedTexture_101
+            // _loadedTexture_98
             ranges[107].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[107].NumDescriptors = 1;
-            ranges[107].BaseShaderRegister = 103;
+            ranges[107].BaseShaderRegister = 100;
             ranges[107].RegisterSpace = 0;
             ranges[107].OffsetInDescriptorsFromTableStart = 107;
 
-            // _loadedTexture_102
+            // _loadedTexture_99
             ranges[108].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[108].NumDescriptors = 1;
-            ranges[108].BaseShaderRegister = 104;
+            ranges[108].BaseShaderRegister = 101;
             ranges[108].RegisterSpace = 0;
             ranges[108].OffsetInDescriptorsFromTableStart = 108;
 
-            // _loadedTexture_103
+            // _loadedTexture_100
             ranges[109].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[109].NumDescriptors = 1;
-            ranges[109].BaseShaderRegister = 105;
+            ranges[109].BaseShaderRegister = 102;
             ranges[109].RegisterSpace = 0;
             ranges[109].OffsetInDescriptorsFromTableStart = 109;
 
-            // _loadedTexture_104
+            // _loadedTexture_101
             ranges[110].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[110].NumDescriptors = 1;
-            ranges[110].BaseShaderRegister = 106;
+            ranges[110].BaseShaderRegister = 103;
             ranges[110].RegisterSpace = 0;
             ranges[110].OffsetInDescriptorsFromTableStart = 110;
 
-            // _loadedTexture_105
+            // _loadedTexture_102
             ranges[111].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[111].NumDescriptors = 1;
-            ranges[111].BaseShaderRegister = 107;
+            ranges[111].BaseShaderRegister = 104;
             ranges[111].RegisterSpace = 0;
             ranges[111].OffsetInDescriptorsFromTableStart = 111;
 
-            // _loadedTexture_106
+            // _loadedTexture_103
             ranges[112].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[112].NumDescriptors = 1;
-            ranges[112].BaseShaderRegister = 108;
+            ranges[112].BaseShaderRegister = 105;
             ranges[112].RegisterSpace = 0;
             ranges[112].OffsetInDescriptorsFromTableStart = 112;
 
-            // _loadedTexture_107
+            // _loadedTexture_104
             ranges[113].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[113].NumDescriptors = 1;
-            ranges[113].BaseShaderRegister = 109;
+            ranges[113].BaseShaderRegister = 106;
             ranges[113].RegisterSpace = 0;
             ranges[113].OffsetInDescriptorsFromTableStart = 113;
 
-            // _loadedTexture_108
+            // _loadedTexture_105
             ranges[114].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[114].NumDescriptors = 1;
-            ranges[114].BaseShaderRegister = 110;
+            ranges[114].BaseShaderRegister = 107;
             ranges[114].RegisterSpace = 0;
             ranges[114].OffsetInDescriptorsFromTableStart = 114;
 
-            // _loadedTexture_109
+            // _loadedTexture_106
             ranges[115].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[115].NumDescriptors = 1;
-            ranges[115].BaseShaderRegister = 111;
+            ranges[115].BaseShaderRegister = 108;
             ranges[115].RegisterSpace = 0;
             ranges[115].OffsetInDescriptorsFromTableStart = 115;
 
-            // _loadedTexture_110
+            // _loadedTexture_107
             ranges[116].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[116].NumDescriptors = 1;
-            ranges[116].BaseShaderRegister = 112;
+            ranges[116].BaseShaderRegister = 109;
             ranges[116].RegisterSpace = 0;
             ranges[116].OffsetInDescriptorsFromTableStart = 116;
 
-            // _loadedTexture_111
+            // _loadedTexture_108
             ranges[117].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[117].NumDescriptors = 1;
-            ranges[117].BaseShaderRegister = 113;
+            ranges[117].BaseShaderRegister = 110;
             ranges[117].RegisterSpace = 0;
             ranges[117].OffsetInDescriptorsFromTableStart = 117;
 
-            // _loadedTexture_112
+            // _loadedTexture_109
             ranges[118].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[118].NumDescriptors = 1;
-            ranges[118].BaseShaderRegister = 114;
+            ranges[118].BaseShaderRegister = 111;
             ranges[118].RegisterSpace = 0;
             ranges[118].OffsetInDescriptorsFromTableStart = 118;
 
-            // _loadedTexture_113
+            // _loadedTexture_110
             ranges[119].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[119].NumDescriptors = 1;
-            ranges[119].BaseShaderRegister = 115;
+            ranges[119].BaseShaderRegister = 112;
             ranges[119].RegisterSpace = 0;
             ranges[119].OffsetInDescriptorsFromTableStart = 119;
 
-            // _loadedTexture_114
+            // _loadedTexture_111
             ranges[120].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[120].NumDescriptors = 1;
-            ranges[120].BaseShaderRegister = 116;
+            ranges[120].BaseShaderRegister = 113;
             ranges[120].RegisterSpace = 0;
             ranges[120].OffsetInDescriptorsFromTableStart = 120;
 
-            // _loadedTexture_115
+            // _loadedTexture_112
             ranges[121].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[121].NumDescriptors = 1;
-            ranges[121].BaseShaderRegister = 117;
+            ranges[121].BaseShaderRegister = 114;
             ranges[121].RegisterSpace = 0;
             ranges[121].OffsetInDescriptorsFromTableStart = 121;
 
-            // _loadedTexture_116
+            // _loadedTexture_113
             ranges[122].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[122].NumDescriptors = 1;
-            ranges[122].BaseShaderRegister = 118;
+            ranges[122].BaseShaderRegister = 115;
             ranges[122].RegisterSpace = 0;
             ranges[122].OffsetInDescriptorsFromTableStart = 122;
 
-            // _loadedTexture_117
+            // _loadedTexture_114
             ranges[123].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[123].NumDescriptors = 1;
-            ranges[123].BaseShaderRegister = 119;
+            ranges[123].BaseShaderRegister = 116;
             ranges[123].RegisterSpace = 0;
             ranges[123].OffsetInDescriptorsFromTableStart = 123;
 
-            // _loadedTexture_118
+            // _loadedTexture_115
             ranges[124].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[124].NumDescriptors = 1;
-            ranges[124].BaseShaderRegister = 120;
+            ranges[124].BaseShaderRegister = 117;
             ranges[124].RegisterSpace = 0;
             ranges[124].OffsetInDescriptorsFromTableStart = 124;
 
-            // _loadedTexture_119
+            // _loadedTexture_116
             ranges[125].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[125].NumDescriptors = 1;
-            ranges[125].BaseShaderRegister = 121;
+            ranges[125].BaseShaderRegister = 118;
             ranges[125].RegisterSpace = 0;
             ranges[125].OffsetInDescriptorsFromTableStart = 125;
 
-            // _loadedTexture_120
+            // _loadedTexture_117
             ranges[126].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[126].NumDescriptors = 1;
-            ranges[126].BaseShaderRegister = 122;
+            ranges[126].BaseShaderRegister = 119;
             ranges[126].RegisterSpace = 0;
             ranges[126].OffsetInDescriptorsFromTableStart = 126;
 
-            // _loadedTexture_121
+            // _loadedTexture_118
             ranges[127].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[127].NumDescriptors = 1;
-            ranges[127].BaseShaderRegister = 123;
+            ranges[127].BaseShaderRegister = 120;
             ranges[127].RegisterSpace = 0;
             ranges[127].OffsetInDescriptorsFromTableStart = 127;
 
-            // _loadedTexture_122
+            // _loadedTexture_119
             ranges[128].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[128].NumDescriptors = 1;
-            ranges[128].BaseShaderRegister = 124;
+            ranges[128].BaseShaderRegister = 121;
             ranges[128].RegisterSpace = 0;
             ranges[128].OffsetInDescriptorsFromTableStart = 128;
 
-            // _loadedTexture_123
+            // _loadedTexture_120
             ranges[129].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[129].NumDescriptors = 1;
-            ranges[129].BaseShaderRegister = 125;
+            ranges[129].BaseShaderRegister = 122;
             ranges[129].RegisterSpace = 0;
             ranges[129].OffsetInDescriptorsFromTableStart = 129;
 
-            // _loadedTexture_124
+            // _loadedTexture_121
             ranges[130].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[130].NumDescriptors = 1;
-            ranges[130].BaseShaderRegister = 126;
+            ranges[130].BaseShaderRegister = 123;
             ranges[130].RegisterSpace = 0;
             ranges[130].OffsetInDescriptorsFromTableStart = 130;
 
-            // _loadedTexture_125
+            // _loadedTexture_122
             ranges[131].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[131].NumDescriptors = 1;
-            ranges[131].BaseShaderRegister = 127;
+            ranges[131].BaseShaderRegister = 124;
             ranges[131].RegisterSpace = 0;
             ranges[131].OffsetInDescriptorsFromTableStart = 131;
 
-            // _loadedTexture_126
+            // _loadedTexture_123
             ranges[132].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[132].NumDescriptors = 1;
-            ranges[132].BaseShaderRegister = 128;
+            ranges[132].BaseShaderRegister = 125;
             ranges[132].RegisterSpace = 0;
             ranges[132].OffsetInDescriptorsFromTableStart = 132;
 
-            // _loadedTexture_127
+            // _loadedTexture_124
             ranges[133].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[133].NumDescriptors = 1;
-            ranges[133].BaseShaderRegister = 129;
+            ranges[133].BaseShaderRegister = 126;
             ranges[133].RegisterSpace = 0;
             ranges[133].OffsetInDescriptorsFromTableStart = 133;
 
-            // _loadedTexture_128
+            // _loadedTexture_125
             ranges[134].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[134].NumDescriptors = 1;
-            ranges[134].BaseShaderRegister = 130;
+            ranges[134].BaseShaderRegister = 127;
             ranges[134].RegisterSpace = 0;
             ranges[134].OffsetInDescriptorsFromTableStart = 134;
 
-            // _loadedTexture_129
+            // _loadedTexture_126
             ranges[135].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[135].NumDescriptors = 1;
-            ranges[135].BaseShaderRegister = 131;
+            ranges[135].BaseShaderRegister = 128;
             ranges[135].RegisterSpace = 0;
             ranges[135].OffsetInDescriptorsFromTableStart = 135;
 
-            // _loadedTexture_130
+            // _loadedTexture_127
             ranges[136].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[136].NumDescriptors = 1;
-            ranges[136].BaseShaderRegister = 132;
+            ranges[136].BaseShaderRegister = 129;
             ranges[136].RegisterSpace = 0;
             ranges[136].OffsetInDescriptorsFromTableStart = 136;
 
-            // _loadedTexture_131
+            // _loadedTexture_128
             ranges[137].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[137].NumDescriptors = 1;
-            ranges[137].BaseShaderRegister = 133;
+            ranges[137].BaseShaderRegister = 130;
             ranges[137].RegisterSpace = 0;
             ranges[137].OffsetInDescriptorsFromTableStart = 137;
 
-            // _loadedTexture_132
+            // _loadedTexture_129
             ranges[138].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[138].NumDescriptors = 1;
-            ranges[138].BaseShaderRegister = 134;
+            ranges[138].BaseShaderRegister = 131;
             ranges[138].RegisterSpace = 0;
             ranges[138].OffsetInDescriptorsFromTableStart = 138;
 
-            // _loadedTexture_133
+            // _loadedTexture_130
             ranges[139].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[139].NumDescriptors = 1;
-            ranges[139].BaseShaderRegister = 135;
+            ranges[139].BaseShaderRegister = 132;
             ranges[139].RegisterSpace = 0;
             ranges[139].OffsetInDescriptorsFromTableStart = 139;
 
-            // _loadedTexture_134
+            // _loadedTexture_131
             ranges[140].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[140].NumDescriptors = 1;
-            ranges[140].BaseShaderRegister = 136;
+            ranges[140].BaseShaderRegister = 133;
             ranges[140].RegisterSpace = 0;
             ranges[140].OffsetInDescriptorsFromTableStart = 140;
 
-            // _loadedTexture_135
+            // _loadedTexture_132
             ranges[141].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[141].NumDescriptors = 1;
-            ranges[141].BaseShaderRegister = 137;
+            ranges[141].BaseShaderRegister = 134;
             ranges[141].RegisterSpace = 0;
             ranges[141].OffsetInDescriptorsFromTableStart = 141;
 
-            // _loadedTexture_136
+            // _loadedTexture_133
             ranges[142].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[142].NumDescriptors = 1;
-            ranges[142].BaseShaderRegister = 138;
+            ranges[142].BaseShaderRegister = 135;
             ranges[142].RegisterSpace = 0;
             ranges[142].OffsetInDescriptorsFromTableStart = 142;
 
-            // _loadedTexture_137
+            // _loadedTexture_134
             ranges[143].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[143].NumDescriptors = 1;
-            ranges[143].BaseShaderRegister = 139;
+            ranges[143].BaseShaderRegister = 136;
             ranges[143].RegisterSpace = 0;
             ranges[143].OffsetInDescriptorsFromTableStart = 143;
 
-            // _loadedTexture_138
+            // _loadedTexture_135
             ranges[144].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[144].NumDescriptors = 1;
-            ranges[144].BaseShaderRegister = 140;
+            ranges[144].BaseShaderRegister = 137;
             ranges[144].RegisterSpace = 0;
             ranges[144].OffsetInDescriptorsFromTableStart = 144;
 
-            // _loadedTexture_139
+            // _loadedTexture_136
             ranges[145].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[145].NumDescriptors = 1;
-            ranges[145].BaseShaderRegister = 141;
+            ranges[145].BaseShaderRegister = 138;
             ranges[145].RegisterSpace = 0;
             ranges[145].OffsetInDescriptorsFromTableStart = 145;
 
-            // _loadedTexture_140
+            // _loadedTexture_137
             ranges[146].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[146].NumDescriptors = 1;
-            ranges[146].BaseShaderRegister = 142;
+            ranges[146].BaseShaderRegister = 139;
             ranges[146].RegisterSpace = 0;
             ranges[146].OffsetInDescriptorsFromTableStart = 146;
 
-            // _loadedTexture_141
+            // _loadedTexture_138
             ranges[147].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[147].NumDescriptors = 1;
-            ranges[147].BaseShaderRegister = 143;
+            ranges[147].BaseShaderRegister = 140;
             ranges[147].RegisterSpace = 0;
             ranges[147].OffsetInDescriptorsFromTableStart = 147;
 
-            // _loadedTexture_142
+            // _loadedTexture_139
             ranges[148].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[148].NumDescriptors = 1;
-            ranges[148].BaseShaderRegister = 144;
+            ranges[148].BaseShaderRegister = 141;
             ranges[148].RegisterSpace = 0;
             ranges[148].OffsetInDescriptorsFromTableStart = 148;
 
-            // _loadedTexture_143
+            // _loadedTexture_140
             ranges[149].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[149].NumDescriptors = 1;
-            ranges[149].BaseShaderRegister = 145;
+            ranges[149].BaseShaderRegister = 142;
             ranges[149].RegisterSpace = 0;
             ranges[149].OffsetInDescriptorsFromTableStart = 149;
 
-            // _loadedTexture_144
+            // _loadedTexture_141
             ranges[150].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[150].NumDescriptors = 1;
-            ranges[150].BaseShaderRegister = 146;
+            ranges[150].BaseShaderRegister = 143;
             ranges[150].RegisterSpace = 0;
             ranges[150].OffsetInDescriptorsFromTableStart = 150;
 
-            // _loadedTexture_145
+            // _loadedTexture_142
             ranges[151].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[151].NumDescriptors = 1;
-            ranges[151].BaseShaderRegister = 147;
+            ranges[151].BaseShaderRegister = 144;
             ranges[151].RegisterSpace = 0;
             ranges[151].OffsetInDescriptorsFromTableStart = 151;
 
-            // _loadedTexture_146
+            // _loadedTexture_143
             ranges[152].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[152].NumDescriptors = 1;
-            ranges[152].BaseShaderRegister = 148;
+            ranges[152].BaseShaderRegister = 145;
             ranges[152].RegisterSpace = 0;
             ranges[152].OffsetInDescriptorsFromTableStart = 152;
 
-            // _loadedTexture_147
+            // _loadedTexture_144
             ranges[153].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[153].NumDescriptors = 1;
-            ranges[153].BaseShaderRegister = 149;
+            ranges[153].BaseShaderRegister = 146;
             ranges[153].RegisterSpace = 0;
             ranges[153].OffsetInDescriptorsFromTableStart = 153;
 
-            // _loadedTexture_148
+            // _loadedTexture_145
             ranges[154].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[154].NumDescriptors = 1;
-            ranges[154].BaseShaderRegister = 150;
+            ranges[154].BaseShaderRegister = 147;
             ranges[154].RegisterSpace = 0;
             ranges[154].OffsetInDescriptorsFromTableStart = 154;
 
-            // _loadedTexture_149
+            // _loadedTexture_146
             ranges[155].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[155].NumDescriptors = 1;
-            ranges[155].BaseShaderRegister = 151;
+            ranges[155].BaseShaderRegister = 148;
             ranges[155].RegisterSpace = 0;
             ranges[155].OffsetInDescriptorsFromTableStart = 155;
 
-            // _loadedTexture_150
+            // _loadedTexture_147
             ranges[156].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[156].NumDescriptors = 1;
-            ranges[156].BaseShaderRegister = 152;
+            ranges[156].BaseShaderRegister = 149;
             ranges[156].RegisterSpace = 0;
             ranges[156].OffsetInDescriptorsFromTableStart = 156;
 
-            // _loadedTexture_151
+            // _loadedTexture_148
             ranges[157].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[157].NumDescriptors = 1;
-            ranges[157].BaseShaderRegister = 153;
+            ranges[157].BaseShaderRegister = 150;
             ranges[157].RegisterSpace = 0;
             ranges[157].OffsetInDescriptorsFromTableStart = 157;
 
-            // _loadedTexture_152
+            // _loadedTexture_149
             ranges[158].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[158].NumDescriptors = 1;
-            ranges[158].BaseShaderRegister = 154;
+            ranges[158].BaseShaderRegister = 151;
             ranges[158].RegisterSpace = 0;
             ranges[158].OffsetInDescriptorsFromTableStart = 158;
 
-            // _loadedTexture_153
+            // _loadedTexture_150
             ranges[159].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[159].NumDescriptors = 1;
-            ranges[159].BaseShaderRegister = 155;
+            ranges[159].BaseShaderRegister = 152;
             ranges[159].RegisterSpace = 0;
             ranges[159].OffsetInDescriptorsFromTableStart = 159;
 
-            // _loadedTexture_154
+            // _loadedTexture_151
             ranges[160].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[160].NumDescriptors = 1;
-            ranges[160].BaseShaderRegister = 156;
+            ranges[160].BaseShaderRegister = 153;
             ranges[160].RegisterSpace = 0;
             ranges[160].OffsetInDescriptorsFromTableStart = 160;
 
-            // _loadedTexture_155
+            // _loadedTexture_152
             ranges[161].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[161].NumDescriptors = 1;
-            ranges[161].BaseShaderRegister = 157;
+            ranges[161].BaseShaderRegister = 154;
             ranges[161].RegisterSpace = 0;
             ranges[161].OffsetInDescriptorsFromTableStart = 161;
 
-            // _loadedTexture_156
+            // _loadedTexture_153
             ranges[162].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[162].NumDescriptors = 1;
-            ranges[162].BaseShaderRegister = 158;
+            ranges[162].BaseShaderRegister = 155;
             ranges[162].RegisterSpace = 0;
             ranges[162].OffsetInDescriptorsFromTableStart = 162;
 
-            // _loadedTexture_157
+            // _loadedTexture_154
             ranges[163].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[163].NumDescriptors = 1;
-            ranges[163].BaseShaderRegister = 159;
+            ranges[163].BaseShaderRegister = 156;
             ranges[163].RegisterSpace = 0;
             ranges[163].OffsetInDescriptorsFromTableStart = 163;
 
-            // _loadedTexture_158
+            // _loadedTexture_155
             ranges[164].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[164].NumDescriptors = 1;
-            ranges[164].BaseShaderRegister = 160;
+            ranges[164].BaseShaderRegister = 157;
             ranges[164].RegisterSpace = 0;
             ranges[164].OffsetInDescriptorsFromTableStart = 164;
 
-            // _loadedTexture_159
+            // _loadedTexture_156
             ranges[165].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[165].NumDescriptors = 1;
-            ranges[165].BaseShaderRegister = 161;
+            ranges[165].BaseShaderRegister = 158;
             ranges[165].RegisterSpace = 0;
             ranges[165].OffsetInDescriptorsFromTableStart = 165;
 
-            // _loadedTexture_160
+            // _loadedTexture_157
             ranges[166].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[166].NumDescriptors = 1;
-            ranges[166].BaseShaderRegister = 162;
+            ranges[166].BaseShaderRegister = 159;
             ranges[166].RegisterSpace = 0;
             ranges[166].OffsetInDescriptorsFromTableStart = 166;
 
-            // _loadedTexture_161
+            // _loadedTexture_158
             ranges[167].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[167].NumDescriptors = 1;
-            ranges[167].BaseShaderRegister = 163;
+            ranges[167].BaseShaderRegister = 160;
             ranges[167].RegisterSpace = 0;
             ranges[167].OffsetInDescriptorsFromTableStart = 167;
 
-            // _loadedTexture_162
+            // _loadedTexture_159
             ranges[168].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[168].NumDescriptors = 1;
-            ranges[168].BaseShaderRegister = 164;
+            ranges[168].BaseShaderRegister = 161;
             ranges[168].RegisterSpace = 0;
             ranges[168].OffsetInDescriptorsFromTableStart = 168;
 
-            // _loadedTexture_163
+            // _loadedTexture_160
             ranges[169].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[169].NumDescriptors = 1;
-            ranges[169].BaseShaderRegister = 165;
+            ranges[169].BaseShaderRegister = 162;
             ranges[169].RegisterSpace = 0;
             ranges[169].OffsetInDescriptorsFromTableStart = 169;
 
-            // _loadedTexture_164
+            // _loadedTexture_161
             ranges[170].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[170].NumDescriptors = 1;
-            ranges[170].BaseShaderRegister = 166;
+            ranges[170].BaseShaderRegister = 163;
             ranges[170].RegisterSpace = 0;
             ranges[170].OffsetInDescriptorsFromTableStart = 170;
 
-            // _loadedTexture_165
+            // _loadedTexture_162
             ranges[171].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[171].NumDescriptors = 1;
-            ranges[171].BaseShaderRegister = 167;
+            ranges[171].BaseShaderRegister = 164;
             ranges[171].RegisterSpace = 0;
             ranges[171].OffsetInDescriptorsFromTableStart = 171;
 
-            // _loadedTexture_166
+            // _loadedTexture_163
             ranges[172].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[172].NumDescriptors = 1;
-            ranges[172].BaseShaderRegister = 168;
+            ranges[172].BaseShaderRegister = 165;
             ranges[172].RegisterSpace = 0;
             ranges[172].OffsetInDescriptorsFromTableStart = 172;
 
-            // _loadedTexture_167
+            // _loadedTexture_164
             ranges[173].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[173].NumDescriptors = 1;
-            ranges[173].BaseShaderRegister = 169;
+            ranges[173].BaseShaderRegister = 166;
             ranges[173].RegisterSpace = 0;
             ranges[173].OffsetInDescriptorsFromTableStart = 173;
 
-            // _loadedTexture_168
+            // _loadedTexture_165
             ranges[174].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[174].NumDescriptors = 1;
-            ranges[174].BaseShaderRegister = 170;
+            ranges[174].BaseShaderRegister = 167;
             ranges[174].RegisterSpace = 0;
             ranges[174].OffsetInDescriptorsFromTableStart = 174;
 
-            // _loadedTexture_169
+            // _loadedTexture_166
             ranges[175].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[175].NumDescriptors = 1;
-            ranges[175].BaseShaderRegister = 171;
+            ranges[175].BaseShaderRegister = 168;
             ranges[175].RegisterSpace = 0;
             ranges[175].OffsetInDescriptorsFromTableStart = 175;
 
-            // _loadedTexture_170
+            // _loadedTexture_167
             ranges[176].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[176].NumDescriptors = 1;
-            ranges[176].BaseShaderRegister = 172;
+            ranges[176].BaseShaderRegister = 169;
             ranges[176].RegisterSpace = 0;
             ranges[176].OffsetInDescriptorsFromTableStart = 176;
 
-            // _loadedTexture_171
+            // _loadedTexture_168
             ranges[177].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[177].NumDescriptors = 1;
-            ranges[177].BaseShaderRegister = 173;
+            ranges[177].BaseShaderRegister = 170;
             ranges[177].RegisterSpace = 0;
             ranges[177].OffsetInDescriptorsFromTableStart = 177;
 
-            // _loadedTexture_172
+            // _loadedTexture_169
             ranges[178].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[178].NumDescriptors = 1;
-            ranges[178].BaseShaderRegister = 174;
+            ranges[178].BaseShaderRegister = 171;
             ranges[178].RegisterSpace = 0;
             ranges[178].OffsetInDescriptorsFromTableStart = 178;
 
-            // _loadedTexture_173
+            // _loadedTexture_170
             ranges[179].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[179].NumDescriptors = 1;
-            ranges[179].BaseShaderRegister = 175;
+            ranges[179].BaseShaderRegister = 172;
             ranges[179].RegisterSpace = 0;
             ranges[179].OffsetInDescriptorsFromTableStart = 179;
 
-            // _loadedTexture_174
+            // _loadedTexture_171
             ranges[180].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[180].NumDescriptors = 1;
-            ranges[180].BaseShaderRegister = 176;
+            ranges[180].BaseShaderRegister = 173;
             ranges[180].RegisterSpace = 0;
             ranges[180].OffsetInDescriptorsFromTableStart = 180;
 
-            // _loadedTexture_175
+            // _loadedTexture_172
             ranges[181].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[181].NumDescriptors = 1;
-            ranges[181].BaseShaderRegister = 177;
+            ranges[181].BaseShaderRegister = 174;
             ranges[181].RegisterSpace = 0;
             ranges[181].OffsetInDescriptorsFromTableStart = 181;
 
-            // _loadedTexture_176
+            // _loadedTexture_173
             ranges[182].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[182].NumDescriptors = 1;
-            ranges[182].BaseShaderRegister = 178;
+            ranges[182].BaseShaderRegister = 175;
             ranges[182].RegisterSpace = 0;
             ranges[182].OffsetInDescriptorsFromTableStart = 182;
 
-            // _loadedTexture_177
+            // _loadedTexture_174
             ranges[183].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[183].NumDescriptors = 1;
-            ranges[183].BaseShaderRegister = 179;
+            ranges[183].BaseShaderRegister = 176;
             ranges[183].RegisterSpace = 0;
             ranges[183].OffsetInDescriptorsFromTableStart = 183;
 
-            // _loadedTexture_178
+            // _loadedTexture_175
             ranges[184].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[184].NumDescriptors = 1;
-            ranges[184].BaseShaderRegister = 180;
+            ranges[184].BaseShaderRegister = 177;
             ranges[184].RegisterSpace = 0;
             ranges[184].OffsetInDescriptorsFromTableStart = 184;
 
-            // _loadedTexture_179
+            // _loadedTexture_176
             ranges[185].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[185].NumDescriptors = 1;
-            ranges[185].BaseShaderRegister = 181;
+            ranges[185].BaseShaderRegister = 178;
             ranges[185].RegisterSpace = 0;
             ranges[185].OffsetInDescriptorsFromTableStart = 185;
 
-            // _loadedTexture_180
+            // _loadedTexture_177
             ranges[186].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[186].NumDescriptors = 1;
-            ranges[186].BaseShaderRegister = 182;
+            ranges[186].BaseShaderRegister = 179;
             ranges[186].RegisterSpace = 0;
             ranges[186].OffsetInDescriptorsFromTableStart = 186;
 
-            // _loadedTexture_181
+            // _loadedTexture_178
             ranges[187].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[187].NumDescriptors = 1;
-            ranges[187].BaseShaderRegister = 183;
+            ranges[187].BaseShaderRegister = 180;
             ranges[187].RegisterSpace = 0;
             ranges[187].OffsetInDescriptorsFromTableStart = 187;
 
-            // _loadedTexture_182
+            // _loadedTexture_179
             ranges[188].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[188].NumDescriptors = 1;
-            ranges[188].BaseShaderRegister = 184;
+            ranges[188].BaseShaderRegister = 181;
             ranges[188].RegisterSpace = 0;
             ranges[188].OffsetInDescriptorsFromTableStart = 188;
 
-            // _loadedTexture_183
+            // _loadedTexture_180
             ranges[189].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[189].NumDescriptors = 1;
-            ranges[189].BaseShaderRegister = 185;
+            ranges[189].BaseShaderRegister = 182;
             ranges[189].RegisterSpace = 0;
             ranges[189].OffsetInDescriptorsFromTableStart = 189;
 
-            // _loadedTexture_184
+            // _loadedTexture_181
             ranges[190].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[190].NumDescriptors = 1;
-            ranges[190].BaseShaderRegister = 186;
+            ranges[190].BaseShaderRegister = 183;
             ranges[190].RegisterSpace = 0;
             ranges[190].OffsetInDescriptorsFromTableStart = 190;
 
-            // _loadedTexture_185
+            // _loadedTexture_182
             ranges[191].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[191].NumDescriptors = 1;
-            ranges[191].BaseShaderRegister = 187;
+            ranges[191].BaseShaderRegister = 184;
             ranges[191].RegisterSpace = 0;
             ranges[191].OffsetInDescriptorsFromTableStart = 191;
 
-            // _loadedTexture_186
+            // _loadedTexture_183
             ranges[192].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[192].NumDescriptors = 1;
-            ranges[192].BaseShaderRegister = 188;
+            ranges[192].BaseShaderRegister = 185;
             ranges[192].RegisterSpace = 0;
             ranges[192].OffsetInDescriptorsFromTableStart = 192;
 
-            // _loadedTexture_187
+            // _loadedTexture_184
             ranges[193].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[193].NumDescriptors = 1;
-            ranges[193].BaseShaderRegister = 189;
+            ranges[193].BaseShaderRegister = 186;
             ranges[193].RegisterSpace = 0;
             ranges[193].OffsetInDescriptorsFromTableStart = 193;
 
-            // _loadedTexture_188
+            // _loadedTexture_185
             ranges[194].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[194].NumDescriptors = 1;
-            ranges[194].BaseShaderRegister = 190;
+            ranges[194].BaseShaderRegister = 187;
             ranges[194].RegisterSpace = 0;
             ranges[194].OffsetInDescriptorsFromTableStart = 194;
 
-            // _loadedTexture_189
+            // _loadedTexture_186
             ranges[195].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[195].NumDescriptors = 1;
-            ranges[195].BaseShaderRegister = 191;
+            ranges[195].BaseShaderRegister = 188;
             ranges[195].RegisterSpace = 0;
             ranges[195].OffsetInDescriptorsFromTableStart = 195;
 
-            // _loadedTexture_190
+            // _loadedTexture_187
             ranges[196].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[196].NumDescriptors = 1;
-            ranges[196].BaseShaderRegister = 192;
+            ranges[196].BaseShaderRegister = 189;
             ranges[196].RegisterSpace = 0;
             ranges[196].OffsetInDescriptorsFromTableStart = 196;
 
-            // _loadedTexture_191
+            // _loadedTexture_188
             ranges[197].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[197].NumDescriptors = 1;
-            ranges[197].BaseShaderRegister = 193;
+            ranges[197].BaseShaderRegister = 190;
             ranges[197].RegisterSpace = 0;
             ranges[197].OffsetInDescriptorsFromTableStart = 197;
 
-            // _loadedTexture_192
+            // _loadedTexture_189
             ranges[198].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[198].NumDescriptors = 1;
-            ranges[198].BaseShaderRegister = 194;
+            ranges[198].BaseShaderRegister = 191;
             ranges[198].RegisterSpace = 0;
             ranges[198].OffsetInDescriptorsFromTableStart = 198;
 
-            // _loadedTexture_193
+            // _loadedTexture_190
             ranges[199].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[199].NumDescriptors = 1;
-            ranges[199].BaseShaderRegister = 195;
+            ranges[199].BaseShaderRegister = 192;
             ranges[199].RegisterSpace = 0;
             ranges[199].OffsetInDescriptorsFromTableStart = 199;
 
-            // _loadedTexture_194
+            // _loadedTexture_191
             ranges[200].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[200].NumDescriptors = 1;
-            ranges[200].BaseShaderRegister = 196;
+            ranges[200].BaseShaderRegister = 193;
             ranges[200].RegisterSpace = 0;
             ranges[200].OffsetInDescriptorsFromTableStart = 200;
 
-            // _loadedTexture_195
+            // _loadedTexture_192
             ranges[201].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[201].NumDescriptors = 1;
-            ranges[201].BaseShaderRegister = 197;
+            ranges[201].BaseShaderRegister = 194;
             ranges[201].RegisterSpace = 0;
             ranges[201].OffsetInDescriptorsFromTableStart = 201;
 
-            // _RayGenCB
-            ranges[202].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
+            // _loadedTexture_193
+            ranges[202].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[202].NumDescriptors = 1;
-            ranges[202].BaseShaderRegister = 0;
+            ranges[202].BaseShaderRegister = 195;
             ranges[202].RegisterSpace = 0;
             ranges[202].OffsetInDescriptorsFromTableStart = 202;
 
-            if(!DX12Utils::MakeRootSig(device, ranges, 203, samplers, 2, &ContextInternal::rayShader_Raytrace_rootSig, (c_debugNames ? L"Raytrace" : nullptr), Context::LogFn))
+            // _loadedTexture_194
+            ranges[203].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+            ranges[203].NumDescriptors = 1;
+            ranges[203].BaseShaderRegister = 196;
+            ranges[203].RegisterSpace = 0;
+            ranges[203].OffsetInDescriptorsFromTableStart = 203;
+
+            // _loadedTexture_195
+            ranges[204].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+            ranges[204].NumDescriptors = 1;
+            ranges[204].BaseShaderRegister = 197;
+            ranges[204].RegisterSpace = 0;
+            ranges[204].OffsetInDescriptorsFromTableStart = 204;
+
+            // _loadedTexture_196
+            ranges[205].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+            ranges[205].NumDescriptors = 1;
+            ranges[205].BaseShaderRegister = 198;
+            ranges[205].RegisterSpace = 0;
+            ranges[205].OffsetInDescriptorsFromTableStart = 205;
+
+            // _loadedTexture_197
+            ranges[206].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+            ranges[206].NumDescriptors = 1;
+            ranges[206].BaseShaderRegister = 199;
+            ranges[206].RegisterSpace = 0;
+            ranges[206].OffsetInDescriptorsFromTableStart = 206;
+
+            // _loadedTexture_198
+            ranges[207].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+            ranges[207].NumDescriptors = 1;
+            ranges[207].BaseShaderRegister = 200;
+            ranges[207].RegisterSpace = 0;
+            ranges[207].OffsetInDescriptorsFromTableStart = 207;
+
+            // _loadedTexture_199
+            ranges[208].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+            ranges[208].NumDescriptors = 1;
+            ranges[208].BaseShaderRegister = 201;
+            ranges[208].RegisterSpace = 0;
+            ranges[208].OffsetInDescriptorsFromTableStart = 208;
+
+            // _loadedTexture_200
+            ranges[209].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+            ranges[209].NumDescriptors = 1;
+            ranges[209].BaseShaderRegister = 202;
+            ranges[209].RegisterSpace = 0;
+            ranges[209].OffsetInDescriptorsFromTableStart = 209;
+
+            // _loadedTexture_201
+            ranges[210].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+            ranges[210].NumDescriptors = 1;
+            ranges[210].BaseShaderRegister = 203;
+            ranges[210].RegisterSpace = 0;
+            ranges[210].OffsetInDescriptorsFromTableStart = 210;
+
+            // _loadedTexture_202
+            ranges[211].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+            ranges[211].NumDescriptors = 1;
+            ranges[211].BaseShaderRegister = 204;
+            ranges[211].RegisterSpace = 0;
+            ranges[211].OffsetInDescriptorsFromTableStart = 211;
+
+            // _RayGenCB
+            ranges[212].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
+            ranges[212].NumDescriptors = 1;
+            ranges[212].BaseShaderRegister = 0;
+            ranges[212].RegisterSpace = 0;
+            ranges[212].OffsetInDescriptorsFromTableStart = 212;
+
+            if(!DX12Utils::MakeRootSig(device, ranges, 213, samplers, 2, &ContextInternal::rayShader_Raytrace_rootSig, (c_debugNames ? L"Raytrace" : nullptr), Context::LogFn))
                 return false;
 
             ShaderCompilationInfo shaderCompilationInfo;
@@ -1885,7 +1952,7 @@ namespace FastBokeh
             samplers[0].RegisterSpace = 0;
             samplers[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 
-            D3D12_DESCRIPTOR_RANGE ranges[21];
+            D3D12_DESCRIPTOR_RANGE ranges[23];
 
             // FarFieldColorCoC
             ranges[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
@@ -1901,140 +1968,154 @@ namespace FastBokeh
             ranges[1].RegisterSpace = 0;
             ranges[1].OffsetInDescriptorsFromTableStart = 1;
 
-            // _loadedTexture_179
+            // _loadedTexture_186
             ranges[2].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[2].NumDescriptors = 1;
             ranges[2].BaseShaderRegister = 1;
             ranges[2].RegisterSpace = 0;
             ranges[2].OffsetInDescriptorsFromTableStart = 2;
 
-            // _loadedTexture_180
+            // _loadedTexture_187
             ranges[3].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[3].NumDescriptors = 1;
             ranges[3].BaseShaderRegister = 2;
             ranges[3].RegisterSpace = 0;
             ranges[3].OffsetInDescriptorsFromTableStart = 3;
 
-            // _loadedTexture_181
+            // _loadedTexture_188
             ranges[4].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[4].NumDescriptors = 1;
             ranges[4].BaseShaderRegister = 3;
             ranges[4].RegisterSpace = 0;
             ranges[4].OffsetInDescriptorsFromTableStart = 4;
 
-            // _loadedTexture_182
+            // _loadedTexture_189
             ranges[5].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[5].NumDescriptors = 1;
             ranges[5].BaseShaderRegister = 4;
             ranges[5].RegisterSpace = 0;
             ranges[5].OffsetInDescriptorsFromTableStart = 5;
 
-            // _loadedTexture_183
+            // _loadedTexture_190
             ranges[6].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[6].NumDescriptors = 1;
             ranges[6].BaseShaderRegister = 5;
             ranges[6].RegisterSpace = 0;
             ranges[6].OffsetInDescriptorsFromTableStart = 6;
 
-            // _loadedTexture_171
+            // _loadedTexture_178
             ranges[7].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[7].NumDescriptors = 1;
             ranges[7].BaseShaderRegister = 6;
             ranges[7].RegisterSpace = 0;
             ranges[7].OffsetInDescriptorsFromTableStart = 7;
 
-            // _loadedTexture_184
+            // _loadedTexture_191
             ranges[8].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[8].NumDescriptors = 1;
             ranges[8].BaseShaderRegister = 7;
             ranges[8].RegisterSpace = 0;
             ranges[8].OffsetInDescriptorsFromTableStart = 8;
 
-            // _loadedTexture_185
+            // _loadedTexture_192
             ranges[9].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[9].NumDescriptors = 1;
             ranges[9].BaseShaderRegister = 8;
             ranges[9].RegisterSpace = 0;
             ranges[9].OffsetInDescriptorsFromTableStart = 9;
 
-            // _loadedTexture_187
+            // _loadedTexture_194
             ranges[10].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[10].NumDescriptors = 1;
             ranges[10].BaseShaderRegister = 9;
             ranges[10].RegisterSpace = 0;
             ranges[10].OffsetInDescriptorsFromTableStart = 10;
 
-            // _loadedTexture_188
+            // _loadedTexture_195
             ranges[11].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[11].NumDescriptors = 1;
             ranges[11].BaseShaderRegister = 10;
             ranges[11].RegisterSpace = 0;
             ranges[11].OffsetInDescriptorsFromTableStart = 11;
 
-            // _loadedTexture_186
+            // _loadedTexture_193
             ranges[12].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[12].NumDescriptors = 1;
             ranges[12].BaseShaderRegister = 11;
             ranges[12].RegisterSpace = 0;
             ranges[12].OffsetInDescriptorsFromTableStart = 12;
 
-            // _loadedTexture_189
+            // _loadedTexture_196
             ranges[13].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[13].NumDescriptors = 1;
             ranges[13].BaseShaderRegister = 12;
             ranges[13].RegisterSpace = 0;
             ranges[13].OffsetInDescriptorsFromTableStart = 13;
 
-            // _loadedTexture_190
+            // _loadedTexture_197
             ranges[14].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[14].NumDescriptors = 1;
             ranges[14].BaseShaderRegister = 13;
             ranges[14].RegisterSpace = 0;
             ranges[14].OffsetInDescriptorsFromTableStart = 14;
 
-            // _loadedTexture_191
+            // _loadedTexture_198
             ranges[15].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[15].NumDescriptors = 1;
             ranges[15].BaseShaderRegister = 14;
             ranges[15].RegisterSpace = 0;
             ranges[15].OffsetInDescriptorsFromTableStart = 15;
 
-            // _loadedTexture_192
+            // _loadedTexture_199
             ranges[16].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[16].NumDescriptors = 1;
             ranges[16].BaseShaderRegister = 15;
             ranges[16].RegisterSpace = 0;
             ranges[16].OffsetInDescriptorsFromTableStart = 16;
 
-            // _loadedTexture_193
+            // _loadedTexture_200
             ranges[17].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[17].NumDescriptors = 1;
             ranges[17].BaseShaderRegister = 16;
             ranges[17].RegisterSpace = 0;
             ranges[17].OffsetInDescriptorsFromTableStart = 17;
 
-            // _loadedTexture_194
+            // _loadedTexture_201
             ranges[18].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[18].NumDescriptors = 1;
             ranges[18].BaseShaderRegister = 17;
             ranges[18].RegisterSpace = 0;
             ranges[18].OffsetInDescriptorsFromTableStart = 18;
 
-            // _loadedTexture_195
+            // _loadedTexture_202
             ranges[19].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[19].NumDescriptors = 1;
             ranges[19].BaseShaderRegister = 18;
             ranges[19].RegisterSpace = 0;
             ranges[19].OffsetInDescriptorsFromTableStart = 19;
 
-            // _GatherDOF_BlurFarCSCB
-            ranges[20].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
+            // _loadedTexture_203
+            ranges[20].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[20].NumDescriptors = 1;
-            ranges[20].BaseShaderRegister = 0;
+            ranges[20].BaseShaderRegister = 19;
             ranges[20].RegisterSpace = 0;
             ranges[20].OffsetInDescriptorsFromTableStart = 20;
 
-            if(!DX12Utils::MakeRootSig(device, ranges, 21, samplers, 1, &ContextInternal::computeShader_GatherDOF_BlurFar_rootSig, (c_debugNames ? L"GatherDOF_BlurFar" : nullptr), Context::LogFn))
+            // _loadedTexture_204
+            ranges[21].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+            ranges[21].NumDescriptors = 1;
+            ranges[21].BaseShaderRegister = 20;
+            ranges[21].RegisterSpace = 0;
+            ranges[21].OffsetInDescriptorsFromTableStart = 21;
+
+            // _GatherDOF_BlurFarCSCB
+            ranges[22].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
+            ranges[22].NumDescriptors = 1;
+            ranges[22].BaseShaderRegister = 0;
+            ranges[22].RegisterSpace = 0;
+            ranges[22].OffsetInDescriptorsFromTableStart = 22;
+
+            if(!DX12Utils::MakeRootSig(device, ranges, 23, samplers, 1, &ContextInternal::computeShader_GatherDOF_BlurFar_rootSig, (c_debugNames ? L"GatherDOF_BlurFar" : nullptr), Context::LogFn))
                 return false;
 
             ShaderCompilationInfo shaderCompilationInfo;
@@ -2095,126 +2176,126 @@ namespace FastBokeh
             ranges[2].RegisterSpace = 0;
             ranges[2].OffsetInDescriptorsFromTableStart = 2;
 
-            // _loadedTexture_179
+            // _loadedTexture_186
             ranges[3].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[3].NumDescriptors = 1;
             ranges[3].BaseShaderRegister = 2;
             ranges[3].RegisterSpace = 0;
             ranges[3].OffsetInDescriptorsFromTableStart = 3;
 
-            // _loadedTexture_180
+            // _loadedTexture_187
             ranges[4].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[4].NumDescriptors = 1;
             ranges[4].BaseShaderRegister = 3;
             ranges[4].RegisterSpace = 0;
             ranges[4].OffsetInDescriptorsFromTableStart = 4;
 
-            // _loadedTexture_181
+            // _loadedTexture_188
             ranges[5].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[5].NumDescriptors = 1;
             ranges[5].BaseShaderRegister = 4;
             ranges[5].RegisterSpace = 0;
             ranges[5].OffsetInDescriptorsFromTableStart = 5;
 
-            // _loadedTexture_182
+            // _loadedTexture_189
             ranges[6].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[6].NumDescriptors = 1;
             ranges[6].BaseShaderRegister = 5;
             ranges[6].RegisterSpace = 0;
             ranges[6].OffsetInDescriptorsFromTableStart = 6;
 
-            // _loadedTexture_183
+            // _loadedTexture_190
             ranges[7].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[7].NumDescriptors = 1;
             ranges[7].BaseShaderRegister = 6;
             ranges[7].RegisterSpace = 0;
             ranges[7].OffsetInDescriptorsFromTableStart = 7;
 
-            // _loadedTexture_171
+            // _loadedTexture_178
             ranges[8].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[8].NumDescriptors = 1;
             ranges[8].BaseShaderRegister = 7;
             ranges[8].RegisterSpace = 0;
             ranges[8].OffsetInDescriptorsFromTableStart = 8;
 
-            // _loadedTexture_184
+            // _loadedTexture_191
             ranges[9].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[9].NumDescriptors = 1;
             ranges[9].BaseShaderRegister = 8;
             ranges[9].RegisterSpace = 0;
             ranges[9].OffsetInDescriptorsFromTableStart = 9;
 
-            // _loadedTexture_185
+            // _loadedTexture_192
             ranges[10].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[10].NumDescriptors = 1;
             ranges[10].BaseShaderRegister = 9;
             ranges[10].RegisterSpace = 0;
             ranges[10].OffsetInDescriptorsFromTableStart = 10;
 
-            // _loadedTexture_186
+            // _loadedTexture_193
             ranges[11].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[11].NumDescriptors = 1;
             ranges[11].BaseShaderRegister = 10;
             ranges[11].RegisterSpace = 0;
             ranges[11].OffsetInDescriptorsFromTableStart = 11;
 
-            // _loadedTexture_187
+            // _loadedTexture_194
             ranges[12].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[12].NumDescriptors = 1;
             ranges[12].BaseShaderRegister = 11;
             ranges[12].RegisterSpace = 0;
             ranges[12].OffsetInDescriptorsFromTableStart = 12;
 
-            // _loadedTexture_188
+            // _loadedTexture_195
             ranges[13].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[13].NumDescriptors = 1;
             ranges[13].BaseShaderRegister = 12;
             ranges[13].RegisterSpace = 0;
             ranges[13].OffsetInDescriptorsFromTableStart = 13;
 
-            // _loadedTexture_189
+            // _loadedTexture_196
             ranges[14].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[14].NumDescriptors = 1;
             ranges[14].BaseShaderRegister = 13;
             ranges[14].RegisterSpace = 0;
             ranges[14].OffsetInDescriptorsFromTableStart = 14;
 
-            // _loadedTexture_190
+            // _loadedTexture_197
             ranges[15].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[15].NumDescriptors = 1;
             ranges[15].BaseShaderRegister = 14;
             ranges[15].RegisterSpace = 0;
             ranges[15].OffsetInDescriptorsFromTableStart = 15;
 
-            // _loadedTexture_191
+            // _loadedTexture_198
             ranges[16].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[16].NumDescriptors = 1;
             ranges[16].BaseShaderRegister = 15;
             ranges[16].RegisterSpace = 0;
             ranges[16].OffsetInDescriptorsFromTableStart = 16;
 
-            // _loadedTexture_192
+            // _loadedTexture_199
             ranges[17].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[17].NumDescriptors = 1;
             ranges[17].BaseShaderRegister = 16;
             ranges[17].RegisterSpace = 0;
             ranges[17].OffsetInDescriptorsFromTableStart = 17;
 
-            // _loadedTexture_193
+            // _loadedTexture_200
             ranges[18].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[18].NumDescriptors = 1;
             ranges[18].BaseShaderRegister = 17;
             ranges[18].RegisterSpace = 0;
             ranges[18].OffsetInDescriptorsFromTableStart = 18;
 
-            // _loadedTexture_194
+            // _loadedTexture_201
             ranges[19].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[19].NumDescriptors = 1;
             ranges[19].BaseShaderRegister = 18;
             ranges[19].RegisterSpace = 0;
             ranges[19].OffsetInDescriptorsFromTableStart = 19;
 
-            // _loadedTexture_195
+            // _loadedTexture_202
             ranges[20].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[20].NumDescriptors = 1;
             ranges[20].BaseShaderRegister = 19;
@@ -2384,7 +2465,7 @@ namespace FastBokeh
             samplers[0].RegisterSpace = 0;
             samplers[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 
-            D3D12_DESCRIPTOR_RANGE ranges[22];
+            D3D12_DESCRIPTOR_RANGE ranges[23];
 
             // NearFieldColorCoCBorder
             ranges[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
@@ -2407,140 +2488,147 @@ namespace FastBokeh
             ranges[2].RegisterSpace = 0;
             ranges[2].OffsetInDescriptorsFromTableStart = 2;
 
-            // _loadedTexture_179
+            // _loadedTexture_186
             ranges[3].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[3].NumDescriptors = 1;
             ranges[3].BaseShaderRegister = 2;
             ranges[3].RegisterSpace = 0;
             ranges[3].OffsetInDescriptorsFromTableStart = 3;
 
-            // _loadedTexture_180
+            // _loadedTexture_187
             ranges[4].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[4].NumDescriptors = 1;
             ranges[4].BaseShaderRegister = 3;
             ranges[4].RegisterSpace = 0;
             ranges[4].OffsetInDescriptorsFromTableStart = 4;
 
-            // _loadedTexture_181
+            // _loadedTexture_188
             ranges[5].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[5].NumDescriptors = 1;
             ranges[5].BaseShaderRegister = 4;
             ranges[5].RegisterSpace = 0;
             ranges[5].OffsetInDescriptorsFromTableStart = 5;
 
-            // _loadedTexture_182
+            // _loadedTexture_189
             ranges[6].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[6].NumDescriptors = 1;
             ranges[6].BaseShaderRegister = 5;
             ranges[6].RegisterSpace = 0;
             ranges[6].OffsetInDescriptorsFromTableStart = 6;
 
-            // _loadedTexture_183
+            // _loadedTexture_190
             ranges[7].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[7].NumDescriptors = 1;
             ranges[7].BaseShaderRegister = 6;
             ranges[7].RegisterSpace = 0;
             ranges[7].OffsetInDescriptorsFromTableStart = 7;
 
-            // _loadedTexture_171
+            // _loadedTexture_178
             ranges[8].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[8].NumDescriptors = 1;
             ranges[8].BaseShaderRegister = 7;
             ranges[8].RegisterSpace = 0;
             ranges[8].OffsetInDescriptorsFromTableStart = 8;
 
-            // _loadedTexture_184
+            // _loadedTexture_191
             ranges[9].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[9].NumDescriptors = 1;
             ranges[9].BaseShaderRegister = 8;
             ranges[9].RegisterSpace = 0;
             ranges[9].OffsetInDescriptorsFromTableStart = 9;
 
-            // _loadedTexture_185
+            // _loadedTexture_192
             ranges[10].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[10].NumDescriptors = 1;
             ranges[10].BaseShaderRegister = 9;
             ranges[10].RegisterSpace = 0;
             ranges[10].OffsetInDescriptorsFromTableStart = 10;
 
-            // _loadedTexture_186
+            // _loadedTexture_193
             ranges[11].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[11].NumDescriptors = 1;
             ranges[11].BaseShaderRegister = 10;
             ranges[11].RegisterSpace = 0;
             ranges[11].OffsetInDescriptorsFromTableStart = 11;
 
-            // _loadedTexture_187
+            // _loadedTexture_194
             ranges[12].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[12].NumDescriptors = 1;
             ranges[12].BaseShaderRegister = 11;
             ranges[12].RegisterSpace = 0;
             ranges[12].OffsetInDescriptorsFromTableStart = 12;
 
-            // _loadedTexture_188
+            // _loadedTexture_195
             ranges[13].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[13].NumDescriptors = 1;
             ranges[13].BaseShaderRegister = 12;
             ranges[13].RegisterSpace = 0;
             ranges[13].OffsetInDescriptorsFromTableStart = 13;
 
-            // _loadedTexture_189
+            // _loadedTexture_196
             ranges[14].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[14].NumDescriptors = 1;
             ranges[14].BaseShaderRegister = 13;
             ranges[14].RegisterSpace = 0;
             ranges[14].OffsetInDescriptorsFromTableStart = 14;
 
-            // _loadedTexture_190
+            // _loadedTexture_197
             ranges[15].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[15].NumDescriptors = 1;
             ranges[15].BaseShaderRegister = 14;
             ranges[15].RegisterSpace = 0;
             ranges[15].OffsetInDescriptorsFromTableStart = 15;
 
-            // _loadedTexture_191
+            // _loadedTexture_198
             ranges[16].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[16].NumDescriptors = 1;
             ranges[16].BaseShaderRegister = 15;
             ranges[16].RegisterSpace = 0;
             ranges[16].OffsetInDescriptorsFromTableStart = 16;
 
-            // _loadedTexture_192
+            // _loadedTexture_199
             ranges[17].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[17].NumDescriptors = 1;
             ranges[17].BaseShaderRegister = 16;
             ranges[17].RegisterSpace = 0;
             ranges[17].OffsetInDescriptorsFromTableStart = 17;
 
-            // _loadedTexture_193
+            // _loadedTexture_200
             ranges[18].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[18].NumDescriptors = 1;
             ranges[18].BaseShaderRegister = 17;
             ranges[18].RegisterSpace = 0;
             ranges[18].OffsetInDescriptorsFromTableStart = 18;
 
-            // _loadedTexture_194
+            // _loadedTexture_201
             ranges[19].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[19].NumDescriptors = 1;
             ranges[19].BaseShaderRegister = 18;
             ranges[19].RegisterSpace = 0;
             ranges[19].OffsetInDescriptorsFromTableStart = 19;
 
-            // _loadedTexture_195
+            // _loadedTexture_202
             ranges[20].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[20].NumDescriptors = 1;
             ranges[20].BaseShaderRegister = 19;
             ranges[20].RegisterSpace = 0;
             ranges[20].OffsetInDescriptorsFromTableStart = 20;
 
-            // _GatherDOF_NearBlurCB
-            ranges[21].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
+            // _loadedTexture_203
+            ranges[21].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[21].NumDescriptors = 1;
-            ranges[21].BaseShaderRegister = 0;
+            ranges[21].BaseShaderRegister = 20;
             ranges[21].RegisterSpace = 0;
             ranges[21].OffsetInDescriptorsFromTableStart = 21;
 
-            if(!DX12Utils::MakeRootSig(device, ranges, 22, samplers, 1, &ContextInternal::computeShader_GatherDOF_NearBlur_rootSig, (c_debugNames ? L"GatherDOF_NearBlur" : nullptr), Context::LogFn))
+            // _GatherDOF_NearBlurCB
+            ranges[22].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
+            ranges[22].NumDescriptors = 1;
+            ranges[22].BaseShaderRegister = 0;
+            ranges[22].RegisterSpace = 0;
+            ranges[22].OffsetInDescriptorsFromTableStart = 22;
+
+            if(!DX12Utils::MakeRootSig(device, ranges, 23, samplers, 1, &ContextInternal::computeShader_GatherDOF_NearBlur_rootSig, (c_debugNames ? L"GatherDOF_NearBlur" : nullptr), Context::LogFn))
                 return false;
 
             ShaderCompilationInfo shaderCompilationInfo;
@@ -2601,126 +2689,126 @@ namespace FastBokeh
             ranges[2].RegisterSpace = 0;
             ranges[2].OffsetInDescriptorsFromTableStart = 2;
 
-            // _loadedTexture_179
+            // _loadedTexture_186
             ranges[3].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[3].NumDescriptors = 1;
             ranges[3].BaseShaderRegister = 2;
             ranges[3].RegisterSpace = 0;
             ranges[3].OffsetInDescriptorsFromTableStart = 3;
 
-            // _loadedTexture_180
+            // _loadedTexture_187
             ranges[4].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[4].NumDescriptors = 1;
             ranges[4].BaseShaderRegister = 3;
             ranges[4].RegisterSpace = 0;
             ranges[4].OffsetInDescriptorsFromTableStart = 4;
 
-            // _loadedTexture_181
+            // _loadedTexture_188
             ranges[5].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[5].NumDescriptors = 1;
             ranges[5].BaseShaderRegister = 4;
             ranges[5].RegisterSpace = 0;
             ranges[5].OffsetInDescriptorsFromTableStart = 5;
 
-            // _loadedTexture_182
+            // _loadedTexture_189
             ranges[6].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[6].NumDescriptors = 1;
             ranges[6].BaseShaderRegister = 5;
             ranges[6].RegisterSpace = 0;
             ranges[6].OffsetInDescriptorsFromTableStart = 6;
 
-            // _loadedTexture_183
+            // _loadedTexture_190
             ranges[7].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[7].NumDescriptors = 1;
             ranges[7].BaseShaderRegister = 6;
             ranges[7].RegisterSpace = 0;
             ranges[7].OffsetInDescriptorsFromTableStart = 7;
 
-            // _loadedTexture_171
+            // _loadedTexture_178
             ranges[8].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[8].NumDescriptors = 1;
             ranges[8].BaseShaderRegister = 7;
             ranges[8].RegisterSpace = 0;
             ranges[8].OffsetInDescriptorsFromTableStart = 8;
 
-            // _loadedTexture_184
+            // _loadedTexture_191
             ranges[9].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[9].NumDescriptors = 1;
             ranges[9].BaseShaderRegister = 8;
             ranges[9].RegisterSpace = 0;
             ranges[9].OffsetInDescriptorsFromTableStart = 9;
 
-            // _loadedTexture_185
+            // _loadedTexture_192
             ranges[10].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[10].NumDescriptors = 1;
             ranges[10].BaseShaderRegister = 9;
             ranges[10].RegisterSpace = 0;
             ranges[10].OffsetInDescriptorsFromTableStart = 10;
 
-            // _loadedTexture_186
+            // _loadedTexture_193
             ranges[11].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[11].NumDescriptors = 1;
             ranges[11].BaseShaderRegister = 10;
             ranges[11].RegisterSpace = 0;
             ranges[11].OffsetInDescriptorsFromTableStart = 11;
 
-            // _loadedTexture_187
+            // _loadedTexture_194
             ranges[12].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[12].NumDescriptors = 1;
             ranges[12].BaseShaderRegister = 11;
             ranges[12].RegisterSpace = 0;
             ranges[12].OffsetInDescriptorsFromTableStart = 12;
 
-            // _loadedTexture_188
+            // _loadedTexture_195
             ranges[13].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[13].NumDescriptors = 1;
             ranges[13].BaseShaderRegister = 12;
             ranges[13].RegisterSpace = 0;
             ranges[13].OffsetInDescriptorsFromTableStart = 13;
 
-            // _loadedTexture_189
+            // _loadedTexture_196
             ranges[14].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[14].NumDescriptors = 1;
             ranges[14].BaseShaderRegister = 13;
             ranges[14].RegisterSpace = 0;
             ranges[14].OffsetInDescriptorsFromTableStart = 14;
 
-            // _loadedTexture_190
+            // _loadedTexture_197
             ranges[15].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[15].NumDescriptors = 1;
             ranges[15].BaseShaderRegister = 14;
             ranges[15].RegisterSpace = 0;
             ranges[15].OffsetInDescriptorsFromTableStart = 15;
 
-            // _loadedTexture_191
+            // _loadedTexture_198
             ranges[16].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[16].NumDescriptors = 1;
             ranges[16].BaseShaderRegister = 15;
             ranges[16].RegisterSpace = 0;
             ranges[16].OffsetInDescriptorsFromTableStart = 16;
 
-            // _loadedTexture_192
+            // _loadedTexture_199
             ranges[17].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[17].NumDescriptors = 1;
             ranges[17].BaseShaderRegister = 16;
             ranges[17].RegisterSpace = 0;
             ranges[17].OffsetInDescriptorsFromTableStart = 17;
 
-            // _loadedTexture_193
+            // _loadedTexture_200
             ranges[18].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[18].NumDescriptors = 1;
             ranges[18].BaseShaderRegister = 17;
             ranges[18].RegisterSpace = 0;
             ranges[18].OffsetInDescriptorsFromTableStart = 18;
 
-            // _loadedTexture_194
+            // _loadedTexture_201
             ranges[19].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[19].NumDescriptors = 1;
             ranges[19].BaseShaderRegister = 18;
             ranges[19].RegisterSpace = 0;
             ranges[19].OffsetInDescriptorsFromTableStart = 19;
 
-            // _loadedTexture_195
+            // _loadedTexture_202
             ranges[20].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             ranges[20].NumDescriptors = 1;
             ranges[20].BaseShaderRegister = 19;
@@ -2833,52 +2921,6 @@ namespace FastBokeh
 
             if(!DX12Utils::MakeComputePSO_DXC(device, shaderCompilationInfo,
                ContextInternal::computeShader_GatherDOF_Recombine_rootSig, &ContextInternal::computeShader_GatherDOF_Recombine_pso, Context::LogFn))
-                return false;
-        }
-
-        // Compute Shader: GaussBlur_DoBlur
-        {
-            D3D12_STATIC_SAMPLER_DESC* samplers = nullptr;
-
-            D3D12_DESCRIPTOR_RANGE ranges[3];
-
-            // Input
-            ranges[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-            ranges[0].NumDescriptors = 1;
-            ranges[0].BaseShaderRegister = 0;
-            ranges[0].RegisterSpace = 0;
-            ranges[0].OffsetInDescriptorsFromTableStart = 0;
-
-            // Output
-            ranges[1].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
-            ranges[1].NumDescriptors = 1;
-            ranges[1].BaseShaderRegister = 0;
-            ranges[1].RegisterSpace = 0;
-            ranges[1].OffsetInDescriptorsFromTableStart = 1;
-
-            // _GaussBlur_GaussBlurCSCB
-            ranges[2].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
-            ranges[2].NumDescriptors = 1;
-            ranges[2].BaseShaderRegister = 0;
-            ranges[2].RegisterSpace = 0;
-            ranges[2].OffsetInDescriptorsFromTableStart = 2;
-
-            if(!DX12Utils::MakeRootSig(device, ranges, 3, samplers, 0, &ContextInternal::computeShader_GaussBlur_DoBlur_rootSig, (c_debugNames ? L"GaussBlur_DoBlur" : nullptr), Context::LogFn))
-                return false;
-
-            ShaderCompilationInfo shaderCompilationInfo;
-            shaderCompilationInfo.fileName = std::filesystem::path(Context::s_techniqueLocation) / "shaders" / "GaussBlur_GaussBlur/GaussBlurCS.hlsl";
-            shaderCompilationInfo.entryPoint = "csmain";
-            shaderCompilationInfo.shaderModel = "cs_6_1";
-            shaderCompilationInfo.debugName = (c_debugNames ? "GaussBlur_DoBlur" : "");
-            if (c_debugShaders) shaderCompilationInfo.flags |= ShaderCompilationFlags::Debug;
-            shaderCompilationInfo.defines.emplace_back("__GigiDispatchMultiply","uint3(1,1,1)");
-            shaderCompilationInfo.defines.emplace_back("__GigiDispatchDivide","uint3(1,1,1)");
-            shaderCompilationInfo.defines.emplace_back("__GigiDispatchPreAdd","uint3(0,0,0)");
-            shaderCompilationInfo.defines.emplace_back("__GigiDispatchPostAdd","uint3(0,0,0)");
-
-            if(!DX12Utils::MakeComputePSO_DXC(device, shaderCompilationInfo,
-               ContextInternal::computeShader_GaussBlur_DoBlur_rootSig, &ContextInternal::computeShader_GaussBlur_DoBlur_pso, Context::LogFn))
                 return false;
         }
 
@@ -3160,18 +3202,6 @@ namespace FastBokeh
         {
             s_delayedRelease.Add(ContextInternal::computeShader_GatherDOF_Recombine_rootSig);
             ContextInternal::computeShader_GatherDOF_Recombine_rootSig = nullptr;
-        }
-
-        if(ContextInternal::computeShader_GaussBlur_DoBlur_pso)
-        {
-            s_delayedRelease.Add(ContextInternal::computeShader_GaussBlur_DoBlur_pso);
-            ContextInternal::computeShader_GaussBlur_DoBlur_pso = nullptr;
-        }
-
-        if(ContextInternal::computeShader_GaussBlur_DoBlur_rootSig)
-        {
-            s_delayedRelease.Add(ContextInternal::computeShader_GaussBlur_DoBlur_rootSig);
-            ContextInternal::computeShader_GaussBlur_DoBlur_rootSig = nullptr;
         }
 
         if(ContextInternal::computeShader_TemporalAccumulation_DoAccum_pso)
@@ -3731,7 +3761,7 @@ namespace FastBokeh
 
         D3D12_RANGE range;
         range.Begin = 0;
-        range.End = ((16 + 1) * 2) * sizeof(uint64_t);
+        range.End = ((13 + 1) * 2) * sizeof(uint64_t);
 
         uint64_t* timeStampBuffer = nullptr;
         m_internal.m_TimestampReadbackBuffer->Map(0, &range, (void**)&timeStampBuffer);
@@ -3771,18 +3801,6 @@ namespace FastBokeh
             m_profileData[numItems].m_gpu = float(GPUTickDelta * double(timeStampBuffer[numItems*2+2] - timeStampBuffer[numItems*2+1])); numItems++; // compute shader: GatherDOF_FloodFillNear
         }
         m_profileData[numItems].m_gpu = float(GPUTickDelta * double(timeStampBuffer[numItems*2+2] - timeStampBuffer[numItems*2+1])); numItems++; // compute shader: GatherDOF_Recombine
-        if(m_input.variable_DOF != DOFMode::PostProcessing)
-        {
-            m_profileData[numItems].m_gpu = float(GPUTickDelta * double(timeStampBuffer[numItems*2+2] - timeStampBuffer[numItems*2+1])); numItems++; // copy resource: CopyHDR
-        }
-        if(!m_input.variable_GaussBlur_Disable)
-        {
-            m_profileData[numItems].m_gpu = float(GPUTickDelta * double(timeStampBuffer[numItems*2+2] - timeStampBuffer[numItems*2+1])); numItems++; // compute shader: GaussBlur_DoBlur
-        }
-        if(m_input.variable_GaussBlur_Disable)
-        {
-            m_profileData[numItems].m_gpu = float(GPUTickDelta * double(timeStampBuffer[numItems*2+2] - timeStampBuffer[numItems*2+1])); numItems++; // copy resource: GaussBlur_DontBlur
-        }
         m_profileData[numItems].m_gpu = float(GPUTickDelta * double(timeStampBuffer[numItems*2+2] - timeStampBuffer[numItems*2+1])); numItems++; // compute shader: TemporalAccumulation_DoAccum
         m_profileData[numItems].m_gpu = float(GPUTickDelta * double(timeStampBuffer[numItems*2+2] - timeStampBuffer[numItems*2+1])); numItems++; // compute shader: ToneMap_Tonemap
         m_profileData[numItems].m_gpu = float(GPUTickDelta * double(timeStampBuffer[numItems*2+1] - timeStampBuffer[0])); numItems++; // GPU total
@@ -3841,6 +3859,24 @@ namespace FastBokeh
         {
             s_delayedRelease.Add(m_internal.texture_DebugTex);
             m_internal.texture_DebugTex = nullptr;
+        }
+
+        if(m_internal.texture_ColorHDR_)
+        {
+            s_delayedRelease.Add(m_internal.texture_ColorHDR_);
+            m_internal.texture_ColorHDR_ = nullptr;
+        }
+
+        if(m_internal.texture_ColorHDR__)
+        {
+            s_delayedRelease.Add(m_internal.texture_ColorHDR__);
+            m_internal.texture_ColorHDR__ = nullptr;
+        }
+
+        if(m_internal.texture_ColorHDR___)
+        {
+            s_delayedRelease.Add(m_internal.texture_ColorHDR___);
+            m_internal.texture_ColorHDR___ = nullptr;
         }
 
         if(m_output.texture_GatherDOF_Output)
@@ -3913,12 +3949,6 @@ namespace FastBokeh
         {
             s_delayedRelease.Add(m_internal.texture_GatherDOF_FloodFilledBlurredNearFieldColorAlpha);
             m_internal.texture_GatherDOF_FloodFilledBlurredNearFieldColorAlpha = nullptr;
-        }
-
-        if(m_output.texture_GaussBlur_Output)
-        {
-            s_delayedRelease.Add(m_output.texture_GaussBlur_Output);
-            m_output.texture_GaussBlur_Output = nullptr;
         }
 
         if(m_output.texture_TemporalAccumulation_Accum)
@@ -5109,6 +5139,48 @@ namespace FastBokeh
             m_internal.texture__loadedTexture_195 = nullptr;
         }
 
+        if(m_internal.texture__loadedTexture_196)
+        {
+            s_delayedRelease.Add(m_internal.texture__loadedTexture_196);
+            m_internal.texture__loadedTexture_196 = nullptr;
+        }
+
+        if(m_internal.texture__loadedTexture_197)
+        {
+            s_delayedRelease.Add(m_internal.texture__loadedTexture_197);
+            m_internal.texture__loadedTexture_197 = nullptr;
+        }
+
+        if(m_internal.texture__loadedTexture_198)
+        {
+            s_delayedRelease.Add(m_internal.texture__loadedTexture_198);
+            m_internal.texture__loadedTexture_198 = nullptr;
+        }
+
+        if(m_internal.texture__loadedTexture_199)
+        {
+            s_delayedRelease.Add(m_internal.texture__loadedTexture_199);
+            m_internal.texture__loadedTexture_199 = nullptr;
+        }
+
+        if(m_internal.texture__loadedTexture_200)
+        {
+            s_delayedRelease.Add(m_internal.texture__loadedTexture_200);
+            m_internal.texture__loadedTexture_200 = nullptr;
+        }
+
+        if(m_internal.texture__loadedTexture_201)
+        {
+            s_delayedRelease.Add(m_internal.texture__loadedTexture_201);
+            m_internal.texture__loadedTexture_201 = nullptr;
+        }
+
+        if(m_internal.texture__loadedTexture_202)
+        {
+            s_delayedRelease.Add(m_internal.texture__loadedTexture_202);
+            m_internal.texture__loadedTexture_202 = nullptr;
+        }
+
         // _RayGenCB
         if (m_internal.constantBuffer__RayGenCB)
         {
@@ -5121,6 +5193,18 @@ namespace FastBokeh
         {
             s_delayedRelease.Add(m_internal.constantBuffer__GatherDOF_SetupCSCB);
             m_internal.constantBuffer__GatherDOF_SetupCSCB = nullptr;
+        }
+
+        if(m_internal.texture__loadedTexture_203)
+        {
+            s_delayedRelease.Add(m_internal.texture__loadedTexture_203);
+            m_internal.texture__loadedTexture_203 = nullptr;
+        }
+
+        if(m_internal.texture__loadedTexture_204)
+        {
+            s_delayedRelease.Add(m_internal.texture__loadedTexture_204);
+            m_internal.texture__loadedTexture_204 = nullptr;
         }
 
         // _GatherDOF_BlurFarCSCB
@@ -5142,13 +5226,6 @@ namespace FastBokeh
         {
             s_delayedRelease.Add(m_internal.constantBuffer__GatherDOF_RecombineCSCB);
             m_internal.constantBuffer__GatherDOF_RecombineCSCB = nullptr;
-        }
-
-        // _GaussBlur_GaussBlurCSCB
-        if (m_internal.constantBuffer__GaussBlur_GaussBlurCSCB)
-        {
-            s_delayedRelease.Add(m_internal.constantBuffer__GaussBlur_GaussBlurCSCB);
-            m_internal.constantBuffer__GaussBlur_GaussBlurCSCB = nullptr;
         }
 
         // _TemporalAccumulation_AccumulateCB
@@ -5185,7 +5262,7 @@ namespace FastBokeh
         // reset the timer index
         s_timerIndex = 0;
 
-        ScopedPerfEvent scopedPerf("FastBokeh", commandList, 243);
+        ScopedPerfEvent scopedPerf("FastBokeh", commandList, 250);
 
         std::chrono::high_resolution_clock::time_point startPointCPUTechnique;
         if(context->m_profile)
@@ -5194,14 +5271,14 @@ namespace FastBokeh
             if(context->m_internal.m_TimestampQueryHeap == nullptr)
             {
                 D3D12_QUERY_HEAP_DESC QueryHeapDesc;
-                QueryHeapDesc.Count = (16+1) * 2;
+                QueryHeapDesc.Count = (13+1) * 2;
                 QueryHeapDesc.NodeMask = 1;
                 QueryHeapDesc.Type = D3D12_QUERY_HEAP_TYPE_TIMESTAMP;
                 device->CreateQueryHeap(&QueryHeapDesc, IID_PPV_ARGS(&context->m_internal.m_TimestampQueryHeap));
                 if (c_debugNames)
                     context->m_internal.m_TimestampQueryHeap->SetName(L"FastBokeh Time Stamp Query Heap");
 
-                context->m_internal.m_TimestampReadbackBuffer = DX12Utils::CreateBuffer(device, sizeof(uint64_t) * (16+1) * 2, D3D12_RESOURCE_FLAG_NONE, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_HEAP_TYPE_READBACK, (c_debugNames ? L"FastBokeh Time Stamp Query Heap" : nullptr), nullptr);
+                context->m_internal.m_TimestampReadbackBuffer = DX12Utils::CreateBuffer(device, sizeof(uint64_t) * (13+1) * 2, D3D12_RESOURCE_FLAG_NONE, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_HEAP_TYPE_READBACK, (c_debugNames ? L"FastBokeh Time Stamp Query Heap" : nullptr), nullptr);
             }
             commandList->EndQuery(context->m_internal.m_TimestampQueryHeap, D3D12_QUERY_TYPE_TIMESTAMP, s_timerIndex++);
         }
@@ -5291,11 +5368,18 @@ namespace FastBokeh
             context->m_internal.constantBuffer__RayGenCB_cpu.AnamorphicScaling = context->m_input.variable_AnamorphicScaling;
             context->m_internal.constantBuffer__RayGenCB_cpu.Animate = context->m_input.variable_Animate;
             context->m_internal.constantBuffer__RayGenCB_cpu.ApertureRadius = context->m_input.variable_ApertureRadius;
+            context->m_internal.constantBuffer__RayGenCB_cpu.BokehConfigMode = (int)context->m_input.variable_BokehConfigMode;
             context->m_internal.constantBuffer__RayGenCB_cpu.CameraPos = context->m_input.variable_CameraPos;
-            context->m_internal.constantBuffer__RayGenCB_cpu.DOF = (int)context->m_input.variable_DOF;
+            context->m_internal.constantBuffer__RayGenCB_cpu.ConfigLightCount = context->m_input.variable_ConfigLightCount;
+            context->m_internal.constantBuffer__RayGenCB_cpu.ConfigLightDistance = context->m_input.variable_ConfigLightDistance;
+            context->m_internal.constantBuffer__RayGenCB_cpu.ConfigLightFieldWidth = context->m_input.variable_ConfigLightFieldWidth;
+            context->m_internal.constantBuffer__RayGenCB_cpu.ConfigOnlyDiagonal = context->m_input.variable_ConfigOnlyDiagonal;
+            context->m_internal.constantBuffer__RayGenCB_cpu.DebugToggle = context->m_input.variable_DebugToggle;
             context->m_internal.constantBuffer__RayGenCB_cpu.DepthNearPlane = context->m_input.variable_DepthNearPlane;
             context->m_internal.constantBuffer__RayGenCB_cpu.FocalLength = context->m_input.variable_FocalLength;
+            context->m_internal.constantBuffer__RayGenCB_cpu.FocusDistance = context->m_input.variable_FocusDistance;
             context->m_internal.constantBuffer__RayGenCB_cpu.FrameIndex = context->m_internal.variable_FrameIndex;
+            context->m_internal.constantBuffer__RayGenCB_cpu.HeliosApertureStop = context->m_input.variable_HeliosApertureStop;
             context->m_internal.constantBuffer__RayGenCB_cpu.InvViewMtx = context->m_input.variable_InvViewMtx;
             context->m_internal.constantBuffer__RayGenCB_cpu.InvViewProjMtx = context->m_input.variable_InvViewProjMtx;
             context->m_internal.constantBuffer__RayGenCB_cpu.JitterNoiseTextures = context->m_input.variable_JitterNoiseTextures;
@@ -5308,26 +5392,33 @@ namespace FastBokeh
             context->m_internal.constantBuffer__RayGenCB_cpu.NoImportanceSampling = context->m_input.variable_NoImportanceSampling;
             context->m_internal.constantBuffer__RayGenCB_cpu.NumBounces = context->m_input.variable_NumBounces;
             context->m_internal.constantBuffer__RayGenCB_cpu.OcclusionSettings = context->m_input.variable_OcclusionSettings;
+            context->m_internal.constantBuffer__RayGenCB_cpu.OnlyThisLightByIndex = context->m_input.variable_OnlyThisLightByIndex;
             context->m_internal.constantBuffer__RayGenCB_cpu.PetzvalScaling = context->m_input.variable_PetzvalScaling;
             context->m_internal.constantBuffer__RayGenCB_cpu.RayPosNormalNudge = context->m_input.variable_RayPosNormalNudge;
+            context->m_internal.constantBuffer__RayGenCB_cpu.RenderBokehConfig = context->m_input.variable_RenderBokehConfig;
+            context->m_internal.constantBuffer__RayGenCB_cpu.RenderLensSimulationDoF = context->m_input.variable_RenderLensSimulationDoF;
+            context->m_internal.constantBuffer__RayGenCB_cpu.RenderPinhole = context->m_input.variable_RenderPinhole;
+            context->m_internal.constantBuffer__RayGenCB_cpu.RenderThinLensDoF = context->m_input.variable_RenderThinLensDoF;
             context->m_internal.constantBuffer__RayGenCB_cpu.SamplesPerPixelPerFrame = context->m_input.variable_SamplesPerPixelPerFrame;
+            context->m_internal.constantBuffer__RayGenCB_cpu.ShiftHeliosPosition = context->m_input.variable_ShiftHeliosPosition;
             context->m_internal.constantBuffer__RayGenCB_cpu.SkyBrightness = context->m_input.variable_SkyBrightness;
             context->m_internal.constantBuffer__RayGenCB_cpu.SkyColor = context->m_input.variable_SkyColor;
             context->m_internal.constantBuffer__RayGenCB_cpu.SmallLightBrightness = context->m_input.variable_SmallLightBrightness;
             context->m_internal.constantBuffer__RayGenCB_cpu.SmallLightRadius = context->m_input.variable_SmallLightRadius;
             context->m_internal.constantBuffer__RayGenCB_cpu.SmallLightsColor = context->m_input.variable_SmallLightsColor;
             context->m_internal.constantBuffer__RayGenCB_cpu.SmallLightsColorful = context->m_input.variable_SmallLightsColorful;
+            context->m_internal.constantBuffer__RayGenCB_cpu.ToggleChromaticAberration = context->m_input.variable_ToggleChromaticAberration;
             DX12Utils::CopyConstantsCPUToGPU(s_ubTracker, device, commandList, context->m_internal.constantBuffer__RayGenCB, context->m_internal.constantBuffer__RayGenCB_cpu, Context::LogFn);
         }
 
         // Transition resources for the next action
         {
-            D3D12_RESOURCE_BARRIER barriers[4];
+            D3D12_RESOURCE_BARRIER barriers[7];
 
             barriers[0].Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
             barriers[0].Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
             barriers[0].Transition.pResource = context->m_internal.texture_ColorHDR;
-            barriers[0].Transition.StateBefore = D3D12_RESOURCE_STATE_COPY_SOURCE;
+            barriers[0].Transition.StateBefore = D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE;
             barriers[0].Transition.StateAfter = D3D12_RESOURCE_STATE_UNORDERED_ACCESS;
             barriers[0].Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
 
@@ -5346,7 +5437,19 @@ namespace FastBokeh
             barriers[3].Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
             barriers[3].UAV.pResource = context->m_internal.texture_DebugTex;
 
-            commandList->ResourceBarrier(4, barriers);
+            barriers[4].Type = D3D12_RESOURCE_BARRIER_TYPE_UAV;
+            barriers[4].Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+            barriers[4].UAV.pResource = context->m_internal.texture_ColorHDR_;
+
+            barriers[5].Type = D3D12_RESOURCE_BARRIER_TYPE_UAV;
+            barriers[5].Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+            barriers[5].UAV.pResource = context->m_internal.texture_ColorHDR__;
+
+            barriers[6].Type = D3D12_RESOURCE_BARRIER_TYPE_UAV;
+            barriers[6].Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+            barriers[6].UAV.pResource = context->m_internal.texture_ColorHDR___;
+
+            commandList->ResourceBarrier(7, barriers);
         }
 
         // Ray Shader: Raytrace
@@ -5364,6 +5467,9 @@ namespace FastBokeh
 
             DX12Utils::ResourceDescriptor descriptors[] = {
                 { context->m_internal.texture_ColorHDR, context->m_internal.texture_ColorHDR_format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture_ColorHDR_, context->m_internal.texture_ColorHDR__format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture_ColorHDR__, context->m_internal.texture_ColorHDR___format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture_ColorHDR___, context->m_internal.texture_ColorHDR____format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
                 { context->m_internal.texture_LinearDepth, context->m_internal.texture_LinearDepth_format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
                 { context->m_input.buffer_Scene, DXGI_FORMAT_UNKNOWN, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::RTScene, false, context->m_input.buffer_Scene_tlasSize, 1, 0, 0, 0, false },
                 { context->m_input.buffer_VertexBuffer, context->m_input.buffer_VertexBuffer_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Buffer, false, context->m_input.buffer_VertexBuffer_stride, context->m_input.buffer_VertexBuffer_count, 0, 0, 0, false },
@@ -5540,35 +5646,42 @@ namespace FastBokeh
                 { context->m_internal.texture__loadedTexture_168, context->m_internal.texture__loadedTexture_168_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
                 { context->m_internal.texture__loadedTexture_169, context->m_internal.texture__loadedTexture_169_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
                 { context->m_internal.texture__loadedTexture_170, context->m_internal.texture__loadedTexture_170_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_171, context->m_internal.texture__loadedTexture_171_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_171_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_171, context->m_internal.texture__loadedTexture_171_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
                 { context->m_internal.texture__loadedTexture_172, context->m_internal.texture__loadedTexture_172_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
                 { context->m_internal.texture__loadedTexture_173, context->m_internal.texture__loadedTexture_173_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
                 { context->m_internal.texture__loadedTexture_174, context->m_internal.texture__loadedTexture_174_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
                 { context->m_internal.texture__loadedTexture_175, context->m_internal.texture__loadedTexture_175_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
                 { context->m_internal.texture__loadedTexture_176, context->m_internal.texture__loadedTexture_176_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
                 { context->m_internal.texture__loadedTexture_177, context->m_internal.texture__loadedTexture_177_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_178, context->m_internal.texture__loadedTexture_178_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_179, context->m_internal.texture__loadedTexture_179_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_179_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_180, context->m_internal.texture__loadedTexture_180_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_180_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_181, context->m_internal.texture__loadedTexture_181_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_181_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_182, context->m_internal.texture__loadedTexture_182_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_182_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_178, context->m_internal.texture__loadedTexture_178_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_178_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_179, context->m_internal.texture__loadedTexture_179_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_180, context->m_internal.texture__loadedTexture_180_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_181, context->m_internal.texture__loadedTexture_181_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_182, context->m_internal.texture__loadedTexture_182_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
                 { context->m_internal.texture__loadedTexture_183, context->m_internal.texture__loadedTexture_183_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_184, context->m_internal.texture__loadedTexture_184_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_184_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_185, context->m_internal.texture__loadedTexture_185_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_185_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_186, context->m_internal.texture__loadedTexture_186_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_184, context->m_internal.texture__loadedTexture_184_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_185, context->m_internal.texture__loadedTexture_185_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_186, context->m_internal.texture__loadedTexture_186_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_186_size[2], 0, 0, 0, false },
                 { context->m_internal.texture__loadedTexture_187, context->m_internal.texture__loadedTexture_187_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_187_size[2], 0, 0, 0, false },
                 { context->m_internal.texture__loadedTexture_188, context->m_internal.texture__loadedTexture_188_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_188_size[2], 0, 0, 0, false },
                 { context->m_internal.texture__loadedTexture_189, context->m_internal.texture__loadedTexture_189_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_189_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_190, context->m_internal.texture__loadedTexture_190_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_190_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_190, context->m_internal.texture__loadedTexture_190_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
                 { context->m_internal.texture__loadedTexture_191, context->m_internal.texture__loadedTexture_191_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_191_size[2], 0, 0, 0, false },
                 { context->m_internal.texture__loadedTexture_192, context->m_internal.texture__loadedTexture_192_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_192_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_193, context->m_internal.texture__loadedTexture_193_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_193_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_193, context->m_internal.texture__loadedTexture_193_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
                 { context->m_internal.texture__loadedTexture_194, context->m_internal.texture__loadedTexture_194_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_194_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_195, context->m_internal.texture__loadedTexture_195_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_195, context->m_internal.texture__loadedTexture_195_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_195_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_196, context->m_internal.texture__loadedTexture_196_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_196_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_197, context->m_internal.texture__loadedTexture_197_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_197_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_198, context->m_internal.texture__loadedTexture_198_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_198_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_199, context->m_internal.texture__loadedTexture_199_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_199_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_200, context->m_internal.texture__loadedTexture_200_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_200_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_201, context->m_internal.texture__loadedTexture_201_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_201_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_202, context->m_internal.texture__loadedTexture_202_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
                 { context->m_internal.constantBuffer__RayGenCB, DXGI_FORMAT_UNKNOWN, DX12Utils::AccessType::CBV, DX12Utils::ResourceType::Buffer, false, 512, 1, 0, 0, 0, false }
             };
 
-            D3D12_GPU_DESCRIPTOR_HANDLE descriptorTable = GetDescriptorTable(device, s_srvHeap, descriptors, 203, Context::LogFn);
+            D3D12_GPU_DESCRIPTOR_HANDLE descriptorTable = GetDescriptorTable(device, s_srvHeap, descriptors, 213, Context::LogFn);
             commandList->SetComputeRootDescriptorTable(0, descriptorTable);
 
             unsigned int baseDispatchSize[3] = {
@@ -5658,7 +5771,7 @@ namespace FastBokeh
 
         // Compute Shader: GatherDOF_Setup
         {
-            ScopedPerfEvent scopedPerf("Compute Shader: GatherDOF_Setup", commandList, 9);
+            ScopedPerfEvent scopedPerf("Compute Shader: GatherDOF_Setup", commandList, 11);
             std::chrono::high_resolution_clock::time_point startPointCPU;
             if(context->m_profile)
             {
@@ -5727,7 +5840,7 @@ namespace FastBokeh
         // Compute Shader: GatherDOF_NearBorder
         if(context->m_input.variable_GatherDOF_DoNearField)
         {
-            ScopedPerfEvent scopedPerf("Compute Shader: GatherDOF_NearBorder", commandList, 23);
+            ScopedPerfEvent scopedPerf("Compute Shader: GatherDOF_NearBorder", commandList, 25);
             std::chrono::high_resolution_clock::time_point startPointCPU;
             if(context->m_profile)
             {
@@ -5805,7 +5918,7 @@ namespace FastBokeh
         // Compute Shader: GatherDOF_BlurFar
         if(context->m_input.variable_GatherDOF_DoFarField)
         {
-            ScopedPerfEvent scopedPerf("Compute Shader: GatherDOF_BlurFar", commandList, 13);
+            ScopedPerfEvent scopedPerf("Compute Shader: GatherDOF_BlurFar", commandList, 15);
             std::chrono::high_resolution_clock::time_point startPointCPU;
             if(context->m_profile)
             {
@@ -5819,28 +5932,30 @@ namespace FastBokeh
             DX12Utils::ResourceDescriptor descriptors[] = {
                 { context->m_internal.texture_GatherDOF_FarFieldColorCoC, context->m_internal.texture_GatherDOF_FarFieldColorCoC_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
                 { context->m_internal.texture_GatherDOF_BlurredFarFieldColorAlpha, context->m_internal.texture_GatherDOF_BlurredFarFieldColorAlpha_format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_179, context->m_internal.texture__loadedTexture_179_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_179_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_180, context->m_internal.texture__loadedTexture_180_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_180_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_181, context->m_internal.texture__loadedTexture_181_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_181_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_182, context->m_internal.texture__loadedTexture_182_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_182_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_183, context->m_internal.texture__loadedTexture_183_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_171, context->m_internal.texture__loadedTexture_171_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_171_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_184, context->m_internal.texture__loadedTexture_184_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_184_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_185, context->m_internal.texture__loadedTexture_185_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_185_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_186, context->m_internal.texture__loadedTexture_186_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_186_size[2], 0, 0, 0, false },
                 { context->m_internal.texture__loadedTexture_187, context->m_internal.texture__loadedTexture_187_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_187_size[2], 0, 0, 0, false },
                 { context->m_internal.texture__loadedTexture_188, context->m_internal.texture__loadedTexture_188_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_188_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_186, context->m_internal.texture__loadedTexture_186_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
                 { context->m_internal.texture__loadedTexture_189, context->m_internal.texture__loadedTexture_189_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_189_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_190, context->m_internal.texture__loadedTexture_190_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_190_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_190, context->m_internal.texture__loadedTexture_190_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_178, context->m_internal.texture__loadedTexture_178_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_178_size[2], 0, 0, 0, false },
                 { context->m_internal.texture__loadedTexture_191, context->m_internal.texture__loadedTexture_191_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_191_size[2], 0, 0, 0, false },
                 { context->m_internal.texture__loadedTexture_192, context->m_internal.texture__loadedTexture_192_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_192_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_193, context->m_internal.texture__loadedTexture_193_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_193_size[2], 0, 0, 0, false },
                 { context->m_internal.texture__loadedTexture_194, context->m_internal.texture__loadedTexture_194_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_194_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_195, context->m_internal.texture__loadedTexture_195_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_195, context->m_internal.texture__loadedTexture_195_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_195_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_193, context->m_internal.texture__loadedTexture_193_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_196, context->m_internal.texture__loadedTexture_196_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_196_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_197, context->m_internal.texture__loadedTexture_197_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_197_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_198, context->m_internal.texture__loadedTexture_198_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_198_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_199, context->m_internal.texture__loadedTexture_199_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_199_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_200, context->m_internal.texture__loadedTexture_200_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_200_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_201, context->m_internal.texture__loadedTexture_201_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_201_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_202, context->m_internal.texture__loadedTexture_202_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_203, context->m_internal.texture__loadedTexture_203_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_203_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_204, context->m_internal.texture__loadedTexture_204_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
                 { context->m_internal.constantBuffer__GatherDOF_BlurFarCSCB, DXGI_FORMAT_UNKNOWN, DX12Utils::AccessType::CBV, DX12Utils::ResourceType::Buffer, false, 256, 1, 0, 0, 0, false }
             };
 
-            D3D12_GPU_DESCRIPTOR_HANDLE descriptorTable = GetDescriptorTable(device, s_srvHeap, descriptors, 21, Context::LogFn);
+            D3D12_GPU_DESCRIPTOR_HANDLE descriptorTable = GetDescriptorTable(device, s_srvHeap, descriptors, 23, Context::LogFn);
             commandList->SetComputeRootDescriptorTable(0, descriptorTable);
 
             unsigned int baseDispatchSize[3] = {
@@ -5889,12 +6004,6 @@ namespace FastBokeh
             context->m_internal.constantBuffer__GatherDOF_RecombineCSCB_cpu.GatherDOF_NearTransitionRegion = context->m_input.variable_GatherDOF_NearTransitionRegion;
             context->m_internal.constantBuffer__GatherDOF_RecombineCSCB_cpu.GatherDOF_Scale = context->m_input.variable_GatherDOF_Scale;
             DX12Utils::CopyConstantsCPUToGPU(s_ubTracker, device, commandList, context->m_internal.constantBuffer__GatherDOF_RecombineCSCB, context->m_internal.constantBuffer__GatherDOF_RecombineCSCB_cpu, Context::LogFn);
-        }
-
-        // Shader Constants: _GaussBlur_GaussBlurCSCB
-        {
-            context->m_internal.constantBuffer__GaussBlur_GaussBlurCSCB_cpu.GaussBlur_Sigma = context->m_input.variable_GaussBlur_Sigma;
-            DX12Utils::CopyConstantsCPUToGPU(s_ubTracker, device, commandList, context->m_internal.constantBuffer__GaussBlur_GaussBlurCSCB, context->m_internal.constantBuffer__GaussBlur_GaussBlurCSCB_cpu, Context::LogFn);
         }
 
         // Shader Constants: _TemporalAccumulation_AccumulateCB
@@ -5958,7 +6067,7 @@ namespace FastBokeh
         // Compute Shader: GatherDOF_FloodFillFar
         if(context->m_input.variable_GatherDOF_DoFarField)
         {
-            ScopedPerfEvent scopedPerf("Compute Shader: GatherDOF_FloodFillFar", commandList, 15);
+            ScopedPerfEvent scopedPerf("Compute Shader: GatherDOF_FloodFillFar", commandList, 17);
             std::chrono::high_resolution_clock::time_point startPointCPU;
             if(context->m_profile)
             {
@@ -5973,24 +6082,24 @@ namespace FastBokeh
                 { context->m_internal.texture_GatherDOF_NearMaxCocTilemap, context->m_internal.texture_GatherDOF_NearMaxCocTilemap_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
                 { context->m_internal.texture_GatherDOF_BlurredFarFieldColorAlpha, context->m_internal.texture_GatherDOF_BlurredFarFieldColorAlpha_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
                 { context->m_internal.texture_GatherDOF_FloodFilledBlurredFarFieldColorAlpha, context->m_internal.texture_GatherDOF_FloodFilledBlurredFarFieldColorAlpha_format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_179, context->m_internal.texture__loadedTexture_179_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_179_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_180, context->m_internal.texture__loadedTexture_180_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_180_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_181, context->m_internal.texture__loadedTexture_181_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_181_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_182, context->m_internal.texture__loadedTexture_182_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_182_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_183, context->m_internal.texture__loadedTexture_183_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_171, context->m_internal.texture__loadedTexture_171_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_171_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_184, context->m_internal.texture__loadedTexture_184_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_184_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_185, context->m_internal.texture__loadedTexture_185_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_185_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_186, context->m_internal.texture__loadedTexture_186_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_186, context->m_internal.texture__loadedTexture_186_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_186_size[2], 0, 0, 0, false },
                 { context->m_internal.texture__loadedTexture_187, context->m_internal.texture__loadedTexture_187_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_187_size[2], 0, 0, 0, false },
                 { context->m_internal.texture__loadedTexture_188, context->m_internal.texture__loadedTexture_188_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_188_size[2], 0, 0, 0, false },
                 { context->m_internal.texture__loadedTexture_189, context->m_internal.texture__loadedTexture_189_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_189_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_190, context->m_internal.texture__loadedTexture_190_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_190_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_190, context->m_internal.texture__loadedTexture_190_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_178, context->m_internal.texture__loadedTexture_178_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_178_size[2], 0, 0, 0, false },
                 { context->m_internal.texture__loadedTexture_191, context->m_internal.texture__loadedTexture_191_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_191_size[2], 0, 0, 0, false },
                 { context->m_internal.texture__loadedTexture_192, context->m_internal.texture__loadedTexture_192_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_192_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_193, context->m_internal.texture__loadedTexture_193_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_193_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_193, context->m_internal.texture__loadedTexture_193_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
                 { context->m_internal.texture__loadedTexture_194, context->m_internal.texture__loadedTexture_194_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_194_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_195, context->m_internal.texture__loadedTexture_195_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_195, context->m_internal.texture__loadedTexture_195_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_195_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_196, context->m_internal.texture__loadedTexture_196_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_196_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_197, context->m_internal.texture__loadedTexture_197_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_197_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_198, context->m_internal.texture__loadedTexture_198_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_198_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_199, context->m_internal.texture__loadedTexture_199_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_199_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_200, context->m_internal.texture__loadedTexture_200_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_200_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_201, context->m_internal.texture__loadedTexture_201_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_201_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_202, context->m_internal.texture__loadedTexture_202_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
                 { context->m_internal.constantBuffer__GatherDOF_FloodFillFarCS_0CB, DXGI_FORMAT_UNKNOWN, DX12Utils::AccessType::CBV, DX12Utils::ResourceType::Buffer, false, 256, 1, 0, 0, 0, false }
             };
 
@@ -6036,7 +6145,7 @@ namespace FastBokeh
         // Compute Shader: GatherDOF_DownscaleTileMap_1_4
         if(context->m_input.variable_GatherDOF_DoNearField)
         {
-            ScopedPerfEvent scopedPerf("Compute Shader: GatherDOF_DownscaleTileMap_1_4", commandList, 17);
+            ScopedPerfEvent scopedPerf("Compute Shader: GatherDOF_DownscaleTileMap_1_4", commandList, 19);
             std::chrono::high_resolution_clock::time_point startPointCPU;
             if(context->m_profile)
             {
@@ -6101,7 +6210,7 @@ namespace FastBokeh
         // Compute Shader: GatherDOF_DownscaleTileMap_1_8
         if(context->m_input.variable_GatherDOF_DoNearField)
         {
-            ScopedPerfEvent scopedPerf("Compute Shader: GatherDOF_DownscaleTileMap_1_8", commandList, 20);
+            ScopedPerfEvent scopedPerf("Compute Shader: GatherDOF_DownscaleTileMap_1_8", commandList, 22);
             std::chrono::high_resolution_clock::time_point startPointCPU;
             if(context->m_profile)
             {
@@ -6166,7 +6275,7 @@ namespace FastBokeh
         // Compute Shader: GatherDOF_NearHalo
         if(context->m_input.variable_GatherDOF_DoNearField)
         {
-            ScopedPerfEvent scopedPerf("Compute Shader: GatherDOF_NearHalo", commandList, 21);
+            ScopedPerfEvent scopedPerf("Compute Shader: GatherDOF_NearHalo", commandList, 23);
             std::chrono::high_resolution_clock::time_point startPointCPU;
             if(context->m_profile)
             {
@@ -6238,7 +6347,7 @@ namespace FastBokeh
         // Compute Shader: GatherDOF_NearBlur
         if(context->m_input.variable_GatherDOF_DoNearField)
         {
-            ScopedPerfEvent scopedPerf("Compute Shader: GatherDOF_NearBlur", commandList, 25);
+            ScopedPerfEvent scopedPerf("Compute Shader: GatherDOF_NearBlur", commandList, 27);
             std::chrono::high_resolution_clock::time_point startPointCPU;
             if(context->m_profile)
             {
@@ -6253,28 +6362,29 @@ namespace FastBokeh
                 { context->m_internal.texture_GatherDOF_NearFieldColorCoCBorder, context->m_internal.texture_GatherDOF_NearFieldColorCoCBorder_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
                 { context->m_internal.texture_GatherDOF_NearMaxCocTilemap_1_8_Halo, context->m_internal.texture_GatherDOF_NearMaxCocTilemap_1_8_Halo_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
                 { context->m_internal.texture_GatherDOF_NearFieldColorCoCBorderBlurred, context->m_internal.texture_GatherDOF_NearFieldColorCoCBorderBlurred_format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_179, context->m_internal.texture__loadedTexture_179_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_179_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_180, context->m_internal.texture__loadedTexture_180_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_180_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_181, context->m_internal.texture__loadedTexture_181_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_181_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_182, context->m_internal.texture__loadedTexture_182_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_182_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_183, context->m_internal.texture__loadedTexture_183_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_171, context->m_internal.texture__loadedTexture_171_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_171_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_184, context->m_internal.texture__loadedTexture_184_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_184_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_185, context->m_internal.texture__loadedTexture_185_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_185_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_186, context->m_internal.texture__loadedTexture_186_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_186, context->m_internal.texture__loadedTexture_186_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_186_size[2], 0, 0, 0, false },
                 { context->m_internal.texture__loadedTexture_187, context->m_internal.texture__loadedTexture_187_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_187_size[2], 0, 0, 0, false },
                 { context->m_internal.texture__loadedTexture_188, context->m_internal.texture__loadedTexture_188_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_188_size[2], 0, 0, 0, false },
                 { context->m_internal.texture__loadedTexture_189, context->m_internal.texture__loadedTexture_189_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_189_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_190, context->m_internal.texture__loadedTexture_190_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_190_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_190, context->m_internal.texture__loadedTexture_190_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_178, context->m_internal.texture__loadedTexture_178_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_178_size[2], 0, 0, 0, false },
                 { context->m_internal.texture__loadedTexture_191, context->m_internal.texture__loadedTexture_191_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_191_size[2], 0, 0, 0, false },
                 { context->m_internal.texture__loadedTexture_192, context->m_internal.texture__loadedTexture_192_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_192_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_193, context->m_internal.texture__loadedTexture_193_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_193_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_193, context->m_internal.texture__loadedTexture_193_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
                 { context->m_internal.texture__loadedTexture_194, context->m_internal.texture__loadedTexture_194_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_194_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_195, context->m_internal.texture__loadedTexture_195_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_195, context->m_internal.texture__loadedTexture_195_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_195_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_196, context->m_internal.texture__loadedTexture_196_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_196_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_197, context->m_internal.texture__loadedTexture_197_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_197_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_198, context->m_internal.texture__loadedTexture_198_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_198_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_199, context->m_internal.texture__loadedTexture_199_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_199_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_200, context->m_internal.texture__loadedTexture_200_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_200_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_201, context->m_internal.texture__loadedTexture_201_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_201_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_202, context->m_internal.texture__loadedTexture_202_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_203, context->m_internal.texture__loadedTexture_203_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_203_size[2], 0, 0, 0, false },
                 { context->m_internal.constantBuffer__GatherDOF_NearBlurCB, DXGI_FORMAT_UNKNOWN, DX12Utils::AccessType::CBV, DX12Utils::ResourceType::Buffer, false, 256, 1, 0, 0, 0, false }
             };
 
-            D3D12_GPU_DESCRIPTOR_HANDLE descriptorTable = GetDescriptorTable(device, s_srvHeap, descriptors, 22, Context::LogFn);
+            D3D12_GPU_DESCRIPTOR_HANDLE descriptorTable = GetDescriptorTable(device, s_srvHeap, descriptors, 23, Context::LogFn);
             commandList->SetComputeRootDescriptorTable(0, descriptorTable);
 
             unsigned int baseDispatchSize[3] = {
@@ -6338,7 +6448,7 @@ namespace FastBokeh
         // Compute Shader: GatherDOF_FloodFillNear
         if(context->m_input.variable_GatherDOF_DoNearField)
         {
-            ScopedPerfEvent scopedPerf("Compute Shader: GatherDOF_FloodFillNear", commandList, 27);
+            ScopedPerfEvent scopedPerf("Compute Shader: GatherDOF_FloodFillNear", commandList, 29);
             std::chrono::high_resolution_clock::time_point startPointCPU;
             if(context->m_profile)
             {
@@ -6353,24 +6463,24 @@ namespace FastBokeh
                 { context->m_internal.texture_GatherDOF_NearMaxCocTilemap_1_8_Halo, context->m_internal.texture_GatherDOF_NearMaxCocTilemap_1_8_Halo_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
                 { context->m_internal.texture_GatherDOF_NearFieldColorCoCBorderBlurred, context->m_internal.texture_GatherDOF_NearFieldColorCoCBorderBlurred_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
                 { context->m_internal.texture_GatherDOF_FloodFilledBlurredNearFieldColorAlpha, context->m_internal.texture_GatherDOF_FloodFilledBlurredNearFieldColorAlpha_format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_179, context->m_internal.texture__loadedTexture_179_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_179_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_180, context->m_internal.texture__loadedTexture_180_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_180_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_181, context->m_internal.texture__loadedTexture_181_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_181_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_182, context->m_internal.texture__loadedTexture_182_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_182_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_183, context->m_internal.texture__loadedTexture_183_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_171, context->m_internal.texture__loadedTexture_171_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_171_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_184, context->m_internal.texture__loadedTexture_184_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_184_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_185, context->m_internal.texture__loadedTexture_185_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_185_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_186, context->m_internal.texture__loadedTexture_186_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_186, context->m_internal.texture__loadedTexture_186_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_186_size[2], 0, 0, 0, false },
                 { context->m_internal.texture__loadedTexture_187, context->m_internal.texture__loadedTexture_187_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_187_size[2], 0, 0, 0, false },
                 { context->m_internal.texture__loadedTexture_188, context->m_internal.texture__loadedTexture_188_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_188_size[2], 0, 0, 0, false },
                 { context->m_internal.texture__loadedTexture_189, context->m_internal.texture__loadedTexture_189_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_189_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_190, context->m_internal.texture__loadedTexture_190_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_190_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_190, context->m_internal.texture__loadedTexture_190_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_178, context->m_internal.texture__loadedTexture_178_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_178_size[2], 0, 0, 0, false },
                 { context->m_internal.texture__loadedTexture_191, context->m_internal.texture__loadedTexture_191_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_191_size[2], 0, 0, 0, false },
                 { context->m_internal.texture__loadedTexture_192, context->m_internal.texture__loadedTexture_192_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_192_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_193, context->m_internal.texture__loadedTexture_193_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_193_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_193, context->m_internal.texture__loadedTexture_193_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
                 { context->m_internal.texture__loadedTexture_194, context->m_internal.texture__loadedTexture_194_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_194_size[2], 0, 0, 0, false },
-                { context->m_internal.texture__loadedTexture_195, context->m_internal.texture__loadedTexture_195_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_195, context->m_internal.texture__loadedTexture_195_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_195_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_196, context->m_internal.texture__loadedTexture_196_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_196_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_197, context->m_internal.texture__loadedTexture_197_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_197_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_198, context->m_internal.texture__loadedTexture_198_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_198_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_199, context->m_internal.texture__loadedTexture_199_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_199_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_200, context->m_internal.texture__loadedTexture_200_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_200_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_201, context->m_internal.texture__loadedTexture_201_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2DArray, false, 0, context->m_internal.texture__loadedTexture_201_size[2], 0, 0, 0, false },
+                { context->m_internal.texture__loadedTexture_202, context->m_internal.texture__loadedTexture_202_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
                 { context->m_internal.constantBuffer__GatherDOF_FloodFillFarCS_1CB, DXGI_FORMAT_UNKNOWN, DX12Utils::AccessType::CBV, DX12Utils::ResourceType::Buffer, false, 256, 1, 0, 0, 0, false }
             };
 
@@ -6406,7 +6516,7 @@ namespace FastBokeh
             barriers[0].Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
             barriers[0].Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
             barriers[0].Transition.pResource = context->m_output.texture_GatherDOF_Output;
-            barriers[0].Transition.StateBefore = D3D12_RESOURCE_STATE_COPY_SOURCE;
+            barriers[0].Transition.StateBefore = D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE;
             barriers[0].Transition.StateAfter = D3D12_RESOURCE_STATE_UNORDERED_ACCESS;
             barriers[0].Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
 
@@ -6429,7 +6539,7 @@ namespace FastBokeh
 
         // Compute Shader: GatherDOF_Recombine
         {
-            ScopedPerfEvent scopedPerf("Compute Shader: GatherDOF_Recombine", commandList, 29);
+            ScopedPerfEvent scopedPerf("Compute Shader: GatherDOF_Recombine", commandList, 31);
             std::chrono::high_resolution_clock::time_point startPointCPU;
             if(context->m_profile)
             {
@@ -6480,160 +6590,8 @@ namespace FastBokeh
 
             barriers[0].Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
             barriers[0].Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-            barriers[0].Transition.pResource = context->m_internal.texture_ColorHDR;
-            barriers[0].Transition.StateBefore = D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE;
-            barriers[0].Transition.StateAfter = D3D12_RESOURCE_STATE_COPY_SOURCE;
-            barriers[0].Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-
-            barriers[1].Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-            barriers[1].Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-            barriers[1].Transition.pResource = context->m_output.texture_GatherDOF_Output;
-            barriers[1].Transition.StateBefore = D3D12_RESOURCE_STATE_UNORDERED_ACCESS;
-            barriers[1].Transition.StateAfter = D3D12_RESOURCE_STATE_COPY_DEST;
-            barriers[1].Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-
-            commandList->ResourceBarrier(2, barriers);
-        }
-
-        // Copy Resource: CopyHDR
-        if(context->m_input.variable_DOF != DOFMode::PostProcessing)
-        {
-            ScopedPerfEvent scopedPerf("Copy Resource: CopyHDR", commandList, 4);
-            std::chrono::high_resolution_clock::time_point startPointCPU;
-            if(context->m_profile)
-            {
-                startPointCPU = std::chrono::high_resolution_clock::now();
-                commandList->EndQuery(context->m_internal.m_TimestampQueryHeap, D3D12_QUERY_TYPE_TIMESTAMP, s_timerIndex++);
-            }
-
-            // Copy the texture.
-            commandList->CopyResource(context->m_output.texture_GatherDOF_Output, context->m_internal.texture_ColorHDR);
-
-            if(context->m_profile)
-            {
-                context->m_profileData[(s_timerIndex-1)/2].m_label = "CopyHDR";
-                context->m_profileData[(s_timerIndex-1)/2].m_cpu = (float)std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now() - startPointCPU).count();
-                commandList->EndQuery(context->m_internal.m_TimestampQueryHeap, D3D12_QUERY_TYPE_TIMESTAMP, s_timerIndex++);
-            }
-        }
-
-        // Transition resources for the next action
-        {
-            D3D12_RESOURCE_BARRIER barriers[2];
-
-            barriers[0].Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-            barriers[0].Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
             barriers[0].Transition.pResource = context->m_output.texture_GatherDOF_Output;
-            barriers[0].Transition.StateBefore = D3D12_RESOURCE_STATE_COPY_DEST;
-            barriers[0].Transition.StateAfter = D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE;
-            barriers[0].Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-
-            barriers[1].Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-            barriers[1].Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-            barriers[1].Transition.pResource = context->m_output.texture_GaussBlur_Output;
-            barriers[1].Transition.StateBefore = D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE;
-            barriers[1].Transition.StateAfter = D3D12_RESOURCE_STATE_UNORDERED_ACCESS;
-            barriers[1].Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-
-            commandList->ResourceBarrier(2, barriers);
-        }
-
-        // Compute Shader: GaussBlur_DoBlur
-        if(!context->m_input.variable_GaussBlur_Disable)
-        {
-            ScopedPerfEvent scopedPerf("Compute Shader: GaussBlur_DoBlur", commandList, 30);
-            std::chrono::high_resolution_clock::time_point startPointCPU;
-            if(context->m_profile)
-            {
-                startPointCPU = std::chrono::high_resolution_clock::now();
-                commandList->EndQuery(context->m_internal.m_TimestampQueryHeap, D3D12_QUERY_TYPE_TIMESTAMP, s_timerIndex++);
-            }
-
-            commandList->SetComputeRootSignature(ContextInternal::computeShader_GaussBlur_DoBlur_rootSig);
-            commandList->SetPipelineState(ContextInternal::computeShader_GaussBlur_DoBlur_pso);
-
-            DX12Utils::ResourceDescriptor descriptors[] = {
-                { context->m_output.texture_GatherDOF_Output, context->m_output.texture_GatherDOF_Output_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
-                { context->m_output.texture_GaussBlur_Output, context->m_output.texture_GaussBlur_Output_format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
-                { context->m_internal.constantBuffer__GaussBlur_GaussBlurCSCB, DXGI_FORMAT_UNKNOWN, DX12Utils::AccessType::CBV, DX12Utils::ResourceType::Buffer, false, 256, 1, 0, 0, 0, false }
-            };
-
-            D3D12_GPU_DESCRIPTOR_HANDLE descriptorTable = GetDescriptorTable(device, s_srvHeap, descriptors, 3, Context::LogFn);
-            commandList->SetComputeRootDescriptorTable(0, descriptorTable);
-
-            unsigned int baseDispatchSize[3] = {
-                context->m_output.texture_GatherDOF_Output_size[0],
-                context->m_output.texture_GatherDOF_Output_size[1],
-                context->m_output.texture_GatherDOF_Output_size[2]
-            };
-
-            unsigned int dispatchSize[3] = {
-                (((baseDispatchSize[0] + 0) * 1) / 1 + 0 + 8 - 1) / 8,
-                (((baseDispatchSize[1] + 0) * 1) / 1 + 0 + 8 - 1) / 8,
-                (((baseDispatchSize[2] + 0) * 1) / 1 + 0 + 1 - 1) / 1
-            };
-
-            commandList->Dispatch(dispatchSize[0], dispatchSize[1], dispatchSize[2]);
-
-            if(context->m_profile)
-            {
-                context->m_profileData[(s_timerIndex-1)/2].m_label = "GaussBlur_DoBlur";
-                context->m_profileData[(s_timerIndex-1)/2].m_cpu = (float)std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now() - startPointCPU).count();
-                commandList->EndQuery(context->m_internal.m_TimestampQueryHeap, D3D12_QUERY_TYPE_TIMESTAMP, s_timerIndex++);
-            }
-        }
-
-        // Transition resources for the next action
-        {
-            D3D12_RESOURCE_BARRIER barriers[2];
-
-            barriers[0].Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-            barriers[0].Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-            barriers[0].Transition.pResource = context->m_output.texture_GatherDOF_Output;
-            barriers[0].Transition.StateBefore = D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE;
-            barriers[0].Transition.StateAfter = D3D12_RESOURCE_STATE_COPY_SOURCE;
-            barriers[0].Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-
-            barriers[1].Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-            barriers[1].Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-            barriers[1].Transition.pResource = context->m_output.texture_GaussBlur_Output;
-            barriers[1].Transition.StateBefore = D3D12_RESOURCE_STATE_UNORDERED_ACCESS;
-            barriers[1].Transition.StateAfter = D3D12_RESOURCE_STATE_COPY_DEST;
-            barriers[1].Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-
-            commandList->ResourceBarrier(2, barriers);
-        }
-
-        // Copy Resource: GaussBlur_DontBlur
-        if(context->m_input.variable_GaussBlur_Disable)
-        {
-            ScopedPerfEvent scopedPerf("Copy Resource: GaussBlur_DontBlur", commandList, 32);
-            std::chrono::high_resolution_clock::time_point startPointCPU;
-            if(context->m_profile)
-            {
-                startPointCPU = std::chrono::high_resolution_clock::now();
-                commandList->EndQuery(context->m_internal.m_TimestampQueryHeap, D3D12_QUERY_TYPE_TIMESTAMP, s_timerIndex++);
-            }
-
-            // Copy the texture.
-            commandList->CopyResource(context->m_output.texture_GaussBlur_Output, context->m_output.texture_GatherDOF_Output);
-
-            if(context->m_profile)
-            {
-                context->m_profileData[(s_timerIndex-1)/2].m_label = "GaussBlur_DontBlur";
-                context->m_profileData[(s_timerIndex-1)/2].m_cpu = (float)std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now() - startPointCPU).count();
-                commandList->EndQuery(context->m_internal.m_TimestampQueryHeap, D3D12_QUERY_TYPE_TIMESTAMP, s_timerIndex++);
-            }
-        }
-
-        // Transition resources for the next action
-        {
-            D3D12_RESOURCE_BARRIER barriers[2];
-
-            barriers[0].Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-            barriers[0].Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-            barriers[0].Transition.pResource = context->m_output.texture_GaussBlur_Output;
-            barriers[0].Transition.StateBefore = D3D12_RESOURCE_STATE_COPY_DEST;
+            barriers[0].Transition.StateBefore = D3D12_RESOURCE_STATE_UNORDERED_ACCESS;
             barriers[0].Transition.StateAfter = D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE;
             barriers[0].Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
 
@@ -6649,7 +6607,7 @@ namespace FastBokeh
 
         // Compute Shader: TemporalAccumulation_DoAccum
         {
-            ScopedPerfEvent scopedPerf("Compute Shader: TemporalAccumulation_DoAccum", commandList, 33);
+            ScopedPerfEvent scopedPerf("Compute Shader: TemporalAccumulation_DoAccum", commandList, 32);
             std::chrono::high_resolution_clock::time_point startPointCPU;
             if(context->m_profile)
             {
@@ -6661,7 +6619,7 @@ namespace FastBokeh
             commandList->SetPipelineState(ContextInternal::computeShader_TemporalAccumulation_DoAccum_pso);
 
             DX12Utils::ResourceDescriptor descriptors[] = {
-                { context->m_output.texture_GaussBlur_Output, context->m_output.texture_GaussBlur_Output_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
+                { context->m_output.texture_GatherDOF_Output, context->m_output.texture_GatherDOF_Output_format, DX12Utils::AccessType::SRV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
                 { context->m_output.texture_TemporalAccumulation_Accum, context->m_output.texture_TemporalAccumulation_Accum_format, DX12Utils::AccessType::UAV, DX12Utils::ResourceType::Texture2D, false, 0, 0, 0, 0, 0, false },
                 { context->m_internal.constantBuffer__TemporalAccumulation_AccumulateCB, DXGI_FORMAT_UNKNOWN, DX12Utils::AccessType::CBV, DX12Utils::ResourceType::Buffer, false, 256, 1, 0, 0, 0, false }
             };
@@ -6670,9 +6628,9 @@ namespace FastBokeh
             commandList->SetComputeRootDescriptorTable(0, descriptorTable);
 
             unsigned int baseDispatchSize[3] = {
-                context->m_output.texture_GaussBlur_Output_size[0],
-                context->m_output.texture_GaussBlur_Output_size[1],
-                context->m_output.texture_GaussBlur_Output_size[2]
+                context->m_output.texture_GatherDOF_Output_size[0],
+                context->m_output.texture_GatherDOF_Output_size[1],
+                context->m_output.texture_GatherDOF_Output_size[2]
             };
 
             unsigned int dispatchSize[3] = {
@@ -6711,7 +6669,7 @@ namespace FastBokeh
 
         // Compute Shader: ToneMap_Tonemap
         {
-            ScopedPerfEvent scopedPerf("Compute Shader: ToneMap_Tonemap", commandList, 36);
+            ScopedPerfEvent scopedPerf("Compute Shader: ToneMap_Tonemap", commandList, 35);
             std::chrono::high_resolution_clock::time_point startPointCPU;
             if(context->m_profile)
             {
@@ -6830,7 +6788,7 @@ namespace FastBokeh
                 if(m_internal.texture_ColorHDR)
                     s_delayedRelease.Add(m_internal.texture_ColorHDR);
 
-                m_internal.texture_ColorHDR = DX12Utils::CreateTexture(device, desiredSize, desiredNumMips, desiredFormat, m_internal.texture_ColorHDR_flags, D3D12_RESOURCE_STATE_COPY_SOURCE, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"ColorHDR" : nullptr), Context::LogFn);
+                m_internal.texture_ColorHDR = DX12Utils::CreateTexture(device, desiredSize, desiredNumMips, desiredFormat, m_internal.texture_ColorHDR_flags, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"ColorHDR" : nullptr), Context::LogFn);
                 m_internal.texture_ColorHDR_size[0] = desiredSize[0];
                 m_internal.texture_ColorHDR_size[1] = desiredSize[1];
                 m_internal.texture_ColorHDR_size[2] = desiredSize[2];
@@ -6915,7 +6873,7 @@ namespace FastBokeh
 
             static const unsigned int desiredNumMips = 1;
 
-            DXGI_FORMAT desiredFormat = DXGI_FORMAT_R32_FLOAT;
+            DXGI_FORMAT desiredFormat = DXGI_FORMAT_R32G32B32A32_FLOAT;
 
             if(!m_internal.texture_DebugTex ||
                m_internal.texture_DebugTex_size[0] != desiredSize[0] ||
@@ -6934,6 +6892,111 @@ namespace FastBokeh
                 m_internal.texture_DebugTex_size[2] = desiredSize[2];
                 m_internal.texture_DebugTex_numMips = desiredNumMips;
                 m_internal.texture_DebugTex_format = desiredFormat;
+            }
+        }
+
+        // ColorHDR_
+        {
+
+            unsigned int baseSize[3] = { (unsigned int)m_input.variable_RenderSize[0], (unsigned int)m_input.variable_RenderSize[1], 1 };
+
+            unsigned int desiredSize[3] = {
+                ((baseSize[0] + 0) * 1) / 1 + 0,
+                ((baseSize[1] + 0) * 1) / 1 + 0,
+                ((baseSize[2] + 0) * 1) / 1 + 0
+            };
+
+            static const unsigned int desiredNumMips = 1;
+
+            DXGI_FORMAT desiredFormat = DXGI_FORMAT_R32G32B32A32_FLOAT;
+
+            if(!m_internal.texture_ColorHDR_ ||
+               m_internal.texture_ColorHDR__size[0] != desiredSize[0] ||
+               m_internal.texture_ColorHDR__size[1] != desiredSize[1] ||
+               m_internal.texture_ColorHDR__size[2] != desiredSize[2] ||
+               m_internal.texture_ColorHDR__numMips != desiredNumMips ||
+               m_internal.texture_ColorHDR__format != desiredFormat)
+            {
+                dirty = true;
+                if(m_internal.texture_ColorHDR_)
+                    s_delayedRelease.Add(m_internal.texture_ColorHDR_);
+
+                m_internal.texture_ColorHDR_ = DX12Utils::CreateTexture(device, desiredSize, desiredNumMips, desiredFormat, m_internal.texture_ColorHDR__flags, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"ColorHDR_" : nullptr), Context::LogFn);
+                m_internal.texture_ColorHDR__size[0] = desiredSize[0];
+                m_internal.texture_ColorHDR__size[1] = desiredSize[1];
+                m_internal.texture_ColorHDR__size[2] = desiredSize[2];
+                m_internal.texture_ColorHDR__numMips = desiredNumMips;
+                m_internal.texture_ColorHDR__format = desiredFormat;
+            }
+        }
+
+        // ColorHDR__
+        {
+
+            unsigned int baseSize[3] = { (unsigned int)m_input.variable_RenderSize[0], (unsigned int)m_input.variable_RenderSize[1], 1 };
+
+            unsigned int desiredSize[3] = {
+                ((baseSize[0] + 0) * 1) / 1 + 0,
+                ((baseSize[1] + 0) * 1) / 1 + 0,
+                ((baseSize[2] + 0) * 1) / 1 + 0
+            };
+
+            static const unsigned int desiredNumMips = 1;
+
+            DXGI_FORMAT desiredFormat = DXGI_FORMAT_R32G32B32A32_FLOAT;
+
+            if(!m_internal.texture_ColorHDR__ ||
+               m_internal.texture_ColorHDR___size[0] != desiredSize[0] ||
+               m_internal.texture_ColorHDR___size[1] != desiredSize[1] ||
+               m_internal.texture_ColorHDR___size[2] != desiredSize[2] ||
+               m_internal.texture_ColorHDR___numMips != desiredNumMips ||
+               m_internal.texture_ColorHDR___format != desiredFormat)
+            {
+                dirty = true;
+                if(m_internal.texture_ColorHDR__)
+                    s_delayedRelease.Add(m_internal.texture_ColorHDR__);
+
+                m_internal.texture_ColorHDR__ = DX12Utils::CreateTexture(device, desiredSize, desiredNumMips, desiredFormat, m_internal.texture_ColorHDR___flags, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"ColorHDR__" : nullptr), Context::LogFn);
+                m_internal.texture_ColorHDR___size[0] = desiredSize[0];
+                m_internal.texture_ColorHDR___size[1] = desiredSize[1];
+                m_internal.texture_ColorHDR___size[2] = desiredSize[2];
+                m_internal.texture_ColorHDR___numMips = desiredNumMips;
+                m_internal.texture_ColorHDR___format = desiredFormat;
+            }
+        }
+
+        // ColorHDR___
+        {
+
+            unsigned int baseSize[3] = { (unsigned int)m_input.variable_RenderSize[0], (unsigned int)m_input.variable_RenderSize[1], 1 };
+
+            unsigned int desiredSize[3] = {
+                ((baseSize[0] + 0) * 1) / 1 + 0,
+                ((baseSize[1] + 0) * 1) / 1 + 0,
+                ((baseSize[2] + 0) * 1) / 1 + 0
+            };
+
+            static const unsigned int desiredNumMips = 1;
+
+            DXGI_FORMAT desiredFormat = DXGI_FORMAT_R32G32B32A32_FLOAT;
+
+            if(!m_internal.texture_ColorHDR___ ||
+               m_internal.texture_ColorHDR____size[0] != desiredSize[0] ||
+               m_internal.texture_ColorHDR____size[1] != desiredSize[1] ||
+               m_internal.texture_ColorHDR____size[2] != desiredSize[2] ||
+               m_internal.texture_ColorHDR____numMips != desiredNumMips ||
+               m_internal.texture_ColorHDR____format != desiredFormat)
+            {
+                dirty = true;
+                if(m_internal.texture_ColorHDR___)
+                    s_delayedRelease.Add(m_internal.texture_ColorHDR___);
+
+                m_internal.texture_ColorHDR___ = DX12Utils::CreateTexture(device, desiredSize, desiredNumMips, desiredFormat, m_internal.texture_ColorHDR____flags, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"ColorHDR___" : nullptr), Context::LogFn);
+                m_internal.texture_ColorHDR____size[0] = desiredSize[0];
+                m_internal.texture_ColorHDR____size[1] = desiredSize[1];
+                m_internal.texture_ColorHDR____size[2] = desiredSize[2];
+                m_internal.texture_ColorHDR____numMips = desiredNumMips;
+                m_internal.texture_ColorHDR____format = desiredFormat;
             }
         }
 
@@ -6966,7 +7029,7 @@ namespace FastBokeh
                 if(m_output.texture_GatherDOF_Output)
                     s_delayedRelease.Add(m_output.texture_GatherDOF_Output);
 
-                m_output.texture_GatherDOF_Output = DX12Utils::CreateTexture(device, desiredSize, desiredNumMips, desiredFormat, m_output.texture_GatherDOF_Output_flags, D3D12_RESOURCE_STATE_COPY_SOURCE, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"GatherDOF_Output" : nullptr), Context::LogFn);
+                m_output.texture_GatherDOF_Output = DX12Utils::CreateTexture(device, desiredSize, desiredNumMips, desiredFormat, m_output.texture_GatherDOF_Output_flags, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"GatherDOF_Output" : nullptr), Context::LogFn);
                 m_output.texture_GatherDOF_Output_size[0] = desiredSize[0];
                 m_output.texture_GatherDOF_Output_size[1] = desiredSize[1];
                 m_output.texture_GatherDOF_Output_size[2] = desiredSize[2];
@@ -7393,7 +7456,7 @@ namespace FastBokeh
             }
         }
 
-        // GaussBlur_Output
+        // TemporalAccumulation_Accum
         {
             unsigned int baseSize[3] = {
                 m_output.texture_GatherDOF_Output_size[0],
@@ -7410,44 +7473,6 @@ namespace FastBokeh
             static const unsigned int desiredNumMips = 1;
 
             DXGI_FORMAT desiredFormat = m_output.texture_GatherDOF_Output_format;
-
-            if(!m_output.texture_GaussBlur_Output ||
-               m_output.texture_GaussBlur_Output_size[0] != desiredSize[0] ||
-               m_output.texture_GaussBlur_Output_size[1] != desiredSize[1] ||
-               m_output.texture_GaussBlur_Output_size[2] != desiredSize[2] ||
-               m_output.texture_GaussBlur_Output_numMips != desiredNumMips ||
-               m_output.texture_GaussBlur_Output_format != desiredFormat)
-            {
-                dirty = true;
-                if(m_output.texture_GaussBlur_Output)
-                    s_delayedRelease.Add(m_output.texture_GaussBlur_Output);
-
-                m_output.texture_GaussBlur_Output = DX12Utils::CreateTexture(device, desiredSize, desiredNumMips, desiredFormat, m_output.texture_GaussBlur_Output_flags, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"GaussBlur_Output" : nullptr), Context::LogFn);
-                m_output.texture_GaussBlur_Output_size[0] = desiredSize[0];
-                m_output.texture_GaussBlur_Output_size[1] = desiredSize[1];
-                m_output.texture_GaussBlur_Output_size[2] = desiredSize[2];
-                m_output.texture_GaussBlur_Output_numMips = desiredNumMips;
-                m_output.texture_GaussBlur_Output_format = desiredFormat;
-            }
-        }
-
-        // TemporalAccumulation_Accum
-        {
-            unsigned int baseSize[3] = {
-                m_output.texture_GaussBlur_Output_size[0],
-                m_output.texture_GaussBlur_Output_size[1],
-                m_output.texture_GaussBlur_Output_size[2]
-            };
-
-            unsigned int desiredSize[3] = {
-                ((baseSize[0] + 0) * 1) / 1 + 0,
-                ((baseSize[1] + 0) * 1) / 1 + 0,
-                ((baseSize[2] + 0) * 1) / 1 + 0
-            };
-
-            static const unsigned int desiredNumMips = 1;
-
-            DXGI_FORMAT desiredFormat = m_output.texture_GaussBlur_Output_format;
 
             if(!m_output.texture_TemporalAccumulation_Accum ||
                m_output.texture_TemporalAccumulation_Accum_size[0] != desiredSize[0] ||
@@ -7513,22 +7538,22 @@ namespace FastBokeh
             {
                 // Load the texture
                 std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
-                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, Context::LogFn);
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8_UNORM, Context::LogFn);
                 DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
                 if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
                     desiredType = DX12Utils::TextureCache::Type::U8;
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Paris_Curbstones_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\LensKernels\\f2.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Paris_Curbstones_01_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\LensKernels\\f2.png", s_techniqueLocation.c_str());
 
-                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
+                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Paris_Curbstones_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\LensKernels\\f2.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -7540,8 +7565,8 @@ namespace FastBokeh
                 m_internal.texture__loadedTexture_0_size[1] = size[1];
                 m_internal.texture__loadedTexture_0_size[2] = size[2];
                 m_internal.texture__loadedTexture_0_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_0_format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-                m_internal.texture__loadedTexture_0 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, m_internal.texture__loadedTexture_0_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_0" : nullptr), Context::LogFn);
+                m_internal.texture__loadedTexture_0_format = DXGI_FORMAT_R8_UNORM;
+                m_internal.texture__loadedTexture_0 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8_UNORM, m_internal.texture__loadedTexture_0_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_0" : nullptr), Context::LogFn);
 
 
                 std::vector<unsigned char> pixels;
@@ -7558,22 +7583,22 @@ namespace FastBokeh
             {
                 // Load the texture
                 std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
-                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, Context::LogFn);
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8_UNORM, Context::LogFn);
                 DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
                 if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
                     desiredType = DX12Utils::TextureCache::Type::U8;
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Pavement_Cobblestone_Small_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\LensKernels\\f2_8.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Pavement_Cobblestone_Small_01_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\LensKernels\\f2_8.png", s_techniqueLocation.c_str());
 
-                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
+                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Pavement_Cobblestone_Small_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\LensKernels\\f2_8.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -7585,8 +7610,8 @@ namespace FastBokeh
                 m_internal.texture__loadedTexture_1_size[1] = size[1];
                 m_internal.texture__loadedTexture_1_size[2] = size[2];
                 m_internal.texture__loadedTexture_1_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_1_format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-                m_internal.texture__loadedTexture_1 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, m_internal.texture__loadedTexture_1_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_1" : nullptr), Context::LogFn);
+                m_internal.texture__loadedTexture_1_format = DXGI_FORMAT_R8_UNORM;
+                m_internal.texture__loadedTexture_1 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8_UNORM, m_internal.texture__loadedTexture_1_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_1" : nullptr), Context::LogFn);
 
 
                 std::vector<unsigned char> pixels;
@@ -7603,22 +7628,22 @@ namespace FastBokeh
             {
                 // Load the texture
                 std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
-                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, Context::LogFn);
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8_UNORM, Context::LogFn);
                 DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
                 if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
                     desiredType = DX12Utils::TextureCache::Type::U8;
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Pavement_Cobblestone_Big_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\LensKernels\\f4.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Pavement_Cobblestone_Big_01_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\LensKernels\\f4.png", s_techniqueLocation.c_str());
 
-                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
+                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Pavement_Cobblestone_Big_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\LensKernels\\f4.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -7630,8 +7655,8 @@ namespace FastBokeh
                 m_internal.texture__loadedTexture_2_size[1] = size[1];
                 m_internal.texture__loadedTexture_2_size[2] = size[2];
                 m_internal.texture__loadedTexture_2_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_2_format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-                m_internal.texture__loadedTexture_2 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, m_internal.texture__loadedTexture_2_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_2" : nullptr), Context::LogFn);
+                m_internal.texture__loadedTexture_2_format = DXGI_FORMAT_R8_UNORM;
+                m_internal.texture__loadedTexture_2 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8_UNORM, m_internal.texture__loadedTexture_2_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_2" : nullptr), Context::LogFn);
 
 
                 std::vector<unsigned char> pixels;
@@ -7648,22 +7673,22 @@ namespace FastBokeh
             {
                 // Load the texture
                 std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
-                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, Context::LogFn);
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8_UNORM, Context::LogFn);
                 DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
                 if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
                     desiredType = DX12Utils::TextureCache::Type::U8;
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Pavement_Cobblestone_03_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\LensKernels\\f5_6.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Pavement_Cobblestone_03_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\LensKernels\\f5_6.png", s_techniqueLocation.c_str());
 
-                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
+                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Pavement_Cobblestone_03_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\LensKernels\\f5_6.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -7675,8 +7700,8 @@ namespace FastBokeh
                 m_internal.texture__loadedTexture_3_size[1] = size[1];
                 m_internal.texture__loadedTexture_3_size[2] = size[2];
                 m_internal.texture__loadedTexture_3_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_3_format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-                m_internal.texture__loadedTexture_3 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, m_internal.texture__loadedTexture_3_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_3" : nullptr), Context::LogFn);
+                m_internal.texture__loadedTexture_3_format = DXGI_FORMAT_R8_UNORM;
+                m_internal.texture__loadedTexture_3 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8_UNORM, m_internal.texture__loadedTexture_3_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_3" : nullptr), Context::LogFn);
 
 
                 std::vector<unsigned char> pixels;
@@ -7693,22 +7718,22 @@ namespace FastBokeh
             {
                 // Load the texture
                 std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
-                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, Context::LogFn);
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8_UNORM, Context::LogFn);
                 DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
                 if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
                     desiredType = DX12Utils::TextureCache::Type::U8;
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Pavement_Brick_01_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\LensKernels\\f8.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Pavement_Brick_01_Diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\LensKernels\\f8.png", s_techniqueLocation.c_str());
 
-                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
+                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Pavement_Brick_01_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\LensKernels\\f8.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -7720,8 +7745,8 @@ namespace FastBokeh
                 m_internal.texture__loadedTexture_4_size[1] = size[1];
                 m_internal.texture__loadedTexture_4_size[2] = size[2];
                 m_internal.texture__loadedTexture_4_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_4_format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-                m_internal.texture__loadedTexture_4 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, m_internal.texture__loadedTexture_4_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_4" : nullptr), Context::LogFn);
+                m_internal.texture__loadedTexture_4_format = DXGI_FORMAT_R8_UNORM;
+                m_internal.texture__loadedTexture_4 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8_UNORM, m_internal.texture__loadedTexture_4_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_4" : nullptr), Context::LogFn);
 
 
                 std::vector<unsigned char> pixels;
@@ -7738,22 +7763,22 @@ namespace FastBokeh
             {
                 // Load the texture
                 std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
-                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, Context::LogFn);
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8_UNORM, Context::LogFn);
                 DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
                 if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
                     desiredType = DX12Utils::TextureCache::Type::U8;
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Ground_Wet_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\LensKernels\\f11.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Ground_Wet_01_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\LensKernels\\f11.png", s_techniqueLocation.c_str());
 
-                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
+                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Ground_Wet_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\LensKernels\\f11.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -7765,8 +7790,8 @@ namespace FastBokeh
                 m_internal.texture__loadedTexture_5_size[1] = size[1];
                 m_internal.texture__loadedTexture_5_size[2] = size[2];
                 m_internal.texture__loadedTexture_5_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_5_format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-                m_internal.texture__loadedTexture_5 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, m_internal.texture__loadedTexture_5_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_5" : nullptr), Context::LogFn);
+                m_internal.texture__loadedTexture_5_format = DXGI_FORMAT_R8_UNORM;
+                m_internal.texture__loadedTexture_5 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8_UNORM, m_internal.texture__loadedTexture_5_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_5" : nullptr), Context::LogFn);
 
 
                 std::vector<unsigned char> pixels;
@@ -7783,22 +7808,22 @@ namespace FastBokeh
             {
                 // Load the texture
                 std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
-                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, Context::LogFn);
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8_UNORM, Context::LogFn);
                 DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
                 if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
                     desiredType = DX12Utils::TextureCache::Type::U8;
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Paris_manholecover_01b_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\LensKernels\\f16.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Paris_manholecover_01b_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\LensKernels\\f16.png", s_techniqueLocation.c_str());
 
-                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
+                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Paris_manholecover_01b_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\LensKernels\\f16.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -7810,8 +7835,8 @@ namespace FastBokeh
                 m_internal.texture__loadedTexture_6_size[1] = size[1];
                 m_internal.texture__loadedTexture_6_size[2] = size[2];
                 m_internal.texture__loadedTexture_6_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_6_format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-                m_internal.texture__loadedTexture_6 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, m_internal.texture__loadedTexture_6_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_6" : nullptr), Context::LogFn);
+                m_internal.texture__loadedTexture_6_format = DXGI_FORMAT_R8_UNORM;
+                m_internal.texture__loadedTexture_6 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8_UNORM, m_internal.texture__loadedTexture_6_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_6" : nullptr), Context::LogFn);
 
 
                 std::vector<unsigned char> pixels;
@@ -7835,15 +7860,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Cobble_02B_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Paris_Curbstones_01_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Cobble_02B_Diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Paris_Curbstones_01_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Cobble_02B_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Paris_Curbstones_01_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -7880,15 +7905,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Pavement_Cobblestone_01_b_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Pavement_Cobblestone_Small_01_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Pavement_Cobblestone_01_b_Diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Pavement_Cobblestone_Small_01_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Pavement_Cobblestone_01_b_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Pavement_Cobblestone_Small_01_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -7925,15 +7950,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Brick_Small_03_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Pavement_Cobblestone_Big_01_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Brick_Small_03_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Pavement_Cobblestone_Big_01_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Brick_Small_03_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Pavement_Cobblestone_Big_01_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -7970,15 +7995,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\concrete_smooth_02_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Pavement_Cobblestone_03_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\concrete_smooth_02_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Pavement_Cobblestone_03_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\concrete_smooth_02_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Pavement_Cobblestone_03_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -8015,15 +8040,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\paris_bistroexteriorspotlight_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Pavement_Brick_01_Diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\paris_bistroexteriorspotlight_01_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Pavement_Brick_01_Diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\paris_bistroexteriorspotlight_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Pavement_Brick_01_Diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -8060,15 +8085,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Metal_Chrome_01_tint_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Ground_Wet_01_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Metal_Chrome_01_tint_Diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Ground_Wet_01_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Metal_Chrome_01_tint_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Ground_Wet_01_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -8105,15 +8130,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Paris_BistroExteriorSpotLightGlass_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Paris_manholecover_01b_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Paris_BistroExteriorSpotLightGlass_01_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Paris_manholecover_01b_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Paris_BistroExteriorSpotLightGlass_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Paris_manholecover_01b_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -8150,15 +8175,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\bistro_woodpanelornament_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Cobble_02B_Diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\bistro_woodpanelornament_01_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Cobble_02B_Diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\bistro_woodpanelornament_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Cobble_02B_Diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -8195,15 +8220,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Bistro_main_door_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Pavement_Cobblestone_01_b_Diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Bistro_main_door_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Pavement_Cobblestone_01_b_Diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Bistro_main_door_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Pavement_Cobblestone_01_b_Diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -8240,15 +8265,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\concrete_grooved_02_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Brick_Small_03_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\concrete_grooved_02_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Brick_Small_03_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\concrete_grooved_02_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Brick_Small_03_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -8285,15 +8310,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Glass_Dirty_01_spec.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\concrete_smooth_02_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Glass_Dirty_01_spec.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\concrete_smooth_02_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Glass_Dirty_01_spec.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\concrete_smooth_02_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -8330,15 +8355,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Wood_Painted_02_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\paris_bistroexteriorspotlight_01_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Wood_Painted_02_Diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\paris_bistroexteriorspotlight_01_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Wood_Painted_02_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\paris_bistroexteriorspotlight_01_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -8375,15 +8400,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Bistro_Main_Door_Concrete_01A_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Metal_Chrome_01_tint_Diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Bistro_Main_Door_Concrete_01A_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Metal_Chrome_01_tint_Diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Bistro_Main_Door_Concrete_01A_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Metal_Chrome_01_tint_Diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -8420,15 +8445,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Paris_BistroSideBanner_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Paris_BistroExteriorSpotLightGlass_01_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Paris_BistroSideBanner_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Paris_BistroExteriorSpotLightGlass_01_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Paris_BistroSideBanner_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Paris_BistroExteriorSpotLightGlass_01_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -8458,22 +8483,22 @@ namespace FastBokeh
             {
                 // Load the texture
                 std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
-                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8_UNORM, Context::LogFn);
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, Context::LogFn);
                 DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
                 if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
                     desiredType = DX12Utils::TextureCache::Type::U8;
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Paris_BistroSideBanner_mask.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\bistro_woodpanelornament_01_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Paris_BistroSideBanner_mask.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\bistro_woodpanelornament_01_diff.png", s_techniqueLocation.c_str());
 
-                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount));
+                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Paris_BistroSideBanner_mask.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\bistro_woodpanelornament_01_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -8485,8 +8510,8 @@ namespace FastBokeh
                 m_internal.texture__loadedTexture_21_size[1] = size[1];
                 m_internal.texture__loadedTexture_21_size[2] = size[2];
                 m_internal.texture__loadedTexture_21_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_21_format = DXGI_FORMAT_R8_UNORM;
-                m_internal.texture__loadedTexture_21 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8_UNORM, m_internal.texture__loadedTexture_21_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_21" : nullptr), Context::LogFn);
+                m_internal.texture__loadedTexture_21_format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+                m_internal.texture__loadedTexture_21 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, m_internal.texture__loadedTexture_21_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_21" : nullptr), Context::LogFn);
 
 
                 std::vector<unsigned char> pixels;
@@ -8510,15 +8535,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_MainBalcony_01\\Paris_Doors_04A_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Bistro_main_door_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_MainBalcony_01\\Paris_Doors_04A_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Bistro_main_door_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_MainBalcony_01\\Paris_Doors_04A_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Bistro_main_door_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -8555,15 +8580,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_MainBalcony_01\\Paris_MainBalcony_02A_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\concrete_grooved_02_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_MainBalcony_01\\Paris_MainBalcony_02A_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\concrete_grooved_02_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_MainBalcony_01\\Paris_MainBalcony_02A_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\concrete_grooved_02_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -8600,15 +8625,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_MainBalcony_01\\Paris_MainBalcony_01A_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Glass_Dirty_01_spec.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_MainBalcony_01\\Paris_MainBalcony_01A_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Glass_Dirty_01_spec.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_MainBalcony_01\\Paris_MainBalcony_01A_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Glass_Dirty_01_spec.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -8645,15 +8670,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_MainBalcony_01\\Paris_Doors_03A_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Wood_Painted_02_Diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_MainBalcony_01\\Paris_Doors_03A_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Wood_Painted_02_Diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_MainBalcony_01\\Paris_Doors_03A_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Wood_Painted_02_Diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -8690,15 +8715,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Plastic_01_Planters_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Bistro_Main_Door_Concrete_01A_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Plastic_01_Planters_Diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Bistro_Main_Door_Concrete_01A_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Plastic_01_Planters_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Bistro_Main_Door_Concrete_01A_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -8735,15 +8760,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\grain_metal_01_black_metal_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Paris_BistroSideBanner_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\grain_metal_01_black_metal_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Paris_BistroSideBanner_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\grain_metal_01_black_metal_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Paris_BistroSideBanner_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -8773,22 +8798,22 @@ namespace FastBokeh
             {
                 // Load the texture
                 std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
-                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, Context::LogFn);
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8_UNORM, Context::LogFn);
                 DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
                 if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
                     desiredType = DX12Utils::TextureCache::Type::U8;
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Plaster_01A_yellow_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Paris_BistroSideBanner_mask.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Plaster_01A_yellow_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Paris_BistroSideBanner_mask.png", s_techniqueLocation.c_str());
 
-                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
+                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Plaster_01A_yellow_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Paris_BistroSideBanner_mask.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -8800,8 +8825,8 @@ namespace FastBokeh
                 m_internal.texture__loadedTexture_28_size[1] = size[1];
                 m_internal.texture__loadedTexture_28_size[2] = size[2];
                 m_internal.texture__loadedTexture_28_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_28_format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-                m_internal.texture__loadedTexture_28 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, m_internal.texture__loadedTexture_28_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_28" : nullptr), Context::LogFn);
+                m_internal.texture__loadedTexture_28_format = DXGI_FORMAT_R8_UNORM;
+                m_internal.texture__loadedTexture_28 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8_UNORM, m_internal.texture__loadedTexture_28_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_28" : nullptr), Context::LogFn);
 
 
                 std::vector<unsigned char> pixels;
@@ -8825,15 +8850,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Concrete_Smooth_03_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_MainBalcony_01\\Paris_Doors_04A_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Concrete_Smooth_03_Diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_MainBalcony_01\\Paris_Doors_04A_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Concrete_Smooth_03_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_MainBalcony_01\\Paris_Doors_04A_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -8870,15 +8895,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Roofing_Shingle_01_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_MainBalcony_01\\Paris_MainBalcony_02A_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Roofing_Shingle_01_Diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_MainBalcony_01\\Paris_MainBalcony_02A_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Roofing_Shingle_01_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_MainBalcony_01\\Paris_MainBalcony_02A_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -8915,15 +8940,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Roofing_Shingle_03_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_MainBalcony_01\\Paris_MainBalcony_01A_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Roofing_Shingle_03_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_MainBalcony_01\\Paris_MainBalcony_01A_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Roofing_Shingle_03_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_MainBalcony_01\\Paris_MainBalcony_01A_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -8960,15 +8985,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Trim_cornice_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_MainBalcony_01\\Paris_Doors_03A_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Trim_cornice_01_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_MainBalcony_01\\Paris_Doors_03A_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Trim_cornice_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_MainBalcony_01\\Paris_Doors_03A_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -9005,15 +9030,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Paris_Building01_Window_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Plastic_01_Planters_Diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Paris_Building01_Window_01_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Plastic_01_Planters_Diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Paris_Building01_Window_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Plastic_01_Planters_Diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -9043,22 +9068,22 @@ namespace FastBokeh
             {
                 // Load the texture
                 std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
-                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8_UNORM, Context::LogFn);
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, Context::LogFn);
                 DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
                 if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
                     desiredType = DX12Utils::TextureCache::Type::U8;
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Paris_Building01_Window_01_mask.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\grain_metal_01_black_metal_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Paris_Building01_Window_01_mask.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\grain_metal_01_black_metal_diff.png", s_techniqueLocation.c_str());
 
-                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount));
+                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Paris_Building01_Window_01_mask.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\grain_metal_01_black_metal_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -9070,8 +9095,8 @@ namespace FastBokeh
                 m_internal.texture__loadedTexture_34_size[1] = size[1];
                 m_internal.texture__loadedTexture_34_size[2] = size[2];
                 m_internal.texture__loadedTexture_34_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_34_format = DXGI_FORMAT_R8_UNORM;
-                m_internal.texture__loadedTexture_34 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8_UNORM, m_internal.texture__loadedTexture_34_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_34" : nullptr), Context::LogFn);
+                m_internal.texture__loadedTexture_34_format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+                m_internal.texture__loadedTexture_34 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, m_internal.texture__loadedTexture_34_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_34" : nullptr), Context::LogFn);
 
 
                 std::vector<unsigned char> pixels;
@@ -9095,15 +9120,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Windows_curtains_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Plaster_01A_yellow_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Windows_curtains_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Plaster_01A_yellow_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Windows_curtains_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Plaster_01A_yellow_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -9140,15 +9165,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\wood_base_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Concrete_Smooth_03_Diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\wood_base_01_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Concrete_Smooth_03_Diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\wood_base_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Concrete_Smooth_03_Diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -9185,15 +9210,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Paris_Doors_01A_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Roofing_Shingle_01_Diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Paris_Doors_01A_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Roofing_Shingle_01_Diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Paris_Doors_01A_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Roofing_Shingle_01_Diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -9230,15 +9255,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\brick_large_03_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Roofing_Shingle_03_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\brick_large_03_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Roofing_Shingle_03_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\brick_large_03_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Roofing_Shingle_03_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -9275,15 +9300,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\wood_painted_flat_grey_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Trim_cornice_01_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\wood_painted_flat_grey_01_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Trim_cornice_01_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\wood_painted_flat_grey_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Trim_cornice_01_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -9320,15 +9345,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\brick_large_02_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Paris_Building01_Window_01_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\brick_large_02_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Paris_Building01_Window_01_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\brick_large_02_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Paris_Building01_Window_01_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -9358,22 +9383,22 @@ namespace FastBokeh
             {
                 // Load the texture
                 std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
-                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, Context::LogFn);
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8_UNORM, Context::LogFn);
                 DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
                 if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
                     desiredType = DX12Utils::TextureCache::Type::U8;
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Paris_Building_09_Details_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Paris_Building01_Window_01_mask.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Paris_Building_09_Details_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Paris_Building01_Window_01_mask.png", s_techniqueLocation.c_str());
 
-                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
+                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Paris_Building_09_Details_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Paris_Building01_Window_01_mask.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -9385,8 +9410,8 @@ namespace FastBokeh
                 m_internal.texture__loadedTexture_41_size[1] = size[1];
                 m_internal.texture__loadedTexture_41_size[2] = size[2];
                 m_internal.texture__loadedTexture_41_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_41_format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-                m_internal.texture__loadedTexture_41 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, m_internal.texture__loadedTexture_41_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_41" : nullptr), Context::LogFn);
+                m_internal.texture__loadedTexture_41_format = DXGI_FORMAT_R8_UNORM;
+                m_internal.texture__loadedTexture_41 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8_UNORM, m_internal.texture__loadedTexture_41_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_41" : nullptr), Context::LogFn);
 
 
                 std::vector<unsigned char> pixels;
@@ -9410,15 +9435,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\wood_painted_flat_cyan_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Windows_curtains_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\wood_painted_flat_cyan_01_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Windows_curtains_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\wood_painted_flat_cyan_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Windows_curtains_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -9455,15 +9480,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\brick_small_02_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\wood_base_01_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\brick_small_02_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\wood_base_01_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\brick_small_02_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\wood_base_01_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -9500,15 +9525,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\roofing_metal_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Paris_Doors_01A_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\roofing_metal_01_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Paris_Doors_01A_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\roofing_metal_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Paris_Doors_01A_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -9545,15 +9570,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Room_Interior_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\brick_large_03_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Room_Interior_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\brick_large_03_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Room_Interior_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\brick_large_03_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -9590,15 +9615,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Paris_BistroAwning_Beams_01B_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\wood_painted_flat_grey_01_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Paris_BistroAwning_Beams_01B_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\wood_painted_flat_grey_01_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Paris_BistroAwning_Beams_01B_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\wood_painted_flat_grey_01_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -9635,15 +9660,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Boulangeria_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\brick_large_02_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Boulangeria_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\brick_large_02_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Boulangeria_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\brick_large_02_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -9680,15 +9705,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\frosted_glass_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Paris_Building_09_Details_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\frosted_glass_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Paris_Building_09_Details_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\frosted_glass_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Paris_Building_09_Details_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -9725,15 +9750,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Paris_BistroAwning_Fabric_Cyan_01A_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\wood_painted_flat_cyan_01_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Paris_BistroAwning_Fabric_Cyan_01A_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\wood_painted_flat_cyan_01_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Paris_BistroAwning_Fabric_Cyan_01A_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\wood_painted_flat_cyan_01_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -9770,15 +9795,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Metal_Clean_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\brick_small_02_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Metal_Clean_01_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\brick_small_02_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Metal_Clean_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\brick_small_02_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -9815,15 +9840,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Plaster_01A_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\roofing_metal_01_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Plaster_01A_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\roofing_metal_01_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Plaster_01A_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\roofing_metal_01_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -9860,15 +9885,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\paris_bistroawning_fabric_01a_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Room_Interior_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\paris_bistroawning_fabric_01a_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Room_Interior_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\paris_bistroawning_fabric_01a_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Room_Interior_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -9905,15 +9930,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Books_Covers_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Paris_BistroAwning_Beams_01B_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Books_Covers_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Paris_BistroAwning_Beams_01B_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Books_Covers_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Paris_BistroAwning_Beams_01B_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -9950,15 +9975,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\concrete_smooth_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Boulangeria_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\concrete_smooth_01_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Boulangeria_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\concrete_smooth_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Boulangeria_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -9995,15 +10020,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Wood_Painted_04_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\frosted_glass_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Wood_Painted_04_Diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\frosted_glass_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Wood_Painted_04_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\frosted_glass_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -10040,15 +10065,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Tiling\\Metal_RollDoor_01\\Metal_RollDoor_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Paris_BistroAwning_Fabric_Cyan_01A_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Tiling\\Metal_RollDoor_01\\Metal_RollDoor_01_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Paris_BistroAwning_Fabric_Cyan_01A_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Tiling\\Metal_RollDoor_01\\Metal_RollDoor_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Paris_BistroAwning_Fabric_Cyan_01A_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -10085,15 +10110,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Natural\\Buxus\\buxus_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Metal_Clean_01_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Natural\\Buxus\\buxus_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Metal_Clean_01_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Natural\\Buxus\\buxus_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Metal_Clean_01_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -10123,22 +10148,22 @@ namespace FastBokeh
             {
                 // Load the texture
                 std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
-                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8_UNORM, Context::LogFn);
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, Context::LogFn);
                 DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
                 if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
                     desiredType = DX12Utils::TextureCache::Type::U8;
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Natural\\Buxus\\buxus_mask.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Plaster_01A_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Natural\\Buxus\\buxus_mask.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Plaster_01A_diff.png", s_techniqueLocation.c_str());
 
-                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount));
+                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Natural\\Buxus\\buxus_mask.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Plaster_01A_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -10150,8 +10175,8 @@ namespace FastBokeh
                 m_internal.texture__loadedTexture_58_size[1] = size[1];
                 m_internal.texture__loadedTexture_58_size[2] = size[2];
                 m_internal.texture__loadedTexture_58_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_58_format = DXGI_FORMAT_R8_UNORM;
-                m_internal.texture__loadedTexture_58 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8_UNORM, m_internal.texture__loadedTexture_58_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_58" : nullptr), Context::LogFn);
+                m_internal.texture__loadedTexture_58_format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+                m_internal.texture__loadedTexture_58 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, m_internal.texture__loadedTexture_58_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_58" : nullptr), Context::LogFn);
 
 
                 std::vector<unsigned char> pixels;
@@ -10175,15 +10200,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Natural\\Italian_Cypress\\Italian_Cypress_Leaves_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\paris_bistroawning_fabric_01a_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Natural\\Italian_Cypress\\Italian_Cypress_Leaves_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\paris_bistroawning_fabric_01a_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Natural\\Italian_Cypress\\Italian_Cypress_Leaves_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\paris_bistroawning_fabric_01a_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -10213,22 +10238,22 @@ namespace FastBokeh
             {
                 // Load the texture
                 std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
-                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8_UNORM, Context::LogFn);
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, Context::LogFn);
                 DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
                 if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
                     desiredType = DX12Utils::TextureCache::Type::U8;
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Natural\\Italian_Cypress\\Italian_Cypress_Leaves_mask.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Books_Covers_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Natural\\Italian_Cypress\\Italian_Cypress_Leaves_mask.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Books_Covers_diff.png", s_techniqueLocation.c_str());
 
-                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount));
+                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Natural\\Italian_Cypress\\Italian_Cypress_Leaves_mask.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Books_Covers_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -10240,8 +10265,8 @@ namespace FastBokeh
                 m_internal.texture__loadedTexture_60_size[1] = size[1];
                 m_internal.texture__loadedTexture_60_size[2] = size[2];
                 m_internal.texture__loadedTexture_60_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_60_format = DXGI_FORMAT_R8_UNORM;
-                m_internal.texture__loadedTexture_60 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8_UNORM, m_internal.texture__loadedTexture_60_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_60" : nullptr), Context::LogFn);
+                m_internal.texture__loadedTexture_60_format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+                m_internal.texture__loadedTexture_60 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, m_internal.texture__loadedTexture_60_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_60" : nullptr), Context::LogFn);
 
 
                 std::vector<unsigned char> pixels;
@@ -10265,15 +10290,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Natural\\Italian_Cypress\\Italian_Cypress_Bark_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\concrete_smooth_01_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Natural\\Italian_Cypress\\Italian_Cypress_Bark_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\concrete_smooth_01_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Natural\\Italian_Cypress\\Italian_Cypress_Bark_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\concrete_smooth_01_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -10310,15 +10335,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Natural\\Paris_flowers_01a\\Paris_Foliage_01a_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Wood_Painted_04_Diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Natural\\Paris_flowers_01a\\Paris_Foliage_01a_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Wood_Painted_04_Diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Natural\\Paris_flowers_01a\\Paris_Foliage_01a_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Wood_Painted_04_Diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -10348,22 +10373,22 @@ namespace FastBokeh
             {
                 // Load the texture
                 std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
-                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8_UNORM, Context::LogFn);
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, Context::LogFn);
                 DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
                 if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
                     desiredType = DX12Utils::TextureCache::Type::U8;
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Natural\\Paris_flowers_01a\\Paris_Foliage_01a_mask.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Tiling\\Metal_RollDoor_01\\Metal_RollDoor_01_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Natural\\Paris_flowers_01a\\Paris_Foliage_01a_mask.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Tiling\\Metal_RollDoor_01\\Metal_RollDoor_01_diff.png", s_techniqueLocation.c_str());
 
-                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount));
+                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Natural\\Paris_flowers_01a\\Paris_Foliage_01a_mask.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Tiling\\Metal_RollDoor_01\\Metal_RollDoor_01_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -10375,8 +10400,8 @@ namespace FastBokeh
                 m_internal.texture__loadedTexture_63_size[1] = size[1];
                 m_internal.texture__loadedTexture_63_size[2] = size[2];
                 m_internal.texture__loadedTexture_63_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_63_format = DXGI_FORMAT_R8_UNORM;
-                m_internal.texture__loadedTexture_63 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8_UNORM, m_internal.texture__loadedTexture_63_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_63" : nullptr), Context::LogFn);
+                m_internal.texture__loadedTexture_63_format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+                m_internal.texture__loadedTexture_63 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, m_internal.texture__loadedTexture_63_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_63" : nullptr), Context::LogFn);
 
 
                 std::vector<unsigned char> pixels;
@@ -10400,15 +10425,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Natural\\Paris_flowers_01a\\Paris_flowers_01a_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Natural\\Buxus\\buxus_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Natural\\Paris_flowers_01a\\Paris_flowers_01a_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Natural\\Buxus\\buxus_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Natural\\Paris_flowers_01a\\Paris_flowers_01a_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Natural\\Buxus\\buxus_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -10445,15 +10470,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Natural\\Paris_flowers_01a\\Paris_flowers_01a_mask.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Natural\\Buxus\\buxus_mask.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Natural\\Paris_flowers_01a\\Paris_flowers_01a_mask.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Natural\\Buxus\\buxus_mask.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Natural\\Paris_flowers_01a\\Paris_flowers_01a_mask.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Natural\\Buxus\\buxus_mask.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -10490,15 +10515,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Natural\\linden\\Linden_Bark_A_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Natural\\Italian_Cypress\\Italian_Cypress_Leaves_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Natural\\linden\\Linden_Bark_A_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Natural\\Italian_Cypress\\Italian_Cypress_Leaves_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Natural\\linden\\Linden_Bark_A_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Natural\\Italian_Cypress\\Italian_Cypress_Leaves_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -10528,22 +10553,22 @@ namespace FastBokeh
             {
                 // Load the texture
                 std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
-                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, Context::LogFn);
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8_UNORM, Context::LogFn);
                 DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
                 if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
                     desiredType = DX12Utils::TextureCache::Type::U8;
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Natural\\linden\\Leaves_B_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Natural\\Italian_Cypress\\Italian_Cypress_Leaves_mask.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Natural\\linden\\Leaves_B_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Natural\\Italian_Cypress\\Italian_Cypress_Leaves_mask.png", s_techniqueLocation.c_str());
 
-                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
+                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Natural\\linden\\Leaves_B_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Natural\\Italian_Cypress\\Italian_Cypress_Leaves_mask.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -10555,8 +10580,8 @@ namespace FastBokeh
                 m_internal.texture__loadedTexture_67_size[1] = size[1];
                 m_internal.texture__loadedTexture_67_size[2] = size[2];
                 m_internal.texture__loadedTexture_67_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_67_format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-                m_internal.texture__loadedTexture_67 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, m_internal.texture__loadedTexture_67_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_67" : nullptr), Context::LogFn);
+                m_internal.texture__loadedTexture_67_format = DXGI_FORMAT_R8_UNORM;
+                m_internal.texture__loadedTexture_67 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8_UNORM, m_internal.texture__loadedTexture_67_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_67" : nullptr), Context::LogFn);
 
 
                 std::vector<unsigned char> pixels;
@@ -10573,22 +10598,22 @@ namespace FastBokeh
             {
                 // Load the texture
                 std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
-                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8_UNORM, Context::LogFn);
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, Context::LogFn);
                 DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
                 if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
                     desiredType = DX12Utils::TextureCache::Type::U8;
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Natural\\linden\\Leaves_B_mask.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Natural\\Italian_Cypress\\Italian_Cypress_Bark_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Natural\\linden\\Leaves_B_mask.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Natural\\Italian_Cypress\\Italian_Cypress_Bark_diff.png", s_techniqueLocation.c_str());
 
-                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount));
+                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Natural\\linden\\Leaves_B_mask.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Natural\\Italian_Cypress\\Italian_Cypress_Bark_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -10600,8 +10625,8 @@ namespace FastBokeh
                 m_internal.texture__loadedTexture_68_size[1] = size[1];
                 m_internal.texture__loadedTexture_68_size[2] = size[2];
                 m_internal.texture__loadedTexture_68_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_68_format = DXGI_FORMAT_R8_UNORM;
-                m_internal.texture__loadedTexture_68 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8_UNORM, m_internal.texture__loadedTexture_68_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_68" : nullptr), Context::LogFn);
+                m_internal.texture__loadedTexture_68_format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+                m_internal.texture__loadedTexture_68 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, m_internal.texture__loadedTexture_68_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_68" : nullptr), Context::LogFn);
 
 
                 std::vector<unsigned char> pixels;
@@ -10625,15 +10650,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Natural\\linden\\Leaves_A_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Natural\\Paris_flowers_01a\\Paris_Foliage_01a_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Natural\\linden\\Leaves_A_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Natural\\Paris_flowers_01a\\Paris_Foliage_01a_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Natural\\linden\\Leaves_A_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Natural\\Paris_flowers_01a\\Paris_Foliage_01a_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -10670,15 +10695,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Natural\\linden\\Leaves_A_mask.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Natural\\Paris_flowers_01a\\Paris_Foliage_01a_mask.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Natural\\linden\\Leaves_A_mask.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Natural\\Paris_flowers_01a\\Paris_Foliage_01a_mask.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Natural\\linden\\Leaves_A_mask.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Natural\\Paris_flowers_01a\\Paris_Foliage_01a_mask.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -10715,15 +10740,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Natural\\Paris_ivy_01a\\Paris_ivy_leaf_a_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Natural\\Paris_flowers_01a\\Paris_flowers_01a_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Natural\\Paris_ivy_01a\\Paris_ivy_leaf_a_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Natural\\Paris_flowers_01a\\Paris_flowers_01a_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Natural\\Paris_ivy_01a\\Paris_ivy_leaf_a_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Natural\\Paris_flowers_01a\\Paris_flowers_01a_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -10760,15 +10785,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Natural\\Paris_ivy_01a\\Paris_ivy_leaf_a_mask.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Natural\\Paris_flowers_01a\\Paris_flowers_01a_mask.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Natural\\Paris_ivy_01a\\Paris_ivy_leaf_a_mask.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Natural\\Paris_flowers_01a\\Paris_flowers_01a_mask.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Natural\\Paris_ivy_01a\\Paris_ivy_leaf_a_mask.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Natural\\Paris_flowers_01a\\Paris_flowers_01a_mask.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -10805,15 +10830,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Natural\\Paris_ivy_01a\\Paris_ivy_branch_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Natural\\linden\\Linden_Bark_A_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Natural\\Paris_ivy_01a\\Paris_ivy_branch_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Natural\\linden\\Linden_Bark_A_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Natural\\Paris_ivy_01a\\Paris_ivy_branch_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Natural\\linden\\Linden_Bark_A_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -10850,15 +10875,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_StreetLight_01\\Paris_StreetLight_Glass_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Natural\\linden\\Leaves_B_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_StreetLight_01\\Paris_StreetLight_Glass_01_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Natural\\linden\\Leaves_B_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_StreetLight_01\\Paris_StreetLight_Glass_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Natural\\linden\\Leaves_B_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -10888,22 +10913,22 @@ namespace FastBokeh
             {
                 // Load the texture
                 std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
-                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, Context::LogFn);
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8_UNORM, Context::LogFn);
                 DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
                 if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
                     desiredType = DX12Utils::TextureCache::Type::U8;
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Colors\\White.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Natural\\linden\\Leaves_B_mask.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Colors\\White.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Natural\\linden\\Leaves_B_mask.png", s_techniqueLocation.c_str());
 
-                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
+                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Colors\\White.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Natural\\linden\\Leaves_B_mask.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -10915,8 +10940,8 @@ namespace FastBokeh
                 m_internal.texture__loadedTexture_75_size[1] = size[1];
                 m_internal.texture__loadedTexture_75_size[2] = size[2];
                 m_internal.texture__loadedTexture_75_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_75_format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-                m_internal.texture__loadedTexture_75 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, m_internal.texture__loadedTexture_75_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_75" : nullptr), Context::LogFn);
+                m_internal.texture__loadedTexture_75_format = DXGI_FORMAT_R8_UNORM;
+                m_internal.texture__loadedTexture_75 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8_UNORM, m_internal.texture__loadedTexture_75_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_75" : nullptr), Context::LogFn);
 
 
                 std::vector<unsigned char> pixels;
@@ -10940,15 +10965,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_StreetLight_01\\Paris_StreetLight_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Natural\\linden\\Leaves_A_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_StreetLight_01\\Paris_StreetLight_01_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Natural\\linden\\Leaves_A_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_StreetLight_01\\Paris_StreetLight_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Natural\\linden\\Leaves_A_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -10978,22 +11003,22 @@ namespace FastBokeh
             {
                 // Load the texture
                 std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
-                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, Context::LogFn);
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8_UNORM, Context::LogFn);
                 DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
                 if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
                     desiredType = DX12Utils::TextureCache::Type::U8;
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_StreetLight_01\\Street_decals_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Natural\\linden\\Leaves_A_mask.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_StreetLight_01\\Street_decals_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Natural\\linden\\Leaves_A_mask.png", s_techniqueLocation.c_str());
 
-                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
+                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_StreetLight_01\\Street_decals_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Natural\\linden\\Leaves_A_mask.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -11005,8 +11030,8 @@ namespace FastBokeh
                 m_internal.texture__loadedTexture_77_size[1] = size[1];
                 m_internal.texture__loadedTexture_77_size[2] = size[2];
                 m_internal.texture__loadedTexture_77_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_77_format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-                m_internal.texture__loadedTexture_77 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, m_internal.texture__loadedTexture_77_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_77" : nullptr), Context::LogFn);
+                m_internal.texture__loadedTexture_77_format = DXGI_FORMAT_R8_UNORM;
+                m_internal.texture__loadedTexture_77 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8_UNORM, m_internal.texture__loadedTexture_77_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_77" : nullptr), Context::LogFn);
 
 
                 std::vector<unsigned char> pixels;
@@ -11023,22 +11048,22 @@ namespace FastBokeh
             {
                 // Load the texture
                 std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
-                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8_UNORM, Context::LogFn);
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, Context::LogFn);
                 DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
                 if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
                     desiredType = DX12Utils::TextureCache::Type::U8;
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_StreetLight_01\\Street_decals_mask.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Natural\\Paris_ivy_01a\\Paris_ivy_leaf_a_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_StreetLight_01\\Street_decals_mask.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Natural\\Paris_ivy_01a\\Paris_ivy_leaf_a_diff.png", s_techniqueLocation.c_str());
 
-                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount));
+                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_StreetLight_01\\Street_decals_mask.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Natural\\Paris_ivy_01a\\Paris_ivy_leaf_a_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -11050,8 +11075,8 @@ namespace FastBokeh
                 m_internal.texture__loadedTexture_78_size[1] = size[1];
                 m_internal.texture__loadedTexture_78_size[2] = size[2];
                 m_internal.texture__loadedTexture_78_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_78_format = DXGI_FORMAT_R8_UNORM;
-                m_internal.texture__loadedTexture_78 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8_UNORM, m_internal.texture__loadedTexture_78_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_78" : nullptr), Context::LogFn);
+                m_internal.texture__loadedTexture_78_format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+                m_internal.texture__loadedTexture_78 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, m_internal.texture__loadedTexture_78_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_78" : nullptr), Context::LogFn);
 
 
                 std::vector<unsigned char> pixels;
@@ -11068,22 +11093,22 @@ namespace FastBokeh
             {
                 // Load the texture
                 std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
-                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, Context::LogFn);
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8_UNORM, Context::LogFn);
                 DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
                 if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
                     desiredType = DX12Utils::TextureCache::Type::U8;
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_StreetPivot\\Paris_StreetPivot_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Natural\\Paris_ivy_01a\\Paris_ivy_leaf_a_mask.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_StreetPivot\\Paris_StreetPivot_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Natural\\Paris_ivy_01a\\Paris_ivy_leaf_a_mask.png", s_techniqueLocation.c_str());
 
-                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
+                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_StreetPivot\\Paris_StreetPivot_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Natural\\Paris_ivy_01a\\Paris_ivy_leaf_a_mask.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -11095,8 +11120,8 @@ namespace FastBokeh
                 m_internal.texture__loadedTexture_79_size[1] = size[1];
                 m_internal.texture__loadedTexture_79_size[2] = size[2];
                 m_internal.texture__loadedTexture_79_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_79_format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-                m_internal.texture__loadedTexture_79 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, m_internal.texture__loadedTexture_79_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_79" : nullptr), Context::LogFn);
+                m_internal.texture__loadedTexture_79_format = DXGI_FORMAT_R8_UNORM;
+                m_internal.texture__loadedTexture_79 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8_UNORM, m_internal.texture__loadedTexture_79_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_79" : nullptr), Context::LogFn);
 
 
                 std::vector<unsigned char> pixels;
@@ -11120,15 +11145,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_ElectricBox_01\\Paris_ElectricBox_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Natural\\Paris_ivy_01a\\Paris_ivy_branch_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_ElectricBox_01\\Paris_ElectricBox_01_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Natural\\Paris_ivy_01a\\Paris_ivy_branch_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_ElectricBox_01\\Paris_ElectricBox_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Natural\\Paris_ivy_01a\\Paris_ivy_branch_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -11165,15 +11190,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_ShopSign_01\\Paris_ShopSign_bakery_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_StreetLight_01\\Paris_StreetLight_Glass_01_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_ShopSign_01\\Paris_ShopSign_bakery_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_StreetLight_01\\Paris_StreetLight_Glass_01_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_ShopSign_01\\Paris_ShopSign_bakery_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_StreetLight_01\\Paris_StreetLight_Glass_01_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -11210,15 +11235,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Tiling\\Metal_Chrome_01\\Metal_Chrome_01_banner_metal_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Colors\\White.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Tiling\\Metal_Chrome_01\\Metal_Chrome_01_banner_metal_Diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Colors\\White.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Tiling\\Metal_Chrome_01\\Metal_Chrome_01_banner_metal_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Colors\\White.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -11255,15 +11280,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_ShopSign_01\\Paris_ShopSign_bookshop_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_StreetLight_01\\Paris_StreetLight_01_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_ShopSign_01\\Paris_ShopSign_bookshop_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_StreetLight_01\\Paris_StreetLight_01_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_ShopSign_01\\Paris_ShopSign_bookshop_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_StreetLight_01\\Paris_StreetLight_01_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -11300,15 +11325,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_ShopSign_01\\Paris_ShopSign_pharmacy_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_StreetLight_01\\Street_decals_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_ShopSign_01\\Paris_ShopSign_pharmacy_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_StreetLight_01\\Street_decals_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_ShopSign_01\\Paris_ShopSign_pharmacy_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_StreetLight_01\\Street_decals_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -11338,22 +11363,22 @@ namespace FastBokeh
             {
                 // Load the texture
                 std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
-                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, Context::LogFn);
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8_UNORM, Context::LogFn);
                 DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
                 if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
                     desiredType = DX12Utils::TextureCache::Type::U8;
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_ShopSign_01\\Paris_ShopSign_ties shop_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_StreetLight_01\\Street_decals_mask.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_ShopSign_01\\Paris_ShopSign_ties shop_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_StreetLight_01\\Street_decals_mask.png", s_techniqueLocation.c_str());
 
-                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
+                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_ShopSign_01\\Paris_ShopSign_ties shop_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_StreetLight_01\\Street_decals_mask.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -11365,8 +11390,8 @@ namespace FastBokeh
                 m_internal.texture__loadedTexture_85_size[1] = size[1];
                 m_internal.texture__loadedTexture_85_size[2] = size[2];
                 m_internal.texture__loadedTexture_85_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_85_format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-                m_internal.texture__loadedTexture_85 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, m_internal.texture__loadedTexture_85_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_85" : nullptr), Context::LogFn);
+                m_internal.texture__loadedTexture_85_format = DXGI_FORMAT_R8_UNORM;
+                m_internal.texture__loadedTexture_85 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8_UNORM, m_internal.texture__loadedTexture_85_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_85" : nullptr), Context::LogFn);
 
 
                 std::vector<unsigned char> pixels;
@@ -11390,15 +11415,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_BistroExteriorSpotLight_01\\Paris_BistroExteriorSpotLight_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_StreetPivot\\Paris_StreetPivot_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_BistroExteriorSpotLight_01\\Paris_BistroExteriorSpotLight_01_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_StreetPivot\\Paris_StreetPivot_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_BistroExteriorSpotLight_01\\Paris_BistroExteriorSpotLight_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_StreetPivot\\Paris_StreetPivot_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -11435,15 +11460,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_StreetSign_01\\Paris_StreetSign_01A_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_ElectricBox_01\\Paris_ElectricBox_01_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_StreetSign_01\\Paris_StreetSign_01A_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_ElectricBox_01\\Paris_ElectricBox_01_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_StreetSign_01\\Paris_StreetSign_01A_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_ElectricBox_01\\Paris_ElectricBox_01_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -11480,15 +11505,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_TrafficSign_01\\Paris_TrafficSign_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_ShopSign_01\\Paris_ShopSign_bakery_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_TrafficSign_01\\Paris_TrafficSign_01_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_ShopSign_01\\Paris_ShopSign_bakery_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_TrafficSign_01\\Paris_TrafficSign_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_ShopSign_01\\Paris_ShopSign_bakery_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -11525,15 +11550,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_MenuSign_01\\Paris_MenuSign_01A_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Tiling\\Metal_Chrome_01\\Metal_Chrome_01_banner_metal_Diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_MenuSign_01\\Paris_MenuSign_01A_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Tiling\\Metal_Chrome_01\\Metal_Chrome_01_banner_metal_Diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_MenuSign_01\\Paris_MenuSign_01A_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Tiling\\Metal_Chrome_01\\Metal_Chrome_01_banner_metal_Diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -11570,15 +11595,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_MenuSign_01\\Paris_MenuSign_01B_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_ShopSign_01\\Paris_ShopSign_bookshop_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_MenuSign_01\\Paris_MenuSign_01B_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_ShopSign_01\\Paris_ShopSign_bookshop_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_MenuSign_01\\Paris_MenuSign_01B_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_ShopSign_01\\Paris_ShopSign_bookshop_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -11615,15 +11640,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Tiling\\Glass_Dirty_01\\Glass_Dirty_01_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_ShopSign_01\\Paris_ShopSign_pharmacy_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Tiling\\Glass_Dirty_01\\Glass_Dirty_01_Diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_ShopSign_01\\Paris_ShopSign_pharmacy_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Tiling\\Glass_Dirty_01\\Glass_Dirty_01_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_ShopSign_01\\Paris_ShopSign_pharmacy_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -11660,15 +11685,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_TrashCan_01\\Paris_TrashCan_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_ShopSign_01\\Paris_ShopSign_ties shop_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_TrashCan_01\\Paris_TrashCan_01_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_ShopSign_01\\Paris_ShopSign_ties shop_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_TrashCan_01\\Paris_TrashCan_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_ShopSign_01\\Paris_ShopSign_ties shop_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -11705,15 +11730,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Colors\\Green.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_BistroExteriorSpotLight_01\\Paris_BistroExteriorSpotLight_01_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Colors\\Green.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_BistroExteriorSpotLight_01\\Paris_BistroExteriorSpotLight_01_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Colors\\Green.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_BistroExteriorSpotLight_01\\Paris_BistroExteriorSpotLight_01_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -11750,15 +11775,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Colors\\Red_Full.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_StreetSign_01\\Paris_StreetSign_01A_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Colors\\Red_Full.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_StreetSign_01\\Paris_StreetSign_01A_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Colors\\Red_Full.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_StreetSign_01\\Paris_StreetSign_01A_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -11795,15 +11820,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_StringLights_01\\Paris_StringLights_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_TrafficSign_01\\Paris_TrafficSign_01_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_StringLights_01\\Paris_StringLights_01_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_TrafficSign_01\\Paris_TrafficSign_01_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_StringLights_01\\Paris_StringLights_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_TrafficSign_01\\Paris_TrafficSign_01_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -11840,15 +11865,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Colors\\Purple.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_MenuSign_01\\Paris_MenuSign_01A_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Colors\\Purple.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_MenuSign_01\\Paris_MenuSign_01A_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Colors\\Purple.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_MenuSign_01\\Paris_MenuSign_01A_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -11885,15 +11910,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Colors\\Orange.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_MenuSign_01\\Paris_MenuSign_01B_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Colors\\Orange.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_MenuSign_01\\Paris_MenuSign_01B_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Colors\\Orange.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_MenuSign_01\\Paris_MenuSign_01B_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -11930,15 +11955,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_Bollard_01\\Paris_Bollard_01A_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Tiling\\Glass_Dirty_01\\Glass_Dirty_01_Diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_Bollard_01\\Paris_Bollard_01A_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Tiling\\Glass_Dirty_01\\Glass_Dirty_01_Diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_Bollard_01\\Paris_Bollard_01A_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Tiling\\Glass_Dirty_01\\Glass_Dirty_01_Diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -11975,15 +12000,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_VespaScooter_01\\Paris_VespaScooter_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_TrashCan_01\\Paris_TrashCan_01_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_VespaScooter_01\\Paris_VespaScooter_01_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_TrashCan_01\\Paris_TrashCan_01_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_VespaScooter_01\\Paris_VespaScooter_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_TrashCan_01\\Paris_TrashCan_01_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -12020,15 +12045,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_VespaScooter_01\\Paris_VespaScooter_01_odometer_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Colors\\Green.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_VespaScooter_01\\Paris_VespaScooter_01_odometer_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Colors\\Green.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_VespaScooter_01\\Paris_VespaScooter_01_odometer_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Colors\\Green.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -12065,15 +12090,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Tiling\\Metal_Clean_01\\Metal_Clean_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Colors\\Red_Full.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Tiling\\Metal_Clean_01\\Metal_Clean_01_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Colors\\Red_Full.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Tiling\\Metal_Clean_01\\Metal_Clean_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Colors\\Red_Full.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -12110,15 +12135,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Tiling\\Plastic_02\\Plastic_02_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_StringLights_01\\Paris_StringLights_01_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Tiling\\Plastic_02\\Plastic_02_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_StringLights_01\\Paris_StringLights_01_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Tiling\\Plastic_02\\Plastic_02_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_StringLights_01\\Paris_StringLights_01_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -12155,15 +12180,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_BistroAwning_01\\Paris_BistroAwning_Fabric_01A_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Colors\\Purple.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_BistroAwning_01\\Paris_BistroAwning_Fabric_01A_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Colors\\Purple.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_BistroAwning_01\\Paris_BistroAwning_Fabric_01A_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Colors\\Purple.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -12200,15 +12225,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_BistroAwning_01\\Paris_BistroAwning_Beams_01A_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Colors\\Orange.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_BistroAwning_01\\Paris_BistroAwning_Beams_01A_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Colors\\Orange.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_BistroAwning_01\\Paris_BistroAwning_Beams_01A_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Colors\\Orange.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -12245,15 +12270,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_BistroAwning_02\\Paris_BistroAwning_02_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_Bollard_01\\Paris_Bollard_01A_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_BistroAwning_02\\Paris_BistroAwning_02_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_Bollard_01\\Paris_Bollard_01A_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_BistroAwning_02\\Paris_BistroAwning_02_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_Bollard_01\\Paris_Bollard_01A_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -12290,15 +12315,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_BistroFrontBanner_01\\Paris_BistroFrontBanner_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_VespaScooter_01\\Paris_VespaScooter_01_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_BistroFrontBanner_01\\Paris_BistroFrontBanner_01_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_VespaScooter_01\\Paris_VespaScooter_01_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_BistroFrontBanner_01\\Paris_BistroFrontBanner_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_VespaScooter_01\\Paris_VespaScooter_01_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -12335,15 +12360,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Colors\\Grey_80.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_VespaScooter_01\\Paris_VespaScooter_01_odometer_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Colors\\Grey_80.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_VespaScooter_01\\Paris_VespaScooter_01_odometer_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Colors\\Grey_80.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_VespaScooter_01\\Paris_VespaScooter_01_odometer_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -12380,15 +12405,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_PlantPot_01\\Paris_PlantPot_01A_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Tiling\\Metal_Clean_01\\Metal_Clean_01_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_PlantPot_01\\Paris_PlantPot_01A_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Tiling\\Metal_Clean_01\\Metal_Clean_01_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_PlantPot_01\\Paris_PlantPot_01A_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Tiling\\Metal_Clean_01\\Metal_Clean_01_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -12425,15 +12450,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_SidewalkBarrier_01\\Paris_SidewalkBarrier_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Tiling\\Plastic_02\\Plastic_02_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_SidewalkBarrier_01\\Paris_SidewalkBarrier_01_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Tiling\\Plastic_02\\Plastic_02_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_SidewalkBarrier_01\\Paris_SidewalkBarrier_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Tiling\\Plastic_02\\Plastic_02_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -12470,15 +12495,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Tiling\\Concrete_Smooth_02\\Concrete_Smooth_02_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_BistroAwning_01\\Paris_BistroAwning_Fabric_01A_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Tiling\\Concrete_Smooth_02\\Concrete_Smooth_02_Diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_BistroAwning_01\\Paris_BistroAwning_Fabric_01A_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Tiling\\Concrete_Smooth_02\\Concrete_Smooth_02_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_BistroAwning_01\\Paris_BistroAwning_Fabric_01A_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -12515,15 +12540,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Tiling\\Brick_Large_01\\Brick_Large_01_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_BistroAwning_01\\Paris_BistroAwning_Beams_01A_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Tiling\\Brick_Large_01\\Brick_Large_01_Diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_BistroAwning_01\\Paris_BistroAwning_Beams_01A_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Tiling\\Brick_Large_01\\Brick_Large_01_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_BistroAwning_01\\Paris_BistroAwning_Beams_01A_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -12560,15 +12585,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Tiling\\Concrete_Smooth_01\\Concrete_Smooth_01_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_BistroAwning_02\\Paris_BistroAwning_02_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Tiling\\Concrete_Smooth_01\\Concrete_Smooth_01_Diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_BistroAwning_02\\Paris_BistroAwning_02_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Tiling\\Concrete_Smooth_01\\Concrete_Smooth_01_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_BistroAwning_02\\Paris_BistroAwning_02_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -12605,15 +12630,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Tiling\\Concrete_Grooved_02\\Concrete_Grooved_02_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_BistroFrontBanner_01\\Paris_BistroFrontBanner_01_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Tiling\\Concrete_Grooved_02\\Concrete_Grooved_02_Diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_BistroFrontBanner_01\\Paris_BistroFrontBanner_01_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Tiling\\Concrete_Grooved_02\\Concrete_Grooved_02_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_BistroFrontBanner_01\\Paris_BistroFrontBanner_01_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -12650,15 +12675,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Tiling\\Grain_Metal_01\\Grain_Metal_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Colors\\Grey_80.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Tiling\\Grain_Metal_01\\Grain_Metal_01_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Colors\\Grey_80.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Tiling\\Grain_Metal_01\\Grain_Metal_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Colors\\Grey_80.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -12695,15 +12720,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_Lantern_01\\Paris_Lantern_01A_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_PlantPot_01\\Paris_PlantPot_01A_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_Lantern_01\\Paris_Lantern_01A_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_PlantPot_01\\Paris_PlantPot_01A_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_Lantern_01\\Paris_Lantern_01A_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_PlantPot_01\\Paris_PlantPot_01A_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -12740,15 +12765,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_Chair_01\\Paris_Chair_01A_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_SidewalkBarrier_01\\Paris_SidewalkBarrier_01_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_Chair_01\\Paris_Chair_01A_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_SidewalkBarrier_01\\Paris_SidewalkBarrier_01_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_Chair_01\\Paris_Chair_01A_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_SidewalkBarrier_01\\Paris_SidewalkBarrier_01_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -12785,15 +12810,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_Table_01\\Paris_Table_01A_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Tiling\\Concrete_Smooth_02\\Concrete_Smooth_02_Diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_Table_01\\Paris_Table_01A_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Tiling\\Concrete_Smooth_02\\Concrete_Smooth_02_Diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_Table_01\\Paris_Table_01A_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Tiling\\Concrete_Smooth_02\\Concrete_Smooth_02_Diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -12830,15 +12855,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_Ashtray_01\\Paris_Ashtray_01A_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Tiling\\Brick_Large_01\\Brick_Large_01_Diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_Ashtray_01\\Paris_Ashtray_01A_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Tiling\\Brick_Large_01\\Brick_Large_01_Diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_Ashtray_01\\Paris_Ashtray_01A_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Tiling\\Brick_Large_01\\Brick_Large_01_Diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -12875,15 +12900,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_NapkinHolder_01\\Paris_Napkinholder_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Tiling\\Concrete_Smooth_01\\Concrete_Smooth_01_Diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_NapkinHolder_01\\Paris_Napkinholder_01_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Tiling\\Concrete_Smooth_01\\Concrete_Smooth_01_Diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_NapkinHolder_01\\Paris_Napkinholder_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Tiling\\Concrete_Smooth_01\\Concrete_Smooth_01_Diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -12920,15 +12945,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Colors\\Grey_30.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Tiling\\Concrete_Grooved_02\\Concrete_Grooved_02_Diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Colors\\Grey_30.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Tiling\\Concrete_Grooved_02\\Concrete_Grooved_02_Diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Colors\\Grey_30.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Tiling\\Concrete_Grooved_02\\Concrete_Grooved_02_Diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -12965,15 +12990,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_LiquorBottle_01\\Paris_LiquorBottle_01_Cap_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Tiling\\Grain_Metal_01\\Grain_Metal_01_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_LiquorBottle_01\\Paris_LiquorBottle_01_Cap_Diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Tiling\\Grain_Metal_01\\Grain_Metal_01_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_LiquorBottle_01\\Paris_LiquorBottle_01_Cap_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Tiling\\Grain_Metal_01\\Grain_Metal_01_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -13010,15 +13035,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_LiquorBottle_01\\Paris_LiquorBottle_labels_01_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_Lantern_01\\Paris_Lantern_01A_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_LiquorBottle_01\\Paris_LiquorBottle_labels_01_Diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_Lantern_01\\Paris_Lantern_01A_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_LiquorBottle_01\\Paris_LiquorBottle_labels_01_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_Lantern_01\\Paris_Lantern_01A_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -13048,22 +13073,22 @@ namespace FastBokeh
             {
                 // Load the texture
                 std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
-                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8_UNORM, Context::LogFn);
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, Context::LogFn);
                 DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
                 if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
                     desiredType = DX12Utils::TextureCache::Type::U8;
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_LiquorBottle_01\\Paris_LiquorBottle_labels_01_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_Chair_01\\Paris_Chair_01A_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_LiquorBottle_01\\Paris_LiquorBottle_labels_01_Diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_Chair_01\\Paris_Chair_01A_diff.png", s_techniqueLocation.c_str());
 
-                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount));
+                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_LiquorBottle_01\\Paris_LiquorBottle_labels_01_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_Chair_01\\Paris_Chair_01A_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -13075,8 +13100,8 @@ namespace FastBokeh
                 m_internal.texture__loadedTexture_123_size[1] = size[1];
                 m_internal.texture__loadedTexture_123_size[2] = size[2];
                 m_internal.texture__loadedTexture_123_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_123_format = DXGI_FORMAT_R8_UNORM;
-                m_internal.texture__loadedTexture_123 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8_UNORM, m_internal.texture__loadedTexture_123_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_123" : nullptr), Context::LogFn);
+                m_internal.texture__loadedTexture_123_format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+                m_internal.texture__loadedTexture_123 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, m_internal.texture__loadedTexture_123_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_123" : nullptr), Context::LogFn);
 
 
                 std::vector<unsigned char> pixels;
@@ -13100,15 +13125,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\wood_polished_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_Table_01\\Paris_Table_01A_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\wood_polished_01_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_Table_01\\Paris_Table_01A_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\wood_polished_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_Table_01\\Paris_Table_01A_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -13145,15 +13170,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\wood_planks_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_Ashtray_01\\Paris_Ashtray_01A_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\wood_planks_01_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_Ashtray_01\\Paris_Ashtray_01A_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\wood_planks_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_Ashtray_01\\Paris_Ashtray_01A_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -13190,15 +13215,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\concrete_smooth_02_red_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_NapkinHolder_01\\Paris_Napkinholder_01_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\concrete_smooth_02_red_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_NapkinHolder_01\\Paris_Napkinholder_01_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\concrete_smooth_02_red_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_NapkinHolder_01\\Paris_Napkinholder_01_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -13235,15 +13260,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Grey_128.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Colors\\Grey_30.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Grey_128.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Colors\\Grey_30.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Grey_128.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Colors\\Grey_30.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -13280,15 +13305,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\paris_brushed_metal_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_LiquorBottle_01\\Paris_LiquorBottle_01_Cap_Diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\paris_brushed_metal_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_LiquorBottle_01\\Paris_LiquorBottle_01_Cap_Diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\paris_brushed_metal_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_LiquorBottle_01\\Paris_LiquorBottle_01_Cap_Diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -13325,15 +13350,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\tile_hexagonal_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_LiquorBottle_01\\Paris_LiquorBottle_labels_01_Diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\tile_hexagonal_01_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_LiquorBottle_01\\Paris_LiquorBottle_labels_01_Diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\tile_hexagonal_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_LiquorBottle_01\\Paris_LiquorBottle_labels_01_Diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -13363,22 +13388,22 @@ namespace FastBokeh
             {
                 // Load the texture
                 std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
-                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, Context::LogFn);
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8_UNORM, Context::LogFn);
                 DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
                 if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
                     desiredType = DX12Utils::TextureCache::Type::U8;
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Colors\\Grey_128.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_LiquorBottle_01\\Paris_LiquorBottle_labels_01_Diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Colors\\Grey_128.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_LiquorBottle_01\\Paris_LiquorBottle_labels_01_Diff.png", s_techniqueLocation.c_str());
 
-                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
+                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Colors\\Grey_128.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_LiquorBottle_01\\Paris_LiquorBottle_labels_01_Diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -13390,8 +13415,8 @@ namespace FastBokeh
                 m_internal.texture__loadedTexture_130_size[1] = size[1];
                 m_internal.texture__loadedTexture_130_size[2] = size[2];
                 m_internal.texture__loadedTexture_130_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_130_format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-                m_internal.texture__loadedTexture_130 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, m_internal.texture__loadedTexture_130_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_130" : nullptr), Context::LogFn);
+                m_internal.texture__loadedTexture_130_format = DXGI_FORMAT_R8_UNORM;
+                m_internal.texture__loadedTexture_130 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8_UNORM, m_internal.texture__loadedTexture_130_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_130" : nullptr), Context::LogFn);
 
 
                 std::vector<unsigned char> pixels;
@@ -13415,15 +13440,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Paris_BarTrim_01a_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\wood_polished_01_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Paris_BarTrim_01a_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\wood_polished_01_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Paris_BarTrim_01a_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\wood_polished_01_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -13460,15 +13485,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\White.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\wood_planks_01_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\White.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\wood_planks_01_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\White.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\wood_planks_01_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -13505,15 +13530,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Metal_Hexagonal_Grid_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\concrete_smooth_02_red_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Metal_Hexagonal_Grid_01_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\concrete_smooth_02_red_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Metal_Hexagonal_Grid_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\concrete_smooth_02_red_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -13550,15 +13575,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Paris_MenuSign_01B_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Grey_128.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Paris_MenuSign_01B_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Grey_128.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Paris_MenuSign_01B_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Grey_128.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -13595,15 +13620,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_Lantern_01\\Paris_Lantern_01A_emi.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\paris_brushed_metal_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_Lantern_01\\Paris_Lantern_01A_emi.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\paris_brushed_metal_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_Lantern_01\\Paris_Lantern_01A_emi.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\paris_brushed_metal_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -13633,22 +13658,22 @@ namespace FastBokeh
             {
                 // Load the texture
                 std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
-                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8_UNORM, Context::LogFn);
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, Context::LogFn);
                 DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
                 if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
                     desiredType = DX12Utils::TextureCache::Type::U8;
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Paris_Lantern_01A_mask.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\tile_hexagonal_01_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Paris_Lantern_01A_mask.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\tile_hexagonal_01_diff.png", s_techniqueLocation.c_str());
 
-                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount));
+                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Paris_Lantern_01A_mask.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\tile_hexagonal_01_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -13660,8 +13685,8 @@ namespace FastBokeh
                 m_internal.texture__loadedTexture_136_size[1] = size[1];
                 m_internal.texture__loadedTexture_136_size[2] = size[2];
                 m_internal.texture__loadedTexture_136_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_136_format = DXGI_FORMAT_R8_UNORM;
-                m_internal.texture__loadedTexture_136 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8_UNORM, m_internal.texture__loadedTexture_136_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_136" : nullptr), Context::LogFn);
+                m_internal.texture__loadedTexture_136_format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+                m_internal.texture__loadedTexture_136 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, m_internal.texture__loadedTexture_136_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_136" : nullptr), Context::LogFn);
 
 
                 std::vector<unsigned char> pixels;
@@ -13685,15 +13710,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_Curtain_01\\Paris_Curtain_01B_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Colors\\Grey_128.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_Curtain_01\\Paris_Curtain_01B_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Colors\\Grey_128.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_Curtain_01\\Paris_Curtain_01B_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Colors\\Grey_128.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -13730,15 +13755,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_Curtain_01\\Paris_Curtain_01A_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Paris_BarTrim_01a_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_Curtain_01\\Paris_Curtain_01A_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Paris_BarTrim_01a_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_Curtain_01\\Paris_Curtain_01A_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Paris_BarTrim_01a_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -13775,15 +13800,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_Ceiling_Lamp_01\\Paris_Ceiling_Lamp_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\White.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_Ceiling_Lamp_01\\Paris_Ceiling_Lamp_01_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\White.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_Ceiling_Lamp_01\\Paris_Ceiling_Lamp_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\White.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -13820,15 +13845,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_Ceiling_Lamp_01\\Paris_Ceiling_Lamp_01_emi.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Metal_Hexagonal_Grid_01_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_Ceiling_Lamp_01\\Paris_Ceiling_Lamp_01_emi.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Metal_Hexagonal_Grid_01_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_Ceiling_Lamp_01\\Paris_Ceiling_Lamp_01_emi.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Metal_Hexagonal_Grid_01_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -13865,15 +13890,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_Wall_Light_Interior_01\\Paris_Wall_Light_Interior_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Paris_MenuSign_01B_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_Wall_Light_Interior_01\\Paris_Wall_Light_Interior_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Paris_MenuSign_01B_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_Wall_Light_Interior_01\\Paris_Wall_Light_Interior_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Paris_MenuSign_01B_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -13903,22 +13928,22 @@ namespace FastBokeh
             {
                 // Load the texture
                 std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
-                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8_UNORM, Context::LogFn);
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, Context::LogFn);
                 DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
                 if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
                     desiredType = DX12Utils::TextureCache::Type::U8;
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_Wall_Light_Interior_01\\Paris_Wall_Light_Interior_Emi.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Street\\Paris_Lantern_01\\Paris_Lantern_01A_emi.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_Wall_Light_Interior_01\\Paris_Wall_Light_Interior_Emi.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Street\\Paris_Lantern_01\\Paris_Lantern_01A_emi.png", s_techniqueLocation.c_str());
 
-                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount));
+                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_Wall_Light_Interior_01\\Paris_Wall_Light_Interior_Emi.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Street\\Paris_Lantern_01\\Paris_Lantern_01A_emi.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -13930,8 +13955,8 @@ namespace FastBokeh
                 m_internal.texture__loadedTexture_142_size[1] = size[1];
                 m_internal.texture__loadedTexture_142_size[2] = size[2];
                 m_internal.texture__loadedTexture_142_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_142_format = DXGI_FORMAT_R8_UNORM;
-                m_internal.texture__loadedTexture_142 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8_UNORM, m_internal.texture__loadedTexture_142_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_142" : nullptr), Context::LogFn);
+                m_internal.texture__loadedTexture_142_format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+                m_internal.texture__loadedTexture_142 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, m_internal.texture__loadedTexture_142_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_142" : nullptr), Context::LogFn);
 
 
                 std::vector<unsigned char> pixels;
@@ -13948,22 +13973,22 @@ namespace FastBokeh
             {
                 // Load the texture
                 std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
-                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, Context::LogFn);
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8_UNORM, Context::LogFn);
                 DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
                 if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
                     desiredType = DX12Utils::TextureCache::Type::U8;
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Tiling\\Bronze_01\\Bronze_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\BuildingTextures\\Paris_Lantern_01A_mask.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Tiling\\Bronze_01\\Bronze_01_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\BuildingTextures\\Paris_Lantern_01A_mask.png", s_techniqueLocation.c_str());
 
-                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
+                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Tiling\\Bronze_01\\Bronze_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\BuildingTextures\\Paris_Lantern_01A_mask.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -13975,8 +14000,8 @@ namespace FastBokeh
                 m_internal.texture__loadedTexture_143_size[1] = size[1];
                 m_internal.texture__loadedTexture_143_size[2] = size[2];
                 m_internal.texture__loadedTexture_143_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_143_format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-                m_internal.texture__loadedTexture_143 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, m_internal.texture__loadedTexture_143_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_143" : nullptr), Context::LogFn);
+                m_internal.texture__loadedTexture_143_format = DXGI_FORMAT_R8_UNORM;
+                m_internal.texture__loadedTexture_143 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8_UNORM, m_internal.texture__loadedTexture_143_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_143" : nullptr), Context::LogFn);
 
 
                 std::vector<unsigned char> pixels;
@@ -14000,15 +14025,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_CeilingFan_01\\Paris_CeilingFan_01A_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_Curtain_01\\Paris_Curtain_01B_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_CeilingFan_01\\Paris_CeilingFan_01A_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_Curtain_01\\Paris_Curtain_01B_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_CeilingFan_01\\Paris_CeilingFan_01A_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_Curtain_01\\Paris_Curtain_01B_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -14045,15 +14070,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_BeerTap_01\\Paris_BeerTap_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_Curtain_01\\Paris_Curtain_01A_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_BeerTap_01\\Paris_BeerTap_01_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_Curtain_01\\Paris_Curtain_01A_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_BeerTap_01\\Paris_BeerTap_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_Curtain_01\\Paris_Curtain_01A_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -14090,15 +14115,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Tiling\\Wood_Planks_01\\Wood_Planks_01_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_Ceiling_Lamp_01\\Paris_Ceiling_Lamp_01_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Tiling\\Wood_Planks_01\\Wood_Planks_01_Diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_Ceiling_Lamp_01\\Paris_Ceiling_Lamp_01_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Tiling\\Wood_Planks_01\\Wood_Planks_01_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_Ceiling_Lamp_01\\Paris_Ceiling_Lamp_01_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -14135,15 +14160,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Tiling\\Plastic_01\\Plastic_01_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_Ceiling_Lamp_01\\Paris_Ceiling_Lamp_01_emi.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Tiling\\Plastic_01\\Plastic_01_Diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_Ceiling_Lamp_01\\Paris_Ceiling_Lamp_01_emi.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Tiling\\Plastic_01\\Plastic_01_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_Ceiling_Lamp_01\\Paris_Ceiling_Lamp_01_emi.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -14180,15 +14205,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_Painting_01\\Paris_Painting_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_Wall_Light_Interior_01\\Paris_Wall_Light_Interior_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_Painting_01\\Paris_Painting_01_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_Wall_Light_Interior_01\\Paris_Wall_Light_Interior_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_Painting_01\\Paris_Painting_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_Wall_Light_Interior_01\\Paris_Wall_Light_Interior_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -14218,22 +14243,22 @@ namespace FastBokeh
             {
                 // Load the texture
                 std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
-                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, Context::LogFn);
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8_UNORM, Context::LogFn);
                 DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
                 if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
                     desiredType = DX12Utils::TextureCache::Type::U8;
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_Painting_01\\Paris_Paintings_01_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_Wall_Light_Interior_01\\Paris_Wall_Light_Interior_Emi.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_Painting_01\\Paris_Paintings_01_Diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_Wall_Light_Interior_01\\Paris_Wall_Light_Interior_Emi.png", s_techniqueLocation.c_str());
 
-                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
+                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_Painting_01\\Paris_Paintings_01_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_Wall_Light_Interior_01\\Paris_Wall_Light_Interior_Emi.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -14245,8 +14270,8 @@ namespace FastBokeh
                 m_internal.texture__loadedTexture_149_size[1] = size[1];
                 m_internal.texture__loadedTexture_149_size[2] = size[2];
                 m_internal.texture__loadedTexture_149_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_149_format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-                m_internal.texture__loadedTexture_149 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, m_internal.texture__loadedTexture_149_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_149" : nullptr), Context::LogFn);
+                m_internal.texture__loadedTexture_149_format = DXGI_FORMAT_R8_UNORM;
+                m_internal.texture__loadedTexture_149 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8_UNORM, m_internal.texture__loadedTexture_149_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_149" : nullptr), Context::LogFn);
 
 
                 std::vector<unsigned char> pixels;
@@ -14270,15 +14295,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_BarStool_01\\Paris_BarStool_01A_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Tiling\\Bronze_01\\Bronze_01_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_BarStool_01\\Paris_BarStool_01A_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Tiling\\Bronze_01\\Bronze_01_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_BarStool_01\\Paris_BarStool_01A_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Tiling\\Bronze_01\\Bronze_01_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -14315,15 +14340,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Tiling\\Metal_Chrome_01\\Metal_Chrome_01_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_CeilingFan_01\\Paris_CeilingFan_01A_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Tiling\\Metal_Chrome_01\\Metal_Chrome_01_Diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_CeilingFan_01\\Paris_CeilingFan_01A_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Tiling\\Metal_Chrome_01\\Metal_Chrome_01_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_CeilingFan_01\\Paris_CeilingFan_01A_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -14360,15 +14385,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_CookieJar\\Cookie_01_Lo_default_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_BeerTap_01\\Paris_BeerTap_01_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_CookieJar\\Cookie_01_Lo_default_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_BeerTap_01\\Paris_BeerTap_01_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_CookieJar\\Cookie_01_Lo_default_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_BeerTap_01\\Paris_BeerTap_01_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -14405,15 +14430,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_Radiator_01\\Paris_Radiator_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Tiling\\Wood_Planks_01\\Wood_Planks_01_Diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_Radiator_01\\Paris_Radiator_01_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Tiling\\Wood_Planks_01\\Wood_Planks_01_Diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_Radiator_01\\Paris_Radiator_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Tiling\\Wood_Planks_01\\Wood_Planks_01_Diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -14450,15 +14475,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Tiling\\Metal_Chrome_02\\Metal_Chrome_02_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Tiling\\Plastic_01\\Plastic_01_Diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Tiling\\Metal_Chrome_02\\Metal_Chrome_02_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Tiling\\Plastic_01\\Plastic_01_Diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Tiling\\Metal_Chrome_02\\Metal_Chrome_02_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Tiling\\Plastic_01\\Plastic_01_Diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -14495,15 +14520,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_Cutlery_01\\Paris_Cutlery_01_details_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_Painting_01\\Paris_Painting_01_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_Cutlery_01\\Paris_Cutlery_01_details_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_Painting_01\\Paris_Painting_01_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_Cutlery_01\\Paris_Cutlery_01_details_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_Painting_01\\Paris_Painting_01_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -14540,15 +14565,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Tiling\\Wood_Polished_01\\Wood_Polished_01_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_Painting_01\\Paris_Paintings_01_Diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Tiling\\Wood_Polished_01\\Wood_Polished_01_Diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_Painting_01\\Paris_Paintings_01_Diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Tiling\\Wood_Polished_01\\Wood_Polished_01_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_Painting_01\\Paris_Paintings_01_Diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -14585,15 +14610,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_Plates_01\\Paris_Plates_details_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_BarStool_01\\Paris_BarStool_01A_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_Plates_01\\Paris_Plates_details_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_BarStool_01\\Paris_BarStool_01A_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_Plates_01\\Paris_Plates_details_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_BarStool_01\\Paris_BarStool_01A_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -14623,22 +14648,22 @@ namespace FastBokeh
             {
                 // Load the texture
                 std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
-                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8_UNORM, Context::LogFn);
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, Context::LogFn);
                 DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
                 if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
                     desiredType = DX12Utils::TextureCache::Type::U8;
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_Plates_01\\Paris_Plates_details_mask.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Tiling\\Metal_Chrome_01\\Metal_Chrome_01_Diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_Plates_01\\Paris_Plates_details_mask.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Tiling\\Metal_Chrome_01\\Metal_Chrome_01_Diff.png", s_techniqueLocation.c_str());
 
-                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount));
+                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_Plates_01\\Paris_Plates_details_mask.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Tiling\\Metal_Chrome_01\\Metal_Chrome_01_Diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -14650,8 +14675,8 @@ namespace FastBokeh
                 m_internal.texture__loadedTexture_158_size[1] = size[1];
                 m_internal.texture__loadedTexture_158_size[2] = size[2];
                 m_internal.texture__loadedTexture_158_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_158_format = DXGI_FORMAT_R8_UNORM;
-                m_internal.texture__loadedTexture_158 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8_UNORM, m_internal.texture__loadedTexture_158_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_158" : nullptr), Context::LogFn);
+                m_internal.texture__loadedTexture_158_format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+                m_internal.texture__loadedTexture_158 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, m_internal.texture__loadedTexture_158_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_158" : nullptr), Context::LogFn);
 
 
                 std::vector<unsigned char> pixels;
@@ -14675,15 +14700,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Tiling\\Ceramic_01\\Ceramic_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_CookieJar\\Cookie_01_Lo_default_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Tiling\\Ceramic_01\\Ceramic_01_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_CookieJar\\Cookie_01_Lo_default_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Tiling\\Ceramic_01\\Ceramic_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_CookieJar\\Cookie_01_Lo_default_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -14720,15 +14745,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_Cotton_Placemat_01\\Paris_Cotton_Placemat_01_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_Radiator_01\\Paris_Radiator_01_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_Cotton_Placemat_01\\Paris_Cotton_Placemat_01_Diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_Radiator_01\\Paris_Radiator_01_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_Cotton_Placemat_01\\Paris_Cotton_Placemat_01_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_Radiator_01\\Paris_Radiator_01_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -14765,15 +14790,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_Wine_Cooler_01\\Paris_Cloths_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Tiling\\Metal_Chrome_02\\Metal_Chrome_02_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_Wine_Cooler_01\\Paris_Cloths_01_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Tiling\\Metal_Chrome_02\\Metal_Chrome_02_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_Wine_Cooler_01\\Paris_Cloths_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Tiling\\Metal_Chrome_02\\Metal_Chrome_02_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -14810,15 +14835,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_Flower_Pot_01\\Paris_interior_plants_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_Cutlery_01\\Paris_Cutlery_01_details_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_Flower_Pot_01\\Paris_interior_plants_01_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_Cutlery_01\\Paris_Cutlery_01_details_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_Flower_Pot_01\\Paris_interior_plants_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_Cutlery_01\\Paris_Cutlery_01_details_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -14848,22 +14873,22 @@ namespace FastBokeh
             {
                 // Load the texture
                 std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
-                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8_UNORM, Context::LogFn);
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, Context::LogFn);
                 DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
                 if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
                     desiredType = DX12Utils::TextureCache::Type::U8;
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_Flower_Pot_01\\Paris_interior_plants_01_mask.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Tiling\\Wood_Polished_01\\Wood_Polished_01_Diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_Flower_Pot_01\\Paris_interior_plants_01_mask.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Tiling\\Wood_Polished_01\\Wood_Polished_01_Diff.png", s_techniqueLocation.c_str());
 
-                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount));
+                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_Flower_Pot_01\\Paris_interior_plants_01_mask.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Tiling\\Wood_Polished_01\\Wood_Polished_01_Diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -14875,8 +14900,8 @@ namespace FastBokeh
                 m_internal.texture__loadedTexture_163_size[1] = size[1];
                 m_internal.texture__loadedTexture_163_size[2] = size[2];
                 m_internal.texture__loadedTexture_163_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_163_format = DXGI_FORMAT_R8_UNORM;
-                m_internal.texture__loadedTexture_163 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8_UNORM, m_internal.texture__loadedTexture_163_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_163" : nullptr), Context::LogFn);
+                m_internal.texture__loadedTexture_163_format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+                m_internal.texture__loadedTexture_163 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, m_internal.texture__loadedTexture_163_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_163" : nullptr), Context::LogFn);
 
 
                 std::vector<unsigned char> pixels;
@@ -14900,15 +14925,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Tiling\\Wood_Painted_02\\Wood_Painted_02_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_Plates_01\\Paris_Plates_details_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Tiling\\Wood_Painted_02\\Wood_Painted_02_Diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_Plates_01\\Paris_Plates_details_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Tiling\\Wood_Painted_02\\Wood_Painted_02_Diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_Plates_01\\Paris_Plates_details_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -14938,22 +14963,22 @@ namespace FastBokeh
             {
                 // Load the texture
                 std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
-                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, Context::LogFn);
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8_UNORM, Context::LogFn);
                 DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
                 if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
                     desiredType = DX12Utils::TextureCache::Type::U8;
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_WickerBasket_01\\Paris_WickerBasket_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_Plates_01\\Paris_Plates_details_mask.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_WickerBasket_01\\Paris_WickerBasket_01_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_Plates_01\\Paris_Plates_details_mask.png", s_techniqueLocation.c_str());
 
-                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
+                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_WickerBasket_01\\Paris_WickerBasket_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_Plates_01\\Paris_Plates_details_mask.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -14965,8 +14990,8 @@ namespace FastBokeh
                 m_internal.texture__loadedTexture_165_size[1] = size[1];
                 m_internal.texture__loadedTexture_165_size[2] = size[2];
                 m_internal.texture__loadedTexture_165_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_165_format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-                m_internal.texture__loadedTexture_165 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, m_internal.texture__loadedTexture_165_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_165" : nullptr), Context::LogFn);
+                m_internal.texture__loadedTexture_165_format = DXGI_FORMAT_R8_UNORM;
+                m_internal.texture__loadedTexture_165 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8_UNORM, m_internal.texture__loadedTexture_165_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_165" : nullptr), Context::LogFn);
 
 
                 std::vector<unsigned char> pixels;
@@ -14990,15 +15015,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_Coasters_01\\Paris_Coasters_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Tiling\\Ceramic_01\\Ceramic_01_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_Coasters_01\\Paris_Coasters_01_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Tiling\\Ceramic_01\\Ceramic_01_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_Coasters_01\\Paris_Coasters_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Tiling\\Ceramic_01\\Ceramic_01_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -15035,15 +15060,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_CashRegister_01\\Paris_CashRegister_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_Cotton_Placemat_01\\Paris_Cotton_Placemat_01_Diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_CashRegister_01\\Paris_CashRegister_01_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_Cotton_Placemat_01\\Paris_Cotton_Placemat_01_Diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_CashRegister_01\\Paris_CashRegister_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_Cotton_Placemat_01\\Paris_Cotton_Placemat_01_Diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -15080,15 +15105,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_CashRegister_01\\Paris_CashRegister_Buttons_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_Wine_Cooler_01\\Paris_Cloths_01_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_CashRegister_01\\Paris_CashRegister_Buttons_01_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_Wine_Cooler_01\\Paris_Cloths_01_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_CashRegister_01\\Paris_CashRegister_Buttons_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_Wine_Cooler_01\\Paris_Cloths_01_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -15125,15 +15150,15 @@ namespace FastBokeh
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_Doormats\\Paris_Doormat_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_Flower_Pot_01\\Paris_interior_plants_01_diff.png");
 
                 char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_Doormats\\Paris_Doormat_01_diff.png", s_techniqueLocation.c_str());
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_Flower_Pot_01\\Paris_interior_plants_01_diff.png", s_techniqueLocation.c_str());
 
                 loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
                 DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
                 if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_Doormats\\Paris_Doormat_01_diff.png");
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_Flower_Pot_01\\Paris_interior_plants_01_diff.png");
 
                 unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
@@ -15163,6 +15188,321 @@ namespace FastBokeh
             {
                 // Load the texture
                 std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8_UNORM, Context::LogFn);
+                DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
+                if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
+                    desiredType = DX12Utils::TextureCache::Type::U8;
+                else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
+                    desiredType = DX12Utils::TextureCache::Type::F32;
+                else
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_Flower_Pot_01\\Paris_interior_plants_01_mask.png");
+
+                char loadedTextureFileName[1024];
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_Flower_Pot_01\\Paris_interior_plants_01_mask.png", s_techniqueLocation.c_str());
+
+                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount));
+                DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
+                if(!loadedTexture.Valid())
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_Flower_Pot_01\\Paris_interior_plants_01_mask.png");
+
+                unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
+
+                static const unsigned int desiredNumMips = 1;
+
+                // Create the texture
+                dirty = true;
+                m_internal.texture__loadedTexture_170_size[0] = size[0];
+                m_internal.texture__loadedTexture_170_size[1] = size[1];
+                m_internal.texture__loadedTexture_170_size[2] = size[2];
+                m_internal.texture__loadedTexture_170_numMips = desiredNumMips;
+                m_internal.texture__loadedTexture_170_format = DXGI_FORMAT_R8_UNORM;
+                m_internal.texture__loadedTexture_170 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8_UNORM, m_internal.texture__loadedTexture_170_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_170" : nullptr), Context::LogFn);
+
+
+                std::vector<unsigned char> pixels;
+                for (const DX12Utils::TextureCache::Texture& texture : loadedTextureSlices)
+                    pixels.insert(pixels.end(), texture.pixels.begin(), texture.pixels.end());
+
+                DX12Utils::UploadTextureToGPUAndMakeMips(device, commandList, s_ubTracker, m_internal.texture__loadedTexture_170, pixels, size, desiredNumMips, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, LogFn);
+            }
+        }
+
+        // _loadedTexture_171
+        {
+            if (!m_internal.texture__loadedTexture_171)
+            {
+                // Load the texture
+                std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, Context::LogFn);
+                DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
+                if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
+                    desiredType = DX12Utils::TextureCache::Type::U8;
+                else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
+                    desiredType = DX12Utils::TextureCache::Type::F32;
+                else
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\OtherTextures\\Tiling\\Wood_Painted_02\\Wood_Painted_02_Diff.png");
+
+                char loadedTextureFileName[1024];
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\OtherTextures\\Tiling\\Wood_Painted_02\\Wood_Painted_02_Diff.png", s_techniqueLocation.c_str());
+
+                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
+                DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
+                if(!loadedTexture.Valid())
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\OtherTextures\\Tiling\\Wood_Painted_02\\Wood_Painted_02_Diff.png");
+
+                unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
+
+                static const unsigned int desiredNumMips = 1;
+
+                // Create the texture
+                dirty = true;
+                m_internal.texture__loadedTexture_171_size[0] = size[0];
+                m_internal.texture__loadedTexture_171_size[1] = size[1];
+                m_internal.texture__loadedTexture_171_size[2] = size[2];
+                m_internal.texture__loadedTexture_171_numMips = desiredNumMips;
+                m_internal.texture__loadedTexture_171_format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+                m_internal.texture__loadedTexture_171 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, m_internal.texture__loadedTexture_171_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_171" : nullptr), Context::LogFn);
+
+
+                std::vector<unsigned char> pixels;
+                for (const DX12Utils::TextureCache::Texture& texture : loadedTextureSlices)
+                    pixels.insert(pixels.end(), texture.pixels.begin(), texture.pixels.end());
+
+                DX12Utils::UploadTextureToGPUAndMakeMips(device, commandList, s_ubTracker, m_internal.texture__loadedTexture_171, pixels, size, desiredNumMips, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, LogFn);
+            }
+        }
+
+        // _loadedTexture_172
+        {
+            if (!m_internal.texture__loadedTexture_172)
+            {
+                // Load the texture
+                std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, Context::LogFn);
+                DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
+                if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
+                    desiredType = DX12Utils::TextureCache::Type::U8;
+                else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
+                    desiredType = DX12Utils::TextureCache::Type::F32;
+                else
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_WickerBasket_01\\Paris_WickerBasket_01_diff.png");
+
+                char loadedTextureFileName[1024];
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_WickerBasket_01\\Paris_WickerBasket_01_diff.png", s_techniqueLocation.c_str());
+
+                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
+                DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
+                if(!loadedTexture.Valid())
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_WickerBasket_01\\Paris_WickerBasket_01_diff.png");
+
+                unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
+
+                static const unsigned int desiredNumMips = 1;
+
+                // Create the texture
+                dirty = true;
+                m_internal.texture__loadedTexture_172_size[0] = size[0];
+                m_internal.texture__loadedTexture_172_size[1] = size[1];
+                m_internal.texture__loadedTexture_172_size[2] = size[2];
+                m_internal.texture__loadedTexture_172_numMips = desiredNumMips;
+                m_internal.texture__loadedTexture_172_format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+                m_internal.texture__loadedTexture_172 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, m_internal.texture__loadedTexture_172_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_172" : nullptr), Context::LogFn);
+
+
+                std::vector<unsigned char> pixels;
+                for (const DX12Utils::TextureCache::Texture& texture : loadedTextureSlices)
+                    pixels.insert(pixels.end(), texture.pixels.begin(), texture.pixels.end());
+
+                DX12Utils::UploadTextureToGPUAndMakeMips(device, commandList, s_ubTracker, m_internal.texture__loadedTexture_172, pixels, size, desiredNumMips, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, LogFn);
+            }
+        }
+
+        // _loadedTexture_173
+        {
+            if (!m_internal.texture__loadedTexture_173)
+            {
+                // Load the texture
+                std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, Context::LogFn);
+                DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
+                if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
+                    desiredType = DX12Utils::TextureCache::Type::U8;
+                else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
+                    desiredType = DX12Utils::TextureCache::Type::F32;
+                else
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_Coasters_01\\Paris_Coasters_01_diff.png");
+
+                char loadedTextureFileName[1024];
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_Coasters_01\\Paris_Coasters_01_diff.png", s_techniqueLocation.c_str());
+
+                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
+                DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
+                if(!loadedTexture.Valid())
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_Coasters_01\\Paris_Coasters_01_diff.png");
+
+                unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
+
+                static const unsigned int desiredNumMips = 1;
+
+                // Create the texture
+                dirty = true;
+                m_internal.texture__loadedTexture_173_size[0] = size[0];
+                m_internal.texture__loadedTexture_173_size[1] = size[1];
+                m_internal.texture__loadedTexture_173_size[2] = size[2];
+                m_internal.texture__loadedTexture_173_numMips = desiredNumMips;
+                m_internal.texture__loadedTexture_173_format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+                m_internal.texture__loadedTexture_173 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, m_internal.texture__loadedTexture_173_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_173" : nullptr), Context::LogFn);
+
+
+                std::vector<unsigned char> pixels;
+                for (const DX12Utils::TextureCache::Texture& texture : loadedTextureSlices)
+                    pixels.insert(pixels.end(), texture.pixels.begin(), texture.pixels.end());
+
+                DX12Utils::UploadTextureToGPUAndMakeMips(device, commandList, s_ubTracker, m_internal.texture__loadedTexture_173, pixels, size, desiredNumMips, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, LogFn);
+            }
+        }
+
+        // _loadedTexture_174
+        {
+            if (!m_internal.texture__loadedTexture_174)
+            {
+                // Load the texture
+                std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, Context::LogFn);
+                DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
+                if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
+                    desiredType = DX12Utils::TextureCache::Type::U8;
+                else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
+                    desiredType = DX12Utils::TextureCache::Type::F32;
+                else
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_CashRegister_01\\Paris_CashRegister_01_diff.png");
+
+                char loadedTextureFileName[1024];
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_CashRegister_01\\Paris_CashRegister_01_diff.png", s_techniqueLocation.c_str());
+
+                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
+                DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
+                if(!loadedTexture.Valid())
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_CashRegister_01\\Paris_CashRegister_01_diff.png");
+
+                unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
+
+                static const unsigned int desiredNumMips = 1;
+
+                // Create the texture
+                dirty = true;
+                m_internal.texture__loadedTexture_174_size[0] = size[0];
+                m_internal.texture__loadedTexture_174_size[1] = size[1];
+                m_internal.texture__loadedTexture_174_size[2] = size[2];
+                m_internal.texture__loadedTexture_174_numMips = desiredNumMips;
+                m_internal.texture__loadedTexture_174_format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+                m_internal.texture__loadedTexture_174 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, m_internal.texture__loadedTexture_174_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_174" : nullptr), Context::LogFn);
+
+
+                std::vector<unsigned char> pixels;
+                for (const DX12Utils::TextureCache::Texture& texture : loadedTextureSlices)
+                    pixels.insert(pixels.end(), texture.pixels.begin(), texture.pixels.end());
+
+                DX12Utils::UploadTextureToGPUAndMakeMips(device, commandList, s_ubTracker, m_internal.texture__loadedTexture_174, pixels, size, desiredNumMips, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, LogFn);
+            }
+        }
+
+        // _loadedTexture_175
+        {
+            if (!m_internal.texture__loadedTexture_175)
+            {
+                // Load the texture
+                std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, Context::LogFn);
+                DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
+                if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
+                    desiredType = DX12Utils::TextureCache::Type::U8;
+                else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
+                    desiredType = DX12Utils::TextureCache::Type::F32;
+                else
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_CashRegister_01\\Paris_CashRegister_Buttons_01_diff.png");
+
+                char loadedTextureFileName[1024];
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_CashRegister_01\\Paris_CashRegister_Buttons_01_diff.png", s_techniqueLocation.c_str());
+
+                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
+                DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
+                if(!loadedTexture.Valid())
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_CashRegister_01\\Paris_CashRegister_Buttons_01_diff.png");
+
+                unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
+
+                static const unsigned int desiredNumMips = 1;
+
+                // Create the texture
+                dirty = true;
+                m_internal.texture__loadedTexture_175_size[0] = size[0];
+                m_internal.texture__loadedTexture_175_size[1] = size[1];
+                m_internal.texture__loadedTexture_175_size[2] = size[2];
+                m_internal.texture__loadedTexture_175_numMips = desiredNumMips;
+                m_internal.texture__loadedTexture_175_format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+                m_internal.texture__loadedTexture_175 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, m_internal.texture__loadedTexture_175_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_175" : nullptr), Context::LogFn);
+
+
+                std::vector<unsigned char> pixels;
+                for (const DX12Utils::TextureCache::Texture& texture : loadedTextureSlices)
+                    pixels.insert(pixels.end(), texture.pixels.begin(), texture.pixels.end());
+
+                DX12Utils::UploadTextureToGPUAndMakeMips(device, commandList, s_ubTracker, m_internal.texture__loadedTexture_175, pixels, size, desiredNumMips, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, LogFn);
+            }
+        }
+
+        // _loadedTexture_176
+        {
+            if (!m_internal.texture__loadedTexture_176)
+            {
+                // Load the texture
+                std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, Context::LogFn);
+                DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
+                if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
+                    desiredType = DX12Utils::TextureCache::Type::U8;
+                else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
+                    desiredType = DX12Utils::TextureCache::Type::F32;
+                else
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\PropTextures\\Bistro\\Paris_Doormats\\Paris_Doormat_01_diff.png");
+
+                char loadedTextureFileName[1024];
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\PropTextures\\Bistro\\Paris_Doormats\\Paris_Doormat_01_diff.png", s_techniqueLocation.c_str());
+
+                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, true, desiredType, formatInfo.sRGB, formatInfo.channelCount));
+                DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
+                if(!loadedTexture.Valid())
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\PropTextures\\Bistro\\Paris_Doormats\\Paris_Doormat_01_diff.png");
+
+                unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
+
+                static const unsigned int desiredNumMips = 1;
+
+                // Create the texture
+                dirty = true;
+                m_internal.texture__loadedTexture_176_size[0] = size[0];
+                m_internal.texture__loadedTexture_176_size[1] = size[1];
+                m_internal.texture__loadedTexture_176_size[2] = size[2];
+                m_internal.texture__loadedTexture_176_numMips = desiredNumMips;
+                m_internal.texture__loadedTexture_176_format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+                m_internal.texture__loadedTexture_176 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, m_internal.texture__loadedTexture_176_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_176" : nullptr), Context::LogFn);
+
+
+                std::vector<unsigned char> pixels;
+                for (const DX12Utils::TextureCache::Texture& texture : loadedTextureSlices)
+                    pixels.insert(pixels.end(), texture.pixels.begin(), texture.pixels.end());
+
+                DX12Utils::UploadTextureToGPUAndMakeMips(device, commandList, s_ubTracker, m_internal.texture__loadedTexture_176, pixels, size, desiredNumMips, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, LogFn);
+            }
+        }
+
+        // _loadedTexture_177
+        {
+            if (!m_internal.texture__loadedTexture_177)
+            {
+                // Load the texture
+                std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
                 DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, Context::LogFn);
                 DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
                 if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
@@ -15186,25 +15526,25 @@ namespace FastBokeh
 
                 // Create the texture
                 dirty = true;
-                m_internal.texture__loadedTexture_170_size[0] = size[0];
-                m_internal.texture__loadedTexture_170_size[1] = size[1];
-                m_internal.texture__loadedTexture_170_size[2] = size[2];
-                m_internal.texture__loadedTexture_170_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_170_format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-                m_internal.texture__loadedTexture_170 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, m_internal.texture__loadedTexture_170_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_170" : nullptr), Context::LogFn);
+                m_internal.texture__loadedTexture_177_size[0] = size[0];
+                m_internal.texture__loadedTexture_177_size[1] = size[1];
+                m_internal.texture__loadedTexture_177_size[2] = size[2];
+                m_internal.texture__loadedTexture_177_numMips = desiredNumMips;
+                m_internal.texture__loadedTexture_177_format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+                m_internal.texture__loadedTexture_177 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, m_internal.texture__loadedTexture_177_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_177" : nullptr), Context::LogFn);
 
 
                 std::vector<unsigned char> pixels;
                 for (const DX12Utils::TextureCache::Texture& texture : loadedTextureSlices)
                     pixels.insert(pixels.end(), texture.pixels.begin(), texture.pixels.end());
 
-                DX12Utils::UploadTextureToGPUAndMakeMips(device, commandList, s_ubTracker, m_internal.texture__loadedTexture_170, pixels, size, desiredNumMips, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, LogFn);
+                DX12Utils::UploadTextureToGPUAndMakeMips(device, commandList, s_ubTracker, m_internal.texture__loadedTexture_177, pixels, size, desiredNumMips, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, LogFn);
             }
         }
 
-        // _loadedTexture_171
+        // _loadedTexture_178
         {
-            if (!m_internal.texture__loadedTexture_171)
+            if (!m_internal.texture__loadedTexture_178)
             {
                 // Load the texture
                 std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
@@ -15244,25 +15584,25 @@ namespace FastBokeh
 
                 // Create the texture
                 dirty = true;
-                m_internal.texture__loadedTexture_171_size[0] = size[0];
-                m_internal.texture__loadedTexture_171_size[1] = size[1];
-                m_internal.texture__loadedTexture_171_size[2] = size[2];
-                m_internal.texture__loadedTexture_171_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_171_format = DXGI_FORMAT_R8G8_UNORM;
-                m_internal.texture__loadedTexture_171 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8_UNORM, m_internal.texture__loadedTexture_171_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2DArray, (c_debugNames ? L"_loadedTexture_171" : nullptr), Context::LogFn);
+                m_internal.texture__loadedTexture_178_size[0] = size[0];
+                m_internal.texture__loadedTexture_178_size[1] = size[1];
+                m_internal.texture__loadedTexture_178_size[2] = size[2];
+                m_internal.texture__loadedTexture_178_numMips = desiredNumMips;
+                m_internal.texture__loadedTexture_178_format = DXGI_FORMAT_R8G8_UNORM;
+                m_internal.texture__loadedTexture_178 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8_UNORM, m_internal.texture__loadedTexture_178_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2DArray, (c_debugNames ? L"_loadedTexture_178" : nullptr), Context::LogFn);
 
 
                 std::vector<unsigned char> pixels;
                 for (const DX12Utils::TextureCache::Texture& texture : loadedTextureSlices)
                     pixels.insert(pixels.end(), texture.pixels.begin(), texture.pixels.end());
 
-                DX12Utils::UploadTextureToGPUAndMakeMips(device, commandList, s_ubTracker, m_internal.texture__loadedTexture_171, pixels, size, desiredNumMips, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, LogFn);
+                DX12Utils::UploadTextureToGPUAndMakeMips(device, commandList, s_ubTracker, m_internal.texture__loadedTexture_178, pixels, size, desiredNumMips, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, LogFn);
             }
         }
 
-        // _loadedTexture_172
+        // _loadedTexture_179
         {
-            if (!m_internal.texture__loadedTexture_172)
+            if (!m_internal.texture__loadedTexture_179)
             {
                 // Load the texture
                 std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
@@ -15289,25 +15629,25 @@ namespace FastBokeh
 
                 // Create the texture
                 dirty = true;
-                m_internal.texture__loadedTexture_172_size[0] = size[0];
-                m_internal.texture__loadedTexture_172_size[1] = size[1];
-                m_internal.texture__loadedTexture_172_size[2] = size[2];
-                m_internal.texture__loadedTexture_172_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_172_format = DXGI_FORMAT_R8_UNORM;
-                m_internal.texture__loadedTexture_172 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8_UNORM, m_internal.texture__loadedTexture_172_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_172" : nullptr), Context::LogFn);
+                m_internal.texture__loadedTexture_179_size[0] = size[0];
+                m_internal.texture__loadedTexture_179_size[1] = size[1];
+                m_internal.texture__loadedTexture_179_size[2] = size[2];
+                m_internal.texture__loadedTexture_179_numMips = desiredNumMips;
+                m_internal.texture__loadedTexture_179_format = DXGI_FORMAT_R8_UNORM;
+                m_internal.texture__loadedTexture_179 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8_UNORM, m_internal.texture__loadedTexture_179_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_179" : nullptr), Context::LogFn);
 
 
                 std::vector<unsigned char> pixels;
                 for (const DX12Utils::TextureCache::Texture& texture : loadedTextureSlices)
                     pixels.insert(pixels.end(), texture.pixels.begin(), texture.pixels.end());
 
-                DX12Utils::UploadTextureToGPUAndMakeMips(device, commandList, s_ubTracker, m_internal.texture__loadedTexture_172, pixels, size, desiredNumMips, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, LogFn);
+                DX12Utils::UploadTextureToGPUAndMakeMips(device, commandList, s_ubTracker, m_internal.texture__loadedTexture_179, pixels, size, desiredNumMips, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, LogFn);
             }
         }
 
-        // _loadedTexture_173
+        // _loadedTexture_180
         {
-            if (!m_internal.texture__loadedTexture_173)
+            if (!m_internal.texture__loadedTexture_180)
             {
                 // Load the texture
                 std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
@@ -15334,25 +15674,25 @@ namespace FastBokeh
 
                 // Create the texture
                 dirty = true;
-                m_internal.texture__loadedTexture_173_size[0] = size[0];
-                m_internal.texture__loadedTexture_173_size[1] = size[1];
-                m_internal.texture__loadedTexture_173_size[2] = size[2];
-                m_internal.texture__loadedTexture_173_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_173_format = DXGI_FORMAT_R8_UNORM;
-                m_internal.texture__loadedTexture_173 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8_UNORM, m_internal.texture__loadedTexture_173_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_173" : nullptr), Context::LogFn);
+                m_internal.texture__loadedTexture_180_size[0] = size[0];
+                m_internal.texture__loadedTexture_180_size[1] = size[1];
+                m_internal.texture__loadedTexture_180_size[2] = size[2];
+                m_internal.texture__loadedTexture_180_numMips = desiredNumMips;
+                m_internal.texture__loadedTexture_180_format = DXGI_FORMAT_R8_UNORM;
+                m_internal.texture__loadedTexture_180 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8_UNORM, m_internal.texture__loadedTexture_180_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_180" : nullptr), Context::LogFn);
 
 
                 std::vector<unsigned char> pixels;
                 for (const DX12Utils::TextureCache::Texture& texture : loadedTextureSlices)
                     pixels.insert(pixels.end(), texture.pixels.begin(), texture.pixels.end());
 
-                DX12Utils::UploadTextureToGPUAndMakeMips(device, commandList, s_ubTracker, m_internal.texture__loadedTexture_173, pixels, size, desiredNumMips, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, LogFn);
+                DX12Utils::UploadTextureToGPUAndMakeMips(device, commandList, s_ubTracker, m_internal.texture__loadedTexture_180, pixels, size, desiredNumMips, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, LogFn);
             }
         }
 
-        // _loadedTexture_174
+        // _loadedTexture_181
         {
-            if (!m_internal.texture__loadedTexture_174)
+            if (!m_internal.texture__loadedTexture_181)
             {
                 // Load the texture
                 std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
@@ -15379,25 +15719,25 @@ namespace FastBokeh
 
                 // Create the texture
                 dirty = true;
-                m_internal.texture__loadedTexture_174_size[0] = size[0];
-                m_internal.texture__loadedTexture_174_size[1] = size[1];
-                m_internal.texture__loadedTexture_174_size[2] = size[2];
-                m_internal.texture__loadedTexture_174_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_174_format = DXGI_FORMAT_R8_UNORM;
-                m_internal.texture__loadedTexture_174 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8_UNORM, m_internal.texture__loadedTexture_174_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_174" : nullptr), Context::LogFn);
+                m_internal.texture__loadedTexture_181_size[0] = size[0];
+                m_internal.texture__loadedTexture_181_size[1] = size[1];
+                m_internal.texture__loadedTexture_181_size[2] = size[2];
+                m_internal.texture__loadedTexture_181_numMips = desiredNumMips;
+                m_internal.texture__loadedTexture_181_format = DXGI_FORMAT_R8_UNORM;
+                m_internal.texture__loadedTexture_181 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8_UNORM, m_internal.texture__loadedTexture_181_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_181" : nullptr), Context::LogFn);
 
 
                 std::vector<unsigned char> pixels;
                 for (const DX12Utils::TextureCache::Texture& texture : loadedTextureSlices)
                     pixels.insert(pixels.end(), texture.pixels.begin(), texture.pixels.end());
 
-                DX12Utils::UploadTextureToGPUAndMakeMips(device, commandList, s_ubTracker, m_internal.texture__loadedTexture_174, pixels, size, desiredNumMips, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, LogFn);
+                DX12Utils::UploadTextureToGPUAndMakeMips(device, commandList, s_ubTracker, m_internal.texture__loadedTexture_181, pixels, size, desiredNumMips, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, LogFn);
             }
         }
 
-        // _loadedTexture_175
+        // _loadedTexture_182
         {
-            if (!m_internal.texture__loadedTexture_175)
+            if (!m_internal.texture__loadedTexture_182)
             {
                 // Load the texture
                 std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
@@ -15424,25 +15764,25 @@ namespace FastBokeh
 
                 // Create the texture
                 dirty = true;
-                m_internal.texture__loadedTexture_175_size[0] = size[0];
-                m_internal.texture__loadedTexture_175_size[1] = size[1];
-                m_internal.texture__loadedTexture_175_size[2] = size[2];
-                m_internal.texture__loadedTexture_175_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_175_format = DXGI_FORMAT_R8_UNORM;
-                m_internal.texture__loadedTexture_175 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8_UNORM, m_internal.texture__loadedTexture_175_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_175" : nullptr), Context::LogFn);
+                m_internal.texture__loadedTexture_182_size[0] = size[0];
+                m_internal.texture__loadedTexture_182_size[1] = size[1];
+                m_internal.texture__loadedTexture_182_size[2] = size[2];
+                m_internal.texture__loadedTexture_182_numMips = desiredNumMips;
+                m_internal.texture__loadedTexture_182_format = DXGI_FORMAT_R8_UNORM;
+                m_internal.texture__loadedTexture_182 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8_UNORM, m_internal.texture__loadedTexture_182_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_182" : nullptr), Context::LogFn);
 
 
                 std::vector<unsigned char> pixels;
                 for (const DX12Utils::TextureCache::Texture& texture : loadedTextureSlices)
                     pixels.insert(pixels.end(), texture.pixels.begin(), texture.pixels.end());
 
-                DX12Utils::UploadTextureToGPUAndMakeMips(device, commandList, s_ubTracker, m_internal.texture__loadedTexture_175, pixels, size, desiredNumMips, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, LogFn);
+                DX12Utils::UploadTextureToGPUAndMakeMips(device, commandList, s_ubTracker, m_internal.texture__loadedTexture_182, pixels, size, desiredNumMips, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, LogFn);
             }
         }
 
-        // _loadedTexture_176
+        // _loadedTexture_183
         {
-            if (!m_internal.texture__loadedTexture_176)
+            if (!m_internal.texture__loadedTexture_183)
             {
                 // Load the texture
                 std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
@@ -15469,25 +15809,25 @@ namespace FastBokeh
 
                 // Create the texture
                 dirty = true;
-                m_internal.texture__loadedTexture_176_size[0] = size[0];
-                m_internal.texture__loadedTexture_176_size[1] = size[1];
-                m_internal.texture__loadedTexture_176_size[2] = size[2];
-                m_internal.texture__loadedTexture_176_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_176_format = DXGI_FORMAT_R8_UNORM;
-                m_internal.texture__loadedTexture_176 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8_UNORM, m_internal.texture__loadedTexture_176_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_176" : nullptr), Context::LogFn);
+                m_internal.texture__loadedTexture_183_size[0] = size[0];
+                m_internal.texture__loadedTexture_183_size[1] = size[1];
+                m_internal.texture__loadedTexture_183_size[2] = size[2];
+                m_internal.texture__loadedTexture_183_numMips = desiredNumMips;
+                m_internal.texture__loadedTexture_183_format = DXGI_FORMAT_R8_UNORM;
+                m_internal.texture__loadedTexture_183 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8_UNORM, m_internal.texture__loadedTexture_183_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_183" : nullptr), Context::LogFn);
 
 
                 std::vector<unsigned char> pixels;
                 for (const DX12Utils::TextureCache::Texture& texture : loadedTextureSlices)
                     pixels.insert(pixels.end(), texture.pixels.begin(), texture.pixels.end());
 
-                DX12Utils::UploadTextureToGPUAndMakeMips(device, commandList, s_ubTracker, m_internal.texture__loadedTexture_176, pixels, size, desiredNumMips, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, LogFn);
+                DX12Utils::UploadTextureToGPUAndMakeMips(device, commandList, s_ubTracker, m_internal.texture__loadedTexture_183, pixels, size, desiredNumMips, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, LogFn);
             }
         }
 
-        // _loadedTexture_177
+        // _loadedTexture_184
         {
-            if (!m_internal.texture__loadedTexture_177)
+            if (!m_internal.texture__loadedTexture_184)
             {
                 // Load the texture
                 std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
@@ -15514,25 +15854,25 @@ namespace FastBokeh
 
                 // Create the texture
                 dirty = true;
-                m_internal.texture__loadedTexture_177_size[0] = size[0];
-                m_internal.texture__loadedTexture_177_size[1] = size[1];
-                m_internal.texture__loadedTexture_177_size[2] = size[2];
-                m_internal.texture__loadedTexture_177_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_177_format = DXGI_FORMAT_R8_UNORM;
-                m_internal.texture__loadedTexture_177 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8_UNORM, m_internal.texture__loadedTexture_177_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_177" : nullptr), Context::LogFn);
+                m_internal.texture__loadedTexture_184_size[0] = size[0];
+                m_internal.texture__loadedTexture_184_size[1] = size[1];
+                m_internal.texture__loadedTexture_184_size[2] = size[2];
+                m_internal.texture__loadedTexture_184_numMips = desiredNumMips;
+                m_internal.texture__loadedTexture_184_format = DXGI_FORMAT_R8_UNORM;
+                m_internal.texture__loadedTexture_184 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8_UNORM, m_internal.texture__loadedTexture_184_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_184" : nullptr), Context::LogFn);
 
 
                 std::vector<unsigned char> pixels;
                 for (const DX12Utils::TextureCache::Texture& texture : loadedTextureSlices)
                     pixels.insert(pixels.end(), texture.pixels.begin(), texture.pixels.end());
 
-                DX12Utils::UploadTextureToGPUAndMakeMips(device, commandList, s_ubTracker, m_internal.texture__loadedTexture_177, pixels, size, desiredNumMips, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, LogFn);
+                DX12Utils::UploadTextureToGPUAndMakeMips(device, commandList, s_ubTracker, m_internal.texture__loadedTexture_184, pixels, size, desiredNumMips, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, LogFn);
             }
         }
 
-        // _loadedTexture_178
+        // _loadedTexture_185
         {
-            if (!m_internal.texture__loadedTexture_178)
+            if (!m_internal.texture__loadedTexture_185)
             {
                 // Load the texture
                 std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
@@ -15559,25 +15899,25 @@ namespace FastBokeh
 
                 // Create the texture
                 dirty = true;
-                m_internal.texture__loadedTexture_178_size[0] = size[0];
-                m_internal.texture__loadedTexture_178_size[1] = size[1];
-                m_internal.texture__loadedTexture_178_size[2] = size[2];
-                m_internal.texture__loadedTexture_178_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_178_format = DXGI_FORMAT_R8_UNORM;
-                m_internal.texture__loadedTexture_178 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8_UNORM, m_internal.texture__loadedTexture_178_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_178" : nullptr), Context::LogFn);
+                m_internal.texture__loadedTexture_185_size[0] = size[0];
+                m_internal.texture__loadedTexture_185_size[1] = size[1];
+                m_internal.texture__loadedTexture_185_size[2] = size[2];
+                m_internal.texture__loadedTexture_185_numMips = desiredNumMips;
+                m_internal.texture__loadedTexture_185_format = DXGI_FORMAT_R8_UNORM;
+                m_internal.texture__loadedTexture_185 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8_UNORM, m_internal.texture__loadedTexture_185_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_185" : nullptr), Context::LogFn);
 
 
                 std::vector<unsigned char> pixels;
                 for (const DX12Utils::TextureCache::Texture& texture : loadedTextureSlices)
                     pixels.insert(pixels.end(), texture.pixels.begin(), texture.pixels.end());
 
-                DX12Utils::UploadTextureToGPUAndMakeMips(device, commandList, s_ubTracker, m_internal.texture__loadedTexture_178, pixels, size, desiredNumMips, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, LogFn);
+                DX12Utils::UploadTextureToGPUAndMakeMips(device, commandList, s_ubTracker, m_internal.texture__loadedTexture_185, pixels, size, desiredNumMips, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, LogFn);
             }
         }
 
-        // _loadedTexture_179
+        // _loadedTexture_186
         {
-            if (!m_internal.texture__loadedTexture_179)
+            if (!m_internal.texture__loadedTexture_186)
             {
                 // Load the texture
                 std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
@@ -15617,392 +15957,12 @@ namespace FastBokeh
 
                 // Create the texture
                 dirty = true;
-                m_internal.texture__loadedTexture_179_size[0] = size[0];
-                m_internal.texture__loadedTexture_179_size[1] = size[1];
-                m_internal.texture__loadedTexture_179_size[2] = size[2];
-                m_internal.texture__loadedTexture_179_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_179_format = DXGI_FORMAT_R8G8_UNORM;
-                m_internal.texture__loadedTexture_179 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8_UNORM, m_internal.texture__loadedTexture_179_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2DArray, (c_debugNames ? L"_loadedTexture_179" : nullptr), Context::LogFn);
-
-
-                std::vector<unsigned char> pixels;
-                for (const DX12Utils::TextureCache::Texture& texture : loadedTextureSlices)
-                    pixels.insert(pixels.end(), texture.pixels.begin(), texture.pixels.end());
-
-                DX12Utils::UploadTextureToGPUAndMakeMips(device, commandList, s_ubTracker, m_internal.texture__loadedTexture_179, pixels, size, desiredNumMips, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, LogFn);
-            }
-        }
-
-        // _loadedTexture_180
-        {
-            if (!m_internal.texture__loadedTexture_180)
-            {
-                // Load the texture
-                std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
-                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8_UNORM, Context::LogFn);
-                DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
-                if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
-                    desiredType = DX12Utils::TextureCache::Type::U8;
-                else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
-                    desiredType = DX12Utils::TextureCache::Type::F32;
-                else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type");
-
-                int textureIndex = -1;
-                while(1)
-                {
-                    textureIndex++;
-                    char indexedFileName[1024];
-                    sprintf_s(indexedFileName, "%lsassets/Assets\\NoiseTextures\\UniformCircle\\UniformCircle_%i.png", s_techniqueLocation.c_str(), textureIndex);
-                    DX12Utils::TextureCache::Texture loadedTextureSlice = DX12Utils::TextureCache::GetAs(indexedFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount);
-
-                    if(!loadedTextureSlice.Valid())
-                    {
-                        if (textureIndex == 0)
-                            Context::LogFn(LogLevel::Error, "Could not load image: %s", indexedFileName);
-                        break;
-                    }
-
-                    if (textureIndex > 0 && (loadedTextureSlice.width != loadedTextureSlices[0].width || loadedTextureSlice.height != loadedTextureSlices[0].height))
-                        Context::LogFn(LogLevel::Error, "%s does not match dimensions of the first texture loaded!", indexedFileName);
-
-                    loadedTextureSlices.push_back(loadedTextureSlice);
-                }
-
-                unsigned int size[3] = { (unsigned int)loadedTextureSlices[0].width, (unsigned int)loadedTextureSlices[0].height, (unsigned int)loadedTextureSlices.size() };
-
-                static const unsigned int desiredNumMips = 1;
-
-                // Create the texture
-                dirty = true;
-                m_internal.texture__loadedTexture_180_size[0] = size[0];
-                m_internal.texture__loadedTexture_180_size[1] = size[1];
-                m_internal.texture__loadedTexture_180_size[2] = size[2];
-                m_internal.texture__loadedTexture_180_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_180_format = DXGI_FORMAT_R8G8_UNORM;
-                m_internal.texture__loadedTexture_180 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8_UNORM, m_internal.texture__loadedTexture_180_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2DArray, (c_debugNames ? L"_loadedTexture_180" : nullptr), Context::LogFn);
-
-
-                std::vector<unsigned char> pixels;
-                for (const DX12Utils::TextureCache::Texture& texture : loadedTextureSlices)
-                    pixels.insert(pixels.end(), texture.pixels.begin(), texture.pixels.end());
-
-                DX12Utils::UploadTextureToGPUAndMakeMips(device, commandList, s_ubTracker, m_internal.texture__loadedTexture_180, pixels, size, desiredNumMips, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, LogFn);
-            }
-        }
-
-        // _loadedTexture_181
-        {
-            if (!m_internal.texture__loadedTexture_181)
-            {
-                // Load the texture
-                std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
-                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8_UNORM, Context::LogFn);
-                DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
-                if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
-                    desiredType = DX12Utils::TextureCache::Type::U8;
-                else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
-                    desiredType = DX12Utils::TextureCache::Type::F32;
-                else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type");
-
-                int textureIndex = -1;
-                while(1)
-                {
-                    textureIndex++;
-                    char indexedFileName[1024];
-                    sprintf_s(indexedFileName, "%lsassets/Assets\\NoiseTextures\\UniformHexagon\\UniformHexagon_%i.0.png", s_techniqueLocation.c_str(), textureIndex);
-                    DX12Utils::TextureCache::Texture loadedTextureSlice = DX12Utils::TextureCache::GetAs(indexedFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount);
-
-                    if(!loadedTextureSlice.Valid())
-                    {
-                        if (textureIndex == 0)
-                            Context::LogFn(LogLevel::Error, "Could not load image: %s", indexedFileName);
-                        break;
-                    }
-
-                    if (textureIndex > 0 && (loadedTextureSlice.width != loadedTextureSlices[0].width || loadedTextureSlice.height != loadedTextureSlices[0].height))
-                        Context::LogFn(LogLevel::Error, "%s does not match dimensions of the first texture loaded!", indexedFileName);
-
-                    loadedTextureSlices.push_back(loadedTextureSlice);
-                }
-
-                unsigned int size[3] = { (unsigned int)loadedTextureSlices[0].width, (unsigned int)loadedTextureSlices[0].height, (unsigned int)loadedTextureSlices.size() };
-
-                static const unsigned int desiredNumMips = 1;
-
-                // Create the texture
-                dirty = true;
-                m_internal.texture__loadedTexture_181_size[0] = size[0];
-                m_internal.texture__loadedTexture_181_size[1] = size[1];
-                m_internal.texture__loadedTexture_181_size[2] = size[2];
-                m_internal.texture__loadedTexture_181_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_181_format = DXGI_FORMAT_R8G8_UNORM;
-                m_internal.texture__loadedTexture_181 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8_UNORM, m_internal.texture__loadedTexture_181_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2DArray, (c_debugNames ? L"_loadedTexture_181" : nullptr), Context::LogFn);
-
-
-                std::vector<unsigned char> pixels;
-                for (const DX12Utils::TextureCache::Texture& texture : loadedTextureSlices)
-                    pixels.insert(pixels.end(), texture.pixels.begin(), texture.pixels.end());
-
-                DX12Utils::UploadTextureToGPUAndMakeMips(device, commandList, s_ubTracker, m_internal.texture__loadedTexture_181, pixels, size, desiredNumMips, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, LogFn);
-            }
-        }
-
-        // _loadedTexture_182
-        {
-            if (!m_internal.texture__loadedTexture_182)
-            {
-                // Load the texture
-                std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
-                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8_UNORM, Context::LogFn);
-                DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
-                if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
-                    desiredType = DX12Utils::TextureCache::Type::U8;
-                else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
-                    desiredType = DX12Utils::TextureCache::Type::F32;
-                else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type");
-
-                int textureIndex = -1;
-                while(1)
-                {
-                    textureIndex++;
-                    char indexedFileName[1024];
-                    sprintf_s(indexedFileName, "%lsassets/Assets\\NoiseTextures\\UniformHexagon\\UniformHexagon_%i.png", s_techniqueLocation.c_str(), textureIndex);
-                    DX12Utils::TextureCache::Texture loadedTextureSlice = DX12Utils::TextureCache::GetAs(indexedFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount);
-
-                    if(!loadedTextureSlice.Valid())
-                    {
-                        if (textureIndex == 0)
-                            Context::LogFn(LogLevel::Error, "Could not load image: %s", indexedFileName);
-                        break;
-                    }
-
-                    if (textureIndex > 0 && (loadedTextureSlice.width != loadedTextureSlices[0].width || loadedTextureSlice.height != loadedTextureSlices[0].height))
-                        Context::LogFn(LogLevel::Error, "%s does not match dimensions of the first texture loaded!", indexedFileName);
-
-                    loadedTextureSlices.push_back(loadedTextureSlice);
-                }
-
-                unsigned int size[3] = { (unsigned int)loadedTextureSlices[0].width, (unsigned int)loadedTextureSlices[0].height, (unsigned int)loadedTextureSlices.size() };
-
-                static const unsigned int desiredNumMips = 1;
-
-                // Create the texture
-                dirty = true;
-                m_internal.texture__loadedTexture_182_size[0] = size[0];
-                m_internal.texture__loadedTexture_182_size[1] = size[1];
-                m_internal.texture__loadedTexture_182_size[2] = size[2];
-                m_internal.texture__loadedTexture_182_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_182_format = DXGI_FORMAT_R8G8_UNORM;
-                m_internal.texture__loadedTexture_182 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8_UNORM, m_internal.texture__loadedTexture_182_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2DArray, (c_debugNames ? L"_loadedTexture_182" : nullptr), Context::LogFn);
-
-
-                std::vector<unsigned char> pixels;
-                for (const DX12Utils::TextureCache::Texture& texture : loadedTextureSlices)
-                    pixels.insert(pixels.end(), texture.pixels.begin(), texture.pixels.end());
-
-                DX12Utils::UploadTextureToGPUAndMakeMips(device, commandList, s_ubTracker, m_internal.texture__loadedTexture_182, pixels, size, desiredNumMips, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, LogFn);
-            }
-        }
-
-        // _loadedTexture_183
-        {
-            if (!m_internal.texture__loadedTexture_183)
-            {
-                // Load the texture
-                std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
-                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R32_FLOAT, Context::LogFn);
-                DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
-                if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
-                    desiredType = DX12Utils::TextureCache::Type::U8;
-                else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
-                    desiredType = DX12Utils::TextureCache::Type::F32;
-                else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\NoiseTextures\\UniformHexagon\\UniformHexagon.icdf.exr");
-
-                char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\NoiseTextures\\UniformHexagon\\UniformHexagon.icdf.exr", s_techniqueLocation.c_str());
-
-                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount));
-                DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
-                if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\NoiseTextures\\UniformHexagon\\UniformHexagon.icdf.exr");
-
-                unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
-
-                static const unsigned int desiredNumMips = 1;
-
-                // Create the texture
-                dirty = true;
-                m_internal.texture__loadedTexture_183_size[0] = size[0];
-                m_internal.texture__loadedTexture_183_size[1] = size[1];
-                m_internal.texture__loadedTexture_183_size[2] = size[2];
-                m_internal.texture__loadedTexture_183_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_183_format = DXGI_FORMAT_R32_FLOAT;
-                m_internal.texture__loadedTexture_183 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R32_FLOAT, m_internal.texture__loadedTexture_183_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_183" : nullptr), Context::LogFn);
-
-
-                std::vector<unsigned char> pixels;
-                for (const DX12Utils::TextureCache::Texture& texture : loadedTextureSlices)
-                    pixels.insert(pixels.end(), texture.pixels.begin(), texture.pixels.end());
-
-                DX12Utils::UploadTextureToGPUAndMakeMips(device, commandList, s_ubTracker, m_internal.texture__loadedTexture_183, pixels, size, desiredNumMips, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, LogFn);
-            }
-        }
-
-        // _loadedTexture_184
-        {
-            if (!m_internal.texture__loadedTexture_184)
-            {
-                // Load the texture
-                std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
-                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8_UNORM, Context::LogFn);
-                DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
-                if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
-                    desiredType = DX12Utils::TextureCache::Type::U8;
-                else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
-                    desiredType = DX12Utils::TextureCache::Type::F32;
-                else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type");
-
-                int textureIndex = -1;
-                while(1)
-                {
-                    textureIndex++;
-                    char indexedFileName[1024];
-                    sprintf_s(indexedFileName, "%lsassets/Assets\\NoiseTextures\\UniformStar\\UniformStar_%i.0.png", s_techniqueLocation.c_str(), textureIndex);
-                    DX12Utils::TextureCache::Texture loadedTextureSlice = DX12Utils::TextureCache::GetAs(indexedFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount);
-
-                    if(!loadedTextureSlice.Valid())
-                    {
-                        if (textureIndex == 0)
-                            Context::LogFn(LogLevel::Error, "Could not load image: %s", indexedFileName);
-                        break;
-                    }
-
-                    if (textureIndex > 0 && (loadedTextureSlice.width != loadedTextureSlices[0].width || loadedTextureSlice.height != loadedTextureSlices[0].height))
-                        Context::LogFn(LogLevel::Error, "%s does not match dimensions of the first texture loaded!", indexedFileName);
-
-                    loadedTextureSlices.push_back(loadedTextureSlice);
-                }
-
-                unsigned int size[3] = { (unsigned int)loadedTextureSlices[0].width, (unsigned int)loadedTextureSlices[0].height, (unsigned int)loadedTextureSlices.size() };
-
-                static const unsigned int desiredNumMips = 1;
-
-                // Create the texture
-                dirty = true;
-                m_internal.texture__loadedTexture_184_size[0] = size[0];
-                m_internal.texture__loadedTexture_184_size[1] = size[1];
-                m_internal.texture__loadedTexture_184_size[2] = size[2];
-                m_internal.texture__loadedTexture_184_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_184_format = DXGI_FORMAT_R8G8_UNORM;
-                m_internal.texture__loadedTexture_184 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8_UNORM, m_internal.texture__loadedTexture_184_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2DArray, (c_debugNames ? L"_loadedTexture_184" : nullptr), Context::LogFn);
-
-
-                std::vector<unsigned char> pixels;
-                for (const DX12Utils::TextureCache::Texture& texture : loadedTextureSlices)
-                    pixels.insert(pixels.end(), texture.pixels.begin(), texture.pixels.end());
-
-                DX12Utils::UploadTextureToGPUAndMakeMips(device, commandList, s_ubTracker, m_internal.texture__loadedTexture_184, pixels, size, desiredNumMips, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, LogFn);
-            }
-        }
-
-        // _loadedTexture_185
-        {
-            if (!m_internal.texture__loadedTexture_185)
-            {
-                // Load the texture
-                std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
-                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8_UNORM, Context::LogFn);
-                DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
-                if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
-                    desiredType = DX12Utils::TextureCache::Type::U8;
-                else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
-                    desiredType = DX12Utils::TextureCache::Type::F32;
-                else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type");
-
-                int textureIndex = -1;
-                while(1)
-                {
-                    textureIndex++;
-                    char indexedFileName[1024];
-                    sprintf_s(indexedFileName, "%lsassets/Assets\\NoiseTextures\\UniformStar\\UniformStar_%i.png", s_techniqueLocation.c_str(), textureIndex);
-                    DX12Utils::TextureCache::Texture loadedTextureSlice = DX12Utils::TextureCache::GetAs(indexedFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount);
-
-                    if(!loadedTextureSlice.Valid())
-                    {
-                        if (textureIndex == 0)
-                            Context::LogFn(LogLevel::Error, "Could not load image: %s", indexedFileName);
-                        break;
-                    }
-
-                    if (textureIndex > 0 && (loadedTextureSlice.width != loadedTextureSlices[0].width || loadedTextureSlice.height != loadedTextureSlices[0].height))
-                        Context::LogFn(LogLevel::Error, "%s does not match dimensions of the first texture loaded!", indexedFileName);
-
-                    loadedTextureSlices.push_back(loadedTextureSlice);
-                }
-
-                unsigned int size[3] = { (unsigned int)loadedTextureSlices[0].width, (unsigned int)loadedTextureSlices[0].height, (unsigned int)loadedTextureSlices.size() };
-
-                static const unsigned int desiredNumMips = 1;
-
-                // Create the texture
-                dirty = true;
-                m_internal.texture__loadedTexture_185_size[0] = size[0];
-                m_internal.texture__loadedTexture_185_size[1] = size[1];
-                m_internal.texture__loadedTexture_185_size[2] = size[2];
-                m_internal.texture__loadedTexture_185_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_185_format = DXGI_FORMAT_R8G8_UNORM;
-                m_internal.texture__loadedTexture_185 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8_UNORM, m_internal.texture__loadedTexture_185_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2DArray, (c_debugNames ? L"_loadedTexture_185" : nullptr), Context::LogFn);
-
-
-                std::vector<unsigned char> pixels;
-                for (const DX12Utils::TextureCache::Texture& texture : loadedTextureSlices)
-                    pixels.insert(pixels.end(), texture.pixels.begin(), texture.pixels.end());
-
-                DX12Utils::UploadTextureToGPUAndMakeMips(device, commandList, s_ubTracker, m_internal.texture__loadedTexture_185, pixels, size, desiredNumMips, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, LogFn);
-            }
-        }
-
-        // _loadedTexture_186
-        {
-            if (!m_internal.texture__loadedTexture_186)
-            {
-                // Load the texture
-                std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
-                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R32_FLOAT, Context::LogFn);
-                DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
-                if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
-                    desiredType = DX12Utils::TextureCache::Type::U8;
-                else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
-                    desiredType = DX12Utils::TextureCache::Type::F32;
-                else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\NoiseTextures\\UniformStar\\UniformStar.icdf.exr");
-
-                char loadedTextureFileName[1024];
-                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\NoiseTextures\\UniformStar\\UniformStar.icdf.exr", s_techniqueLocation.c_str());
-
-                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount));
-                DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
-                if(!loadedTexture.Valid())
-                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\NoiseTextures\\UniformStar\\UniformStar.icdf.exr");
-
-                unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
-
-                static const unsigned int desiredNumMips = 1;
-
-                // Create the texture
-                dirty = true;
                 m_internal.texture__loadedTexture_186_size[0] = size[0];
                 m_internal.texture__loadedTexture_186_size[1] = size[1];
                 m_internal.texture__loadedTexture_186_size[2] = size[2];
                 m_internal.texture__loadedTexture_186_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_186_format = DXGI_FORMAT_R32_FLOAT;
-                m_internal.texture__loadedTexture_186 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R32_FLOAT, m_internal.texture__loadedTexture_186_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_186" : nullptr), Context::LogFn);
+                m_internal.texture__loadedTexture_186_format = DXGI_FORMAT_R8G8_UNORM;
+                m_internal.texture__loadedTexture_186 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8_UNORM, m_internal.texture__loadedTexture_186_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2DArray, (c_debugNames ? L"_loadedTexture_186" : nullptr), Context::LogFn);
 
 
                 std::vector<unsigned char> pixels;
@@ -16033,7 +15993,7 @@ namespace FastBokeh
                 {
                     textureIndex++;
                     char indexedFileName[1024];
-                    sprintf_s(indexedFileName, "%lsassets/Assets\\NoiseTextures\\NonUniformStar\\NonUniformStar_%i.0.png", s_techniqueLocation.c_str(), textureIndex);
+                    sprintf_s(indexedFileName, "%lsassets/Assets\\NoiseTextures\\UniformCircle\\UniformCircle_%i.png", s_techniqueLocation.c_str(), textureIndex);
                     DX12Utils::TextureCache::Texture loadedTextureSlice = DX12Utils::TextureCache::GetAs(indexedFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount);
 
                     if(!loadedTextureSlice.Valid())
@@ -16091,7 +16051,7 @@ namespace FastBokeh
                 {
                     textureIndex++;
                     char indexedFileName[1024];
-                    sprintf_s(indexedFileName, "%lsassets/Assets\\NoiseTextures\\NonUniformStar\\NonUniformStar_%i.png", s_techniqueLocation.c_str(), textureIndex);
+                    sprintf_s(indexedFileName, "%lsassets/Assets\\NoiseTextures\\UniformHexagon\\UniformHexagon_%i.0.png", s_techniqueLocation.c_str(), textureIndex);
                     DX12Utils::TextureCache::Texture loadedTextureSlice = DX12Utils::TextureCache::GetAs(indexedFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount);
 
                     if(!loadedTextureSlice.Valid())
@@ -16149,7 +16109,7 @@ namespace FastBokeh
                 {
                     textureIndex++;
                     char indexedFileName[1024];
-                    sprintf_s(indexedFileName, "%lsassets/Assets\\NoiseTextures\\NonUniformStar2\\NonUniformStar2_%i.0.png", s_techniqueLocation.c_str(), textureIndex);
+                    sprintf_s(indexedFileName, "%lsassets/Assets\\NoiseTextures\\UniformHexagon\\UniformHexagon_%i.png", s_techniqueLocation.c_str(), textureIndex);
                     DX12Utils::TextureCache::Texture loadedTextureSlice = DX12Utils::TextureCache::GetAs(indexedFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount);
 
                     if(!loadedTextureSlice.Valid())
@@ -16193,37 +16153,24 @@ namespace FastBokeh
             {
                 // Load the texture
                 std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
-                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8_UNORM, Context::LogFn);
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R32_FLOAT, Context::LogFn);
                 DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
                 if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
                     desiredType = DX12Utils::TextureCache::Type::U8;
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\NoiseTextures\\UniformHexagon\\UniformHexagon.icdf.exr");
 
-                int textureIndex = -1;
-                while(1)
-                {
-                    textureIndex++;
-                    char indexedFileName[1024];
-                    sprintf_s(indexedFileName, "%lsassets/Assets\\NoiseTextures\\NonUniformStar2\\NonUniformStar2_%i.png", s_techniqueLocation.c_str(), textureIndex);
-                    DX12Utils::TextureCache::Texture loadedTextureSlice = DX12Utils::TextureCache::GetAs(indexedFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount);
+                char loadedTextureFileName[1024];
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\NoiseTextures\\UniformHexagon\\UniformHexagon.icdf.exr", s_techniqueLocation.c_str());
 
-                    if(!loadedTextureSlice.Valid())
-                    {
-                        if (textureIndex == 0)
-                            Context::LogFn(LogLevel::Error, "Could not load image: %s", indexedFileName);
-                        break;
-                    }
+                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount));
+                DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
+                if(!loadedTexture.Valid())
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\NoiseTextures\\UniformHexagon\\UniformHexagon.icdf.exr");
 
-                    if (textureIndex > 0 && (loadedTextureSlice.width != loadedTextureSlices[0].width || loadedTextureSlice.height != loadedTextureSlices[0].height))
-                        Context::LogFn(LogLevel::Error, "%s does not match dimensions of the first texture loaded!", indexedFileName);
-
-                    loadedTextureSlices.push_back(loadedTextureSlice);
-                }
-
-                unsigned int size[3] = { (unsigned int)loadedTextureSlices[0].width, (unsigned int)loadedTextureSlices[0].height, (unsigned int)loadedTextureSlices.size() };
+                unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
                 static const unsigned int desiredNumMips = 1;
 
@@ -16233,8 +16180,8 @@ namespace FastBokeh
                 m_internal.texture__loadedTexture_190_size[1] = size[1];
                 m_internal.texture__loadedTexture_190_size[2] = size[2];
                 m_internal.texture__loadedTexture_190_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_190_format = DXGI_FORMAT_R8G8_UNORM;
-                m_internal.texture__loadedTexture_190 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8_UNORM, m_internal.texture__loadedTexture_190_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2DArray, (c_debugNames ? L"_loadedTexture_190" : nullptr), Context::LogFn);
+                m_internal.texture__loadedTexture_190_format = DXGI_FORMAT_R32_FLOAT;
+                m_internal.texture__loadedTexture_190 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R32_FLOAT, m_internal.texture__loadedTexture_190_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_190" : nullptr), Context::LogFn);
 
 
                 std::vector<unsigned char> pixels;
@@ -16265,7 +16212,7 @@ namespace FastBokeh
                 {
                     textureIndex++;
                     char indexedFileName[1024];
-                    sprintf_s(indexedFileName, "%lsassets/Assets\\NoiseTextures\\Lens_kernel_compositingpro.006\\Lens_kernel_compositingpro.006_%i.0.png", s_techniqueLocation.c_str(), textureIndex);
+                    sprintf_s(indexedFileName, "%lsassets/Assets\\NoiseTextures\\UniformStar\\UniformStar_%i.0.png", s_techniqueLocation.c_str(), textureIndex);
                     DX12Utils::TextureCache::Texture loadedTextureSlice = DX12Utils::TextureCache::GetAs(indexedFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount);
 
                     if(!loadedTextureSlice.Valid())
@@ -16323,7 +16270,7 @@ namespace FastBokeh
                 {
                     textureIndex++;
                     char indexedFileName[1024];
-                    sprintf_s(indexedFileName, "%lsassets/Assets\\NoiseTextures\\Lens_kernel_compositingpro.006\\Lens_kernel_compositingpro.006_%i.png", s_techniqueLocation.c_str(), textureIndex);
+                    sprintf_s(indexedFileName, "%lsassets/Assets\\NoiseTextures\\UniformStar\\UniformStar_%i.png", s_techniqueLocation.c_str(), textureIndex);
                     DX12Utils::TextureCache::Texture loadedTextureSlice = DX12Utils::TextureCache::GetAs(indexedFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount);
 
                     if(!loadedTextureSlice.Valid())
@@ -16367,37 +16314,24 @@ namespace FastBokeh
             {
                 // Load the texture
                 std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
-                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8_UNORM, Context::LogFn);
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R32_FLOAT, Context::LogFn);
                 DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
                 if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
                     desiredType = DX12Utils::TextureCache::Type::U8;
                 else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
                     desiredType = DX12Utils::TextureCache::Type::F32;
                 else
-                    Context::LogFn(LogLevel::Error, "Unhandled channel type");
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\NoiseTextures\\UniformStar\\UniformStar.icdf.exr");
 
-                int textureIndex = -1;
-                while(1)
-                {
-                    textureIndex++;
-                    char indexedFileName[1024];
-                    sprintf_s(indexedFileName, "%lsassets/Assets\\NoiseTextures\\Lens_kernel_compositingpro.204\\Lens_kernel_compositingpro.204_%i.0.png", s_techniqueLocation.c_str(), textureIndex);
-                    DX12Utils::TextureCache::Texture loadedTextureSlice = DX12Utils::TextureCache::GetAs(indexedFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount);
+                char loadedTextureFileName[1024];
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\NoiseTextures\\UniformStar\\UniformStar.icdf.exr", s_techniqueLocation.c_str());
 
-                    if(!loadedTextureSlice.Valid())
-                    {
-                        if (textureIndex == 0)
-                            Context::LogFn(LogLevel::Error, "Could not load image: %s", indexedFileName);
-                        break;
-                    }
+                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount));
+                DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
+                if(!loadedTexture.Valid())
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\NoiseTextures\\UniformStar\\UniformStar.icdf.exr");
 
-                    if (textureIndex > 0 && (loadedTextureSlice.width != loadedTextureSlices[0].width || loadedTextureSlice.height != loadedTextureSlices[0].height))
-                        Context::LogFn(LogLevel::Error, "%s does not match dimensions of the first texture loaded!", indexedFileName);
-
-                    loadedTextureSlices.push_back(loadedTextureSlice);
-                }
-
-                unsigned int size[3] = { (unsigned int)loadedTextureSlices[0].width, (unsigned int)loadedTextureSlices[0].height, (unsigned int)loadedTextureSlices.size() };
+                unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
 
                 static const unsigned int desiredNumMips = 1;
 
@@ -16407,8 +16341,8 @@ namespace FastBokeh
                 m_internal.texture__loadedTexture_193_size[1] = size[1];
                 m_internal.texture__loadedTexture_193_size[2] = size[2];
                 m_internal.texture__loadedTexture_193_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_193_format = DXGI_FORMAT_R8G8_UNORM;
-                m_internal.texture__loadedTexture_193 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8_UNORM, m_internal.texture__loadedTexture_193_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2DArray, (c_debugNames ? L"_loadedTexture_193" : nullptr), Context::LogFn);
+                m_internal.texture__loadedTexture_193_format = DXGI_FORMAT_R32_FLOAT;
+                m_internal.texture__loadedTexture_193 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R32_FLOAT, m_internal.texture__loadedTexture_193_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_193" : nullptr), Context::LogFn);
 
 
                 std::vector<unsigned char> pixels;
@@ -16439,7 +16373,7 @@ namespace FastBokeh
                 {
                     textureIndex++;
                     char indexedFileName[1024];
-                    sprintf_s(indexedFileName, "%lsassets/Assets\\NoiseTextures\\Lens_kernel_compositingpro.204\\Lens_kernel_compositingpro.204_%i.png", s_techniqueLocation.c_str(), textureIndex);
+                    sprintf_s(indexedFileName, "%lsassets/Assets\\NoiseTextures\\NonUniformStar\\NonUniformStar_%i.0.png", s_techniqueLocation.c_str(), textureIndex);
                     DX12Utils::TextureCache::Texture loadedTextureSlice = DX12Utils::TextureCache::GetAs(indexedFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount);
 
                     if(!loadedTextureSlice.Valid())
@@ -16483,6 +16417,412 @@ namespace FastBokeh
             {
                 // Load the texture
                 std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8_UNORM, Context::LogFn);
+                DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
+                if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
+                    desiredType = DX12Utils::TextureCache::Type::U8;
+                else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
+                    desiredType = DX12Utils::TextureCache::Type::F32;
+                else
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type");
+
+                int textureIndex = -1;
+                while(1)
+                {
+                    textureIndex++;
+                    char indexedFileName[1024];
+                    sprintf_s(indexedFileName, "%lsassets/Assets\\NoiseTextures\\NonUniformStar\\NonUniformStar_%i.png", s_techniqueLocation.c_str(), textureIndex);
+                    DX12Utils::TextureCache::Texture loadedTextureSlice = DX12Utils::TextureCache::GetAs(indexedFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount);
+
+                    if(!loadedTextureSlice.Valid())
+                    {
+                        if (textureIndex == 0)
+                            Context::LogFn(LogLevel::Error, "Could not load image: %s", indexedFileName);
+                        break;
+                    }
+
+                    if (textureIndex > 0 && (loadedTextureSlice.width != loadedTextureSlices[0].width || loadedTextureSlice.height != loadedTextureSlices[0].height))
+                        Context::LogFn(LogLevel::Error, "%s does not match dimensions of the first texture loaded!", indexedFileName);
+
+                    loadedTextureSlices.push_back(loadedTextureSlice);
+                }
+
+                unsigned int size[3] = { (unsigned int)loadedTextureSlices[0].width, (unsigned int)loadedTextureSlices[0].height, (unsigned int)loadedTextureSlices.size() };
+
+                static const unsigned int desiredNumMips = 1;
+
+                // Create the texture
+                dirty = true;
+                m_internal.texture__loadedTexture_195_size[0] = size[0];
+                m_internal.texture__loadedTexture_195_size[1] = size[1];
+                m_internal.texture__loadedTexture_195_size[2] = size[2];
+                m_internal.texture__loadedTexture_195_numMips = desiredNumMips;
+                m_internal.texture__loadedTexture_195_format = DXGI_FORMAT_R8G8_UNORM;
+                m_internal.texture__loadedTexture_195 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8_UNORM, m_internal.texture__loadedTexture_195_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2DArray, (c_debugNames ? L"_loadedTexture_195" : nullptr), Context::LogFn);
+
+
+                std::vector<unsigned char> pixels;
+                for (const DX12Utils::TextureCache::Texture& texture : loadedTextureSlices)
+                    pixels.insert(pixels.end(), texture.pixels.begin(), texture.pixels.end());
+
+                DX12Utils::UploadTextureToGPUAndMakeMips(device, commandList, s_ubTracker, m_internal.texture__loadedTexture_195, pixels, size, desiredNumMips, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, LogFn);
+            }
+        }
+
+        // _loadedTexture_196
+        {
+            if (!m_internal.texture__loadedTexture_196)
+            {
+                // Load the texture
+                std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8_UNORM, Context::LogFn);
+                DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
+                if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
+                    desiredType = DX12Utils::TextureCache::Type::U8;
+                else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
+                    desiredType = DX12Utils::TextureCache::Type::F32;
+                else
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type");
+
+                int textureIndex = -1;
+                while(1)
+                {
+                    textureIndex++;
+                    char indexedFileName[1024];
+                    sprintf_s(indexedFileName, "%lsassets/Assets\\NoiseTextures\\NonUniformStar2\\NonUniformStar2_%i.0.png", s_techniqueLocation.c_str(), textureIndex);
+                    DX12Utils::TextureCache::Texture loadedTextureSlice = DX12Utils::TextureCache::GetAs(indexedFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount);
+
+                    if(!loadedTextureSlice.Valid())
+                    {
+                        if (textureIndex == 0)
+                            Context::LogFn(LogLevel::Error, "Could not load image: %s", indexedFileName);
+                        break;
+                    }
+
+                    if (textureIndex > 0 && (loadedTextureSlice.width != loadedTextureSlices[0].width || loadedTextureSlice.height != loadedTextureSlices[0].height))
+                        Context::LogFn(LogLevel::Error, "%s does not match dimensions of the first texture loaded!", indexedFileName);
+
+                    loadedTextureSlices.push_back(loadedTextureSlice);
+                }
+
+                unsigned int size[3] = { (unsigned int)loadedTextureSlices[0].width, (unsigned int)loadedTextureSlices[0].height, (unsigned int)loadedTextureSlices.size() };
+
+                static const unsigned int desiredNumMips = 1;
+
+                // Create the texture
+                dirty = true;
+                m_internal.texture__loadedTexture_196_size[0] = size[0];
+                m_internal.texture__loadedTexture_196_size[1] = size[1];
+                m_internal.texture__loadedTexture_196_size[2] = size[2];
+                m_internal.texture__loadedTexture_196_numMips = desiredNumMips;
+                m_internal.texture__loadedTexture_196_format = DXGI_FORMAT_R8G8_UNORM;
+                m_internal.texture__loadedTexture_196 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8_UNORM, m_internal.texture__loadedTexture_196_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2DArray, (c_debugNames ? L"_loadedTexture_196" : nullptr), Context::LogFn);
+
+
+                std::vector<unsigned char> pixels;
+                for (const DX12Utils::TextureCache::Texture& texture : loadedTextureSlices)
+                    pixels.insert(pixels.end(), texture.pixels.begin(), texture.pixels.end());
+
+                DX12Utils::UploadTextureToGPUAndMakeMips(device, commandList, s_ubTracker, m_internal.texture__loadedTexture_196, pixels, size, desiredNumMips, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, LogFn);
+            }
+        }
+
+        // _loadedTexture_197
+        {
+            if (!m_internal.texture__loadedTexture_197)
+            {
+                // Load the texture
+                std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8_UNORM, Context::LogFn);
+                DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
+                if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
+                    desiredType = DX12Utils::TextureCache::Type::U8;
+                else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
+                    desiredType = DX12Utils::TextureCache::Type::F32;
+                else
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type");
+
+                int textureIndex = -1;
+                while(1)
+                {
+                    textureIndex++;
+                    char indexedFileName[1024];
+                    sprintf_s(indexedFileName, "%lsassets/Assets\\NoiseTextures\\NonUniformStar2\\NonUniformStar2_%i.png", s_techniqueLocation.c_str(), textureIndex);
+                    DX12Utils::TextureCache::Texture loadedTextureSlice = DX12Utils::TextureCache::GetAs(indexedFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount);
+
+                    if(!loadedTextureSlice.Valid())
+                    {
+                        if (textureIndex == 0)
+                            Context::LogFn(LogLevel::Error, "Could not load image: %s", indexedFileName);
+                        break;
+                    }
+
+                    if (textureIndex > 0 && (loadedTextureSlice.width != loadedTextureSlices[0].width || loadedTextureSlice.height != loadedTextureSlices[0].height))
+                        Context::LogFn(LogLevel::Error, "%s does not match dimensions of the first texture loaded!", indexedFileName);
+
+                    loadedTextureSlices.push_back(loadedTextureSlice);
+                }
+
+                unsigned int size[3] = { (unsigned int)loadedTextureSlices[0].width, (unsigned int)loadedTextureSlices[0].height, (unsigned int)loadedTextureSlices.size() };
+
+                static const unsigned int desiredNumMips = 1;
+
+                // Create the texture
+                dirty = true;
+                m_internal.texture__loadedTexture_197_size[0] = size[0];
+                m_internal.texture__loadedTexture_197_size[1] = size[1];
+                m_internal.texture__loadedTexture_197_size[2] = size[2];
+                m_internal.texture__loadedTexture_197_numMips = desiredNumMips;
+                m_internal.texture__loadedTexture_197_format = DXGI_FORMAT_R8G8_UNORM;
+                m_internal.texture__loadedTexture_197 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8_UNORM, m_internal.texture__loadedTexture_197_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2DArray, (c_debugNames ? L"_loadedTexture_197" : nullptr), Context::LogFn);
+
+
+                std::vector<unsigned char> pixels;
+                for (const DX12Utils::TextureCache::Texture& texture : loadedTextureSlices)
+                    pixels.insert(pixels.end(), texture.pixels.begin(), texture.pixels.end());
+
+                DX12Utils::UploadTextureToGPUAndMakeMips(device, commandList, s_ubTracker, m_internal.texture__loadedTexture_197, pixels, size, desiredNumMips, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, LogFn);
+            }
+        }
+
+        // _loadedTexture_198
+        {
+            if (!m_internal.texture__loadedTexture_198)
+            {
+                // Load the texture
+                std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8_UNORM, Context::LogFn);
+                DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
+                if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
+                    desiredType = DX12Utils::TextureCache::Type::U8;
+                else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
+                    desiredType = DX12Utils::TextureCache::Type::F32;
+                else
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type");
+
+                int textureIndex = -1;
+                while(1)
+                {
+                    textureIndex++;
+                    char indexedFileName[1024];
+                    sprintf_s(indexedFileName, "%lsassets/Assets\\NoiseTextures\\Lens_kernel_compositingpro.006\\Lens_kernel_compositingpro.006_%i.0.png", s_techniqueLocation.c_str(), textureIndex);
+                    DX12Utils::TextureCache::Texture loadedTextureSlice = DX12Utils::TextureCache::GetAs(indexedFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount);
+
+                    if(!loadedTextureSlice.Valid())
+                    {
+                        if (textureIndex == 0)
+                            Context::LogFn(LogLevel::Error, "Could not load image: %s", indexedFileName);
+                        break;
+                    }
+
+                    if (textureIndex > 0 && (loadedTextureSlice.width != loadedTextureSlices[0].width || loadedTextureSlice.height != loadedTextureSlices[0].height))
+                        Context::LogFn(LogLevel::Error, "%s does not match dimensions of the first texture loaded!", indexedFileName);
+
+                    loadedTextureSlices.push_back(loadedTextureSlice);
+                }
+
+                unsigned int size[3] = { (unsigned int)loadedTextureSlices[0].width, (unsigned int)loadedTextureSlices[0].height, (unsigned int)loadedTextureSlices.size() };
+
+                static const unsigned int desiredNumMips = 1;
+
+                // Create the texture
+                dirty = true;
+                m_internal.texture__loadedTexture_198_size[0] = size[0];
+                m_internal.texture__loadedTexture_198_size[1] = size[1];
+                m_internal.texture__loadedTexture_198_size[2] = size[2];
+                m_internal.texture__loadedTexture_198_numMips = desiredNumMips;
+                m_internal.texture__loadedTexture_198_format = DXGI_FORMAT_R8G8_UNORM;
+                m_internal.texture__loadedTexture_198 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8_UNORM, m_internal.texture__loadedTexture_198_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2DArray, (c_debugNames ? L"_loadedTexture_198" : nullptr), Context::LogFn);
+
+
+                std::vector<unsigned char> pixels;
+                for (const DX12Utils::TextureCache::Texture& texture : loadedTextureSlices)
+                    pixels.insert(pixels.end(), texture.pixels.begin(), texture.pixels.end());
+
+                DX12Utils::UploadTextureToGPUAndMakeMips(device, commandList, s_ubTracker, m_internal.texture__loadedTexture_198, pixels, size, desiredNumMips, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, LogFn);
+            }
+        }
+
+        // _loadedTexture_199
+        {
+            if (!m_internal.texture__loadedTexture_199)
+            {
+                // Load the texture
+                std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8_UNORM, Context::LogFn);
+                DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
+                if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
+                    desiredType = DX12Utils::TextureCache::Type::U8;
+                else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
+                    desiredType = DX12Utils::TextureCache::Type::F32;
+                else
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type");
+
+                int textureIndex = -1;
+                while(1)
+                {
+                    textureIndex++;
+                    char indexedFileName[1024];
+                    sprintf_s(indexedFileName, "%lsassets/Assets\\NoiseTextures\\Lens_kernel_compositingpro.006\\Lens_kernel_compositingpro.006_%i.png", s_techniqueLocation.c_str(), textureIndex);
+                    DX12Utils::TextureCache::Texture loadedTextureSlice = DX12Utils::TextureCache::GetAs(indexedFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount);
+
+                    if(!loadedTextureSlice.Valid())
+                    {
+                        if (textureIndex == 0)
+                            Context::LogFn(LogLevel::Error, "Could not load image: %s", indexedFileName);
+                        break;
+                    }
+
+                    if (textureIndex > 0 && (loadedTextureSlice.width != loadedTextureSlices[0].width || loadedTextureSlice.height != loadedTextureSlices[0].height))
+                        Context::LogFn(LogLevel::Error, "%s does not match dimensions of the first texture loaded!", indexedFileName);
+
+                    loadedTextureSlices.push_back(loadedTextureSlice);
+                }
+
+                unsigned int size[3] = { (unsigned int)loadedTextureSlices[0].width, (unsigned int)loadedTextureSlices[0].height, (unsigned int)loadedTextureSlices.size() };
+
+                static const unsigned int desiredNumMips = 1;
+
+                // Create the texture
+                dirty = true;
+                m_internal.texture__loadedTexture_199_size[0] = size[0];
+                m_internal.texture__loadedTexture_199_size[1] = size[1];
+                m_internal.texture__loadedTexture_199_size[2] = size[2];
+                m_internal.texture__loadedTexture_199_numMips = desiredNumMips;
+                m_internal.texture__loadedTexture_199_format = DXGI_FORMAT_R8G8_UNORM;
+                m_internal.texture__loadedTexture_199 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8_UNORM, m_internal.texture__loadedTexture_199_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2DArray, (c_debugNames ? L"_loadedTexture_199" : nullptr), Context::LogFn);
+
+
+                std::vector<unsigned char> pixels;
+                for (const DX12Utils::TextureCache::Texture& texture : loadedTextureSlices)
+                    pixels.insert(pixels.end(), texture.pixels.begin(), texture.pixels.end());
+
+                DX12Utils::UploadTextureToGPUAndMakeMips(device, commandList, s_ubTracker, m_internal.texture__loadedTexture_199, pixels, size, desiredNumMips, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, LogFn);
+            }
+        }
+
+        // _loadedTexture_200
+        {
+            if (!m_internal.texture__loadedTexture_200)
+            {
+                // Load the texture
+                std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8_UNORM, Context::LogFn);
+                DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
+                if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
+                    desiredType = DX12Utils::TextureCache::Type::U8;
+                else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
+                    desiredType = DX12Utils::TextureCache::Type::F32;
+                else
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type");
+
+                int textureIndex = -1;
+                while(1)
+                {
+                    textureIndex++;
+                    char indexedFileName[1024];
+                    sprintf_s(indexedFileName, "%lsassets/Assets\\NoiseTextures\\Lens_kernel_compositingpro.204\\Lens_kernel_compositingpro.204_%i.0.png", s_techniqueLocation.c_str(), textureIndex);
+                    DX12Utils::TextureCache::Texture loadedTextureSlice = DX12Utils::TextureCache::GetAs(indexedFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount);
+
+                    if(!loadedTextureSlice.Valid())
+                    {
+                        if (textureIndex == 0)
+                            Context::LogFn(LogLevel::Error, "Could not load image: %s", indexedFileName);
+                        break;
+                    }
+
+                    if (textureIndex > 0 && (loadedTextureSlice.width != loadedTextureSlices[0].width || loadedTextureSlice.height != loadedTextureSlices[0].height))
+                        Context::LogFn(LogLevel::Error, "%s does not match dimensions of the first texture loaded!", indexedFileName);
+
+                    loadedTextureSlices.push_back(loadedTextureSlice);
+                }
+
+                unsigned int size[3] = { (unsigned int)loadedTextureSlices[0].width, (unsigned int)loadedTextureSlices[0].height, (unsigned int)loadedTextureSlices.size() };
+
+                static const unsigned int desiredNumMips = 1;
+
+                // Create the texture
+                dirty = true;
+                m_internal.texture__loadedTexture_200_size[0] = size[0];
+                m_internal.texture__loadedTexture_200_size[1] = size[1];
+                m_internal.texture__loadedTexture_200_size[2] = size[2];
+                m_internal.texture__loadedTexture_200_numMips = desiredNumMips;
+                m_internal.texture__loadedTexture_200_format = DXGI_FORMAT_R8G8_UNORM;
+                m_internal.texture__loadedTexture_200 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8_UNORM, m_internal.texture__loadedTexture_200_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2DArray, (c_debugNames ? L"_loadedTexture_200" : nullptr), Context::LogFn);
+
+
+                std::vector<unsigned char> pixels;
+                for (const DX12Utils::TextureCache::Texture& texture : loadedTextureSlices)
+                    pixels.insert(pixels.end(), texture.pixels.begin(), texture.pixels.end());
+
+                DX12Utils::UploadTextureToGPUAndMakeMips(device, commandList, s_ubTracker, m_internal.texture__loadedTexture_200, pixels, size, desiredNumMips, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, LogFn);
+            }
+        }
+
+        // _loadedTexture_201
+        {
+            if (!m_internal.texture__loadedTexture_201)
+            {
+                // Load the texture
+                std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8_UNORM, Context::LogFn);
+                DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
+                if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
+                    desiredType = DX12Utils::TextureCache::Type::U8;
+                else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
+                    desiredType = DX12Utils::TextureCache::Type::F32;
+                else
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type");
+
+                int textureIndex = -1;
+                while(1)
+                {
+                    textureIndex++;
+                    char indexedFileName[1024];
+                    sprintf_s(indexedFileName, "%lsassets/Assets\\NoiseTextures\\Lens_kernel_compositingpro.204\\Lens_kernel_compositingpro.204_%i.png", s_techniqueLocation.c_str(), textureIndex);
+                    DX12Utils::TextureCache::Texture loadedTextureSlice = DX12Utils::TextureCache::GetAs(indexedFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount);
+
+                    if(!loadedTextureSlice.Valid())
+                    {
+                        if (textureIndex == 0)
+                            Context::LogFn(LogLevel::Error, "Could not load image: %s", indexedFileName);
+                        break;
+                    }
+
+                    if (textureIndex > 0 && (loadedTextureSlice.width != loadedTextureSlices[0].width || loadedTextureSlice.height != loadedTextureSlices[0].height))
+                        Context::LogFn(LogLevel::Error, "%s does not match dimensions of the first texture loaded!", indexedFileName);
+
+                    loadedTextureSlices.push_back(loadedTextureSlice);
+                }
+
+                unsigned int size[3] = { (unsigned int)loadedTextureSlices[0].width, (unsigned int)loadedTextureSlices[0].height, (unsigned int)loadedTextureSlices.size() };
+
+                static const unsigned int desiredNumMips = 1;
+
+                // Create the texture
+                dirty = true;
+                m_internal.texture__loadedTexture_201_size[0] = size[0];
+                m_internal.texture__loadedTexture_201_size[1] = size[1];
+                m_internal.texture__loadedTexture_201_size[2] = size[2];
+                m_internal.texture__loadedTexture_201_numMips = desiredNumMips;
+                m_internal.texture__loadedTexture_201_format = DXGI_FORMAT_R8G8_UNORM;
+                m_internal.texture__loadedTexture_201 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8_UNORM, m_internal.texture__loadedTexture_201_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2DArray, (c_debugNames ? L"_loadedTexture_201" : nullptr), Context::LogFn);
+
+
+                std::vector<unsigned char> pixels;
+                for (const DX12Utils::TextureCache::Texture& texture : loadedTextureSlices)
+                    pixels.insert(pixels.end(), texture.pixels.begin(), texture.pixels.end());
+
+                DX12Utils::UploadTextureToGPUAndMakeMips(device, commandList, s_ubTracker, m_internal.texture__loadedTexture_201, pixels, size, desiredNumMips, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, LogFn);
+            }
+        }
+
+        // _loadedTexture_202
+        {
+            if (!m_internal.texture__loadedTexture_202)
+            {
+                // Load the texture
+                std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
                 DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R32_FLOAT, Context::LogFn);
                 DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
                 if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
@@ -16506,19 +16846,19 @@ namespace FastBokeh
 
                 // Create the texture
                 dirty = true;
-                m_internal.texture__loadedTexture_195_size[0] = size[0];
-                m_internal.texture__loadedTexture_195_size[1] = size[1];
-                m_internal.texture__loadedTexture_195_size[2] = size[2];
-                m_internal.texture__loadedTexture_195_numMips = desiredNumMips;
-                m_internal.texture__loadedTexture_195_format = DXGI_FORMAT_R32_FLOAT;
-                m_internal.texture__loadedTexture_195 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R32_FLOAT, m_internal.texture__loadedTexture_195_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_195" : nullptr), Context::LogFn);
+                m_internal.texture__loadedTexture_202_size[0] = size[0];
+                m_internal.texture__loadedTexture_202_size[1] = size[1];
+                m_internal.texture__loadedTexture_202_size[2] = size[2];
+                m_internal.texture__loadedTexture_202_numMips = desiredNumMips;
+                m_internal.texture__loadedTexture_202_format = DXGI_FORMAT_R32_FLOAT;
+                m_internal.texture__loadedTexture_202 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R32_FLOAT, m_internal.texture__loadedTexture_202_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_202" : nullptr), Context::LogFn);
 
 
                 std::vector<unsigned char> pixels;
                 for (const DX12Utils::TextureCache::Texture& texture : loadedTextureSlices)
                     pixels.insert(pixels.end(), texture.pixels.begin(), texture.pixels.end());
 
-                DX12Utils::UploadTextureToGPUAndMakeMips(device, commandList, s_ubTracker, m_internal.texture__loadedTexture_195, pixels, size, desiredNumMips, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, LogFn);
+                DX12Utils::UploadTextureToGPUAndMakeMips(device, commandList, s_ubTracker, m_internal.texture__loadedTexture_202, pixels, size, desiredNumMips, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, LogFn);
             }
         }
 
@@ -16534,6 +16874,109 @@ namespace FastBokeh
         {
             dirty = true;
             m_internal.constantBuffer__GatherDOF_SetupCSCB = DX12Utils::CreateBuffer(device, 256, D3D12_RESOURCE_FLAG_NONE, D3D12_RESOURCE_STATE_COMMON, D3D12_HEAP_TYPE_DEFAULT, (c_debugNames ? L"_GatherDOF_SetupCSCB" : nullptr), Context::LogFn);
+        }
+
+        // _loadedTexture_203
+        {
+            if (!m_internal.texture__loadedTexture_203)
+            {
+                // Load the texture
+                std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8G8_UNORM, Context::LogFn);
+                DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
+                if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
+                    desiredType = DX12Utils::TextureCache::Type::U8;
+                else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
+                    desiredType = DX12Utils::TextureCache::Type::F32;
+                else
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type");
+
+                int textureIndex = -1;
+                while(1)
+                {
+                    textureIndex++;
+                    char indexedFileName[1024];
+                    sprintf_s(indexedFileName, "%lsassets/Assets\\NoiseTextures\\bokeh\\bokehInv_%i.png", s_techniqueLocation.c_str(), textureIndex);
+                    DX12Utils::TextureCache::Texture loadedTextureSlice = DX12Utils::TextureCache::GetAs(indexedFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount);
+
+                    if(!loadedTextureSlice.Valid())
+                    {
+                        if (textureIndex == 0)
+                            Context::LogFn(LogLevel::Error, "Could not load image: %s", indexedFileName);
+                        break;
+                    }
+
+                    if (textureIndex > 0 && (loadedTextureSlice.width != loadedTextureSlices[0].width || loadedTextureSlice.height != loadedTextureSlices[0].height))
+                        Context::LogFn(LogLevel::Error, "%s does not match dimensions of the first texture loaded!", indexedFileName);
+
+                    loadedTextureSlices.push_back(loadedTextureSlice);
+                }
+
+                unsigned int size[3] = { (unsigned int)loadedTextureSlices[0].width, (unsigned int)loadedTextureSlices[0].height, (unsigned int)loadedTextureSlices.size() };
+
+                static const unsigned int desiredNumMips = 1;
+
+                // Create the texture
+                dirty = true;
+                m_internal.texture__loadedTexture_203_size[0] = size[0];
+                m_internal.texture__loadedTexture_203_size[1] = size[1];
+                m_internal.texture__loadedTexture_203_size[2] = size[2];
+                m_internal.texture__loadedTexture_203_numMips = desiredNumMips;
+                m_internal.texture__loadedTexture_203_format = DXGI_FORMAT_R8G8_UNORM;
+                m_internal.texture__loadedTexture_203 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8G8_UNORM, m_internal.texture__loadedTexture_203_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2DArray, (c_debugNames ? L"_loadedTexture_203" : nullptr), Context::LogFn);
+
+
+                std::vector<unsigned char> pixels;
+                for (const DX12Utils::TextureCache::Texture& texture : loadedTextureSlices)
+                    pixels.insert(pixels.end(), texture.pixels.begin(), texture.pixels.end());
+
+                DX12Utils::UploadTextureToGPUAndMakeMips(device, commandList, s_ubTracker, m_internal.texture__loadedTexture_203, pixels, size, desiredNumMips, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, LogFn);
+            }
+        }
+
+        // _loadedTexture_204
+        {
+            if (!m_internal.texture__loadedTexture_204)
+            {
+                // Load the texture
+                std::vector<DX12Utils::TextureCache::Texture> loadedTextureSlices;
+                DX12Utils::DXGI_FORMAT_Info formatInfo = DX12Utils::Get_DXGI_FORMAT_Info(DXGI_FORMAT_R8_UNORM, Context::LogFn);
+                DX12Utils::TextureCache::Type desiredType = DX12Utils::TextureCache::Type::U8;
+                if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_uint8_t)
+                    desiredType = DX12Utils::TextureCache::Type::U8;
+                else if (formatInfo.channelType == DX12Utils::DXGI_FORMAT_Info::ChannelType::_float)
+                    desiredType = DX12Utils::TextureCache::Type::F32;
+                else
+                    Context::LogFn(LogLevel::Error, "Unhandled channel type for image: Assets\\NoiseTextures\\bokeh\\bokeh_crop.png");
+
+                char loadedTextureFileName[1024];
+                sprintf_s(loadedTextureFileName, "%lsassets/Assets\\NoiseTextures\\bokeh\\bokeh_crop.png", s_techniqueLocation.c_str());
+
+                loadedTextureSlices.push_back(DX12Utils::TextureCache::GetAs(loadedTextureFileName, false, desiredType, formatInfo.sRGB, formatInfo.channelCount));
+                DX12Utils::TextureCache::Texture& loadedTexture = loadedTextureSlices[0];
+                if(!loadedTexture.Valid())
+                    Context::LogFn(LogLevel::Error, "Could not load image: Assets\\NoiseTextures\\bokeh\\bokeh_crop.png");
+
+                unsigned int size[3] = { (unsigned int)loadedTexture.width, (unsigned int)loadedTexture.height, 1 };
+
+                static const unsigned int desiredNumMips = 1;
+
+                // Create the texture
+                dirty = true;
+                m_internal.texture__loadedTexture_204_size[0] = size[0];
+                m_internal.texture__loadedTexture_204_size[1] = size[1];
+                m_internal.texture__loadedTexture_204_size[2] = size[2];
+                m_internal.texture__loadedTexture_204_numMips = desiredNumMips;
+                m_internal.texture__loadedTexture_204_format = DXGI_FORMAT_R8_UNORM;
+                m_internal.texture__loadedTexture_204 = DX12Utils::CreateTexture(device, size, desiredNumMips, DXGI_FORMAT_R8_UNORM, m_internal.texture__loadedTexture_204_flags, D3D12_RESOURCE_STATE_COPY_DEST, DX12Utils::ResourceType::Texture2D, (c_debugNames ? L"_loadedTexture_204" : nullptr), Context::LogFn);
+
+
+                std::vector<unsigned char> pixels;
+                for (const DX12Utils::TextureCache::Texture& texture : loadedTextureSlices)
+                    pixels.insert(pixels.end(), texture.pixels.begin(), texture.pixels.end());
+
+                DX12Utils::UploadTextureToGPUAndMakeMips(device, commandList, s_ubTracker, m_internal.texture__loadedTexture_204, pixels, size, desiredNumMips, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, LogFn);
+            }
         }
 
         // _GatherDOF_BlurFarCSCB
@@ -16555,13 +16998,6 @@ namespace FastBokeh
         {
             dirty = true;
             m_internal.constantBuffer__GatherDOF_RecombineCSCB = DX12Utils::CreateBuffer(device, 256, D3D12_RESOURCE_FLAG_NONE, D3D12_RESOURCE_STATE_COMMON, D3D12_HEAP_TYPE_DEFAULT, (c_debugNames ? L"_GatherDOF_RecombineCSCB" : nullptr), Context::LogFn);
-        }
-
-        // _GaussBlur_GaussBlurCSCB
-        if (m_internal.constantBuffer__GaussBlur_GaussBlurCSCB == nullptr)
-        {
-            dirty = true;
-            m_internal.constantBuffer__GaussBlur_GaussBlurCSCB = DX12Utils::CreateBuffer(device, 256, D3D12_RESOURCE_FLAG_NONE, D3D12_RESOURCE_STATE_COMMON, D3D12_HEAP_TYPE_DEFAULT, (c_debugNames ? L"_GaussBlur_GaussBlurCSCB" : nullptr), Context::LogFn);
         }
 
         // _TemporalAccumulation_AccumulateCB

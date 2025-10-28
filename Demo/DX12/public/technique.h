@@ -50,11 +50,21 @@ namespace FastBokeh
         {
 
             // Variables
+            float variable_FocusDistance = 45.000000f;  // Distance of focus in scene units (cm)
+            bool variable_RenderPinhole = 1;
+            bool variable_RenderThinLensDoF = 0;
+            bool variable_RenderLensSimulationDoF = 0;
+            bool variable_RenderBokehConfig = 0;
             bool variable_Reset = false;
             uint2 variable_RenderSize = {512, 512};
-            MaterialSets variable_MaterialSet = MaterialSets::None;
             bool variable_Accumulate = true;
             bool variable_Animate = true;
+            BokehConfigState variable_BokehConfigMode = BokehConfigState::0;
+            bool variable_DebugToggle = 0;
+            uint variable_HeliosApertureStop = 6;
+            float variable_ShiftHeliosPosition = 0.000000f;  // Shift the position of the helios lens backward in millimeters
+            bool variable_ToggleChromaticAberration = 0;
+            MaterialSets variable_MaterialSet = MaterialSets::None;
             uint variable_SamplesPerPixelPerFrame = 1;
             PixelJitterType variable_JitterPixels = PixelJitterType::PerPixel;  // Provides Antialiasing
             float variable_DepthNearPlane = 0.100000f;
@@ -70,7 +80,6 @@ namespace FastBokeh
             LensRNG variable_LensRNGSource = LensRNG::UniformCircleWhite;
             NoiseTexExtends variable_LensRNGExtend = NoiseTexExtends::None;  // How to extend the noise textures
             bool variable_JitterNoiseTextures = false;  // The noise textures are 8 bit unorms. This adds a random value between -0.5/255 and +0.5/255 to fill in the unset bits with white noise.
-            DOFMode variable_DOF = DOFMode::Off;
             float4x4 variable_InvViewMtx = {0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f};
             float variable_ApertureRadius = 1.000000f;
             float2 variable_AnamorphicScaling = {1.000000f, 1.000000f};  // Defaults to 1.0, 1.0 for no anamorphic effects. Elongates the aperture, does not simulate anamorphic elements.
@@ -84,11 +93,15 @@ namespace FastBokeh
             float3 variable_SmallLightsColor = {1.000000f, 1.000000f, 1.000000f};
             bool variable_SmallLightsColorful = false;  // If true, makes the small lights colorful, else makes them all the same color
             float variable_SmallLightRadius = 1.000000f;
-            float variable_HighestAngleThatMakesItOutOfTheLens = 0.000000f;
+            float variable_ConfigLightDistance = 2000.000000f;  // distance of lights to camera in world units (cm)
+            uint2 variable_ConfigLightCount = {0,0};  // the amount of lights rendered, 2D for grid, 1D for diagonal
+            bool variable_ConfigOnlyDiagonal = 1;  // render diagonal lights instead of grid
+            int variable_OnlyThisLightByIndex = -1;  // -1 is render all the lights, otherwise only light with according index is rendered
+            float variable_ConfigLightFieldWidth = 1000.000000f;  // width of lights field in world units (cm)
             bool variable_GatherDOF_UseNoiseTextures = false;
             bool variable_GatherDOF_AnimateNoiseTextures = true;
             bool variable_GatherDOF_SuppressBokeh = false;  // If true, blurs out of focus areas, but reduces the Bokeh effect of small bright lights
-            float variable_GatherDOF_FocalDistance = 500.000000f;  // Anything closer than this is considered near field
+            float variable_GatherDOF_FocalDistance = 600.000000f;  // Anything closer than this is considered near field
             float variable_GatherDOF_FocalRegion = 100.000000f;  // The size in world units of the middle range which is in focus
             float variable_GatherDOF_FocalLength = 75.000000f;  // Focal length in mm (Camera property e.g. 75mm)
             float variable_GatherDOF_NearTransitionRegion = 50.000000f;  // Fade distance in world units
@@ -101,8 +114,6 @@ namespace FastBokeh
             float4 variable_GatherDOF_KernelSize = {10.000000f, 15.000000f, 5.000000f, 0.000000f};  // x = size of the bokeh blur radius in texel space. y = rotation in radians to apply to the bokeh shape. z = Number of edge of the polygon (number of blades). 0: circle. 4: square, 6: hexagon...
             uint variable_GatherDOF_BlurTapCount = 8;  // 8 for high quality, 6 for low quality. Used in a double for loop, so it's this number squared.
             uint variable_GatherDOF_FloodFillTapCount = 4;  // 4 for high quality, 3 for low quality. Used in a double for loop, so it's this number squared.
-            float variable_GaussBlur_Sigma = 1.000000f;  // Strength of blur. Standard deviation of gaussian distribution.
-            bool variable_GaussBlur_Disable = false;
             float variable_TemporalAccumulation_Alpha = 0.100000f;  // For exponential moving average. From 0 to 1. TAA commonly uses 0.1.
             bool variable_TemporalAccumulation_Enabled = true;
             float variable_ToneMap_ExposureFStops = 0.000000f;
@@ -141,14 +152,7 @@ namespace FastBokeh
             unsigned int texture_GatherDOF_Output_numMips = 0;
             DXGI_FORMAT texture_GatherDOF_Output_format = DXGI_FORMAT_UNKNOWN;
             static const D3D12_RESOURCE_FLAGS texture_GatherDOF_Output_flags =  D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;
-            const D3D12_RESOURCE_STATES c_texture_GatherDOF_Output_endingState = D3D12_RESOURCE_STATE_COPY_SOURCE;
-
-            ID3D12Resource* texture_GaussBlur_Output = nullptr;
-            unsigned int texture_GaussBlur_Output_size[3] = { 0, 0, 0 };
-            unsigned int texture_GaussBlur_Output_numMips = 0;
-            DXGI_FORMAT texture_GaussBlur_Output_format = DXGI_FORMAT_UNKNOWN;
-            static const D3D12_RESOURCE_FLAGS texture_GaussBlur_Output_flags =  D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;
-            const D3D12_RESOURCE_STATES c_texture_GaussBlur_Output_endingState = D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE;
+            const D3D12_RESOURCE_STATES c_texture_GatherDOF_Output_endingState = D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE;
 
             ID3D12Resource* texture_TemporalAccumulation_Accum = nullptr;
             unsigned int texture_TemporalAccumulation_Accum_size[3] = { 0, 0, 0 };
@@ -256,7 +260,7 @@ namespace FastBokeh
         void EnsureResourcesCreated(ID3D12Device* device, ID3D12GraphicsCommandList* commandList);
         bool EnsureDrawCallPSOsCreated(ID3D12Device* device, bool dirty);
 
-        ProfileEntry m_profileData[16+1]; // One for each action node, and another for the total
+        ProfileEntry m_profileData[13+1]; // One for each action node, and another for the total
     };
 
     struct ScopedPerfEvent

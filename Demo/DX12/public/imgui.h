@@ -26,6 +26,12 @@ namespace FastBokeh
     {
         ImGui::PushID("gigi_FastBokeh");
 
+        ImGui::InputFloat("FocusDistance", &context->m_input.variable_FocusDistance);
+        ShowToolTip("Distance of focus in scene units (cm)");
+        ImGui::Checkbox("RenderPinhole", &context->m_input.variable_RenderPinhole);
+        ImGui::Checkbox("RenderThinLensDoF", &context->m_input.variable_RenderThinLensDoF);
+        ImGui::Checkbox("RenderLensSimulationDoF", &context->m_input.variable_RenderLensSimulationDoF);
+        ImGui::Checkbox("RenderBokehConfig", &context->m_input.variable_RenderBokehConfig);
         context->m_input.variable_Reset = ImGui::Button("Reset");
         {
             float width = ImGui::GetContentRegionAvail().x / 4.0f;
@@ -43,6 +49,25 @@ namespace FastBokeh
             ImGui::PopItemWidth();
             ImGui::PopID();
         }
+        ImGui::Checkbox("Accumulate", &context->m_input.variable_Accumulate);
+        ImGui::Checkbox("Animate", &context->m_input.variable_Animate);
+        {
+            static const char* labels[] = {
+                "NoDoF",
+                "ThinLens",
+                "RealisticLens",
+            };
+            ImGui::Combo("BokehConfigMode", (int*)&context->m_input.variable_BokehConfigMode, labels, 3);
+        }
+        ImGui::Checkbox("DebugToggle", &context->m_input.variable_DebugToggle);
+        {
+            int localVar = (int)context->m_input.variable_HeliosApertureStop;
+            if(ImGui::InputInt("HeliosApertureStop", &localVar, 0))
+                context->m_input.variable_HeliosApertureStop = (unsigned int)localVar;
+        }
+        ImGui::InputFloat("ShiftHeliosPosition", &context->m_input.variable_ShiftHeliosPosition);
+        ShowToolTip("Shift the position of the helios lens backward in millimeters");
+        ImGui::Checkbox("ToggleChromaticAberration", &context->m_input.variable_ToggleChromaticAberration);
         {
             static const char* labels[] = {
                 "None",
@@ -51,8 +76,6 @@ namespace FastBokeh
             };
             ImGui::Combo("MaterialSet", (int*)&context->m_input.variable_MaterialSet, labels, 3);
         }
-        ImGui::Checkbox("Accumulate", &context->m_input.variable_Accumulate);
-        ImGui::Checkbox("Animate", &context->m_input.variable_Animate);
         {
             int localVar = (int)context->m_input.variable_SamplesPerPixelPerFrame;
             if(ImGui::InputInt("SamplesPerPixelPerFrame", &localVar, 0))
@@ -101,8 +124,9 @@ namespace FastBokeh
                 "LKCP204Blue",
                 "LKCP204ICDF_White",
                 "LKCP204ICDF_Blue",
+                "bokeh",
             };
-            ImGui::Combo("LensRNGSource", (int*)&context->m_input.variable_LensRNGSource, labels, 21);
+            ImGui::Combo("LensRNGSource", (int*)&context->m_input.variable_LensRNGSource, labels, 22);
         }
         {
             static const char* labels[] = {
@@ -116,15 +140,6 @@ namespace FastBokeh
         }
         ImGui::Checkbox("JitterNoiseTextures", &context->m_input.variable_JitterNoiseTextures);
         ShowToolTip("The noise textures are 8 bit unorms. This adds a random value between -0.5/255 and +0.5/255 to fill in the unset bits with white noise.");
-        {
-            static const char* labels[] = {
-                "Off",
-                "PathTraced",
-                "PostProcessing",
-                "Realistic",
-            };
-            ImGui::Combo("DOF", (int*)&context->m_input.variable_DOF, labels, 4);
-        }
         ImGui::InputFloat("ApertureRadius", &context->m_input.variable_ApertureRadius);
         {
             float width = ImGui::GetContentRegionAvail().x / 4.0f;
@@ -177,7 +192,31 @@ namespace FastBokeh
         ImGui::Checkbox("SmallLightsColorful", &context->m_input.variable_SmallLightsColorful);
         ShowToolTip("If true, makes the small lights colorful, else makes them all the same color");
         ImGui::InputFloat("SmallLightRadius", &context->m_input.variable_SmallLightRadius);
-        ImGui::InputFloat("HighestAngleThatMakesItOutOfTheLens", &context->m_input.variable_HighestAngleThatMakesItOutOfTheLens);
+        ImGui::InputFloat("ConfigLightDistance", &context->m_input.variable_ConfigLightDistance);
+        ShowToolTip("distance of lights to camera in world units (cm)");
+        {
+            float width = ImGui::GetContentRegionAvail().x / 4.0f;
+            ImGui::PushID("ConfigLightCount");
+            ImGui::PushItemWidth(width);
+            int localVarX = (int)context->m_input.variable_ConfigLightCount[0];
+            if(ImGui::InputInt("##X", &localVarX, 0))
+                context->m_input.variable_ConfigLightCount[0] = (unsigned int)localVarX;
+            ImGui::SameLine();
+            int localVarY = (int)context->m_input.variable_ConfigLightCount[1];
+            if(ImGui::InputInt("##Y", &localVarY, 0))
+                context->m_input.variable_ConfigLightCount[1] = (unsigned int)localVarY;
+            ImGui::SameLine();
+            ImGui::Text("ConfigLightCount");
+            ImGui::PopItemWidth();
+            ImGui::PopID();
+            ShowToolTip("the amount of lights rendered, 2D for grid, 1D for diagonal");
+        }
+        ImGui::Checkbox("ConfigOnlyDiagonal", &context->m_input.variable_ConfigOnlyDiagonal);
+        ShowToolTip("render diagonal lights instead of grid");
+        ImGui::InputInt("OnlyThisLightByIndex", &context->m_input.variable_OnlyThisLightByIndex, 0);
+        ShowToolTip("-1 is render all the lights, otherwise only light with according index is rendered");
+        ImGui::InputFloat("ConfigLightFieldWidth", &context->m_input.variable_ConfigLightFieldWidth);
+        ShowToolTip("width of lights field in world units (cm)");
         ImGui::Checkbox("GatherDOF_UseNoiseTextures", &context->m_input.variable_GatherDOF_UseNoiseTextures);
         ImGui::Checkbox("GatherDOF_AnimateNoiseTextures", &context->m_input.variable_GatherDOF_AnimateNoiseTextures);
         ImGui::Checkbox("GatherDOF_SuppressBokeh", &context->m_input.variable_GatherDOF_SuppressBokeh);
@@ -231,9 +270,6 @@ namespace FastBokeh
                 context->m_input.variable_GatherDOF_FloodFillTapCount = (unsigned int)localVar;
             ShowToolTip("4 for high quality, 3 for low quality. Used in a double for loop, so it's this number squared.");
         }
-        ImGui::InputFloat("GaussBlur_Sigma", &context->m_input.variable_GaussBlur_Sigma);
-        ShowToolTip("Strength of blur. Standard deviation of gaussian distribution.");
-        ImGui::Checkbox("GaussBlur_Disable", &context->m_input.variable_GaussBlur_Disable);
         ImGui::InputFloat("TemporalAccumulation_Alpha", &context->m_input.variable_TemporalAccumulation_Alpha);
         ShowToolTip("For exponential moving average. From 0 to 1. TAA commonly uses 0.1.");
         ImGui::Checkbox("TemporalAccumulation_Enabled", &context->m_input.variable_TemporalAccumulation_Enabled);

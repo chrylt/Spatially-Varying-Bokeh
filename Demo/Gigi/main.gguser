@@ -21,7 +21,7 @@
     },
     "snapshot": {
         "resourceViewNodeIndex": 0,
-        "resourceViewResourceIndex": 219,
+        "resourceViewResourceIndex": 216,
         "cameraPos": [
             462.2170104980469,
             126.86669921875,
@@ -58,7 +58,7 @@
             },
             {
                 "name": "RenderPinhole",
-                "value": "true"
+                "value": "false"
             },
             {
                 "name": "RenderThinLensDoF",
@@ -66,11 +66,11 @@
             },
             {
                 "name": "RenderLensSimulationDoF",
-                "value": "true"
+                "value": "false"
             },
             {
                 "name": "RenderBokehConfig",
-                "value": "false"
+                "value": "true"
             },
             {
                 "name": "Reset",
@@ -89,8 +89,12 @@
                 "value": "true"
             },
             {
+                "name": "BokehConfigMode",
+                "value": "2"
+            },
+            {
                 "name": "DebugToggle",
-                "value": "true"
+                "value": "false"
             },
             {
                 "name": "HeliosApertureStop",
@@ -198,7 +202,23 @@
             },
             {
                 "name": "SmallLightRadius",
-                "value": "2.000000"
+                "value": "1.000000"
+            },
+            {
+                "name": "ConfigLightDistance",
+                "value": "500.000000"
+            },
+            {
+                "name": "ConfigLightCount",
+                "value": "8,0"
+            },
+            {
+                "name": "OnlyThisLightByIndex",
+                "value": "-1"
+            },
+            {
+                "name": "ConfigLightFieldWidth",
+                "value": "30.400000"
             },
             {
                 "name": "GatherDOF_UseNoiseTextures",

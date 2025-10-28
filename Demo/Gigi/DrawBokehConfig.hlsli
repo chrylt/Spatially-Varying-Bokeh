@@ -1,78 +1,137 @@
 // Forward Declarations
 float TestSphereTrace(in float3 rayPos, in float3 rayDir, in float4 sphere, out float3 normal);
 
-// Configuration Constants
-#define BCONF_USE_DIAGONAL 1                 // Set to 1 to render diagonal layout instead of grid
-static const float  BCONF_PLANE_DIST   = 2000.0f;  // Distance of light plane in front of camera
-static const float  BCONF_FIELD_WIDTH  = 1100.0f;  // Width of light distribution plane (world units)
-static const int    BCONF_LIGHTS_X     = 11;       // Grid resolution (horizontal)
-static const int    BCONF_LIGHTS_Y     = 7;        // Grid resolution (vertical)
-static const int    BCONF_DIAG_LIGHTS  = 8;       // Number of lights along the diagonal (used when BCONF_USE_DIAGONAL == 1)
+// Fixed configuration constants
+static const float3 BCONF_LIGHT_COLOR = float3(1.0f, 1.0f, 1.0f);
 
-// Derived Constants
-#if BCONF_USE_DIAGONAL
-static const int    BCONF_LIGHT_COUNT  = (BCONF_DIAG_LIGHTS > 0) ? BCONF_DIAG_LIGHTS : 1;
-#else
-static const int    BCONF_LIGHT_COUNT  = BCONF_LIGHTS_X * BCONF_LIGHTS_Y;
-#endif
+bool TraceLightsDiagonal(float3 pos, float3 dir, float3 planeCenter, float3 cameraRight, float3 cameraUp, float fieldWidth, float fieldHeight, int targetIndex, inout float globalHitT)
+{
+	uint diagCount = max(t_config_light_count.x, t_config_light_count.y);
+	diagCount = max(diagCount, 1u);
+
+	float halfWidth = fieldWidth * 0.5f;
+	float halfHeight = fieldHeight * 0.5f;
+	float3 diagonalStart = planeCenter;
+	float3 diagonalEnd = planeCenter + cameraRight * halfWidth + cameraUp * halfHeight;
+
+	bool anyHit = false;
+
+	for (uint i = 0u; i < diagCount; ++i)
+	{
+		int currentIndex = int(i);
+
+		if (targetIndex >= 0)
+		{
+			if (currentIndex < targetIndex)
+				continue;
+			if (currentIndex > targetIndex)
+				break;
+		}
+
+		float fraction = (diagCount > 1u) ? float(i) / float(diagCount - 1u) : 0.0f;
+		float3 lightPos = lerp(diagonalStart, diagonalEnd, fraction);
+
+		float3 sphereNormal;
+		float t = TestSphereTrace(pos, dir, float4(lightPos, t_smallLightRadius), sphereNormal);
+		if (t < 0.0f || t > globalHitT)
+		{
+			if (targetIndex >= 0)
+				break;
+			continue;
+		}
+
+		globalHitT = t;
+		anyHit = true;
+
+		if (targetIndex >= 0)
+			break;
+	}
+
+	return anyHit;
+}
+
+bool TraceLightsGrid(float3 pos, float3 dir, float3 planeCenter, float3 cameraRight, float3 cameraUp, float fieldWidth, float fieldHeight, int targetIndex, inout float globalHitT)
+{
+	uint gridLightsX = max(t_config_light_count.x, 1u);
+	uint gridLightsY = max(t_config_light_count.y, 1u);
+
+	float halfWidth = fieldWidth * 0.5f;
+	float halfHeight = fieldHeight * 0.5f;
+
+	bool anyHit = false;
+
+	for (uint y = 0u; y < gridLightsY; ++y)
+	{
+		float v = ((float(y) + 0.5f) / float(gridLightsY)) * 2.0f - 1.0f;
+
+		for (uint x = 0u; x < gridLightsX; ++x)
+		{
+			int currentIndex = int(y * gridLightsX + x);
+
+			if (targetIndex >= 0)
+			{
+				if (currentIndex < targetIndex)
+					continue;
+				if (currentIndex > targetIndex)
+					return anyHit;
+			}
+
+			float u = ((float(x) + 0.5f) / float(gridLightsX)) * 2.0f - 1.0f;
+
+			float3 lightPos = planeCenter
+				+ (u * halfWidth) * cameraRight
+				+ (v * halfHeight) * cameraUp;
+
+			float3 sphereNormal;
+			float t = TestSphereTrace(pos, dir, float4(lightPos, t_smallLightRadius), sphereNormal);
+			if (t < 0.0f || t > globalHitT)
+			{
+				if (targetIndex >= 0)
+					return anyHit;
+				continue;
+			}
+
+			globalHitT = t;
+			anyHit = true;
+
+			if (targetIndex >= 0)
+				return anyHit;
+		}
+	}
+
+	return anyHit;
+}
 
 bool VisualFieldLightContributions(float3 pos, float3 dir, uint2 screenDims, out float3 lightColor)
 {
-	// Camera basis
 	float3 cameraRight = mul(float4(1.0f, 0.0f, 0.0f, 0.0f), t_invViewMtx).xyz;
 	float3 cameraUp    = mul(float4(0.0f, 1.0f, 0.0f, 0.0f), t_invViewMtx).xyz;
 	float3 cameraFwd   = mul(float4(0.0f, 0.0f, -1.0f, 0.0f), t_invViewMtx).xyz;
 	float3 camPos      = t_cameraPos;
 
-	// Plane extents
-	float aspect      = float(screenDims.x) / float(screenDims.y);
-	float fieldHeight = BCONF_FIELD_WIDTH / aspect;
-	float3 planeCenter = camPos + cameraFwd * BCONF_PLANE_DIST;
+	float aspect = (screenDims.y > 0u) ? (float(screenDims.x) / float(screenDims.y)) : 1.0f;
+	float planeDistance = t_config_light_distance;
+
+	float horizontalFov = t_config_light_field_width;
+	horizontalFov = (horizontalFov > 3.14159265f) ? radians(horizontalFov) : horizontalFov;
+	float halfHorizontalFov = horizontalFov * 0.5f;
+	float distanceAbs = abs(planeDistance);
+	float fieldWidth = (halfHorizontalFov > 0.0f) ? (2.0f * distanceAbs * tan(halfHorizontalFov)) : 0.0f;
+	float fieldHeight = (aspect > 0.0f) ? (fieldWidth / aspect) : fieldWidth;
+
+	float3 planeCenter = camPos + cameraFwd * planeDistance;
 
 	float globalHitT = c_maxT;
 	bool anyHit = false;
 
-#if BCONF_USE_DIAGONAL
-	float halfWidth = BCONF_FIELD_WIDTH * 0.5f;
-	float halfHeight = fieldHeight * 0.5f;
-	float3 diagonalEnd = planeCenter + cameraRight * halfWidth + cameraUp * halfHeight;
-	int diagCount = (BCONF_DIAG_LIGHTS > 0) ? BCONF_DIAG_LIGHTS : 1;
-
-	for (int i = 0; i < diagCount; ++i)
+	if (t_config_only_diagonal)
 	{
-		float fraction = (diagCount > 1) ? (float(i) / float(diagCount - 1)) : 0.0f;
-		float3 lightPos = lerp(planeCenter, diagonalEnd, fraction);
-
-		float3 sphereNormal;
-		float t = TestSphereTrace(pos, dir, float4(lightPos, t_smallLightRadius), sphereNormal);
-		if (t < 0.0f || t > globalHitT)
-			continue;
-
-		globalHitT = t;
-		anyHit = true;
+		anyHit = TraceLightsDiagonal(pos, dir, planeCenter, cameraRight, cameraUp, fieldWidth, fieldHeight, t_only_this_light_by_index, globalHitT);
 	}
-#else
-	for (int y = 0; y < BCONF_LIGHTS_Y; ++y)
+	else
 	{
-		for (int x = 0; x < BCONF_LIGHTS_X; ++x)
-		{
-			float u = ((float(x) + 0.5f) / float(BCONF_LIGHTS_X)) * 2.0f - 1.0f; // [-1,1]
-			float v = ((float(y) + 0.5f) / float(BCONF_LIGHTS_Y)) * 2.0f - 1.0f; // [-1,1]
-
-			float3 lightPos = planeCenter
-				+ (u * (BCONF_FIELD_WIDTH  * 0.5f)) * cameraRight
-				+ (v * (fieldHeight     * 0.5f)) * cameraUp;
-
-			float3 sphereNormal;
-			float t = TestSphereTrace(pos, dir, float4(lightPos, t_smallLightRadius), sphereNormal);
-			if (t < 0.0f || t > globalHitT)
-				continue;
-
-			globalHitT = t;
-			anyHit = true;
-		}
+		anyHit = TraceLightsGrid(pos, dir, planeCenter, cameraRight, cameraUp, fieldWidth, fieldHeight, t_only_this_light_by_index, globalHitT);
 	}
-#endif
 
 	if (!anyHit)
 	{
@@ -80,6 +139,6 @@ bool VisualFieldLightContributions(float3 pos, float3 dir, uint2 screenDims, out
 		return false;
 	}
 
-	lightColor = float3(1.0f, 1.0f, 1.0f) * t_smallLightBrightness;
+	lightColor = BCONF_LIGHT_COLOR * t_smallLightBrightness;
 	return true;
 }

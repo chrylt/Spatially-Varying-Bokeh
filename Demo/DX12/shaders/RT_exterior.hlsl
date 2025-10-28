@@ -29,14 +29,14 @@ struct LensRNG
     static const int LKCP204Blue = 18;
     static const int LKCP204ICDF_White = 19;
     static const int LKCP204ICDF_Blue = 20;
+    static const int bokeh = 21;
 };
 
-struct DOFMode
+struct BokehConfigState
 {
-    static const int Off = 0;
-    static const int PathTraced = 1;
-    static const int PostProcessing = 2;
-    static const int Realistic = 3;
+    static const int NoDoF = 0;
+    static const int ThinLens = 1;
+    static const int RealisticLens = 2;
 };
 
 struct PixelJitterType
@@ -90,11 +90,18 @@ struct Struct__RayGenCB
     float2 AnamorphicScaling;
     uint Animate;
     float ApertureRadius;
+    int BokehConfigMode;
     float3 CameraPos;
-    int DOF;
+    uint2 ConfigLightCount;
+    float ConfigLightDistance;
+    float ConfigLightFieldWidth;
+    uint ConfigOnlyDiagonal;
+    uint DebugToggle;
     float DepthNearPlane;
     float FocalLength;
+    float FocusDistance;
     uint FrameIndex;
+    uint HeliosApertureStop;
     float _padding1;
     float4x4 InvViewMtx;
     float4x4 InvViewProjMtx;
@@ -110,34 +117,44 @@ struct Struct__RayGenCB
     uint NumBounces;
     float2 _padding3;
     float3 OcclusionSettings;
-    float _padding4;
+    int OnlyThisLightByIndex;
     float2 PetzvalScaling;
     float RayPosNormalNudge;
+    uint RenderBokehConfig;
+    uint RenderLensSimulationDoF;
+    uint RenderPinhole;
+    uint RenderThinLensDoF;
     uint SamplesPerPixelPerFrame;
+    float ShiftHeliosPosition;
     float SkyBrightness;
+    float2 _padding4;
     float3 SkyColor;
     float SmallLightBrightness;
     float SmallLightRadius;
-    float2 _padding5;
     float3 SmallLightsColor;
     uint SmallLightsColorful;
+    uint ToggleChromaticAberration;
+    float2 _padding5;
 };
 
 SamplerState PointWrapSampler : register(s0);
 SamplerState PointClampSampler : register(s1);
-RWTexture2D<float4> Output : register(u0);
-RWTexture2D<float> LinearDepth : register(u1);
+RWTexture2D<float4> PinholeOut : register(u0);
+RWTexture2D<float4> ThinlensOut : register(u1);
+RWTexture2D<float4> LensSimulationOut : register(u2);
+RWTexture2D<float4> BokehConfigOut : register(u3);
+RWTexture2D<float> LinearDepth : register(u4);
 RaytracingAccelerationStructure Scene : register(t0);
 StructuredBuffer<Struct_VBStruct> VertexBuffer : register(t1);
-RWStructuredBuffer<Struct_PixelDebugStruct> PixelDebug : register(u2);
-RWTexture2D<float> DebugTex : register(u3);
-Texture2D<float4> _loadedTexture_0 : register(t2);
-Texture2D<float4> _loadedTexture_1 : register(t3);
-Texture2D<float4> _loadedTexture_2 : register(t4);
-Texture2D<float4> _loadedTexture_3 : register(t5);
-Texture2D<float4> _loadedTexture_4 : register(t6);
-Texture2D<float4> _loadedTexture_5 : register(t7);
-Texture2D<float4> _loadedTexture_6 : register(t8);
+RWStructuredBuffer<Struct_PixelDebugStruct> PixelDebug : register(u5);
+RWTexture2D<float4> DebugLensOut : register(u6);
+Texture2D<float> _loadedTexture_0 : register(t2);
+Texture2D<float> _loadedTexture_1 : register(t3);
+Texture2D<float> _loadedTexture_2 : register(t4);
+Texture2D<float> _loadedTexture_3 : register(t5);
+Texture2D<float> _loadedTexture_4 : register(t6);
+Texture2D<float> _loadedTexture_5 : register(t7);
+Texture2D<float> _loadedTexture_6 : register(t8);
 Texture2D<float4> _loadedTexture_7 : register(t9);
 Texture2D<float4> _loadedTexture_8 : register(t10);
 Texture2D<float4> _loadedTexture_9 : register(t11);
@@ -152,27 +169,27 @@ Texture2D<float4> _loadedTexture_17 : register(t19);
 Texture2D<float4> _loadedTexture_18 : register(t20);
 Texture2D<float4> _loadedTexture_19 : register(t21);
 Texture2D<float4> _loadedTexture_20 : register(t22);
-Texture2D<float> _loadedTexture_21 : register(t23);
+Texture2D<float4> _loadedTexture_21 : register(t23);
 Texture2D<float4> _loadedTexture_22 : register(t24);
 Texture2D<float4> _loadedTexture_23 : register(t25);
 Texture2D<float4> _loadedTexture_24 : register(t26);
 Texture2D<float4> _loadedTexture_25 : register(t27);
 Texture2D<float4> _loadedTexture_26 : register(t28);
 Texture2D<float4> _loadedTexture_27 : register(t29);
-Texture2D<float4> _loadedTexture_28 : register(t30);
+Texture2D<float> _loadedTexture_28 : register(t30);
 Texture2D<float4> _loadedTexture_29 : register(t31);
 Texture2D<float4> _loadedTexture_30 : register(t32);
 Texture2D<float4> _loadedTexture_31 : register(t33);
 Texture2D<float4> _loadedTexture_32 : register(t34);
 Texture2D<float4> _loadedTexture_33 : register(t35);
-Texture2D<float> _loadedTexture_34 : register(t36);
+Texture2D<float4> _loadedTexture_34 : register(t36);
 Texture2D<float4> _loadedTexture_35 : register(t37);
 Texture2D<float4> _loadedTexture_36 : register(t38);
 Texture2D<float4> _loadedTexture_37 : register(t39);
 Texture2D<float4> _loadedTexture_38 : register(t40);
 Texture2D<float4> _loadedTexture_39 : register(t41);
 Texture2D<float4> _loadedTexture_40 : register(t42);
-Texture2D<float4> _loadedTexture_41 : register(t43);
+Texture2D<float> _loadedTexture_41 : register(t43);
 Texture2D<float4> _loadedTexture_42 : register(t44);
 Texture2D<float4> _loadedTexture_43 : register(t45);
 Texture2D<float4> _loadedTexture_44 : register(t46);
@@ -189,34 +206,34 @@ Texture2D<float4> _loadedTexture_54 : register(t56);
 Texture2D<float4> _loadedTexture_55 : register(t57);
 Texture2D<float4> _loadedTexture_56 : register(t58);
 Texture2D<float4> _loadedTexture_57 : register(t59);
-Texture2D<float> _loadedTexture_58 : register(t60);
+Texture2D<float4> _loadedTexture_58 : register(t60);
 Texture2D<float4> _loadedTexture_59 : register(t61);
-Texture2D<float> _loadedTexture_60 : register(t62);
+Texture2D<float4> _loadedTexture_60 : register(t62);
 Texture2D<float4> _loadedTexture_61 : register(t63);
 Texture2D<float4> _loadedTexture_62 : register(t64);
-Texture2D<float> _loadedTexture_63 : register(t65);
+Texture2D<float4> _loadedTexture_63 : register(t65);
 Texture2D<float4> _loadedTexture_64 : register(t66);
 Texture2D<float> _loadedTexture_65 : register(t67);
 Texture2D<float4> _loadedTexture_66 : register(t68);
-Texture2D<float4> _loadedTexture_67 : register(t69);
-Texture2D<float> _loadedTexture_68 : register(t70);
+Texture2D<float> _loadedTexture_67 : register(t69);
+Texture2D<float4> _loadedTexture_68 : register(t70);
 Texture2D<float4> _loadedTexture_69 : register(t71);
 Texture2D<float> _loadedTexture_70 : register(t72);
 Texture2D<float4> _loadedTexture_71 : register(t73);
 Texture2D<float> _loadedTexture_72 : register(t74);
 Texture2D<float4> _loadedTexture_73 : register(t75);
 Texture2D<float4> _loadedTexture_74 : register(t76);
-Texture2D<float4> _loadedTexture_75 : register(t77);
+Texture2D<float> _loadedTexture_75 : register(t77);
 Texture2D<float4> _loadedTexture_76 : register(t78);
-Texture2D<float4> _loadedTexture_77 : register(t79);
-Texture2D<float> _loadedTexture_78 : register(t80);
-Texture2D<float4> _loadedTexture_79 : register(t81);
+Texture2D<float> _loadedTexture_77 : register(t79);
+Texture2D<float4> _loadedTexture_78 : register(t80);
+Texture2D<float> _loadedTexture_79 : register(t81);
 Texture2D<float4> _loadedTexture_80 : register(t82);
 Texture2D<float4> _loadedTexture_81 : register(t83);
 Texture2D<float4> _loadedTexture_82 : register(t84);
 Texture2D<float4> _loadedTexture_83 : register(t85);
 Texture2D<float4> _loadedTexture_84 : register(t86);
-Texture2D<float4> _loadedTexture_85 : register(t87);
+Texture2D<float> _loadedTexture_85 : register(t87);
 Texture2D<float4> _loadedTexture_86 : register(t88);
 Texture2D<float4> _loadedTexture_87 : register(t89);
 Texture2D<float4> _loadedTexture_88 : register(t90);
@@ -254,33 +271,33 @@ Texture2D<float4> _loadedTexture_119 : register(t121);
 Texture2D<float4> _loadedTexture_120 : register(t122);
 Texture2D<float4> _loadedTexture_121 : register(t123);
 Texture2D<float4> _loadedTexture_122 : register(t124);
-Texture2D<float> _loadedTexture_123 : register(t125);
+Texture2D<float4> _loadedTexture_123 : register(t125);
 Texture2D<float4> _loadedTexture_124 : register(t126);
 Texture2D<float4> _loadedTexture_125 : register(t127);
 Texture2D<float4> _loadedTexture_126 : register(t128);
 Texture2D<float4> _loadedTexture_127 : register(t129);
 Texture2D<float4> _loadedTexture_128 : register(t130);
 Texture2D<float4> _loadedTexture_129 : register(t131);
-Texture2D<float4> _loadedTexture_130 : register(t132);
+Texture2D<float> _loadedTexture_130 : register(t132);
 Texture2D<float4> _loadedTexture_131 : register(t133);
 Texture2D<float4> _loadedTexture_132 : register(t134);
 Texture2D<float4> _loadedTexture_133 : register(t135);
 Texture2D<float4> _loadedTexture_134 : register(t136);
 Texture2D<float4> _loadedTexture_135 : register(t137);
-Texture2D<float> _loadedTexture_136 : register(t138);
+Texture2D<float4> _loadedTexture_136 : register(t138);
 Texture2D<float4> _loadedTexture_137 : register(t139);
 Texture2D<float4> _loadedTexture_138 : register(t140);
 Texture2D<float4> _loadedTexture_139 : register(t141);
 Texture2D<float4> _loadedTexture_140 : register(t142);
 Texture2D<float4> _loadedTexture_141 : register(t143);
-Texture2D<float> _loadedTexture_142 : register(t144);
-Texture2D<float4> _loadedTexture_143 : register(t145);
+Texture2D<float4> _loadedTexture_142 : register(t144);
+Texture2D<float> _loadedTexture_143 : register(t145);
 Texture2D<float4> _loadedTexture_144 : register(t146);
 Texture2D<float4> _loadedTexture_145 : register(t147);
 Texture2D<float4> _loadedTexture_146 : register(t148);
 Texture2D<float4> _loadedTexture_147 : register(t149);
 Texture2D<float4> _loadedTexture_148 : register(t150);
-Texture2D<float4> _loadedTexture_149 : register(t151);
+Texture2D<float> _loadedTexture_149 : register(t151);
 Texture2D<float4> _loadedTexture_150 : register(t152);
 Texture2D<float4> _loadedTexture_151 : register(t153);
 Texture2D<float4> _loadedTexture_152 : register(t154);
@@ -289,44 +306,51 @@ Texture2D<float4> _loadedTexture_154 : register(t156);
 Texture2D<float4> _loadedTexture_155 : register(t157);
 Texture2D<float4> _loadedTexture_156 : register(t158);
 Texture2D<float4> _loadedTexture_157 : register(t159);
-Texture2D<float> _loadedTexture_158 : register(t160);
+Texture2D<float4> _loadedTexture_158 : register(t160);
 Texture2D<float4> _loadedTexture_159 : register(t161);
 Texture2D<float4> _loadedTexture_160 : register(t162);
 Texture2D<float4> _loadedTexture_161 : register(t163);
 Texture2D<float4> _loadedTexture_162 : register(t164);
-Texture2D<float> _loadedTexture_163 : register(t165);
+Texture2D<float4> _loadedTexture_163 : register(t165);
 Texture2D<float4> _loadedTexture_164 : register(t166);
-Texture2D<float4> _loadedTexture_165 : register(t167);
+Texture2D<float> _loadedTexture_165 : register(t167);
 Texture2D<float4> _loadedTexture_166 : register(t168);
 Texture2D<float4> _loadedTexture_167 : register(t169);
 Texture2D<float4> _loadedTexture_168 : register(t170);
 Texture2D<float4> _loadedTexture_169 : register(t171);
-Texture2D<float4> _loadedTexture_170 : register(t172);
-Texture2DArray<float2> _loadedTexture_171 : register(t173);
-Texture2D<float> _loadedTexture_172 : register(t174);
-Texture2D<float> _loadedTexture_173 : register(t175);
-Texture2D<float> _loadedTexture_174 : register(t176);
-Texture2D<float> _loadedTexture_175 : register(t177);
-Texture2D<float> _loadedTexture_176 : register(t178);
-Texture2D<float> _loadedTexture_177 : register(t179);
-Texture2D<float> _loadedTexture_178 : register(t180);
-Texture2DArray<float2> _loadedTexture_179 : register(t181);
-Texture2DArray<float2> _loadedTexture_180 : register(t182);
-Texture2DArray<float2> _loadedTexture_181 : register(t183);
-Texture2DArray<float2> _loadedTexture_182 : register(t184);
+Texture2D<float> _loadedTexture_170 : register(t172);
+Texture2D<float4> _loadedTexture_171 : register(t173);
+Texture2D<float4> _loadedTexture_172 : register(t174);
+Texture2D<float4> _loadedTexture_173 : register(t175);
+Texture2D<float4> _loadedTexture_174 : register(t176);
+Texture2D<float4> _loadedTexture_175 : register(t177);
+Texture2D<float4> _loadedTexture_176 : register(t178);
+Texture2D<float4> _loadedTexture_177 : register(t179);
+Texture2DArray<float2> _loadedTexture_178 : register(t180);
+Texture2D<float> _loadedTexture_179 : register(t181);
+Texture2D<float> _loadedTexture_180 : register(t182);
+Texture2D<float> _loadedTexture_181 : register(t183);
+Texture2D<float> _loadedTexture_182 : register(t184);
 Texture2D<float> _loadedTexture_183 : register(t185);
-Texture2DArray<float2> _loadedTexture_184 : register(t186);
-Texture2DArray<float2> _loadedTexture_185 : register(t187);
-Texture2D<float> _loadedTexture_186 : register(t188);
+Texture2D<float> _loadedTexture_184 : register(t186);
+Texture2D<float> _loadedTexture_185 : register(t187);
+Texture2DArray<float2> _loadedTexture_186 : register(t188);
 Texture2DArray<float2> _loadedTexture_187 : register(t189);
 Texture2DArray<float2> _loadedTexture_188 : register(t190);
 Texture2DArray<float2> _loadedTexture_189 : register(t191);
-Texture2DArray<float2> _loadedTexture_190 : register(t192);
+Texture2D<float> _loadedTexture_190 : register(t192);
 Texture2DArray<float2> _loadedTexture_191 : register(t193);
 Texture2DArray<float2> _loadedTexture_192 : register(t194);
-Texture2DArray<float2> _loadedTexture_193 : register(t195);
+Texture2D<float> _loadedTexture_193 : register(t195);
 Texture2DArray<float2> _loadedTexture_194 : register(t196);
-Texture2D<float> _loadedTexture_195 : register(t197);
+Texture2DArray<float2> _loadedTexture_195 : register(t197);
+Texture2DArray<float2> _loadedTexture_196 : register(t198);
+Texture2DArray<float2> _loadedTexture_197 : register(t199);
+Texture2DArray<float2> _loadedTexture_198 : register(t200);
+Texture2DArray<float2> _loadedTexture_199 : register(t201);
+Texture2DArray<float2> _loadedTexture_200 : register(t202);
+Texture2DArray<float2> _loadedTexture_201 : register(t203);
+Texture2D<float> _loadedTexture_202 : register(t204);
 ConstantBuffer<Struct__RayGenCB> _RayGenCB : register(b0);
 
 #line 7
@@ -335,10 +359,53 @@ ConstantBuffer<Struct__RayGenCB> _RayGenCB : register(b0);
 #include "PCG.hlsli"
 #include "IndexToColor.hlsli"
 #include "LDSShuffler.hlsli"
-#include "s2h.h"
+#include "s2h\\include\\s2h.hlsl"
+#include "s2h\\include\\s2h_scatter.hlsl"
 
-static const float c_maxT = 10000.0f;
 static const float PI = 3.14159265358979323846f;
+static const float c_maxT = 10000.0f;
+
+// bridge tokens to include files
+static const uint t_aperture_stop = _RayGenCB.HeliosApertureStop;
+static const float t_focal_length = _RayGenCB.FocalLength;
+static const float t_focus_distance = _RayGenCB.FocusDistance;
+static const float4x4 t_invViewMtx = _RayGenCB.InvViewMtx;
+static const float3 t_cameraPos = _RayGenCB.CameraPos;
+static const float t_lens_position_shift = _RayGenCB.ShiftHeliosPosition;
+static const bool t_debug_toggle = (bool)_RayGenCB.DebugToggle;
+static const float t_smallLightRadius = _RayGenCB.SmallLightRadius;
+static const float t_smallLightBrightness = _RayGenCB.SmallLightBrightness;
+static const bool t_renderPinhole = (bool)_RayGenCB.RenderPinhole;
+static const bool t_renderThinLensDoF = (bool)_RayGenCB.RenderThinLensDoF;
+static const bool t_renderLensSimulationDoF = (bool)_RayGenCB.RenderLensSimulationDoF;
+static const bool t_renderBokehConfig = (bool)_RayGenCB.RenderBokehConfig;
+static const int t_bokehConfigMode = _RayGenCB.BokehConfigMode;
+static const float t_config_light_distance = _RayGenCB.ConfigLightDistance;
+static const uint2 t_config_light_count = _RayGenCB.ConfigLightCount;
+static const bool t_config_only_diagonal = (bool)_RayGenCB.ConfigOnlyDiagonal;
+static const int t_only_this_light_by_index = _RayGenCB.OnlyThisLightByIndex;
+static const float t_config_light_field_width = _RayGenCB.ConfigLightFieldWidth;
+
+float sampleHeliosApertureMask(float2 uv)
+{
+	switch(t_aperture_stop)
+	{
+		case 0: return _loadedTexture_0.SampleLevel(PointClampSampler, uv, 0).r;
+		case 1: return _loadedTexture_1.SampleLevel(PointClampSampler, uv, 0).r;
+		case 2: return _loadedTexture_2.SampleLevel(PointClampSampler, uv, 0).r;
+		case 3: return _loadedTexture_3.SampleLevel(PointClampSampler, uv, 0).r;
+		case 4: return _loadedTexture_4.SampleLevel(PointClampSampler, uv, 0).r;
+		case 5: return _loadedTexture_5.SampleLevel(PointClampSampler, uv, 0).r;
+		case 6: return _loadedTexture_6.SampleLevel(PointClampSampler, uv, 0).r;
+		default: return _loadedTexture_0.SampleLevel(PointClampSampler, uv, 0).r;
+	}
+}
+
+#include "common_structs.hlsli"
+#include "DrawBokehConfig.hlsli"
+#include "CameraLensData.hlsli"
+#include "LensSimulation.hlsli"
+#include "DrawDebugLens.hlsli"
 
 //#define FLT_MAX		3.402823466e+38
 #define FLT_MAX		c_maxT
@@ -376,319 +443,319 @@ MaterialInfo EvaluateMaterial_Exterior(uint materialID, float2 UV)
 	switch(materialID)
 	{
 		// Pavement_Curbstones
-		MATERIAL(0, _loadedTexture_0);
+		MATERIAL(0, _loadedTexture_7);
 
 		// Pavement_Cobblestone_Small_BLENDSHADER
-		MATERIAL(1, _loadedTexture_1);
+		MATERIAL(1, _loadedTexture_8);
 
 		// Pavement_Cobblestone_Big_BLENDSHADER
-		MATERIAL(2, _loadedTexture_2);
+		MATERIAL(2, _loadedTexture_9);
 
 		// Pavement_Cobblestone_02
-		MATERIAL(3, _loadedTexture_3);
+		MATERIAL(3, _loadedTexture_10);
 
 		// Pavement_Brick_BLENDSHADER
-		MATERIAL(4, _loadedTexture_4);
+		MATERIAL(4, _loadedTexture_11);
 
 		// Pavement_Ground_Wet
-		MATERIAL(5, _loadedTexture_5);
+		MATERIAL(5, _loadedTexture_12);
 
 		// Pavement_Manhole_Cover
-		MATERIAL(6, _loadedTexture_6);
+		MATERIAL(6, _loadedTexture_13);
 
 		// Pavement_Cobblestone_Wet_BLENDSHADER
-		MATERIAL(7, _loadedTexture_7);
+		MATERIAL(7, _loadedTexture_14);
 
 		// Pavement_Cobblestone_Wet_Leaves_BLENDSHADER
-		MATERIAL(8, _loadedTexture_7);
+		MATERIAL(8, _loadedTexture_14);
 
 		// Pavement_Cobblestone_01_BLENDSHADER
-		MATERIAL(9, _loadedTexture_8);
+		MATERIAL(9, _loadedTexture_15);
 
 		// Pavement_Cobble_Leaves_BLENDSHADER
-		MATERIAL(10, _loadedTexture_8);
+		MATERIAL(10, _loadedTexture_15);
 
 		// MASTER_Brick_Small_Red_BLENDSHADER
-		MATERIAL(11, _loadedTexture_9);
+		MATERIAL(11, _loadedTexture_16);
 
 		// Concrete3
-		MATERIAL(12, _loadedTexture_10);
+		MATERIAL(12, _loadedTexture_17);
 
 		// MASTER_Focus
-		MATERIAL(13, _loadedTexture_11);
+		MATERIAL(13, _loadedTexture_18);
 
 		// MASTER_Metal
-		MATERIAL(14, _loadedTexture_12);
+		MATERIAL(14, _loadedTexture_19);
 
 		// MASTER_Focus_Glass
-		MATERIAL(15, _loadedTexture_13);
+		MATERIAL(15, _loadedTexture_20);
 
 		// MASTER_Focus_Ornament
-		MATERIAL(16, _loadedTexture_14);
+		MATERIAL(16, _loadedTexture_21);
 
 		// MASTER_Bistro_Main_Door
-		MATERIAL(17, _loadedTexture_15);
+		MATERIAL(17, _loadedTexture_22);
 
 		// MASTER_Concrete_Grooved
-		MATERIAL(18, _loadedTexture_16);
+		MATERIAL(18, _loadedTexture_23);
 
 		// MASTER_Glass_Exterior
-		MATERIAL(19, _loadedTexture_17);
+		MATERIAL(19, _loadedTexture_24);
 
 		// MASTER_Light_Bulb
-		MATERIAL(20, _loadedTexture_11);
+		MATERIAL(20, _loadedTexture_18);
 
 		// MASTER_Wood_Painted3
-		MATERIAL(21, _loadedTexture_18);
+		MATERIAL(21, _loadedTexture_25);
 
 		// MASTER_Concrete1
-		MATERIAL(22, _loadedTexture_19);
+		MATERIAL(22, _loadedTexture_26);
 
 		// MASTER_Side_Letters
-		MATERIAL_Mapd(23, _loadedTexture_20, _loadedTexture_21);
+		MATERIAL_Mapd(23, _loadedTexture_27, _loadedTexture_28);
 
 		// Balcony_Concrete
-		MATERIAL(24, _loadedTexture_22);
+		MATERIAL(24, _loadedTexture_29);
 
 		// Balcony_Trims
-		MATERIAL(25, _loadedTexture_23);
+		MATERIAL(25, _loadedTexture_30);
 
 		// Balcony_Ornaments
-		MATERIAL(26, _loadedTexture_24);
+		MATERIAL(26, _loadedTexture_31);
 
 		// Balcony_Green_Wood
-		MATERIAL(27, _loadedTexture_25);
+		MATERIAL(27, _loadedTexture_32);
 
 		// MASTER_Glass_Dirty
 		MATERIAL_Glass(28, float3(0.2f, 0.2f, 0.2f), float3(0.5f, 0.5f, 0.5f));
 
 		// MASTER_Plastic
-		MATERIAL(29, _loadedTexture_26);
+		MATERIAL(29, _loadedTexture_33);
 
 		// MASTER_Grain_Metal
-		MATERIAL(30, _loadedTexture_27);
+		MATERIAL(30, _loadedTexture_34);
 
 		// MASTER_Concrete_Yellow
-		MATERIAL(31, _loadedTexture_28);
+		MATERIAL(31, _loadedTexture_35);
 
 		// MASTER_Concrete
-		MATERIAL(32, _loadedTexture_10);
+		MATERIAL(32, _loadedTexture_17);
 
 		// MASTER_Concrete_Smooth
-		MATERIAL(33, _loadedTexture_29);
+		MATERIAL(33, _loadedTexture_36);
 
 		// MASTER_Roofing_Shingle_Grey
-		MATERIAL(34, _loadedTexture_30);
+		MATERIAL(34, _loadedTexture_37);
 
 		// MASTER_Concrete_Plaster1_BLENDSHADER
-		MATERIAL(35, _loadedTexture_29);
+		MATERIAL(35, _loadedTexture_36);
 
 		// MASTER_Roofing_Shingle_Green
-		MATERIAL(36, _loadedTexture_31);
+		MATERIAL(36, _loadedTexture_38);
 
 		// MASTER_Trim_Cornice
-		MATERIAL(37, _loadedTexture_32);
+		MATERIAL(37, _loadedTexture_39);
 
 		// MASTER_Forge_Metal
-		MATERIAL_Mapd(38, _loadedTexture_33, _loadedTexture_34);
+		MATERIAL_Mapd(38, _loadedTexture_40, _loadedTexture_41);
 
 		// MASTER_Curtains
-		MATERIAL(39, _loadedTexture_35);
+		MATERIAL(39, _loadedTexture_42);
 
 		// MASTER_Metal_Pipe
-		MATERIAL(40, _loadedTexture_27);
+		MATERIAL(40, _loadedTexture_34);
 
 		// MASTER_Wood_Polished
-		MATERIAL(41, _loadedTexture_36);
+		MATERIAL(41, _loadedTexture_43);
 
 		// MASTER_Doors
-		MATERIAL(42, _loadedTexture_37);
+		MATERIAL(42, _loadedTexture_44);
 
 		// MASTER_Brick_Large_Beige_BLENDSHADER
-		MATERIAL(43, _loadedTexture_38);
+		MATERIAL(43, _loadedTexture_45);
 
 		// MASTER_Wood_Brown
-		MATERIAL(44, _loadedTexture_36);
+		MATERIAL(44, _loadedTexture_43);
 
 		// MASTER_Glass_Clean
 		MATERIAL_Glass(45, float3(0.2f, 0.2f, 0.2f), float3(0.5f, 0.5f, 0.5f));
 
 		// MASTER_Wood_Painted_Green
-		MATERIAL(46, _loadedTexture_39);
+		MATERIAL(46, _loadedTexture_46);
 
 		// MASTER_Concrete_Plaster
-		MATERIAL(47, _loadedTexture_29);
+		MATERIAL(47, _loadedTexture_36);
 
 		// MASTER_Black_Metal
-		MATERIAL(48, _loadedTexture_27);
+		MATERIAL(48, _loadedTexture_34);
 
 		// MASTER_Brick_Large_White
-		MATERIAL(49, _loadedTexture_40);
+		MATERIAL(49, _loadedTexture_47);
 
 		// MASTER_Building_Details
-		MATERIAL(50, _loadedTexture_41);
+		MATERIAL(50, _loadedTexture_48);
 
 		// MASTER_Wood_Painted_Cyan
-		MATERIAL(51, _loadedTexture_42);
+		MATERIAL(51, _loadedTexture_49);
 
 		// MASTER_Brick_Small_Red
-		MATERIAL(52, _loadedTexture_43);
+		MATERIAL(52, _loadedTexture_50);
 
 		// MASTER_Roofing_Metal_01
-		MATERIAL(53, _loadedTexture_44);
+		MATERIAL(53, _loadedTexture_51);
 
 		// MASTER_Room_Interior
-		MATERIAL(54, _loadedTexture_45);
+		MATERIAL(54, _loadedTexture_52);
 
 		// MASTER_Awning_Beams
-		MATERIAL(55, _loadedTexture_46);
+		MATERIAL(55, _loadedTexture_53);
 
 		// MASTER_Boulangerie
-		MATERIAL(56, _loadedTexture_47);
+		MATERIAL(56, _loadedTexture_54);
 
 		// MASTER_Frosted_Glass
-		MATERIAL(57, _loadedTexture_48);
+		MATERIAL(57, _loadedTexture_55);
 
 		// MASTER_Awning_Fabric_Cyan
-		MATERIAL(58, _loadedTexture_49);
+		MATERIAL(58, _loadedTexture_56);
 
 		// MASTER_Bronze_BLENDSHADER
-		MATERIAL(59, _loadedTexture_50);
+		MATERIAL(59, _loadedTexture_57);
 
 		// MASTER_Concrete_White
-		MATERIAL(60, _loadedTexture_51);
+		MATERIAL(60, _loadedTexture_58);
 
 		// MASTER_Awning_Fabric_Red
-		MATERIAL(61, _loadedTexture_52);
+		MATERIAL(61, _loadedTexture_59);
 
 		// MASTER_Book_Covers
-		MATERIAL(62, _loadedTexture_53);
+		MATERIAL(62, _loadedTexture_60);
 
 		// MASTER_Concrete_Smooth_BLENDSHADER
-		MATERIAL(63, _loadedTexture_54);
+		MATERIAL(63, _loadedTexture_61);
 
 		// MASTER_Wood_Painted_Green_BLENDSHADER
-		MATERIAL(64, _loadedTexture_55);
+		MATERIAL(64, _loadedTexture_62);
 
 		// MASTER_Rollup_Door
-		MATERIAL(65, _loadedTexture_56);
+		MATERIAL(65, _loadedTexture_63);
 
 		// MASTER_Details_Dark
-		MATERIAL(66, _loadedTexture_41);
+		MATERIAL(66, _loadedTexture_48);
 
 		// Foliage_Bux_Hedges46
-		MATERIAL_Mapd(67, _loadedTexture_57, _loadedTexture_58);
+		MATERIAL_Mapd(67, _loadedTexture_64, _loadedTexture_65);
 
 		// Foliage_Leaves
-		MATERIAL_Mapd(68, _loadedTexture_59, _loadedTexture_60);
+		MATERIAL_Mapd(68, _loadedTexture_66, _loadedTexture_67);
 
 		// Foliage_Trunk
-		MATERIAL(69, _loadedTexture_61);
+		MATERIAL(69, _loadedTexture_68);
 
 		// Foliage_Flowers
-		MATERIAL_Mapd(70, _loadedTexture_62, _loadedTexture_63);
+		MATERIAL_Mapd(70, _loadedTexture_69, _loadedTexture_70);
 
 		// Foliage_Paris_Flowers
-		MATERIAL_Mapd(71, _loadedTexture_64, _loadedTexture_65);
+		MATERIAL_Mapd(71, _loadedTexture_71, _loadedTexture_72);
 
 		// Foliage_Linde_Tree_Large_Trunk
-		MATERIAL(72, _loadedTexture_66);
+		MATERIAL(72, _loadedTexture_73);
 
 		// Foliage_Linde_Tree_Large_Orange_Leaves
-		MATERIAL_Mapd(73, _loadedTexture_67, _loadedTexture_68);
+		MATERIAL_Mapd(73, _loadedTexture_74, _loadedTexture_75);
 
 		// Foliage_Linde_Tree_Large_Green_Leaves
-		MATERIAL_Mapd(74, _loadedTexture_69, _loadedTexture_70);
+		MATERIAL_Mapd(74, _loadedTexture_76, _loadedTexture_77);
 
 		// Foliage_Ivy_leaf_a
-		MATERIAL_Mapd(75, _loadedTexture_71, _loadedTexture_72);
+		MATERIAL_Mapd(75, _loadedTexture_78, _loadedTexture_79);
 
 		// Foliage_Ivy_branches
-		MATERIAL(76, _loadedTexture_73);
+		MATERIAL(76, _loadedTexture_80);
 
 		// Streetlight_Glass
-		MATERIAL(77, _loadedTexture_74);
+		MATERIAL(77, _loadedTexture_81);
 
 		// Streetlight_Support_Bulb
-		MATERIAL(78, _loadedTexture_74);
+		MATERIAL(78, _loadedTexture_81);
 
 		// Paris_StringLights_01_White_Color
-		MATERIAL_Ke(79, _loadedTexture_75, float3(1.0f, 1.0f, 1.0f));
+		MATERIAL_Ke(79, _loadedTexture_82, float3(1.0f, 1.0f, 1.0f));
 
 		// Streetlight_Metal
-		MATERIAL(80, _loadedTexture_76);
+		MATERIAL(80, _loadedTexture_83);
 
 		// Streetlight_Chains
-		MATERIAL_Mapd(81, _loadedTexture_77, _loadedTexture_78);
+		MATERIAL_Mapd(81, _loadedTexture_84, _loadedTexture_85);
 
 		// Paris_Streetpivot
-		MATERIAL(82, _loadedTexture_79);
+		MATERIAL(82, _loadedTexture_86);
 
 		// ElectricBox
-		MATERIAL(83, _loadedTexture_80);
+		MATERIAL(83, _loadedTexture_87);
 
 		// Shopsign_Bakery
-		MATERIAL(84, _loadedTexture_81);
+		MATERIAL(84, _loadedTexture_88);
 
 		// Banner_Metal
-		MATERIAL(85, _loadedTexture_82);
+		MATERIAL(85, _loadedTexture_89);
 
 		// Shopsign_Book_Store
-		MATERIAL(86, _loadedTexture_83);
+		MATERIAL(86, _loadedTexture_90);
 
 		// Shopsign_Pharmacy
-		MATERIAL(87, _loadedTexture_84);
+		MATERIAL(87, _loadedTexture_91);
 
 		// Shopsign_Ties_Shop
-		MATERIAL(88, _loadedTexture_85);
+		MATERIAL(88, _loadedTexture_92);
 
 		// Spotlight_Main
-		MATERIAL(89, _loadedTexture_86);
+		MATERIAL(89, _loadedTexture_93);
 
 		// Spotlight_Emissive
-		MATERIAL_Ke(90, _loadedTexture_86, float3(1.0f, 1.0f, 1.0f) * 20.0f);
+		MATERIAL_Ke(90, _loadedTexture_93, float3(1.0f, 1.0f, 1.0f) * 20.0f);
 
 		// Spotlight_Glass
 		MATERIAL_Glass(91, float3(0.0f, 0.0f, 0.0f), float3(0.0f, 0.0f, 0.0f));
 
 		// Paris_StreetSign_01
-		MATERIAL(92, _loadedTexture_87);
+		MATERIAL(92, _loadedTexture_94);
 
 		// Paris_TrafficSign_A
-		MATERIAL(93, _loadedTexture_88);
+		MATERIAL(93, _loadedTexture_95);
 
 		// MenuSign_01
-		MATERIAL(94, _loadedTexture_89);
+		MATERIAL(94, _loadedTexture_96);
 
 		// MenuSign_02_Mesh
-		MATERIAL(95, _loadedTexture_90);
+		MATERIAL(95, _loadedTexture_97);
 
 		// MenuSign_02_Glass
-		MATERIAL(96, _loadedTexture_91);
+		MATERIAL(96, _loadedTexture_98);
 
 		// Trashcan
-		MATERIAL(97, _loadedTexture_92);
+		MATERIAL(97, _loadedTexture_99);
 
 		// Paris_StringLights_01_Green_Color
-		MATERIAL_Ke(98, _loadedTexture_93, float3(0.1f, 1.0f, 0.1f));
+		MATERIAL_Ke(98, _loadedTexture_100, float3(0.1f, 1.0f, 0.1f));
 
 		// Paris_StringLights_01_Red_Color
-		MATERIAL_Ke(99, _loadedTexture_94, float3(1.0f, 0.1f, 0.1f));
+		MATERIAL_Ke(99, _loadedTexture_101, float3(1.0f, 0.1f, 0.1f));
 
 		// Stringlights
-		MATERIAL(100, _loadedTexture_95);
+		MATERIAL(100, _loadedTexture_102);
 
 		// Paris_StringLights_01_Blue_Color
-		MATERIAL_Ke(101, _loadedTexture_75, float3(0.1f, 0.1f, 1.0f));
+		MATERIAL_Ke(101, _loadedTexture_82, float3(0.1f, 0.1f, 1.0f));
 
 		// Paris_StringLights_01_Pink_Color
-		MATERIAL_Ke(102, _loadedTexture_96, float3(1.0f, 0.1f, 1.0f));
+		MATERIAL_Ke(102, _loadedTexture_103, float3(1.0f, 0.1f, 1.0f));
 
 		// Paris_StringLights_01_Orange_Color
-		MATERIAL_Ke(103, _loadedTexture_97, float3(1.0f, 1.0f, 0.0f));
+		MATERIAL_Ke(103, _loadedTexture_104, float3(1.0f, 1.0f, 0.0f));
 
 		// Bollards
-		MATERIAL(104, _loadedTexture_98);
+		MATERIAL(104, _loadedTexture_105);
 
 		// Vespa_Odometer_Glass
 		MATERIAL_Glass(105, float3(0.2f, 0.2f, 0.2f), float3(0.5f, 0.5f, 0.5f));
@@ -697,79 +764,79 @@ MaterialInfo EvaluateMaterial_Exterior(uint materialID, float2 UV)
 		MATERIAL_Glass(106, float3(0.2f, 0.2f, 0.2f), float3(0.5f, 0.5f, 0.5f));
 
 		// Vespa
-		MATERIAL(107, _loadedTexture_99);
+		MATERIAL(107, _loadedTexture_106);
 
 		// Vespa_Odometer
-		MATERIAL(108, _loadedTexture_100);
+		MATERIAL(108, _loadedTexture_107);
 
 		// Antenna_Metal
-		MATERIAL(109, _loadedTexture_101);
+		MATERIAL(109, _loadedTexture_108);
 
 		// Antenna_Plastic_Blue
-		MATERIAL(110, _loadedTexture_102);
+		MATERIAL(110, _loadedTexture_109);
 
 		// Antenna_Plastic
-		MATERIAL(111, _loadedTexture_102);
+		MATERIAL(111, _loadedTexture_109);
 
 		// Awnings_Fabric
-		MATERIAL(112, _loadedTexture_103);
+		MATERIAL(112, _loadedTexture_110);
 
 		// Awnings_Beams
-		MATERIAL(113, _loadedTexture_104);
+		MATERIAL(113, _loadedTexture_111);
 
 		// Awnings_Hotel_Fabric
-		MATERIAL(114, _loadedTexture_105);
+		MATERIAL(114, _loadedTexture_112);
 
 		// Bistro_Sign_Main
-		MATERIAL(115, _loadedTexture_106);
+		MATERIAL(115, _loadedTexture_113);
 
 		// Bistro_Sign_Letters
-		MATERIAL(116, _loadedTexture_107);
+		MATERIAL(116, _loadedTexture_114);
 
 		// Plantpots
-		MATERIAL(117, _loadedTexture_108);
+		MATERIAL(117, _loadedTexture_115);
 
 		// Sidewalkbarrier
-		MATERIAL(118, _loadedTexture_109);
+		MATERIAL(118, _loadedTexture_116);
 
 		// Concrete
-		MATERIAL(119, _loadedTexture_110);
+		MATERIAL(119, _loadedTexture_117);
 
 		// Plaster
-		MATERIAL(120, _loadedTexture_111);
+		MATERIAL(120, _loadedTexture_118);
 
 		// Concrete2
-		MATERIAL(121, _loadedTexture_112);
+		MATERIAL(121, _loadedTexture_119);
 
 		// Concrete_Striped
-		MATERIAL(122, _loadedTexture_113);
+		MATERIAL(122, _loadedTexture_120);
 
 		// Chimneys_Metal
-		MATERIAL(123, _loadedTexture_114);
+		MATERIAL(123, _loadedTexture_121);
 
 		// Lantern
-		MATERIAL(124, _loadedTexture_115);
+		MATERIAL(124, _loadedTexture_122);
 
 		// Paris_Chair_01
-		MATERIAL(125, _loadedTexture_116);
+		MATERIAL(125, _loadedTexture_123);
 
 		// Paris_Table_Terrace
-		MATERIAL(126, _loadedTexture_117);
+		MATERIAL(126, _loadedTexture_124);
 
 		// Ashtray
-		MATERIAL(127, _loadedTexture_118);
+		MATERIAL(127, _loadedTexture_125);
 
 		// NapkinHolder
-		MATERIAL(128, _loadedTexture_119);
+		MATERIAL(128, _loadedTexture_126);
 
 		// Paris_LiquorBottle_01_Glass_Wine
-		MATERIAL(129, _loadedTexture_120);
+		MATERIAL(129, _loadedTexture_127);
 
 		// Paris_LiquorBottle_01_Caps
-		MATERIAL(130, _loadedTexture_121);
+		MATERIAL(130, _loadedTexture_128);
 
 		// Paris_LiquorBottle_01_Labels
-		MATERIAL_Mapd(131, _loadedTexture_122, _loadedTexture_123);
+		MATERIAL_Mapd(131, _loadedTexture_129, _loadedTexture_130);
 
 		// unknown material goes magenta
 		default:
@@ -792,92 +859,92 @@ MaterialInfo EvaluateMaterial_Interior(uint materialID, float2 UV)
 	switch(materialID)
 	{
 		// MASTER_Interior_01_Plaster
-		MATERIAL(0, _loadedTexture_10);
+		MATERIAL(0, _loadedTexture_17);
 
 		// MASTER_Interior_01_Wood
-		MATERIAL(1, _loadedTexture_124);
+		MATERIAL(1, _loadedTexture_131);
 
 		// MASTER_Interior_01_Wooden_stuco
-		MATERIAL(2, _loadedTexture_125);
+		MATERIAL(2, _loadedTexture_132);
 
 		// MASTER_Wood_Painted3
-		MATERIAL(3, _loadedTexture_18);
+		MATERIAL(3, _loadedTexture_25);
 
 		// MASTER_Interior_01_Plaster_Red
-		MATERIAL(4, _loadedTexture_126);
+		MATERIAL(4, _loadedTexture_133);
 
 		// MASTER_Interior_01_Grid
-		MATERIAL(5, _loadedTexture_127);
+		MATERIAL(5, _loadedTexture_134);
 
 		// MASTER_Interior_01_Brushed_Metal
-		MATERIAL(6, _loadedTexture_128);
+		MATERIAL(6, _loadedTexture_135);
 
 		// MASTER_Interior_01_Plaster2
-		MATERIAL(7, _loadedTexture_10);
+		MATERIAL(7, _loadedTexture_17);
 
 		// MASTER_Interior_01_Frozen_Glass
-		MATERIAL(8, _loadedTexture_48);
+		MATERIAL(8, _loadedTexture_55);
 
 		// MASTER_Interior_01_Floor_Tile_Hexagonal_BLENDSHADER
-		MATERIAL(9, _loadedTexture_129);
+		MATERIAL(9, _loadedTexture_136);
 
 		// MASTER_Interior_01_Glass
-		MATERIAL_Tr(10, _loadedTexture_130, 0.8f);
+		MATERIAL_Tr(10, _loadedTexture_137, 0.8f);
 
 		// MASTER_Interior_01_Paris_Bartrim
-		MATERIAL(11, _loadedTexture_131);
+		MATERIAL(11, _loadedTexture_138);
 
 		// MASTER_Interior_01_White_Plastic
-		MATERIAL(12, _loadedTexture_132);
+		MATERIAL(12, _loadedTexture_139);
 
 		// MASTER_Interior_01_Grid1
-		MATERIAL(13, _loadedTexture_133);
+		MATERIAL(13, _loadedTexture_140);
 
 		// MASTER_Interior_01_Material
-		MATERIAL(14, _loadedTexture_134);
+		MATERIAL(14, _loadedTexture_141);
 
 		// MASTER_Interior_01_Paris_Lantern
-		MATERIAL_MapKe_Mapd(15, _loadedTexture_115, _loadedTexture_135, _loadedTexture_136);
+		MATERIAL_MapKe_Mapd(15, _loadedTexture_122, _loadedTexture_142, _loadedTexture_143);
 
 		// curtainB1
-		MATERIAL(16, _loadedTexture_137);
+		MATERIAL(16, _loadedTexture_144);
 
 		// curtainA
-		MATERIAL(17, _loadedTexture_138);
+		MATERIAL(17, _loadedTexture_145);
 
 		// Paris_Ceiling_Lamp
-		MATERIAL_MapKe(18, _loadedTexture_139, _loadedTexture_140);
+		MATERIAL_MapKe(18, _loadedTexture_146, _loadedTexture_147);
 
 		// Paris_Wall_Light_Interior
-		MATERIAL_MapKeRRR(19, _loadedTexture_141, _loadedTexture_142);
+		MATERIAL_MapKeRRR(19, _loadedTexture_148, _loadedTexture_149);
 
 		// Paris_Wall_Bulb_Light
-		MATERIAL_Ke(20, _loadedTexture_75, float3(1.0f, 1.0f, 1.0f));
+		MATERIAL_Ke(20, _loadedTexture_82, float3(1.0f, 1.0f, 1.0f));
 
 		// Wall_Lamp
-		MATERIAL_MapKe(21, _loadedTexture_115, _loadedTexture_135);
+		MATERIAL_MapKe(21, _loadedTexture_122, _loadedTexture_142);
 
 		// Metal_Bronze_01
-		MATERIAL(22, _loadedTexture_143);
+		MATERIAL(22, _loadedTexture_150);
 
 		// Paris_CeilingFan
 		// This had a map_ke but the file doesn't exist on disk
-		MATERIAL(23, _loadedTexture_144);
+		MATERIAL(23, _loadedTexture_151);
 
 		// Paris_Beertap
-		MATERIAL(24, _loadedTexture_145);
+		MATERIAL(24, _loadedTexture_152);
 
 		// Paris_LiquorBottle_02_Glass
 		MATERIAL_Glass(25, float3(0.2f, 0.1f, 0.0f), float3(0.5f, 0.2f, 0.098f));
 
 		// Paris_LiquorBottle_01_Caps
-		MATERIAL(26, _loadedTexture_121);
+		MATERIAL(26, _loadedTexture_128);
 
 		// ToffeeJar_Label
-		MATERIAL(27, _loadedTexture_122);
+		MATERIAL(27, _loadedTexture_129);
 
 		// Paris_LiquorBottle_01_Glass_Wine
-		MATERIAL(28, _loadedTexture_120);
+		MATERIAL(28, _loadedTexture_127);
 
 		// Paris_LiquorBottle_01_Glass
 		MATERIAL_Glass(29, float3(0.2f, 0.2f, 0.2f), float3(0.212f, 0.212f, 0.212f));
@@ -886,109 +953,109 @@ MaterialInfo EvaluateMaterial_Interior(uint materialID, float2 UV)
 		MATERIAL_Glass(30, float3(0.2f, 0.2f, 0.2f), float3(0.212f, 0.255f, 0.333f));
 
 		// Metal_Worn_01
-		MATERIAL(31, _loadedTexture_101);
+		MATERIAL(31, _loadedTexture_108);
 
 		// Wood
-		MATERIAL(32, _loadedTexture_146);
+		MATERIAL(32, _loadedTexture_153);
 
 		// Plastic_02
-		MATERIAL(33, _loadedTexture_147);
+		MATERIAL(33, _loadedTexture_154);
 
 		// Paris_Painting_Metal
-		MATERIAL(34, _loadedTexture_148);
+		MATERIAL(34, _loadedTexture_155);
 
 		// Paris_Paintings
-		MATERIAL(35, _loadedTexture_149);
+		MATERIAL(35, _loadedTexture_156);
 
 		// Paris_Paintings_Glass
-		MATERIAL(36, _loadedTexture_91);
+		MATERIAL(36, _loadedTexture_98);
 
 		// Paris_BarStool
-		MATERIAL(37, _loadedTexture_150);
+		MATERIAL(37, _loadedTexture_157);
 
 		// ToffeeJar_Metal
-		MATERIAL(38, _loadedTexture_151);
+		MATERIAL(38, _loadedTexture_158);
 
 		// Paris_LiquorBottle_01_Glass1
 		MATERIAL_Glass(39, float3(0.03f, 0.05f, 0.04f), float3(0.4f, 0.4f, 0.4f));
 
 		// ToffeeJar_Toffee
-		MATERIAL(40, _loadedTexture_75);
+		MATERIAL(40, _loadedTexture_82);
 
 		// CookieJar_Glass1
 		MATERIAL_Glass(41, float3(0.1f, 0.1f, 0.1f), float3(0.3f, 0.3f, 0.3f));
 
 		// CookieJar_Cookies
-		MATERIAL(42, _loadedTexture_152);
+		MATERIAL(42, _loadedTexture_159);
 
 		// Paris_Radiator
-		MATERIAL(43, _loadedTexture_153);
+		MATERIAL(43, _loadedTexture_160);
 
 		// Cutlery_chrome
-		MATERIAL(44, _loadedTexture_154);
+		MATERIAL(44, _loadedTexture_161);
 
 		// Cutlery_details
-		MATERIAL_Mapd(45, _loadedTexture_155, _loadedTexture_155);
+		MATERIAL_Mapd(45, _loadedTexture_162, _loadedTexture_162);
 
 		// Paris_Table_03
-		MATERIAL(46, _loadedTexture_156);
+		MATERIAL(46, _loadedTexture_163);
 
 		// Plates_Details
-		MATERIAL_Mapd(47, _loadedTexture_157, _loadedTexture_158);
+		MATERIAL_Mapd(47, _loadedTexture_164, _loadedTexture_165);
 
 		// Plates_Ceramic
-		MATERIAL(48, _loadedTexture_159);
+		MATERIAL(48, _loadedTexture_166);
 
 		// NapkinHolder_01
-		MATERIAL(49, _loadedTexture_119);
+		MATERIAL(49, _loadedTexture_126);
 
 		// Paris_Table_cloth_01
-		MATERIAL(50, _loadedTexture_160);
+		MATERIAL(50, _loadedTexture_167);
 
 		// Metal_Chrome1
-		MATERIAL(51, _loadedTexture_151);
+		MATERIAL(51, _loadedTexture_158);
 
 		// Cloth
-		MATERIAL(52, _loadedTexture_161);
+		MATERIAL(52, _loadedTexture_168);
 
 		// Plants_plants
-		MATERIAL_Mapd(53, _loadedTexture_162,_loadedTexture_163);
+		MATERIAL_Mapd(53, _loadedTexture_169,_loadedTexture_170);
 
 		// Plants_Metal_Base_01
-		MATERIAL(54, _loadedTexture_101);
+		MATERIAL(54, _loadedTexture_108);
 
 		// Trolley_Plastic
-		MATERIAL(55, _loadedTexture_147);
+		MATERIAL(55, _loadedTexture_154);
 
 		// Trolley_Wheels
-		MATERIAL(56, _loadedTexture_92);
+		MATERIAL(56, _loadedTexture_99);
 
 		// Trolley_Wood_Painted
-		MATERIAL(57, _loadedTexture_164);
+		MATERIAL(57, _loadedTexture_171);
 
 		// WickerBasket
-		MATERIAL(58, _loadedTexture_165);
+		MATERIAL(58, _loadedTexture_172);
 
 		// Paris_Coasters_01
-		MATERIAL(59, _loadedTexture_166);
+		MATERIAL(59, _loadedTexture_173);
 
 		// Paris_Cashregister
-		MATERIAL(60, _loadedTexture_167);
+		MATERIAL(60, _loadedTexture_174);
 
 		// Paris_Cashregister_Buttons
-		MATERIAL(61, _loadedTexture_168);
+		MATERIAL(61, _loadedTexture_175);
 
 		// Paris_Cashregister_Glass
-		MATERIAL_Tr(62, _loadedTexture_91, 0.9f);
+		MATERIAL_Tr(62, _loadedTexture_98, 0.9f);
 
 		// Paris_Doormat
-		MATERIAL(63, _loadedTexture_169);
+		MATERIAL(63, _loadedTexture_176);
 
 		// Rubber_Bar_Mat_01
-		MATERIAL(64, _loadedTexture_170);
+		MATERIAL(64, _loadedTexture_177);
 
 		// Plastic_01
-		MATERIAL(65, _loadedTexture_147);
+		MATERIAL(65, _loadedTexture_154);
 
 		// unknown material goes magenta
 		default:
@@ -1070,7 +1137,7 @@ float3 SmallLightColor(int index)
 	return ret;
 }
 
-bool SmallLightContributions(float3 pos, float3 dir, float maxT, out float3 lightColor)
+bool SmallLightContributions(float3 pos, float3 dir, inout Struct_PixelDebugStruct pixelDebug, float maxT, out float3 lightColor, bool writeDebugHitT)
 {
 	// corner 878,380, 419
 	// 815, 380, 395
@@ -1121,6 +1188,10 @@ bool SmallLightContributions(float3 pos, float3 dir, float maxT, out float3 ligh
 		return false;
 	}
 
+	if (writeDebugHitT)
+	{
+		pixelDebug.HitT = globalHitT;
+	}
 	return true;
 }
 
@@ -1130,7 +1201,7 @@ float3 GetColorForRay(float3 pos, float3 dir, inout uint RNG, inout Struct_Pixel
 	float3 color = float3(0.0f, 0.0f, 0.0f);
 
 	// show small lights for primary ray
-	if(SmallLightContributions(pos, dir, c_maxT, color))
+	if(SmallLightContributions(pos, dir, pixelDebug, c_maxT, color, rayIndex == 0))
 		return color;
 
 	for (uint bounceIndex = 0; bounceIndex < _RayGenCB.NumBounces; ++bounceIndex)
@@ -1154,7 +1225,7 @@ float3 GetColorForRay(float3 pos, float3 dir, inout uint RNG, inout Struct_Pixel
 
 		// see if the ray hit the small lights
 		float3 smallLightColor = float3(0.0f, 0.0f, 0.0f);
-		if(SmallLightContributions(ray.Origin, ray.Direction, (payload.hitT < 0.0f ? c_maxT : payload.hitT), smallLightColor))
+		if(SmallLightContributions(ray.Origin, ray.Direction, pixelDebug, (payload.hitT < 0.0f ? c_maxT : payload.hitT), smallLightColor, false))
 		{
 			color += smallLightColor * throughput;
 			return color;
@@ -1350,253 +1421,6 @@ float2 SampleICDF(float2 rng, in Texture2D<float> MarginalCDF)
     return uv * 2.0f - 1.0f;
 }
 
-/************************************************************************************
-Spatially Varying Lens Simulation
-*************************************************************************************/
-
-struct Ray
-{
-	float3 Origin;
-	float3 Direction;
-};
-
-static float4 fishEyeLens[] = {
-	// Muller 16mm/f4 155.9FOV fisheye lens			
-	// MLD p164			
-	// Scaled to 10 mm from 100 mm			
-	// radius	sep	n	aperture
-	float4(30.2249f, 0.8335f, 1.620f, 30.34f),
-	float4(11.3931f, 7.4136f, 1.0f, 20.68f),
-	float4(75.2019f, 1.0654f, 1.639f, 17.80f),
-	float4(8.3349f, 11.1549f, 1.0f, 13.42f),
-	float4(9.5882f, 2.0054f, 1.654f, 9.02f),
-	float4(43.8677f, 5.3895f, 1.0f, 8.14f),
-	float4(	0.0f, 1.4163f, 0.0f, 6.08f),
-	float4(29.4541f, 2.1934f, 1.517f, 5.96f),
-	float4(-5.2265f, 0.9714f, 1.805f, 5.84f),
-	float4(-14.2884f, 0.0627f, 1.0f, 5.96f),
-	float4(-22.3726f, 0.9400f, 1.673f, 5.96f),
-	float4(-15.0404f, 25.0f,  1.0f, 6.52), // 12
-	float4(0.0f, 0.0f, 0.0f, 0.0f),
-	float4(0.0f, 0.0f, 0.0f, 0.0f),
-	float4(0.0f, 0.0f, 0.0f, 0.0f),
-	float4(0.0f, 0.0f, 0.0f, 0.0f),
-};
-
-static float wideAngleLens[] = {
-	// Wide-angle (38-degree) lens. Nakamura.			
-	// MLD, p. 360"			
-	// Scaled to 22 mm from 100 mm			
-	// radius   sep	      n       aperture
-	float4( 35.98738f, 1.21638f, 1.540f, 23.716f),
-	float4( 11.69718f, 9.99570f, 1.000f, 17.996f),
-	float4( 13.08714f, 5.12622f, 1.772f, 12.364f),
-	float4(-22.63294f, 1.76924f, 1.617f, 9.8120f),
-	float4( 71.05802f, 0.81840f, 1.000f, 9.1520f), 
-	float4( 0.000000f, 2.27766f, 0.000f, 8.7560f),
-	float4(-9.585840f, 2.43254f, 1.617f, 8.1840f),
-	float4(-11.28864f, 0.11506f, 1.000f, 9.1520f),
-	float4(-166.7765f, 3.09606f, 1.713f, 10.648f),
-	float4(-7.591100f,	1.32682f, 1.805f, 11.440f),
-	float4(-16.76620f, 3.98068f, 1.000f, 12.276f),
-	float4(-7.702860f, 1.21638f, 1.617f, 13.420f),
-	float4(-11.97328f, 5.00000f, 1.000f, 17.996f), //13
-	float4(0.0f, 0.0f, 0.0f, 0.0f),
-	float4(0.0f, 0.0f, 0.0f, 0.0f),
-	float4(0.0f, 0.0f, 0.0f, 0.0f),
-};
-
-static const float helios_sensor_width = 20.0f;
-static const float helios_max_focal_length = 58.0f; // mm
-static const float helios_scale = helios_max_focal_length / 100.0f; // helios unit scaling from patent
-static const float helios_aperture = 16.0f; // mm widest possible aperture is 16mm
-static const float helios_lens_radius = 16.0f;
-static const float helios_lens_length = 93.04f * helios_scale; // sum of sep in mm ~53.9632
-static const float helios_d_to_film = _RayGenCB.FocalLength; // mm
-
-static float4 helios[] = {
-	// Helios 44-2 58mm/f2 lens
-	// scaled from 100 units to 58mm
-	// 				radius								sep								n			aperture	
-	float4(	/*r1*/	83.6f    * helios_scale, 	/*d1*/ 	10.75f * helios_scale, 	/*n1*/	1.64238f, 	helios_lens_radius),
-	float4(	/*r2*/	321.0f   * helios_scale, 	/*l1*/	1.65f  * helios_scale, 	/*air*/	1.0f, 		helios_lens_radius),
-	float4(	/*r3*/	44.8f    * helios_scale, 	/*d2*/	15.55f * helios_scale, 	/*n2*/	1.62306f, 	helios_lens_radius),
-	float4( /*r4*/	-1150.0f * helios_scale, 	/*d3*/	5.05   * helios_scale, 	/*n3*/	1.57566f, 	helios_lens_radius),
-	float4( /*r5*/	28.3f    * helios_scale, 	/*l2*/	18.9/2 * helios_scale, 	/*air*/ 1.0f, 		helios_lens_radius),
-	float4( /*aperture*/		0.0f, 			/*l2*/	18.9/2 * helios_scale, 	/*air*/ 1.0f, 		helios_aperture),
-	float4( /*r6*/  -38.5f   * helios_scale, 	/*d4*/	5.05f  * helios_scale, 	/*n4*/	1.67270f, 	helios_lens_radius),
-	float4( /*r7*/	50.5f    * helios_scale, 	/*d5*/	21.22f * helios_scale, 	/*n5*/	1.64238f, 	helios_lens_radius),
-	float4( /*r8*/	-53.2f   * helios_scale, 	/*l3*/	0.97f  * helios_scale, 	/*air*/	1.0f, 		helios_lens_radius),
-	float4( /*r9*/	106.0f   * helios_scale, 	/*d6*/	13.9f  * helios_scale, 	/*n6*/	1.64238f, 	helios_lens_radius),
-	float4( /*r10*/	-120.0f  * helios_scale, 	/*f*/	helios_d_to_film, 		/*air*/	1.0, 		helios_lens_radius), //11
-	float4(0.0f, 0.0f, 0.0f, 0.0f),
-	float4(0.0f, 0.0f, 0.0f, 0.0f),
-	float4(0.0f, 0.0f, 0.0f, 0.0f),
-	float4(0.0f, 0.0f, 0.0f, 0.0f),
-	float4(0.0f, 0.0f, 0.0f, 0.0f),
-};
-
-
-// Ray-sphere intersection for a sphere at the origin
-// Returns true if intersection exists and writes the two t values to "intersections" (t0 <= t1)
-bool sphereRayIntersect(out float2 intersections, in float3 rayOrigin, in float3 rayDir, in float radius)
-{
-	intersections = float2(0.0f, 0.0f);
-
-	float a = dot(rayDir, rayDir);
-	// avoid divide by zero for degenerate rays
-	if (a <= 1e-12f)
-		return false;
-
-	float b = dot(rayOrigin, rayDir);
-	float c = dot(rayOrigin, rayOrigin) - radius * radius;
-
-	float discr = b * b - a * c;
-	if (discr < 0.0f)
-		return false;
-
-	float sqrtD = sqrt(discr);
-	float t0 = (-b - sqrtD) / a;
-	float t1 = (-b + sqrtD) / a;
-
-	if (t0 > t1)
-	{
-		float tmp = t0; t0 = t1; t1 = tmp;
-	}
-
-	intersections = float2(t0, t1);
-	return true;
-}
-
-bool intersect(float radius, float center, Ray ray, out float t, out float3 normal)
-{
-	t = 0.0f;
-	normal = float3(0, 0, 0);
-	
-	float2 intersections;
-	if (!sphereRayIntersect(intersections, ray.Origin - float3(0, 0, center), ray.Direction, radius))
-		return false;
-	
-	bool useCloserT = (ray.Direction.z > 0) ^ (radius < 0);
-	t = useCloserT ? min(intersections.y, intersections.x) : max(intersections.y, intersections.x);
-	
-	normal = normalize(ray.Origin + t * ray.Direction - float3(0, 0, center));
-
-	// If using the second intersection, we need to flip the normal	
-	normal *= useCloserT ? 1.0f : -1.0f;
-
-	return true;
-}
-
-bool traceLensesFromFilm(Ray ray, int elementCount, float4 lensElements[16], out Ray outRay)
-{
-	float z = 0.0f; // Start at the film, z = 0
-	
-	for (int i = elementCount - 1; i >= 0; i--)
-	{
-		const float curvatureRadius = lensElements[i].x;
-		const float thickness = lensElements[i].y;
-		const float etaI = lensElements[i].z;
-		const float etaT = i > 0 ? lensElements[i - 1].z : 1.0f;
-		const float apatureRadius = lensElements[i].w;
-		
-		z -= thickness;
-		float t = 0;
-		float3 normal = float3(0, 0, 0);
-		
-		bool isStop = (curvatureRadius == 0.0f);
-		if (isStop)
-		{
-			if (ray.Direction.z >= 0.0f)
-				return false;
-			t = (z - ray.Origin.z) / ray.Direction.z;
-		}
-		else
-		{
-			float center = z + curvatureRadius;
-			if (!intersect(curvatureRadius, center, ray, t, normal))
-			{
-				return false;
-			}
-		}
-		
-		float3 hit = ray.Origin + t * ray.Direction;
-		
-		float r2 = hit.x * hit.x + hit.y * hit.y;
-
-		if (r2 > (apatureRadius * apatureRadius))
-			return false;
-		
-		ray.Origin = hit;
-		
-		if (!isStop)
-		{
-			float3 refractDir = refract(ray.Direction, normal, etaI / (etaT > 0.0f ? etaT : 1.0f));
-			if (all(refractDir == 0.0f))
-				return false;
-			ray.Direction = normalize(refractDir);
-		}
-	} 
-	
-	outRay = ray;
-
-	return true;
-}
-
-// returns PDF
-float ApplyRealisticLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 px, inout uint RNG, in uint2 screenDims, in float2 screenPos)
-{
-	float3 cameraRight = mul(float4(1.0f, 0.0f, 0.0f, 0.0f), _RayGenCB.InvViewMtx).xyz;
-	float3 cameraUp = mul(float4(0.0f, 1.0f, 0.0f, 0.0f), _RayGenCB.InvViewMtx).xyz;
-	float3 cameraForward = mul(float4(0.0f, 0.0f, 1.0f, 0.0f), _RayGenCB.InvViewMtx).xyz;
-	float3 camPos = _RayGenCB.CameraPos;
-
-	// Map normalized screen position ([-1,1]) to film plane coordinates in mm
-	// compensate for mirroring along both axis
-	float aspect = float(screenDims.x) / float(screenDims.y);
-	float sensor_height = helios_sensor_width / aspect;
-	float filmX = -screenPos.x * (helios_sensor_width * 0.5f);
-	float filmY = -screenPos.y * (sensor_height * 0.5f);
-
-	// Conversion between world units and millimeters for lens/film space
-	float worldToMM = 10.0f;
-
-	// Sample a random point on the aperture using polar coordinates
-	float theta = RandomFloat01(RNG) * 2 * PI;
-	float r = sqrt(RandomFloat01(RNG));
-	float2 apertureOffset = float2(cos(theta), sin(theta)) * r;
-	apertureOffset *= helios_lens_radius;
-
-	// Construct film-space ray with the sampled aperture offset
-	Ray filmRay;
-	filmRay.Origin = float3(filmX, filmY, 0.0f);
-
-	// Aim ray at randomly sampled point on innermost lens element
-	float3 target = float3(apertureOffset.x, apertureOffset.y, -helios_d_to_film);
-	filmRay.Direction = normalize(target - filmRay.Origin);
-
-	// Trace through lens elements
-	Ray refracted;
-	if (traceLensesFromFilm(filmRay, 11, helios, refracted))
-	{
-		float invWorldToMM = 1.0f / worldToMM;
-		rayPos = camPos +
-				 (refracted.Origin.x * invWorldToMM) * cameraRight +
-				 (refracted.Origin.y * invWorldToMM) * cameraUp +
-				 (refracted.Origin.z * invWorldToMM) * cameraForward;
-		rayDir = normalize(
-			 refracted.Direction.x * cameraRight +
-			 refracted.Direction.y * cameraUp +
-			 refracted.Direction.z * cameraForward);
-		return 1.0f;
-	}
-	return 0.0f;
-}
-
-/************************************************************************************
-End of Spatially Varying Lens Simulation
-*************************************************************************************/
-
 // returns PDF
 float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 px, inout uint RNG, in uint2 screenDims)
 {
@@ -1615,7 +1439,7 @@ float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 
 	{
 		// Random point in square, then we'll adjust the PDF as appropraite
 		float2 uvwhite = float2(RandomFloat01(RNG), RandomFloat01(RNG));
-        float2 uvblue = ReadVec2STTexture(px, RNG, _loadedTexture_171, false);
+        float2 uvblue = ReadVec2STTexture(px, RNG, _loadedTexture_178, false);
 
 		// set uv to either uvwhite or uvblue, depending on the noise type
         float2 uv;
@@ -1648,7 +1472,7 @@ float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 
 			case LensRNG::UniformCircleWhite:
 			case LensRNG::UniformCircleBlue:
 			{
-				PDF = 1.0f - _loadedTexture_172.SampleLevel(PointClampSampler, uv, 0).r;
+				PDF = 1.0f - _loadedTexture_179.SampleLevel(PointClampSampler, uv, 0).r;
 				PDF = (PDF > 0.5f) ? 1.0f : 0.0f; // The circle image is anti aliased and that makes white specs from very small probabilities in the circle. This corrects that
 				PDF *= 0.781056f;
 				break;
@@ -1658,7 +1482,7 @@ float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 
             case LensRNG::UniformHexagonICDF_White:
             case LensRNG::UniformHexagonICDF_Blue:
 			{
-				PDF = 1.0f - _loadedTexture_173.SampleLevel(PointClampSampler, uv, 0).r;
+				PDF = 1.0f - _loadedTexture_180.SampleLevel(PointClampSampler, uv, 0).r;
 				PDF *= 0.652649f;
 				break;
             }
@@ -1667,14 +1491,14 @@ float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 
             case LensRNG::UniformStarICDF_White:
             case LensRNG::UniformStarICDF_Blue:
             {
-				PDF = 1.0f - _loadedTexture_174.SampleLevel(PointClampSampler, uv, 0).r;
+				PDF = 1.0f - _loadedTexture_181.SampleLevel(PointClampSampler, uv, 0).r;
 				PDF *= 0.368240f;
 				break;
 			}
 			case LensRNG::NonUniformStarWhite:
 			case LensRNG::NonUniformStarBlue:
 			{
-				PDF = 1.0f - _loadedTexture_175.SampleLevel(PointClampSampler, uv, 0).r;
+				PDF = 1.0f - _loadedTexture_182.SampleLevel(PointClampSampler, uv, 0).r;
 				// TODO: need to adjust the PDF to account for brightness change
 				//PDF *= 0.114055f;
 				break;
@@ -1682,7 +1506,7 @@ float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 
 			case LensRNG::NonUniformStar2White:
 			case LensRNG::NonUniformStar2Blue:
 			{
-				PDF = 1.0f - _loadedTexture_176.SampleLevel(PointClampSampler, uv, 0).r;
+				PDF = 1.0f - _loadedTexture_183.SampleLevel(PointClampSampler, uv, 0).r;
 				// TODO: need to adjust the PDF to account for brightness change
 				//PDF *= 0.051030f;
 				break;
@@ -1690,7 +1514,7 @@ float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 
 			case LensRNG::LKCP6White:
 			case LensRNG::LKCP6Blue:
 			{
-				PDF = _loadedTexture_177.SampleLevel(PointClampSampler, uv, 0).r;
+				PDF = _loadedTexture_184.SampleLevel(PointClampSampler, uv, 0).r;
 				// TODO: need to adjust the PDF to account for brightness change
 				//PDF *= 0.206046f;
 				break;
@@ -1700,7 +1524,7 @@ float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 
             case LensRNG::LKCP204ICDF_White:
             case LensRNG::LKCP204ICDF_Blue:
 			{
-				PDF = _loadedTexture_178.SampleLevel(PointClampSampler, uv, 0).r;
+				PDF = _loadedTexture_185.SampleLevel(PointClampSampler, uv, 0).r;
 				PDF *= 9.024792127102528f;  // Found by hand
 
 				//PDF /= 0.095413f; // Calculated, but odd that we have to divide, instead of multiply
@@ -1727,108 +1551,108 @@ float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 
 			}
 			case LensRNG::UniformCircleWhite:
 			{
-				offset = ReadVec2STTexture(px, RNG, _loadedTexture_179);
+				offset = ReadVec2STTexture(px, RNG, _loadedTexture_186);
 				break;
 			}
 			case LensRNG::UniformCircleBlue:
 			{
-				offset = ReadVec2STTexture(px, RNG, _loadedTexture_180);
+				offset = ReadVec2STTexture(px, RNG, _loadedTexture_187);
 				break;
 			}
 			case LensRNG::UniformHexagonWhite:
 			{
-				offset = ReadVec2STTexture(px, RNG, _loadedTexture_181);
+				offset = ReadVec2STTexture(px, RNG, _loadedTexture_188);
 				break;
 			}
 			case LensRNG::UniformHexagonBlue:
 			{
-				offset = ReadVec2STTexture(px, RNG, _loadedTexture_182);
+				offset = ReadVec2STTexture(px, RNG, _loadedTexture_189);
 				break;
             }
             case LensRNG::UniformHexagonICDF_White:
             {
                 float2 rng = float2(RandomFloat01(RNG), RandomFloat01(RNG));
-                offset = SampleICDF(rng, _loadedTexture_183);
+                offset = SampleICDF(rng, _loadedTexture_190);
                 break;
             }
             case LensRNG::UniformHexagonICDF_Blue:
             {
-                float2 rng = ReadVec2STTexture(px, RNG, _loadedTexture_171, false);
-                offset = SampleICDF(rng, _loadedTexture_183);
+                float2 rng = ReadVec2STTexture(px, RNG, _loadedTexture_178, false);
+                offset = SampleICDF(rng, _loadedTexture_190);
                 break;
             }
 			case LensRNG::UniformStarWhite:
 			{
-				offset = ReadVec2STTexture(px, RNG, _loadedTexture_184);
+				offset = ReadVec2STTexture(px, RNG, _loadedTexture_191);
 				break;
 			}
 			case LensRNG::UniformStarBlue:
 			{
-				offset = ReadVec2STTexture(px, RNG, _loadedTexture_185);
+				offset = ReadVec2STTexture(px, RNG, _loadedTexture_192);
 				break;
             }
             case LensRNG::UniformStarICDF_White:
             {
                 float2 rng = float2(RandomFloat01(RNG), RandomFloat01(RNG));
-                offset = SampleICDF(rng, _loadedTexture_186);
+                offset = SampleICDF(rng, _loadedTexture_193);
                 break;
             }
             case LensRNG::UniformStarICDF_Blue:
             {
-                float2 rng = ReadVec2STTexture(px, RNG, _loadedTexture_171, false);
-                offset = SampleICDF(rng, _loadedTexture_186);
+                float2 rng = ReadVec2STTexture(px, RNG, _loadedTexture_178, false);
+                offset = SampleICDF(rng, _loadedTexture_193);
                 break;
             }
 			case LensRNG::NonUniformStarWhite:
 			{
-				offset = ReadVec2STTexture(px, RNG, _loadedTexture_187);
+				offset = ReadVec2STTexture(px, RNG, _loadedTexture_194);
 				break;
 			}
 			case LensRNG::NonUniformStarBlue:
 			{
-				offset = ReadVec2STTexture(px, RNG, _loadedTexture_188);
+				offset = ReadVec2STTexture(px, RNG, _loadedTexture_195);
 				break;
 			}
 			case LensRNG::NonUniformStar2White:
 			{
-				offset = ReadVec2STTexture(px, RNG, _loadedTexture_189);
+				offset = ReadVec2STTexture(px, RNG, _loadedTexture_196);
 				break;
 			}
 			case LensRNG::NonUniformStar2Blue:
 			{
-				offset = ReadVec2STTexture(px, RNG, _loadedTexture_190);
+				offset = ReadVec2STTexture(px, RNG, _loadedTexture_197);
 				break;
 			}
 			case LensRNG::LKCP6White:
 			{
-				offset = ReadVec2STTexture(px, RNG, _loadedTexture_191);
+				offset = ReadVec2STTexture(px, RNG, _loadedTexture_198);
 				break;
 			}
 			case LensRNG::LKCP6Blue:
 			{
-				offset = ReadVec2STTexture(px, RNG, _loadedTexture_192);
+				offset = ReadVec2STTexture(px, RNG, _loadedTexture_199);
 				break;
 			}
 			case LensRNG::LKCP204White:
 			{
-				offset = ReadVec2STTexture(px, RNG, _loadedTexture_193);
+				offset = ReadVec2STTexture(px, RNG, _loadedTexture_200);
 				break;
 			}
 			case LensRNG::LKCP204Blue:
 			{
-				offset = ReadVec2STTexture(px, RNG, _loadedTexture_194);
+				offset = ReadVec2STTexture(px, RNG, _loadedTexture_201);
 				break;
             }
             case LensRNG::LKCP204ICDF_White:
             {
                 float2 rng = float2(RandomFloat01(RNG), RandomFloat01(RNG));
-                offset = SampleICDF(rng, _loadedTexture_195);
+                offset = SampleICDF(rng, _loadedTexture_202);
                 break;
             }
             case LensRNG::LKCP204ICDF_Blue:
             {
-                float2 rng = ReadVec2STTexture(px, RNG, _loadedTexture_171, false);
-                offset = SampleICDF(rng, _loadedTexture_195);
+                float2 rng = ReadVec2STTexture(px, RNG, _loadedTexture_178, false);
+                offset = SampleICDF(rng, _loadedTexture_202);
                 break;
             }
 		}
@@ -1899,29 +1723,36 @@ float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 
 }
 
 [shader("raygeneration")]
-#line 1575
+#line 1375
 void RayGen()
 {
-	const float2 dimensions = float2(DispatchRaysDimensions().xy);
-	Struct_PixelDebugStruct pixelDebug = (Struct_PixelDebugStruct)0;
-	uint3 px;
+	const uint2 dispatchDimsUInt = DispatchRaysDimensions().xy;
+	const float2 dispatchDims = float2(dispatchDimsUInt);
+	const uint2 pixelCoord = DispatchRaysIndex().xy;
 
-	// Average N rays per pixel into "color"
-	float3 color = float3(0.0f, 0.0f, 0.0f);
+	Struct_PixelDebugStruct pinholeDebug = (Struct_PixelDebugStruct)0;
+	Struct_PixelDebugStruct thinLensDebug = (Struct_PixelDebugStruct)0;
+	Struct_PixelDebugStruct lensSimDebug = (Struct_PixelDebugStruct)0;
+	Struct_PixelDebugStruct bokehDebug = (Struct_PixelDebugStruct)0;
+
+	float3 pinholeColor = float3(0.0f, 0.0f, 0.0f);
+	float3 thinLensColor = float3(0.0f, 0.0f, 0.0f);
+	float3 lensSimColor = float3(0.0f, 0.0f, 0.0f);
+	float3 bokehColor = float3(0.0f, 0.0f, 0.0f);
+
 	for (uint rayIndex = 0; rayIndex < _RayGenCB.SamplesPerPixelPerFrame; ++rayIndex)
 	{
-		px = uint3(DispatchRaysIndex().xy, _RayGenCB.FrameIndex * _RayGenCB.SamplesPerPixelPerFrame + rayIndex);
-		uint RNG = HashInit(px);
+		uint3 px = uint3(pixelCoord, _RayGenCB.FrameIndex * _RayGenCB.SamplesPerPixelPerFrame + rayIndex);
+		uint rngBase = HashInit(px);
+		uint rngForJitter = rngBase;
 
-		// Calculate the ray target in screen space
-		// Use sub pixel jitter to integrate over the whole pixel for anti aliasing.
 		float2 pixelJitter = float2(0.5f, 0.5f);
 		switch(_RayGenCB.JitterPixels)
 		{
 			case PixelJitterType::None: break;
 			case PixelJitterType::PerPixel:
 			{
-				pixelJitter = float2(RandomFloat01(RNG), RandomFloat01(RNG));
+				pixelJitter = float2(RandomFloat01(rngForJitter), RandomFloat01(rngForJitter));
 				break;
 			}
 			case PixelJitterType::Global:
@@ -1931,58 +1762,147 @@ void RayGen()
 				break;
 			}
 		}
-		float2 screenPos = (float2(px.xy)+pixelJitter) / dimensions * 2.0 - 1.0;
+
+		float2 screenPos = (float2(pixelCoord) + pixelJitter) / dispatchDims * 2.0f - 1.0f;
 		screenPos.y = -screenPos.y;
 
-		// Convert the ray target into world space
-		float4 world = mul(float4(screenPos, _RayGenCB.DepthNearPlane, 1), _RayGenCB.InvViewProjMtx);
+		float4 world = mul(float4(screenPos, _RayGenCB.DepthNearPlane, 1.0f), _RayGenCB.InvViewProjMtx);
 		world.xyz /= world.w;
 
-		// Apply depth of field through lens simulation
-		float3 rayPos = _RayGenCB.CameraPos;
-		float3 rayDir = normalize(world.xyz - _RayGenCB.CameraPos);
-		float PDF = 1.0f;
-		if (_RayGenCB.DOF == DOFMode::Realistic)
-			PDF = ApplyRealisticLensSimulation(rayPos, rayDir, px, RNG, DispatchRaysDimensions().xy, screenPos);
-		if (_RayGenCB.DOF == DOFMode::PathTraced)
-			PDF = ApplyDOFLensSimulation(rayPos, rayDir, px, RNG, DispatchRaysDimensions().xy);
+		Ray baseRay;
+		baseRay.Origin = _RayGenCB.CameraPos;
+		baseRay.Direction = normalize(world.xyz - _RayGenCB.CameraPos);
 
-		// Shoot the ray
-		float3 rayColor = (PDF > 0.0f) ? GetColorForRay(rayPos, rayDir, RNG, pixelDebug, rayIndex, px.xy) / PDF : float3(0.0f, 0.0f, 0.0f);
-		//rayColor *= 1000;
+		float sampleWeight = 1.0f / float(rayIndex + 1);
 
-		// accumualate the sample
-		color = lerp(color, rayColor, 1.0f / float(rayIndex+1));
+		uint rngPinhole = rngForJitter;
+		uint rngThinLens = wang_hash(rngPinhole);
+		uint rngLensSimulation = wang_hash(rngThinLens);
+		uint rngBokeh = wang_hash(rngLensSimulation);
+
+		if (t_renderPinhole)
+		{
+			float3 sampleColor = ShadeSceneSample(baseRay, 1.0f, pinholeDebug, rayIndex, px, rngPinhole);
+			pinholeColor = lerp(pinholeColor, sampleColor, sampleWeight);
+		}
+
+		if (t_renderThinLensDoF)
+		{
+			Ray thinRay = (Ray)0;
+			float thinPDF = 1.0f;
+			float3 thinOrigin = baseRay.Origin;
+			float3 thinDirection = baseRay.Direction;
+			thinPDF = ApplyDOFLensSimulation(thinOrigin, thinDirection, px, rngThinLens, dispatchDimsUInt);
+			thinRay.Origin = thinOrigin;
+			thinRay.Direction = thinDirection;
+
+			if (t_renderThinLensDoF)
+			{
+				float3 sampleColor = ShadeSceneSample(thinRay, thinPDF, thinLensDebug, rayIndex, px, rngThinLens);
+				thinLensColor = lerp(thinLensColor, sampleColor, sampleWeight);
+			}
+		}
+
+		if (t_renderLensSimulationDoF)
+		{
+			uint rngLensScene = rngLensSimulation;
+			float3 sampleColor = ((bool)_RayGenCB.ToggleChromaticAberration)
+				? TraceRealisticChromatic(baseRay, screenPos, dispatchDimsUInt, px, rngLensScene, lensSimDebug, rayIndex, false)
+				: TraceRealisticMonochrome(baseRay, screenPos, dispatchDimsUInt, px, rngLensScene, lensSimDebug, rayIndex, false);
+			lensSimColor = lerp(lensSimColor, sampleColor, sampleWeight);
+		}
+
+		if (t_renderBokehConfig)
+		{
+			float3 sampleColor = float3(0.0f, 0.0f, 0.0f);
+
+			switch (t_bokehConfigMode)
+			{
+				case BokehConfigState::NoDoF:
+				{
+					sampleColor = ShadeVisualFieldSample(baseRay, 1.0f, dispatchDimsUInt);
+					break;
+				}
+				case BokehConfigState::ThinLens:
+				{
+					Ray thinRay = (Ray)0;
+					float thinPDF = 1.0f;
+					float3 thinOrigin = baseRay.Origin;
+					float3 thinDirection = baseRay.Direction;
+					thinPDF = ApplyDOFLensSimulation(thinOrigin, thinDirection, px, rngThinLens, dispatchDimsUInt);
+					thinRay.Origin = thinOrigin;
+					thinRay.Direction = thinDirection;
+					sampleColor = ShadeVisualFieldSample(thinRay, thinPDF, dispatchDimsUInt);
+					break;
+				}
+				case BokehConfigState::RealisticLens:
+				{
+					uint rngLensBokeh = rngBokeh;
+					sampleColor = ((bool)_RayGenCB.ToggleChromaticAberration)
+						? TraceRealisticChromatic(baseRay, screenPos, dispatchDimsUInt, px, rngLensBokeh, bokehDebug, rayIndex, true)
+						: TraceRealisticMonochrome(baseRay, screenPos, dispatchDimsUInt, px, rngLensBokeh, bokehDebug, rayIndex, true);
+					break;
+				}
+				default:
+				{
+					break;
+				}
+			}
+
+			bokehColor = lerp(bokehColor, sampleColor, sampleWeight);
+		}
 	}
 
-	// Temporally accumulate "color"
-	float3 oldColor = Output[px.xy].rgb;
 	static const uint c_minFrameIndex = 5;
-	float alpha = (_RayGenCB.FrameIndex < c_minFrameIndex || !(bool)_RayGenCB.Accumulate || !(bool)_RayGenCB.Animate) ? 1.0f : 1.0f / float(_RayGenCB.FrameIndex - c_minFrameIndex +1);
+	float accumulationAlpha = (_RayGenCB.FrameIndex < c_minFrameIndex || !(bool)_RayGenCB.Accumulate || !(bool)_RayGenCB.Animate)
+		? 1.0f
+		: 1.0f / float(_RayGenCB.FrameIndex - c_minFrameIndex + 1);
 
-	color = lerp(oldColor, color, alpha);
-
-	// Write the temporally accumulated color
-	Output[px.xy] = float4(color, 1.0f);
-	LinearDepth[px.xy] = pixelDebug.HitT;
-
-	// Write pixel debug information for whatever pixel was clicked on
-	if (all(uint2(_RayGenCB.MouseState.xy) == px.xy))
+	if (t_renderPinhole)
 	{
-		pixelDebug.MousePos = _RayGenCB.MouseState.xy;
-		PixelDebug[0] = pixelDebug;
+		float3 oldColor = PinholeOut[pixelCoord].rgb;
+		float3 blended = lerp(oldColor, pinholeColor, accumulationAlpha);
+		PinholeOut[pixelCoord] = float4(blended, 1.0f);
+		LinearDepth[pixelCoord] = pinholeDebug.HitT;
+	}
+
+	if (t_renderThinLensDoF)
+	{
+		float3 oldColor = ThinlensOut[pixelCoord].rgb;
+		float3 blended = lerp(oldColor, thinLensColor, accumulationAlpha);
+		ThinlensOut[pixelCoord] = float4(blended, 1.0f);
+	}
+
+	if (t_renderLensSimulationDoF)
+	{
+		float3 oldColor = LensSimulationOut[pixelCoord].rgb;
+		float3 blended = lerp(oldColor, lensSimColor, accumulationAlpha);
+		LensSimulationOut[pixelCoord] = float4(blended, 1.0f);
+	}
+
+	if (t_renderBokehConfig)
+	{
+		float3 oldColor = BokehConfigOut[pixelCoord].rgb;
+		float3 blended = lerp(oldColor, bokehColor, accumulationAlpha);
+		BokehConfigOut[pixelCoord] = float4(blended, 1.0f);
+	}
+
+	if (all(uint2(_RayGenCB.MouseState.xy) == pixelCoord))
+	{
+		pinholeDebug.MousePos = _RayGenCB.MouseState.xy;
+		PixelDebug[0] = pinholeDebug;
 	}
 }
 
 [shader("miss")]
-#line 1649
+#line 1545
 void Miss(inout Payload payload : SV_RayPayload)
 {
 	payload.hitT = -1.0f;
 }
 
 [shader("closesthit")]
-#line 1654
+#line 1550
 void ClosestHit(inout Payload payload : SV_RayPayload, in BuiltInTriangleIntersectionAttributes intersection : SV_IntersectionAttributes)
 {
 	payload.hitT = RayTCurrent();

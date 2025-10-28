@@ -29,6 +29,7 @@ struct LensRNG
     static const int LKCP204Blue = 18;
     static const int LKCP204ICDF_White = 19;
     static const int LKCP204ICDF_Blue = 20;
+    static const int bokeh = 21;
 };
 
 struct NoiseTexExtends

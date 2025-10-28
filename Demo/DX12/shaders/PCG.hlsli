@@ -8,7 +8,7 @@
 #define PRIME32_7 2891336453u
 #define PRIME32_8 277803737u
 
-/*
+
 uint wang_hash(inout uint seed)
 {
     seed = uint(seed ^ uint(61)) ^ uint(seed >> uint(16));
@@ -18,7 +18,7 @@ uint wang_hash(inout uint seed)
     seed = seed ^ (seed >> 15);
     return seed;
 }
-*/
+
 
 uint HashPCG(inout uint val)
 {

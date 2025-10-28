@@ -49,14 +49,14 @@ namespace FastBokeh
         LKCP204Blue,
         LKCP204ICDF_White,
         LKCP204ICDF_Blue,
+        bokeh,
     };
 
-    enum class DOFMode: int
+    enum class BokehConfigState: int
     {
-        Off,
-        PathTraced,
-        PostProcessing,
-        Realistic,
+        NoDoF,
+        ThinLens,
+        RealisticLens,
     };
 
     enum class PixelJitterType: int
@@ -104,6 +104,7 @@ namespace FastBokeh
         LKCP204Blue,
         LKCP204ICDF_White,
         LKCP204ICDF_Blue,
+        bokeh,
     };
 
     enum class GatherDOF_NoiseTexExtends: int
@@ -147,18 +148,18 @@ namespace FastBokeh
             case LensRNG::LKCP204Blue: return displayString ? "LKCP204Blue" : "LKCP204Blue";
             case LensRNG::LKCP204ICDF_White: return displayString ? "LKCP204ICDF_White" : "LKCP204ICDF_White";
             case LensRNG::LKCP204ICDF_Blue: return displayString ? "LKCP204ICDF_Blue" : "LKCP204ICDF_Blue";
+            case LensRNG::bokeh: return displayString ? "bokeh" : "bokeh";
             default: return nullptr;
         }
     }
 
-    inline const char* EnumToString(DOFMode value, bool displayString = false)
+    inline const char* EnumToString(BokehConfigState value, bool displayString = false)
     {
         switch(value)
         {
-            case DOFMode::Off: return displayString ? "Off" : "Off";
-            case DOFMode::PathTraced: return displayString ? "PathTraced" : "PathTraced";
-            case DOFMode::PostProcessing: return displayString ? "PostProcessing" : "PostProcessing";
-            case DOFMode::Realistic: return displayString ? "Realistic" : "Realistic";
+            case BokehConfigState::NoDoF: return displayString ? "NoDoF" : "NoDoF";
+            case BokehConfigState::ThinLens: return displayString ? "ThinLens" : "ThinLens";
+            case BokehConfigState::RealisticLens: return displayString ? "RealisticLens" : "RealisticLens";
             default: return nullptr;
         }
     }
@@ -222,6 +223,7 @@ namespace FastBokeh
             case GatherDOF_LensRNG::LKCP204Blue: return displayString ? "LKCP204Blue" : "LKCP204Blue";
             case GatherDOF_LensRNG::LKCP204ICDF_White: return displayString ? "LKCP204ICDF_White" : "LKCP204ICDF_White";
             case GatherDOF_LensRNG::LKCP204ICDF_Blue: return displayString ? "LKCP204ICDF_Blue" : "LKCP204ICDF_Blue";
+            case GatherDOF_LensRNG::bokeh: return displayString ? "bokeh" : "bokeh";
             default: return nullptr;
         }
     }
@@ -277,11 +279,18 @@ namespace FastBokeh
             float2 AnamorphicScaling = {1.000000f, 1.000000f};  // Defaults to 1.0, 1.0 for no anamorphic effects. Elongates the aperture, does not simulate anamorphic elements.
             unsigned int Animate = true;
             float ApertureRadius = 1.000000f;
+            int BokehConfigMode = (int)BokehConfigState::0;
             float3 CameraPos = {0.000000f, 0.000000f, 0.000000f};
-            int DOF = (int)DOFMode::Off;
+            uint2 ConfigLightCount = {0,0};  // the amount of lights rendered, 2D for grid, 1D for diagonal
+            float ConfigLightDistance = 2000.000000f;  // distance of lights to camera in world units (cm)
+            float ConfigLightFieldWidth = 1000.000000f;  // width of lights field in world units (cm)
+            unsigned int ConfigOnlyDiagonal = 1;  // render diagonal lights instead of grid
+            unsigned int DebugToggle = 0;
             float DepthNearPlane = 0.100000f;
             float FocalLength = 28.000000f;
+            float FocusDistance = 45.000000f;  // Distance of focus in scene units (cm)
             uint FrameIndex = 0;
+            uint HeliosApertureStop = 6;
             float _padding1 = 0.000000f;  // Padding
             float4x4 InvViewMtx = {0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f};
             float4x4 InvViewProjMtx = {0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000f};
@@ -297,23 +306,30 @@ namespace FastBokeh
             uint NumBounces = 4;  // How many bounces the rays are allowed
             float2 _padding3 = {0.000000f, 0.000000f};  // Padding
             float3 OcclusionSettings = {1.000000f, 1.000000f, 1.000000f};  // Pushes the bounding square of the lens outwards and clips against a unit circle. 1,1,1 means no occlusion. x is how far from the center of the screen to start moving the square. 0 is center, 1 is the corner.  y is how much to scale the lens bounding square by.  z is how far to move the square, as the pixel is farther from where the occlusion begins. Reasonable settings are 0, 0.1, 1.25.
-            float _padding4 = 0.000000f;  // Padding
+            int OnlyThisLightByIndex = -1;  // -1 is render all the lights, otherwise only light with according index is rendered
             float2 PetzvalScaling = {1.000000f, 1.000000f};  // Scales bokeh on each axis depending on screen position. Fakes the effect. Defaults to 1.0, 1.0 for no elongation.
             float RayPosNormalNudge = 0.100000f;
+            unsigned int RenderBokehConfig = 0;
+            unsigned int RenderLensSimulationDoF = 0;
+            unsigned int RenderPinhole = 1;
+            unsigned int RenderThinLensDoF = 0;
             uint SamplesPerPixelPerFrame = 1;
+            float ShiftHeliosPosition = 0.000000f;  // Shift the position of the helios lens backward in millimeters
             float SkyBrightness = 10.000000f;
+            float2 _padding4 = {0.000000f, 0.000000f};  // Padding
             float3 SkyColor = {1.000000f, 1.000000f, 1.000000f};
             float SmallLightBrightness = 1.000000f;
             float SmallLightRadius = 1.000000f;
-            float2 _padding5 = {0.000000f, 0.000000f};  // Padding
             float3 SmallLightsColor = {1.000000f, 1.000000f, 1.000000f};
             unsigned int SmallLightsColorful = false;  // If true, makes the small lights colorful, else makes them all the same color
+            unsigned int ToggleChromaticAberration = 0;
+            float2 _padding5 = {0.000000f, 0.000000f};  // Padding
         };
 
         struct Struct__GatherDOF_SetupCSCB
         {
             float GatherDOF_FarTransitionRegion = 200.000000f;  // Fade distance in world units
-            float GatherDOF_FocalDistance = 500.000000f;  // Anything closer than this is considered near field
+            float GatherDOF_FocalDistance = 600.000000f;  // Anything closer than this is considered near field
             float GatherDOF_FocalLength = 75.000000f;  // Focal length in mm (Camera property e.g. 75mm)
             float GatherDOF_FocalRegion = 100.000000f;  // The size in world units of the middle range which is in focus
             float GatherDOF_NearTransitionRegion = 50.000000f;  // Fade distance in world units
@@ -353,17 +369,11 @@ namespace FastBokeh
             unsigned int GatherDOF_DoFarField = true;  // Whether or not to do the far field
             unsigned int GatherDOF_DoNearField = true;  // Whether or not to do the near field
             float GatherDOF_FarTransitionRegion = 200.000000f;  // Fade distance in world units
-            float GatherDOF_FocalDistance = 500.000000f;  // Anything closer than this is considered near field
+            float GatherDOF_FocalDistance = 600.000000f;  // Anything closer than this is considered near field
             float GatherDOF_FocalLength = 75.000000f;  // Focal length in mm (Camera property e.g. 75mm)
             float GatherDOF_FocalRegion = 100.000000f;  // The size in world units of the middle range which is in focus
             float GatherDOF_NearTransitionRegion = 50.000000f;  // Fade distance in world units
             float GatherDOF_Scale = 0.500000f;  // Camera property e.g. 0.5f, like aperture
-        };
-
-        struct Struct__GaussBlur_GaussBlurCSCB
-        {
-            float GaussBlur_Sigma = 1.000000f;  // Strength of blur. Standard deviation of gaussian distribution.
-            float3 _padding0 = {0.000000f, 0.000000f, 0.000000f};  // Padding
         };
 
         struct Struct__TemporalAccumulation_AccumulateCB
@@ -415,15 +425,13 @@ namespace FastBokeh
         uint variable_FrameIndex = 0;
         const bool variable___literal_0 = false;  // Made to replace variable "sRGB" with a constant value in subgraph node "GatherDOF"
         uint variable_GatherDOF_FrameIndex = 0;
-        const float variable___literal_1 = 0.995000f;  // Made to replace variable "Support" with a constant value in subgraph node "GaussBlur"
-        const bool variable___literal_2 = false;  // Made to replace variable "sRGB" with a constant value in subgraph node "GaussBlur"
 
         ID3D12Resource* texture_ColorHDR = nullptr;
         unsigned int texture_ColorHDR_size[3] = { 0, 0, 0 };
         unsigned int texture_ColorHDR_numMips = 0;
         DXGI_FORMAT texture_ColorHDR_format = DXGI_FORMAT_UNKNOWN;
         static const D3D12_RESOURCE_FLAGS texture_ColorHDR_flags =  D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;
-        const D3D12_RESOURCE_STATES c_texture_ColorHDR_endingState = D3D12_RESOURCE_STATE_COPY_SOURCE;
+        const D3D12_RESOURCE_STATES c_texture_ColorHDR_endingState = D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE;
 
         ID3D12Resource* buffer_PixelDebug = nullptr;
         DXGI_FORMAT buffer_PixelDebug_format = DXGI_FORMAT_UNKNOWN; // For typed buffers, the type of the buffer
@@ -446,6 +454,27 @@ namespace FastBokeh
         DXGI_FORMAT texture_DebugTex_format = DXGI_FORMAT_UNKNOWN;
         static const D3D12_RESOURCE_FLAGS texture_DebugTex_flags =  D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;
         const D3D12_RESOURCE_STATES c_texture_DebugTex_endingState = D3D12_RESOURCE_STATE_UNORDERED_ACCESS;
+
+        ID3D12Resource* texture_ColorHDR_ = nullptr;
+        unsigned int texture_ColorHDR__size[3] = { 0, 0, 0 };
+        unsigned int texture_ColorHDR__numMips = 0;
+        DXGI_FORMAT texture_ColorHDR__format = DXGI_FORMAT_UNKNOWN;
+        static const D3D12_RESOURCE_FLAGS texture_ColorHDR__flags =  D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;
+        const D3D12_RESOURCE_STATES c_texture_ColorHDR__endingState = D3D12_RESOURCE_STATE_UNORDERED_ACCESS;
+
+        ID3D12Resource* texture_ColorHDR__ = nullptr;
+        unsigned int texture_ColorHDR___size[3] = { 0, 0, 0 };
+        unsigned int texture_ColorHDR___numMips = 0;
+        DXGI_FORMAT texture_ColorHDR___format = DXGI_FORMAT_UNKNOWN;
+        static const D3D12_RESOURCE_FLAGS texture_ColorHDR___flags =  D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;
+        const D3D12_RESOURCE_STATES c_texture_ColorHDR___endingState = D3D12_RESOURCE_STATE_UNORDERED_ACCESS;
+
+        ID3D12Resource* texture_ColorHDR___ = nullptr;
+        unsigned int texture_ColorHDR____size[3] = { 0, 0, 0 };
+        unsigned int texture_ColorHDR____numMips = 0;
+        DXGI_FORMAT texture_ColorHDR____format = DXGI_FORMAT_UNKNOWN;
+        static const D3D12_RESOURCE_FLAGS texture_ColorHDR____flags =  D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;
+        const D3D12_RESOURCE_STATES c_texture_ColorHDR____endingState = D3D12_RESOURCE_STATE_UNORDERED_ACCESS;
 
         ID3D12Resource* texture_GatherDOF_FarFieldColorCoC = nullptr;
         unsigned int texture_GatherDOF_FarFieldColorCoC_size[3] = { 0, 0, 0 };
@@ -1896,6 +1925,55 @@ namespace FastBokeh
         static const D3D12_RESOURCE_FLAGS texture__loadedTexture_195_flags =  D3D12_RESOURCE_FLAG_NONE;
         const D3D12_RESOURCE_STATES c_texture__loadedTexture_195_endingState = D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE;
 
+        ID3D12Resource* texture__loadedTexture_196 = nullptr;
+        unsigned int texture__loadedTexture_196_size[3] = { 0, 0, 0 };
+        unsigned int texture__loadedTexture_196_numMips = 0;
+        DXGI_FORMAT texture__loadedTexture_196_format = DXGI_FORMAT_UNKNOWN;
+        static const D3D12_RESOURCE_FLAGS texture__loadedTexture_196_flags =  D3D12_RESOURCE_FLAG_NONE;
+        const D3D12_RESOURCE_STATES c_texture__loadedTexture_196_endingState = D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE;
+
+        ID3D12Resource* texture__loadedTexture_197 = nullptr;
+        unsigned int texture__loadedTexture_197_size[3] = { 0, 0, 0 };
+        unsigned int texture__loadedTexture_197_numMips = 0;
+        DXGI_FORMAT texture__loadedTexture_197_format = DXGI_FORMAT_UNKNOWN;
+        static const D3D12_RESOURCE_FLAGS texture__loadedTexture_197_flags =  D3D12_RESOURCE_FLAG_NONE;
+        const D3D12_RESOURCE_STATES c_texture__loadedTexture_197_endingState = D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE;
+
+        ID3D12Resource* texture__loadedTexture_198 = nullptr;
+        unsigned int texture__loadedTexture_198_size[3] = { 0, 0, 0 };
+        unsigned int texture__loadedTexture_198_numMips = 0;
+        DXGI_FORMAT texture__loadedTexture_198_format = DXGI_FORMAT_UNKNOWN;
+        static const D3D12_RESOURCE_FLAGS texture__loadedTexture_198_flags =  D3D12_RESOURCE_FLAG_NONE;
+        const D3D12_RESOURCE_STATES c_texture__loadedTexture_198_endingState = D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE;
+
+        ID3D12Resource* texture__loadedTexture_199 = nullptr;
+        unsigned int texture__loadedTexture_199_size[3] = { 0, 0, 0 };
+        unsigned int texture__loadedTexture_199_numMips = 0;
+        DXGI_FORMAT texture__loadedTexture_199_format = DXGI_FORMAT_UNKNOWN;
+        static const D3D12_RESOURCE_FLAGS texture__loadedTexture_199_flags =  D3D12_RESOURCE_FLAG_NONE;
+        const D3D12_RESOURCE_STATES c_texture__loadedTexture_199_endingState = D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE;
+
+        ID3D12Resource* texture__loadedTexture_200 = nullptr;
+        unsigned int texture__loadedTexture_200_size[3] = { 0, 0, 0 };
+        unsigned int texture__loadedTexture_200_numMips = 0;
+        DXGI_FORMAT texture__loadedTexture_200_format = DXGI_FORMAT_UNKNOWN;
+        static const D3D12_RESOURCE_FLAGS texture__loadedTexture_200_flags =  D3D12_RESOURCE_FLAG_NONE;
+        const D3D12_RESOURCE_STATES c_texture__loadedTexture_200_endingState = D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE;
+
+        ID3D12Resource* texture__loadedTexture_201 = nullptr;
+        unsigned int texture__loadedTexture_201_size[3] = { 0, 0, 0 };
+        unsigned int texture__loadedTexture_201_numMips = 0;
+        DXGI_FORMAT texture__loadedTexture_201_format = DXGI_FORMAT_UNKNOWN;
+        static const D3D12_RESOURCE_FLAGS texture__loadedTexture_201_flags =  D3D12_RESOURCE_FLAG_NONE;
+        const D3D12_RESOURCE_STATES c_texture__loadedTexture_201_endingState = D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE;
+
+        ID3D12Resource* texture__loadedTexture_202 = nullptr;
+        unsigned int texture__loadedTexture_202_size[3] = { 0, 0, 0 };
+        unsigned int texture__loadedTexture_202_numMips = 0;
+        DXGI_FORMAT texture__loadedTexture_202_format = DXGI_FORMAT_UNKNOWN;
+        static const D3D12_RESOURCE_FLAGS texture__loadedTexture_202_flags =  D3D12_RESOURCE_FLAG_NONE;
+        const D3D12_RESOURCE_STATES c_texture__loadedTexture_202_endingState = D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE;
+
         Struct__RayGenCB constantBuffer__RayGenCB_cpu;
         ID3D12Resource* constantBuffer__RayGenCB = nullptr;
 
@@ -1917,6 +1995,20 @@ namespace FastBokeh
         static ID3D12PipelineState* computeShader_GatherDOF_NearBorder_pso;
         static ID3D12RootSignature* computeShader_GatherDOF_NearBorder_rootSig;
 
+        ID3D12Resource* texture__loadedTexture_203 = nullptr;
+        unsigned int texture__loadedTexture_203_size[3] = { 0, 0, 0 };
+        unsigned int texture__loadedTexture_203_numMips = 0;
+        DXGI_FORMAT texture__loadedTexture_203_format = DXGI_FORMAT_UNKNOWN;
+        static const D3D12_RESOURCE_FLAGS texture__loadedTexture_203_flags =  D3D12_RESOURCE_FLAG_NONE;
+        const D3D12_RESOURCE_STATES c_texture__loadedTexture_203_endingState = D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE;
+
+        ID3D12Resource* texture__loadedTexture_204 = nullptr;
+        unsigned int texture__loadedTexture_204_size[3] = { 0, 0, 0 };
+        unsigned int texture__loadedTexture_204_numMips = 0;
+        DXGI_FORMAT texture__loadedTexture_204_format = DXGI_FORMAT_UNKNOWN;
+        static const D3D12_RESOURCE_FLAGS texture__loadedTexture_204_flags =  D3D12_RESOURCE_FLAG_NONE;
+        const D3D12_RESOURCE_STATES c_texture__loadedTexture_204_endingState = D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE;
+
         Struct__GatherDOF_BlurFarCSCB constantBuffer__GatherDOF_BlurFarCSCB_cpu;
         ID3D12Resource* constantBuffer__GatherDOF_BlurFarCSCB = nullptr;
 
@@ -1928,9 +2020,6 @@ namespace FastBokeh
 
         Struct__GatherDOF_RecombineCSCB constantBuffer__GatherDOF_RecombineCSCB_cpu;
         ID3D12Resource* constantBuffer__GatherDOF_RecombineCSCB = nullptr;
-
-        Struct__GaussBlur_GaussBlurCSCB constantBuffer__GaussBlur_GaussBlurCSCB_cpu;
-        ID3D12Resource* constantBuffer__GaussBlur_GaussBlurCSCB = nullptr;
 
         Struct__TemporalAccumulation_AccumulateCB constantBuffer__TemporalAccumulation_AccumulateCB_cpu;
         ID3D12Resource* constantBuffer__TemporalAccumulation_AccumulateCB = nullptr;
@@ -1964,9 +2053,6 @@ namespace FastBokeh
 
         static ID3D12PipelineState* computeShader_GatherDOF_Recombine_pso;
         static ID3D12RootSignature* computeShader_GatherDOF_Recombine_rootSig;
-
-        static ID3D12PipelineState* computeShader_GaussBlur_DoBlur_pso;
-        static ID3D12RootSignature* computeShader_GaussBlur_DoBlur_rootSig;
 
         static ID3D12PipelineState* computeShader_TemporalAccumulation_DoAccum_pso;
         static ID3D12RootSignature* computeShader_TemporalAccumulation_DoAccum_rootSig;

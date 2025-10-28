@@ -330,6 +330,45 @@
             "dflt": "1.0f",
             "visibility": "User",
             "UIGroup": "SmallLights"
+        },
+        {
+            "name": "ConfigLightDistance",
+            "comment": "distance of lights to camera in world units (cm)",
+            "type": "Float",
+            "dflt": "2000",
+            "visibility": "User",
+            "UIGroup": "BokehConfig"
+        },
+        {
+            "name": "ConfigLightCount",
+            "comment": "the amount of lights rendered, 2D for grid, 1D for diagonal",
+            "type": "Uint2",
+            "visibility": "User",
+            "UIGroup": "BokehConfig"
+        },
+        {
+            "name": "ConfigOnlyDiagonal",
+            "comment": "render diagonal lights instead of grid",
+            "type": "Bool",
+            "dflt": "1",
+            "visibility": "User",
+            "UIGroup": "BokehConfig"
+        },
+        {
+            "name": "OnlyThisLightByIndex",
+            "comment": "-1 is render all the lights, otherwise only light with according index is rendered",
+            "type": "Int",
+            "dflt": "-1",
+            "visibility": "User",
+            "UIGroup": "BokehConfig"
+        },
+        {
+            "name": "ConfigLightFieldWidth",
+            "comment": "width of lights field in world units (cm)",
+            "type": "Float",
+            "dflt": "1000",
+            "visibility": "User",
+            "UIGroup": "BokehConfig"
         }
     ],
     "shaders": [

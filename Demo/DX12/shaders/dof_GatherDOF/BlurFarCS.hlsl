@@ -29,6 +29,7 @@ struct LensRNG
     static const int LKCP204Blue = 18;
     static const int LKCP204ICDF_White = 19;
     static const int LKCP204ICDF_Blue = 20;
+    static const int bokeh = 21;
 };
 
 struct NoiseTexExtends
@@ -55,24 +56,26 @@ struct Struct__GatherDOF_BlurFarCSCB
 SamplerState linearClampSampler : register(s0);
 Texture2D<float4> FarFieldColorCoC : register(t0);
 RWTexture2D<float4> BlurredFarFieldColorAlpha : register(u0);
-Texture2DArray<float2> _loadedTexture_179 : register(t1);
-Texture2DArray<float2> _loadedTexture_180 : register(t2);
-Texture2DArray<float2> _loadedTexture_181 : register(t3);
-Texture2DArray<float2> _loadedTexture_182 : register(t4);
-Texture2D<float> _loadedTexture_183 : register(t5);
-Texture2DArray<float2> _loadedTexture_171 : register(t6);
-Texture2DArray<float2> _loadedTexture_184 : register(t7);
-Texture2DArray<float2> _loadedTexture_185 : register(t8);
-Texture2DArray<float2> _loadedTexture_187 : register(t9);
-Texture2DArray<float2> _loadedTexture_188 : register(t10);
-Texture2D<float> _loadedTexture_186 : register(t11);
-Texture2DArray<float2> _loadedTexture_189 : register(t12);
-Texture2DArray<float2> _loadedTexture_190 : register(t13);
-Texture2DArray<float2> _loadedTexture_191 : register(t14);
-Texture2DArray<float2> _loadedTexture_192 : register(t15);
-Texture2DArray<float2> _loadedTexture_193 : register(t16);
-Texture2DArray<float2> _loadedTexture_194 : register(t17);
-Texture2D<float> _loadedTexture_195 : register(t18);
+Texture2DArray<float2> _loadedTexture_186 : register(t1);
+Texture2DArray<float2> _loadedTexture_187 : register(t2);
+Texture2DArray<float2> _loadedTexture_188 : register(t3);
+Texture2DArray<float2> _loadedTexture_189 : register(t4);
+Texture2D<float> _loadedTexture_190 : register(t5);
+Texture2DArray<float2> _loadedTexture_178 : register(t6);
+Texture2DArray<float2> _loadedTexture_191 : register(t7);
+Texture2DArray<float2> _loadedTexture_192 : register(t8);
+Texture2DArray<float2> _loadedTexture_194 : register(t9);
+Texture2DArray<float2> _loadedTexture_195 : register(t10);
+Texture2D<float> _loadedTexture_193 : register(t11);
+Texture2DArray<float2> _loadedTexture_196 : register(t12);
+Texture2DArray<float2> _loadedTexture_197 : register(t13);
+Texture2DArray<float2> _loadedTexture_198 : register(t14);
+Texture2DArray<float2> _loadedTexture_199 : register(t15);
+Texture2DArray<float2> _loadedTexture_200 : register(t16);
+Texture2DArray<float2> _loadedTexture_201 : register(t17);
+Texture2D<float> _loadedTexture_202 : register(t18);
+Texture2DArray<float2> _loadedTexture_203 : register(t19);
+Texture2D<float> _loadedTexture_204 : register(t20);
 ConstantBuffer<Struct__GatherDOF_BlurFarCSCB> _GatherDOF_BlurFarCSCB : register(b0);
 
 #line 7
@@ -82,39 +85,53 @@ ConstantBuffer<Struct__GatherDOF_BlurFarCSCB> _GatherDOF_BlurFarCSCB : register(
 #include "PCG.hlsli"
 #include "LDSShuffler.hlsli"
 
-float2 ReadVec2STTextureRaw(in uint3 pxAndFrame, in Texture2DArray<float2> tex)
+uint3 AdjustNoiseTextureCoords(uint3 pxAndFrame, uint3 dims)
 {
-    uint3 dims;
-    tex.GetDimensions(dims.x, dims.y, dims.z);
-
-    // Extend the noise texture over time
+	uint3 coords = pxAndFrame;
 	uint cycleCount = pxAndFrame.z / dims.z;
+
 	switch(_GatherDOF_BlurFarCSCB.LensRNGExtend)
 	{
 		case NoiseTexExtends::None: break;
 		case NoiseTexExtends::White:
 		{
 			uint OffsetRNG = HashInit(uint3(0x1337, 0xbeef, cycleCount));
-			pxAndFrame.x += HashPCG(OffsetRNG);
-			pxAndFrame.y += HashPCG(OffsetRNG);
+			coords.x += HashPCG(OffsetRNG);
+			coords.y += HashPCG(OffsetRNG);
 			break;
 		}
 		case NoiseTexExtends::Shuffle1D:
 		{
 			uint shuffleIndex = LDSShuffle1D_GetValueAtIndex(cycleCount, 16384, 10127, 435);
-			pxAndFrame.x += shuffleIndex % dims.x;
-			pxAndFrame.y += shuffleIndex / dims.x;
+			coords.x += shuffleIndex % dims.x;
+			coords.y += shuffleIndex / dims.x;
 			break;
 		}
 		case NoiseTexExtends::Shuffle1DHilbert:
 		{
 			uint shuffleIndex = LDSShuffle1D_GetValueAtIndex(cycleCount, 16384, 10127, 435);
-			pxAndFrame.xy += Convert1DTo2D_Hilbert(shuffleIndex, 16384);
+			coords.xy += Convert1DTo2D_Hilbert(shuffleIndex, 16384);
 			break;
 		}
 	}
 
-    return tex[pxAndFrame % dims].rg;
+	return coords % dims;
+}
+
+float2 ReadVec2STTextureRaw(in uint3 pxAndFrame, in Texture2DArray<float2> tex)
+{
+	uint3 dims;
+	tex.GetDimensions(dims.x, dims.y, dims.z);
+	uint3 sampleCoord = AdjustNoiseTextureCoords(pxAndFrame, dims);
+	return tex[sampleCoord].rg;
+}
+
+float ReadFloatSTTextureRaw(in uint3 pxAndFrame, in Texture2DArray<float> tex)
+{
+	uint3 dims;
+	tex.GetDimensions(dims.x, dims.y, dims.z);
+	uint3 sampleCoord = AdjustNoiseTextureCoords(pxAndFrame, dims);
+	return tex[sampleCoord];
 }
 
 float2 ReadVec2STTexture(in uint3 pxAndFrame, in Texture2DArray<float2> tex)
@@ -183,8 +200,10 @@ float2 SampleICDF(float2 rng, in Texture2D<float> MarginalCDF)
     return uv * 2.0f - 1.0f;
 }
 
-float2 GetApertureSamplePoint(uint3 pxAndFrame, int u, int v, int maxuv, in float4 KernelSize)
+float2 GetApertureSamplePoint(uint3 pxAndFrame, int u, int v, int maxuv, in float4 KernelSize, out float sampleWeight)
 {
+	sampleWeight = 1.0f;
+
 	if (!(bool)_GatherDOF_BlurFarCSCB.GatherDOF_UseNoiseTextures)
 	{
 		float2 uv = float2(u, v) / (maxuv.xx - 1); // map to [0, 1]
@@ -208,92 +227,98 @@ float2 GetApertureSamplePoint(uint3 pxAndFrame, int u, int v, int maxuv, in floa
 		}
 		case LensRNG::UniformCircleWhite:
 		{
-			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_179);
+			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_186);
 		}
 		case LensRNG::UniformCircleBlue:
 		{
-			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_180);
+			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_187);
 		}
 		case LensRNG::UniformHexagonWhite:
 		{
-			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_181);
+			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_188);
 		}
 		case LensRNG::UniformHexagonBlue:
 		{
-			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_182);
+			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_189);
         }
         case LensRNG::UniformHexagonICDF_White:
         {
             uint RNG = HashInit(pxAndSampleIndex);
             float2 rng = float2(RandomFloat01(RNG), RandomFloat01(RNG));
-            return SampleICDF(rng, _loadedTexture_183);
+            return SampleICDF(rng, _loadedTexture_190);
         }
         case LensRNG::UniformHexagonICDF_Blue:
         {
-            float2 rng = ReadVec2STTextureRaw(pxAndSampleIndex, _loadedTexture_171);
-            return SampleICDF(rng, _loadedTexture_183);
+            float2 rng = ReadVec2STTextureRaw(pxAndSampleIndex, _loadedTexture_178);
+            return SampleICDF(rng, _loadedTexture_190);
         }
 		case LensRNG::UniformStarWhite:
 		{
-			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_184);
+			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_191);
 		}
 		case LensRNG::UniformStarBlue:
 		{
-			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_185);
+			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_192);
 		}
 		case LensRNG::NonUniformStarWhite:
 		{
-			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_187);
+			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_194);
 		}
 		case LensRNG::NonUniformStarBlue:
 		{
-			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_188);
+			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_195);
         }
         case LensRNG::UniformStarICDF_White:
         {
             uint RNG = HashInit(pxAndSampleIndex);
             float2 rng = float2(RandomFloat01(RNG), RandomFloat01(RNG));
-            return SampleICDF(rng, _loadedTexture_186);
+            return SampleICDF(rng, _loadedTexture_193);
         }
         case LensRNG::UniformStarICDF_Blue:
         {
-            float2 rng = ReadVec2STTextureRaw(pxAndSampleIndex, _loadedTexture_171);
-            return SampleICDF(rng, _loadedTexture_186);
+            float2 rng = ReadVec2STTextureRaw(pxAndSampleIndex, _loadedTexture_178);
+            return SampleICDF(rng, _loadedTexture_193);
         }
 		case LensRNG::NonUniformStar2White:
 		{
-			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_189);
+			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_196);
 		}
 		case LensRNG::NonUniformStar2Blue:
 		{
-			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_190);
+			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_197);
 		}
 		case LensRNG::LKCP6White:
 		{
-			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_191);
+			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_198);
 		}
 		case LensRNG::LKCP6Blue:
 		{
-			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_192);
+			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_199);
 		}
 		case LensRNG::LKCP204White:
 		{
-			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_193);
+			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_200);
 		}
 		case LensRNG::LKCP204Blue:
 		{
-			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_194);
+			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_201);
         }
         case LensRNG::LKCP204ICDF_White:
         {
             uint RNG = HashInit(pxAndSampleIndex);
             float2 rng = float2(RandomFloat01(RNG), RandomFloat01(RNG));
-            return SampleICDF(rng, _loadedTexture_195);
+            return SampleICDF(rng, _loadedTexture_202);
         }
         case LensRNG::LKCP204ICDF_Blue:
         {
-            float2 rng = ReadVec2STTextureRaw(pxAndSampleIndex, _loadedTexture_171);
-            return SampleICDF(rng, _loadedTexture_195);
+            float2 rng = ReadVec2STTextureRaw(pxAndSampleIndex, _loadedTexture_178);
+            return SampleICDF(rng, _loadedTexture_202);
+        }
+		case LensRNG::bokeh:
+		{
+			float2 offset = ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_203);
+			sampleWeight = _loadedTexture_204.SampleLevel(linearClampSampler, 0.5 * offset + 0.5, 0).r;
+			return offset;
         }
 	}
 
@@ -308,7 +333,7 @@ float2 GetApertureSamplePoint(uint3 pxAndFrame, int u, int v, int maxuv, in floa
 #define KernelSize _GatherDOF_BlurFarCSCB.GatherDOF_KernelSize
 
 [numthreads(8, 8, 1)]
-#line 238
+#line 260
 void csmain(uint3 DTid : SV_DispatchThreadID)
 {
 	uint2 px = DTid.xy;
@@ -343,7 +368,8 @@ void csmain(uint3 DTid : SV_DispatchThreadID)
 		{
 			for (int v = 0; v < TAP_COUNT; ++v)
 			{
-				float2 uv = GetApertureSamplePoint(pxAndFrame, u, v, TAP_COUNT, KernelSize);
+				float sampleWeight = 1.0f;
+				float2 uv = GetApertureSamplePoint(pxAndFrame, u, v, TAP_COUNT, KernelSize, sampleWeight);
 				uv /= float2(FarFieldColorCoCSize);
 
 				//float2 uv = float2(u, v) / (TAP_COUNT - 1); // map to [0, 1]
@@ -353,9 +379,9 @@ void csmain(uint3 DTid : SV_DispatchThreadID)
 				float4 tapColor = FarFieldColorCoC.SampleLevel(linearClampSampler, uv, 0); //Texture2DSampleLevel(PostprocessInput0, PostprocessInput0Sampler, uv, 0);
 				
 				// Weighted by CoC. Gives more influence to taps with a CoC higher than us.
-				float TapWeight = tapColor.w * saturate(1.0f - (PixelCoC - tapColor.w)); 
+				float TapWeight = sampleWeight * tapColor.w * saturate(1.0f - (PixelCoC - tapColor.w)); 
 				
-				ResultColor +=  tapColor.xyz * TapWeight; 
+				ResultColor +=  tapColor.xyz * TapWeight;
 				Weight += TapWeight;
 			}
 		}

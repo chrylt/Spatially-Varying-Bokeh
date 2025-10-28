@@ -38,23 +38,23 @@ namespace FastBokeh
             case LensRNG::LKCP204Blue: return Py_BuildValue("s", "LKCP204Blue");
             case LensRNG::LKCP204ICDF_White: return Py_BuildValue("s", "LKCP204ICDF_White");
             case LensRNG::LKCP204ICDF_Blue: return Py_BuildValue("s", "LKCP204ICDF_Blue");
+            case LensRNG::bokeh: return Py_BuildValue("s", "bokeh");
             default: return Py_BuildValue("s", "<invalid LensRNG value>");
         }
     }
 
-    inline PyObject* DOFModeToString(PyObject* self, PyObject* args)
+    inline PyObject* BokehConfigStateToString(PyObject* self, PyObject* args)
     {
         int value;
-        if (!PyArg_ParseTuple(args, "i:DOFModeToString", &value))
+        if (!PyArg_ParseTuple(args, "i:BokehConfigStateToString", &value))
             return PyErr_Format(PyExc_TypeError, "type error");
 
-        switch((DOFMode)value)
+        switch((BokehConfigState)value)
         {
-            case DOFMode::Off: return Py_BuildValue("s", "Off");
-            case DOFMode::PathTraced: return Py_BuildValue("s", "PathTraced");
-            case DOFMode::PostProcessing: return Py_BuildValue("s", "PostProcessing");
-            case DOFMode::Realistic: return Py_BuildValue("s", "Realistic");
-            default: return Py_BuildValue("s", "<invalid DOFMode value>");
+            case BokehConfigState::NoDoF: return Py_BuildValue("s", "NoDoF");
+            case BokehConfigState::ThinLens: return Py_BuildValue("s", "ThinLens");
+            case BokehConfigState::RealisticLens: return Py_BuildValue("s", "RealisticLens");
+            default: return Py_BuildValue("s", "<invalid BokehConfigState value>");
         }
     }
 
@@ -133,6 +133,7 @@ namespace FastBokeh
             case GatherDOF_LensRNG::LKCP204Blue: return Py_BuildValue("s", "LKCP204Blue");
             case GatherDOF_LensRNG::LKCP204ICDF_White: return Py_BuildValue("s", "LKCP204ICDF_White");
             case GatherDOF_LensRNG::LKCP204ICDF_Blue: return Py_BuildValue("s", "LKCP204ICDF_Blue");
+            case GatherDOF_LensRNG::bokeh: return Py_BuildValue("s", "bokeh");
             default: return Py_BuildValue("s", "<invalid GatherDOF_LensRNG value>");
         }
     }
@@ -167,6 +168,96 @@ namespace FastBokeh
             case ToneMap_ToneMappingOperation::ACES: return Py_BuildValue("s", "ACES");
             default: return Py_BuildValue("s", "<invalid ToneMap_ToneMappingOperation value>");
         }
+    }
+
+    inline PyObject* Set_FocusDistance(PyObject* self, PyObject* args)
+    {
+        int contextIndex;
+        float value;
+
+        if (!PyArg_ParseTuple(args, "if:Set_FocusDistance", &contextIndex, &value))
+            return PyErr_Format(PyExc_TypeError, "type error");
+
+        Context* context = Context::GetContext(contextIndex);
+        if (!context)
+            return PyErr_Format(PyExc_IndexError, __FUNCTION__, "() : index % i is out of range(count = % i)", contextIndex, Context::GetContextCount());
+
+        context->m_input.variable_FocusDistance = value;
+
+        Py_INCREF(Py_None);
+        return Py_None;
+    }
+
+    inline PyObject* Set_RenderPinhole(PyObject* self, PyObject* args)
+    {
+        int contextIndex;
+        bool value;
+
+        if (!PyArg_ParseTuple(args, "ib:Set_RenderPinhole", &contextIndex, &value))
+            return PyErr_Format(PyExc_TypeError, "type error");
+
+        Context* context = Context::GetContext(contextIndex);
+        if (!context)
+            return PyErr_Format(PyExc_IndexError, __FUNCTION__, "() : index % i is out of range(count = % i)", contextIndex, Context::GetContextCount());
+
+        context->m_input.variable_RenderPinhole = value;
+
+        Py_INCREF(Py_None);
+        return Py_None;
+    }
+
+    inline PyObject* Set_RenderThinLensDoF(PyObject* self, PyObject* args)
+    {
+        int contextIndex;
+        bool value;
+
+        if (!PyArg_ParseTuple(args, "ib:Set_RenderThinLensDoF", &contextIndex, &value))
+            return PyErr_Format(PyExc_TypeError, "type error");
+
+        Context* context = Context::GetContext(contextIndex);
+        if (!context)
+            return PyErr_Format(PyExc_IndexError, __FUNCTION__, "() : index % i is out of range(count = % i)", contextIndex, Context::GetContextCount());
+
+        context->m_input.variable_RenderThinLensDoF = value;
+
+        Py_INCREF(Py_None);
+        return Py_None;
+    }
+
+    inline PyObject* Set_RenderLensSimulationDoF(PyObject* self, PyObject* args)
+    {
+        int contextIndex;
+        bool value;
+
+        if (!PyArg_ParseTuple(args, "ib:Set_RenderLensSimulationDoF", &contextIndex, &value))
+            return PyErr_Format(PyExc_TypeError, "type error");
+
+        Context* context = Context::GetContext(contextIndex);
+        if (!context)
+            return PyErr_Format(PyExc_IndexError, __FUNCTION__, "() : index % i is out of range(count = % i)", contextIndex, Context::GetContextCount());
+
+        context->m_input.variable_RenderLensSimulationDoF = value;
+
+        Py_INCREF(Py_None);
+        return Py_None;
+    }
+
+    inline PyObject* Set_RenderBokehConfig(PyObject* self, PyObject* args)
+    {
+        int contextIndex;
+        bool value;
+
+        if (!PyArg_ParseTuple(args, "ib:Set_RenderBokehConfig", &contextIndex, &value))
+            return PyErr_Format(PyExc_TypeError, "type error");
+
+        Context* context = Context::GetContext(contextIndex);
+        if (!context)
+            return PyErr_Format(PyExc_IndexError, __FUNCTION__, "() : index % i is out of range(count = % i)", contextIndex, Context::GetContextCount());
+
+        context->m_input.variable_RenderBokehConfig = value;
+
+        Py_INCREF(Py_None);
+        return Py_None;
     }
 
     inline PyObject* Set_Reset(PyObject* self, PyObject* args)
@@ -205,24 +296,6 @@ namespace FastBokeh
         return Py_None;
     }
 
-    inline PyObject* Set_MaterialSet(PyObject* self, PyObject* args)
-    {
-        int contextIndex;
-        int value;
-
-        if (!PyArg_ParseTuple(args, "ii:Set_MaterialSet", &contextIndex, &value))
-            return PyErr_Format(PyExc_TypeError, "type error");
-
-        Context* context = Context::GetContext(contextIndex);
-        if (!context)
-            return PyErr_Format(PyExc_IndexError, __FUNCTION__, "() : index % i is out of range(count = % i)", contextIndex, Context::GetContextCount());
-
-        context->m_input.variable_MaterialSet = (MaterialSets)value;
-
-        Py_INCREF(Py_None);
-        return Py_None;
-    }
-
     inline PyObject* Set_Accumulate(PyObject* self, PyObject* args)
     {
         int contextIndex;
@@ -254,6 +327,114 @@ namespace FastBokeh
             return PyErr_Format(PyExc_IndexError, __FUNCTION__, "() : index % i is out of range(count = % i)", contextIndex, Context::GetContextCount());
 
         context->m_input.variable_Animate = value;
+
+        Py_INCREF(Py_None);
+        return Py_None;
+    }
+
+    inline PyObject* Set_BokehConfigMode(PyObject* self, PyObject* args)
+    {
+        int contextIndex;
+        int value;
+
+        if (!PyArg_ParseTuple(args, "ii:Set_BokehConfigMode", &contextIndex, &value))
+            return PyErr_Format(PyExc_TypeError, "type error");
+
+        Context* context = Context::GetContext(contextIndex);
+        if (!context)
+            return PyErr_Format(PyExc_IndexError, __FUNCTION__, "() : index % i is out of range(count = % i)", contextIndex, Context::GetContextCount());
+
+        context->m_input.variable_BokehConfigMode = (BokehConfigState)value;
+
+        Py_INCREF(Py_None);
+        return Py_None;
+    }
+
+    inline PyObject* Set_DebugToggle(PyObject* self, PyObject* args)
+    {
+        int contextIndex;
+        bool value;
+
+        if (!PyArg_ParseTuple(args, "ib:Set_DebugToggle", &contextIndex, &value))
+            return PyErr_Format(PyExc_TypeError, "type error");
+
+        Context* context = Context::GetContext(contextIndex);
+        if (!context)
+            return PyErr_Format(PyExc_IndexError, __FUNCTION__, "() : index % i is out of range(count = % i)", contextIndex, Context::GetContextCount());
+
+        context->m_input.variable_DebugToggle = value;
+
+        Py_INCREF(Py_None);
+        return Py_None;
+    }
+
+    inline PyObject* Set_HeliosApertureStop(PyObject* self, PyObject* args)
+    {
+        int contextIndex;
+        uint value;
+
+        if (!PyArg_ParseTuple(args, "iI:Set_HeliosApertureStop", &contextIndex, &value))
+            return PyErr_Format(PyExc_TypeError, "type error");
+
+        Context* context = Context::GetContext(contextIndex);
+        if (!context)
+            return PyErr_Format(PyExc_IndexError, __FUNCTION__, "() : index % i is out of range(count = % i)", contextIndex, Context::GetContextCount());
+
+        context->m_input.variable_HeliosApertureStop = value;
+
+        Py_INCREF(Py_None);
+        return Py_None;
+    }
+
+    inline PyObject* Set_ShiftHeliosPosition(PyObject* self, PyObject* args)
+    {
+        int contextIndex;
+        float value;
+
+        if (!PyArg_ParseTuple(args, "if:Set_ShiftHeliosPosition", &contextIndex, &value))
+            return PyErr_Format(PyExc_TypeError, "type error");
+
+        Context* context = Context::GetContext(contextIndex);
+        if (!context)
+            return PyErr_Format(PyExc_IndexError, __FUNCTION__, "() : index % i is out of range(count = % i)", contextIndex, Context::GetContextCount());
+
+        context->m_input.variable_ShiftHeliosPosition = value;
+
+        Py_INCREF(Py_None);
+        return Py_None;
+    }
+
+    inline PyObject* Set_ToggleChromaticAberration(PyObject* self, PyObject* args)
+    {
+        int contextIndex;
+        bool value;
+
+        if (!PyArg_ParseTuple(args, "ib:Set_ToggleChromaticAberration", &contextIndex, &value))
+            return PyErr_Format(PyExc_TypeError, "type error");
+
+        Context* context = Context::GetContext(contextIndex);
+        if (!context)
+            return PyErr_Format(PyExc_IndexError, __FUNCTION__, "() : index % i is out of range(count = % i)", contextIndex, Context::GetContextCount());
+
+        context->m_input.variable_ToggleChromaticAberration = value;
+
+        Py_INCREF(Py_None);
+        return Py_None;
+    }
+
+    inline PyObject* Set_MaterialSet(PyObject* self, PyObject* args)
+    {
+        int contextIndex;
+        int value;
+
+        if (!PyArg_ParseTuple(args, "ii:Set_MaterialSet", &contextIndex, &value))
+            return PyErr_Format(PyExc_TypeError, "type error");
+
+        Context* context = Context::GetContext(contextIndex);
+        if (!context)
+            return PyErr_Format(PyExc_IndexError, __FUNCTION__, "() : index % i is out of range(count = % i)", contextIndex, Context::GetContextCount());
+
+        context->m_input.variable_MaterialSet = (MaterialSets)value;
 
         Py_INCREF(Py_None);
         return Py_None;
@@ -416,24 +597,6 @@ namespace FastBokeh
             return PyErr_Format(PyExc_IndexError, __FUNCTION__, "() : index % i is out of range(count = % i)", contextIndex, Context::GetContextCount());
 
         context->m_input.variable_JitterNoiseTextures = value;
-
-        Py_INCREF(Py_None);
-        return Py_None;
-    }
-
-    inline PyObject* Set_DOF(PyObject* self, PyObject* args)
-    {
-        int contextIndex;
-        int value;
-
-        if (!PyArg_ParseTuple(args, "ii:Set_DOF", &contextIndex, &value))
-            return PyErr_Format(PyExc_TypeError, "type error");
-
-        Context* context = Context::GetContext(contextIndex);
-        if (!context)
-            return PyErr_Format(PyExc_IndexError, __FUNCTION__, "() : index % i is out of range(count = % i)", contextIndex, Context::GetContextCount());
-
-        context->m_input.variable_DOF = (DOFMode)value;
 
         Py_INCREF(Py_None);
         return Py_None;
@@ -655,19 +818,91 @@ namespace FastBokeh
         return Py_None;
     }
 
-    inline PyObject* Set_HighestAngleThatMakesItOutOfTheLens(PyObject* self, PyObject* args)
+    inline PyObject* Set_ConfigLightDistance(PyObject* self, PyObject* args)
     {
         int contextIndex;
         float value;
 
-        if (!PyArg_ParseTuple(args, "if:Set_HighestAngleThatMakesItOutOfTheLens", &contextIndex, &value))
+        if (!PyArg_ParseTuple(args, "if:Set_ConfigLightDistance", &contextIndex, &value))
             return PyErr_Format(PyExc_TypeError, "type error");
 
         Context* context = Context::GetContext(contextIndex);
         if (!context)
             return PyErr_Format(PyExc_IndexError, __FUNCTION__, "() : index % i is out of range(count = % i)", contextIndex, Context::GetContextCount());
 
-        context->m_input.variable_HighestAngleThatMakesItOutOfTheLens = value;
+        context->m_input.variable_ConfigLightDistance = value;
+
+        Py_INCREF(Py_None);
+        return Py_None;
+    }
+
+    inline PyObject* Set_ConfigLightCount(PyObject* self, PyObject* args)
+    {
+        int contextIndex;
+        uint2 value;
+
+        if (!PyArg_ParseTuple(args, "iII:Set_ConfigLightCount", &contextIndex, &value[0], &value[1]))
+            return PyErr_Format(PyExc_TypeError, "type error");
+
+        Context* context = Context::GetContext(contextIndex);
+        if (!context)
+            return PyErr_Format(PyExc_IndexError, __FUNCTION__, "() : index % i is out of range(count = % i)", contextIndex, Context::GetContextCount());
+
+        context->m_input.variable_ConfigLightCount = value;
+
+        Py_INCREF(Py_None);
+        return Py_None;
+    }
+
+    inline PyObject* Set_ConfigOnlyDiagonal(PyObject* self, PyObject* args)
+    {
+        int contextIndex;
+        bool value;
+
+        if (!PyArg_ParseTuple(args, "ib:Set_ConfigOnlyDiagonal", &contextIndex, &value))
+            return PyErr_Format(PyExc_TypeError, "type error");
+
+        Context* context = Context::GetContext(contextIndex);
+        if (!context)
+            return PyErr_Format(PyExc_IndexError, __FUNCTION__, "() : index % i is out of range(count = % i)", contextIndex, Context::GetContextCount());
+
+        context->m_input.variable_ConfigOnlyDiagonal = value;
+
+        Py_INCREF(Py_None);
+        return Py_None;
+    }
+
+    inline PyObject* Set_OnlyThisLightByIndex(PyObject* self, PyObject* args)
+    {
+        int contextIndex;
+        int value;
+
+        if (!PyArg_ParseTuple(args, "ii:Set_OnlyThisLightByIndex", &contextIndex, &value))
+            return PyErr_Format(PyExc_TypeError, "type error");
+
+        Context* context = Context::GetContext(contextIndex);
+        if (!context)
+            return PyErr_Format(PyExc_IndexError, __FUNCTION__, "() : index % i is out of range(count = % i)", contextIndex, Context::GetContextCount());
+
+        context->m_input.variable_OnlyThisLightByIndex = value;
+
+        Py_INCREF(Py_None);
+        return Py_None;
+    }
+
+    inline PyObject* Set_ConfigLightFieldWidth(PyObject* self, PyObject* args)
+    {
+        int contextIndex;
+        float value;
+
+        if (!PyArg_ParseTuple(args, "if:Set_ConfigLightFieldWidth", &contextIndex, &value))
+            return PyErr_Format(PyExc_TypeError, "type error");
+
+        Context* context = Context::GetContext(contextIndex);
+        if (!context)
+            return PyErr_Format(PyExc_IndexError, __FUNCTION__, "() : index % i is out of range(count = % i)", contextIndex, Context::GetContextCount());
+
+        context->m_input.variable_ConfigLightFieldWidth = value;
 
         Py_INCREF(Py_None);
         return Py_None;
@@ -961,42 +1196,6 @@ namespace FastBokeh
         return Py_None;
     }
 
-    inline PyObject* Set_GaussBlur_Sigma(PyObject* self, PyObject* args)
-    {
-        int contextIndex;
-        float value;
-
-        if (!PyArg_ParseTuple(args, "if:Set_GaussBlur_Sigma", &contextIndex, &value))
-            return PyErr_Format(PyExc_TypeError, "type error");
-
-        Context* context = Context::GetContext(contextIndex);
-        if (!context)
-            return PyErr_Format(PyExc_IndexError, __FUNCTION__, "() : index % i is out of range(count = % i)", contextIndex, Context::GetContextCount());
-
-        context->m_input.variable_GaussBlur_Sigma = value;
-
-        Py_INCREF(Py_None);
-        return Py_None;
-    }
-
-    inline PyObject* Set_GaussBlur_Disable(PyObject* self, PyObject* args)
-    {
-        int contextIndex;
-        bool value;
-
-        if (!PyArg_ParseTuple(args, "ib:Set_GaussBlur_Disable", &contextIndex, &value))
-            return PyErr_Format(PyExc_TypeError, "type error");
-
-        Context* context = Context::GetContext(contextIndex);
-        if (!context)
-            return PyErr_Format(PyExc_IndexError, __FUNCTION__, "() : index % i is out of range(count = % i)", contextIndex, Context::GetContextCount());
-
-        context->m_input.variable_GaussBlur_Disable = value;
-
-        Py_INCREF(Py_None);
-        return Py_None;
-    }
-
     inline PyObject* Set_TemporalAccumulation_Alpha(PyObject* self, PyObject* args)
     {
         int contextIndex;
@@ -1071,18 +1270,28 @@ namespace FastBokeh
 
     static PyMethodDef pythonModuleMethods[] = {
         {"LensRNGToString", LensRNGToString, METH_VARARGS, ""},
-        {"DOFModeToString", DOFModeToString, METH_VARARGS, ""},
+        {"BokehConfigStateToString", BokehConfigStateToString, METH_VARARGS, ""},
         {"PixelJitterTypeToString", PixelJitterTypeToString, METH_VARARGS, ""},
         {"MaterialSetsToString", MaterialSetsToString, METH_VARARGS, ""},
         {"NoiseTexExtendsToString", NoiseTexExtendsToString, METH_VARARGS, ""},
         {"GatherDOF_LensRNGToString", GatherDOF_LensRNGToString, METH_VARARGS, ""},
         {"GatherDOF_NoiseTexExtendsToString", GatherDOF_NoiseTexExtendsToString, METH_VARARGS, ""},
         {"ToneMap_ToneMappingOperationToString", ToneMap_ToneMappingOperationToString, METH_VARARGS, ""},
+        {"Set_FocusDistance", Set_FocusDistance, METH_VARARGS, "Distance of focus in scene units (cm)"},
+        {"Set_RenderPinhole", Set_RenderPinhole, METH_VARARGS, ""},
+        {"Set_RenderThinLensDoF", Set_RenderThinLensDoF, METH_VARARGS, ""},
+        {"Set_RenderLensSimulationDoF", Set_RenderLensSimulationDoF, METH_VARARGS, ""},
+        {"Set_RenderBokehConfig", Set_RenderBokehConfig, METH_VARARGS, ""},
         {"Set_Reset", Set_Reset, METH_VARARGS, ""},
         {"Set_RenderSize", Set_RenderSize, METH_VARARGS, ""},
-        {"Set_MaterialSet", Set_MaterialSet, METH_VARARGS, ""},
         {"Set_Accumulate", Set_Accumulate, METH_VARARGS, ""},
         {"Set_Animate", Set_Animate, METH_VARARGS, ""},
+        {"Set_BokehConfigMode", Set_BokehConfigMode, METH_VARARGS, ""},
+        {"Set_DebugToggle", Set_DebugToggle, METH_VARARGS, ""},
+        {"Set_HeliosApertureStop", Set_HeliosApertureStop, METH_VARARGS, ""},
+        {"Set_ShiftHeliosPosition", Set_ShiftHeliosPosition, METH_VARARGS, "Shift the position of the helios lens backward in millimeters"},
+        {"Set_ToggleChromaticAberration", Set_ToggleChromaticAberration, METH_VARARGS, ""},
+        {"Set_MaterialSet", Set_MaterialSet, METH_VARARGS, ""},
         {"Set_SamplesPerPixelPerFrame", Set_SamplesPerPixelPerFrame, METH_VARARGS, ""},
         {"Set_JitterPixels", Set_JitterPixels, METH_VARARGS, "Provides Antialiasing"},
         {"Set_NumBounces", Set_NumBounces, METH_VARARGS, "How many bounces the rays are allowed"},
@@ -1092,7 +1301,6 @@ namespace FastBokeh
         {"Set_LensRNGSource", Set_LensRNGSource, METH_VARARGS, ""},
         {"Set_LensRNGExtend", Set_LensRNGExtend, METH_VARARGS, "How to extend the noise textures"},
         {"Set_JitterNoiseTextures", Set_JitterNoiseTextures, METH_VARARGS, "The noise textures are 8 bit unorms. This adds a random value between -0.5/255 and +0.5/255 to fill in the unset bits with white noise."},
-        {"Set_DOF", Set_DOF, METH_VARARGS, ""},
         {"Set_ApertureRadius", Set_ApertureRadius, METH_VARARGS, ""},
         {"Set_AnamorphicScaling", Set_AnamorphicScaling, METH_VARARGS, "Defaults to 1.0, 1.0 for no anamorphic effects. Elongates the aperture, does not simulate anamorphic elements."},
         {"Set_PetzvalScaling", Set_PetzvalScaling, METH_VARARGS, "Scales bokeh on each axis depending on screen position. Fakes the effect. Defaults to 1.0, 1.0 for no elongation."},
@@ -1105,7 +1313,11 @@ namespace FastBokeh
         {"Set_SmallLightsColor", Set_SmallLightsColor, METH_VARARGS, ""},
         {"Set_SmallLightsColorful", Set_SmallLightsColorful, METH_VARARGS, "If true, makes the small lights colorful, else makes them all the same color"},
         {"Set_SmallLightRadius", Set_SmallLightRadius, METH_VARARGS, ""},
-        {"Set_HighestAngleThatMakesItOutOfTheLens", Set_HighestAngleThatMakesItOutOfTheLens, METH_VARARGS, ""},
+        {"Set_ConfigLightDistance", Set_ConfigLightDistance, METH_VARARGS, "distance of lights to camera in world units (cm)"},
+        {"Set_ConfigLightCount", Set_ConfigLightCount, METH_VARARGS, "the amount of lights rendered, 2D for grid, 1D for diagonal"},
+        {"Set_ConfigOnlyDiagonal", Set_ConfigOnlyDiagonal, METH_VARARGS, "render diagonal lights instead of grid"},
+        {"Set_OnlyThisLightByIndex", Set_OnlyThisLightByIndex, METH_VARARGS, "-1 is render all the lights, otherwise only light with according index is rendered"},
+        {"Set_ConfigLightFieldWidth", Set_ConfigLightFieldWidth, METH_VARARGS, "width of lights field in world units (cm)"},
         {"Set_GatherDOF_UseNoiseTextures", Set_GatherDOF_UseNoiseTextures, METH_VARARGS, ""},
         {"Set_GatherDOF_AnimateNoiseTextures", Set_GatherDOF_AnimateNoiseTextures, METH_VARARGS, ""},
         {"Set_GatherDOF_SuppressBokeh", Set_GatherDOF_SuppressBokeh, METH_VARARGS, "If true, blurs out of focus areas, but reduces the Bokeh effect of small bright lights"},
@@ -1122,8 +1334,6 @@ namespace FastBokeh
         {"Set_GatherDOF_KernelSize", Set_GatherDOF_KernelSize, METH_VARARGS, "x = size of the bokeh blur radius in texel space. y = rotation in radians to apply to the bokeh shape. z = Number of edge of the polygon (number of blades). 0: circle. 4: square, 6: hexagon..."},
         {"Set_GatherDOF_BlurTapCount", Set_GatherDOF_BlurTapCount, METH_VARARGS, "8 for high quality, 6 for low quality. Used in a double for loop, so it's this number squared."},
         {"Set_GatherDOF_FloodFillTapCount", Set_GatherDOF_FloodFillTapCount, METH_VARARGS, "4 for high quality, 3 for low quality. Used in a double for loop, so it's this number squared."},
-        {"Set_GaussBlur_Sigma", Set_GaussBlur_Sigma, METH_VARARGS, "Strength of blur. Standard deviation of gaussian distribution."},
-        {"Set_GaussBlur_Disable", Set_GaussBlur_Disable, METH_VARARGS, ""},
         {"Set_TemporalAccumulation_Alpha", Set_TemporalAccumulation_Alpha, METH_VARARGS, "For exponential moving average. From 0 to 1. TAA commonly uses 0.1."},
         {"Set_TemporalAccumulation_Enabled", Set_TemporalAccumulation_Enabled, METH_VARARGS, ""},
         {"Set_ToneMap_ExposureFStops", Set_ToneMap_ExposureFStops, METH_VARARGS, ""},
@@ -1160,10 +1370,10 @@ namespace FastBokeh
         PyModule_AddIntConstant(module, "LensRNG_LKCP204Blue", 18);
         PyModule_AddIntConstant(module, "LensRNG_LKCP204ICDF_White", 19);
         PyModule_AddIntConstant(module, "LensRNG_LKCP204ICDF_Blue", 20);
-        PyModule_AddIntConstant(module, "DOFMode_Off", 0);
-        PyModule_AddIntConstant(module, "DOFMode_PathTraced", 1);
-        PyModule_AddIntConstant(module, "DOFMode_PostProcessing", 2);
-        PyModule_AddIntConstant(module, "DOFMode_Realistic", 3);
+        PyModule_AddIntConstant(module, "LensRNG_bokeh", 21);
+        PyModule_AddIntConstant(module, "BokehConfigState_NoDoF", 0);
+        PyModule_AddIntConstant(module, "BokehConfigState_ThinLens", 1);
+        PyModule_AddIntConstant(module, "BokehConfigState_RealisticLens", 2);
         PyModule_AddIntConstant(module, "PixelJitterType_None", 0);
         PyModule_AddIntConstant(module, "PixelJitterType_PerPixel", 1);
         PyModule_AddIntConstant(module, "PixelJitterType_Global", 2);
@@ -1195,6 +1405,7 @@ namespace FastBokeh
         PyModule_AddIntConstant(module, "GatherDOF_LensRNG_LKCP204Blue", 18);
         PyModule_AddIntConstant(module, "GatherDOF_LensRNG_LKCP204ICDF_White", 19);
         PyModule_AddIntConstant(module, "GatherDOF_LensRNG_LKCP204ICDF_Blue", 20);
+        PyModule_AddIntConstant(module, "GatherDOF_LensRNG_bokeh", 21);
         PyModule_AddIntConstant(module, "GatherDOF_NoiseTexExtends_None", 0);
         PyModule_AddIntConstant(module, "GatherDOF_NoiseTexExtends_White", 1);
         PyModule_AddIntConstant(module, "GatherDOF_NoiseTexExtends_Shuffle1D", 2);

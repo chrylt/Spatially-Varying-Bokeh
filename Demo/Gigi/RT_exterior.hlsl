@@ -30,6 +30,11 @@ static const bool t_renderThinLensDoF = /*$(Variable:RenderThinLensDoF)*/;
 static const bool t_renderLensSimulationDoF = /*$(Variable:RenderLensSimulationDoF)*/;
 static const bool t_renderBokehConfig = /*$(Variable:RenderBokehConfig)*/;
 static const int t_bokehConfigMode = /*$(Variable:BokehConfigMode)*/;
+static const float t_config_light_distance = /*$(Variable:ConfigLightDistance)*/;
+static const uint2 t_config_light_count = /*$(Variable:ConfigLightCount)*/;
+static const bool t_config_only_diagonal = /*$(Variable:ConfigOnlyDiagonal)*/;
+static const int t_only_this_light_by_index = /*$(Variable:OnlyThisLightByIndex)*/;
+static const float t_config_light_field_width = /*$(Variable:ConfigLightFieldWidth)*/;
 
 float sampleHeliosApertureMask(float2 uv)
 {
@@ -1429,18 +1434,15 @@ float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 
 			pinholeColor = lerp(pinholeColor, sampleColor, sampleWeight);
 		}
 
-		bool generateThinLens = t_renderThinLensDoF || (t_renderBokehConfig && t_bokehConfigMode == BokehConfigState::ThinLens);
-		Ray thinRay = (Ray)0;
-		float thinPDF = 1.0f;
-		bool thinLensSampleValid = false;
-		if (generateThinLens)
+		if (t_renderThinLensDoF)
 		{
+			Ray thinRay = (Ray)0;
+			float thinPDF = 1.0f;
 			float3 thinOrigin = baseRay.Origin;
 			float3 thinDirection = baseRay.Direction;
 			thinPDF = ApplyDOFLensSimulation(thinOrigin, thinDirection, px, rngThinLens, dispatchDimsUInt);
 			thinRay.Origin = thinOrigin;
 			thinRay.Direction = thinDirection;
-			thinLensSampleValid = true;
 
 			if (t_renderThinLensDoF)
 			{
@@ -1471,15 +1473,13 @@ float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 
 				}
 				case BokehConfigState::ThinLens:
 				{
-					if (!thinLensSampleValid)
-					{
-						float3 thinOrigin = baseRay.Origin;
-						float3 thinDirection = baseRay.Direction;
-						thinPDF = ApplyDOFLensSimulation(thinOrigin, thinDirection, px, rngThinLens, dispatchDimsUInt);
-						thinRay.Origin = thinOrigin;
-						thinRay.Direction = thinDirection;
-						thinLensSampleValid = true;
-					}
+					Ray thinRay = (Ray)0;
+					float thinPDF = 1.0f;
+					float3 thinOrigin = baseRay.Origin;
+					float3 thinDirection = baseRay.Direction;
+					thinPDF = ApplyDOFLensSimulation(thinOrigin, thinDirection, px, rngThinLens, dispatchDimsUInt);
+					thinRay.Origin = thinOrigin;
+					thinRay.Direction = thinDirection;
 					sampleColor = ShadeVisualFieldSample(thinRay, thinPDF, dispatchDimsUInt);
 					break;
 				}

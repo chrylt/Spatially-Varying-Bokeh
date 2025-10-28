@@ -29,6 +29,7 @@ struct LensRNG
     static const int LKCP204Blue = 18;
     static const int LKCP204ICDF_White = 19;
     static const int LKCP204ICDF_Blue = 20;
+    static const int bokeh = 21;
 };
 
 struct NoiseTexExtends
@@ -56,24 +57,25 @@ SamplerState linearClampSampler : register(s0);
 Texture2D<float4> NearFieldColorCoCBorder : register(t0);
 Texture2D<float> NearmaxCoCTilemap_1_8_Halo : register(t1);
 RWTexture2D<float4> NearFieldColorCoCBorderBlurred : register(u0);
-Texture2DArray<float2> _loadedTexture_179 : register(t2);
-Texture2DArray<float2> _loadedTexture_180 : register(t3);
-Texture2DArray<float2> _loadedTexture_181 : register(t4);
-Texture2DArray<float2> _loadedTexture_182 : register(t5);
-Texture2D<float> _loadedTexture_183 : register(t6);
-Texture2DArray<float2> _loadedTexture_171 : register(t7);
-Texture2DArray<float2> _loadedTexture_184 : register(t8);
-Texture2DArray<float2> _loadedTexture_185 : register(t9);
-Texture2D<float> _loadedTexture_186 : register(t10);
-Texture2DArray<float2> _loadedTexture_187 : register(t11);
-Texture2DArray<float2> _loadedTexture_188 : register(t12);
-Texture2DArray<float2> _loadedTexture_189 : register(t13);
-Texture2DArray<float2> _loadedTexture_190 : register(t14);
-Texture2DArray<float2> _loadedTexture_191 : register(t15);
-Texture2DArray<float2> _loadedTexture_192 : register(t16);
-Texture2DArray<float2> _loadedTexture_193 : register(t17);
-Texture2DArray<float2> _loadedTexture_194 : register(t18);
-Texture2D<float> _loadedTexture_195 : register(t19);
+Texture2DArray<float2> _loadedTexture_186 : register(t2);
+Texture2DArray<float2> _loadedTexture_187 : register(t3);
+Texture2DArray<float2> _loadedTexture_188 : register(t4);
+Texture2DArray<float2> _loadedTexture_189 : register(t5);
+Texture2D<float> _loadedTexture_190 : register(t6);
+Texture2DArray<float2> _loadedTexture_178 : register(t7);
+Texture2DArray<float2> _loadedTexture_191 : register(t8);
+Texture2DArray<float2> _loadedTexture_192 : register(t9);
+Texture2D<float> _loadedTexture_193 : register(t10);
+Texture2DArray<float2> _loadedTexture_194 : register(t11);
+Texture2DArray<float2> _loadedTexture_195 : register(t12);
+Texture2DArray<float2> _loadedTexture_196 : register(t13);
+Texture2DArray<float2> _loadedTexture_197 : register(t14);
+Texture2DArray<float2> _loadedTexture_198 : register(t15);
+Texture2DArray<float2> _loadedTexture_199 : register(t16);
+Texture2DArray<float2> _loadedTexture_200 : register(t17);
+Texture2DArray<float2> _loadedTexture_201 : register(t18);
+Texture2D<float> _loadedTexture_202 : register(t19);
+Texture2DArray<float2> _loadedTexture_203 : register(t20);
 ConstantBuffer<Struct__GatherDOF_NearBlurCB> _GatherDOF_NearBlurCB : register(b0);
 
 #line 7
@@ -209,92 +211,96 @@ float2 GetApertureSamplePoint(uint3 pxAndFrame, int u, int v, int maxuv, in floa
 		}
 		case LensRNG::UniformCircleWhite:
 		{
-			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_179);
+			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_186);
 		}
 		case LensRNG::UniformCircleBlue:
 		{
-			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_180);
+			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_187);
 		}
 		case LensRNG::UniformHexagonWhite:
 		{
-			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_181);
+			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_188);
 		}
 		case LensRNG::UniformHexagonBlue:
 		{
-			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_182);
+			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_189);
         }
         case LensRNG::UniformHexagonICDF_White:
         {
             uint RNG = HashInit(pxAndSampleIndex);
             float2 rng = float2(RandomFloat01(RNG), RandomFloat01(RNG));
-            return SampleICDF(rng, _loadedTexture_183);
+            return SampleICDF(rng, _loadedTexture_190);
         }
         case LensRNG::UniformHexagonICDF_Blue:
         {
-            float2 rng = ReadVec2STTextureRaw(pxAndSampleIndex, _loadedTexture_171);
-            return SampleICDF(rng, _loadedTexture_183);
+            float2 rng = ReadVec2STTextureRaw(pxAndSampleIndex, _loadedTexture_178);
+            return SampleICDF(rng, _loadedTexture_190);
         }
 		case LensRNG::UniformStarWhite:
 		{
-			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_184);
+			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_191);
 		}
 		case LensRNG::UniformStarBlue:
 		{
-			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_185);
+			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_192);
         }
         case LensRNG::UniformStarICDF_White:
         {
             uint RNG = HashInit(pxAndSampleIndex);
             float2 rng = float2(RandomFloat01(RNG), RandomFloat01(RNG));
-            return SampleICDF(rng, _loadedTexture_186);
+            return SampleICDF(rng, _loadedTexture_193);
         }
         case LensRNG::UniformStarICDF_Blue:
         {
-            float2 rng = ReadVec2STTextureRaw(pxAndSampleIndex, _loadedTexture_171);
-            return SampleICDF(rng, _loadedTexture_186);
+            float2 rng = ReadVec2STTextureRaw(pxAndSampleIndex, _loadedTexture_178);
+            return SampleICDF(rng, _loadedTexture_193);
         }
 		case LensRNG::NonUniformStarWhite:
 		{
-			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_187);
+			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_194);
 		}
 		case LensRNG::NonUniformStarBlue:
 		{
-			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_188);
+			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_195);
 		}
 		case LensRNG::NonUniformStar2White:
 		{
-			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_189);
+			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_196);
 		}
 		case LensRNG::NonUniformStar2Blue:
 		{
-			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_190);
+			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_197);
 		}
 		case LensRNG::LKCP6White:
 		{
-			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_191);
+			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_198);
 		}
 		case LensRNG::LKCP6Blue:
 		{
-			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_192);
+			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_199);
 		}
 		case LensRNG::LKCP204White:
 		{
-			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_193);
+			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_200);
 		}
 		case LensRNG::LKCP204Blue:
 		{
-			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_194);
+			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_201);
         }
         case LensRNG::LKCP204ICDF_White:
         {
             uint RNG = HashInit(pxAndSampleIndex);
             float2 rng = float2(RandomFloat01(RNG), RandomFloat01(RNG));
-            return SampleICDF(rng, _loadedTexture_195);
+            return SampleICDF(rng, _loadedTexture_202);
         }
         case LensRNG::LKCP204ICDF_Blue:
         {
-            float2 rng = ReadVec2STTextureRaw(pxAndSampleIndex, _loadedTexture_171);
-            return SampleICDF(rng, _loadedTexture_195);
+            float2 rng = ReadVec2STTextureRaw(pxAndSampleIndex, _loadedTexture_178);
+            return SampleICDF(rng, _loadedTexture_202);
+        }
+		case LensRNG::bokeh:
+		{
+			return ReadVec2STTexture(pxAndSampleIndex, _loadedTexture_203);
         }
 	}
 
@@ -309,7 +315,7 @@ float2 GetApertureSamplePoint(uint3 pxAndFrame, int u, int v, int maxuv, in floa
 #define KernelSize _GatherDOF_NearBlurCB.GatherDOF_KernelSize
 
 [numthreads(8, 8, 1)]
-#line 238
+#line 242
 void csmain(uint3 DTid : SV_DispatchThreadID)
 {
 	uint2 px = DTid.xy;
