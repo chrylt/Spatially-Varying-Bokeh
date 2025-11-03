@@ -218,7 +218,7 @@ bool Process(const char* baseFileNameIn, const char* baseFileNameOut, std::mt199
 
 int main(int argc, char** argv)
 {
-	_mkdir("out");
+	//_mkdir("out");
 
 	unsigned int seed = RANDOM_SHUFFLE_SEED();
 	if (!seed)
@@ -229,6 +229,13 @@ int main(int argc, char** argv)
 
 	std::mt19937 rng(seed);
 
+	for(int i = 1; i < argc - 1; i += 2)
+	{
+		if (!Process(argv[i], argv[i+1], rng))
+			return 1;
+	}
+
+	/*
 	if (!Process("BokehPointSets/bokehInv", "BokehOut/bokehInv", rng))
 		return 1;
 
@@ -255,6 +262,7 @@ int main(int argc, char** argv)
 
 	if (!Process("PointSets/UniformSquare.", "out/UniformSquare", rng))
 		return 1;
+	*/
 
 	return 0;
 }

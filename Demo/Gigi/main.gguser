@@ -20,8 +20,8 @@
         "ProjMtx_textureName": "ColorHDR"
     },
     "snapshot": {
-        "resourceViewNodeIndex": 0,
-        "resourceViewResourceIndex": 216,
+        "resourceViewNodeIndex": 35,
+        "resourceViewResourceIndex": 3,
         "cameraPos": [
             462.2170104980469,
             126.86669921875,
@@ -58,7 +58,7 @@
             },
             {
                 "name": "RenderPinhole",
-                "value": "false"
+                "value": "true"
             },
             {
                 "name": "RenderThinLensDoF",
@@ -70,7 +70,7 @@
             },
             {
                 "name": "RenderBokehConfig",
-                "value": "true"
+                "value": "false"
             },
             {
                 "name": "Reset",
@@ -146,7 +146,7 @@
             },
             {
                 "name": "LensRNGSource",
-                "value": "1"
+                "value": "21"
             },
             {
                 "name": "LensRNGExtend",
@@ -190,7 +190,7 @@
             },
             {
                 "name": "SmallLightBrightness",
-                "value": "100.000000"
+                "value": "50.000000"
             },
             {
                 "name": "SmallLightsColor",
@@ -206,7 +206,7 @@
             },
             {
                 "name": "ConfigLightDistance",
-                "value": "500.000000"
+                "value": "400.000000"
             },
             {
                 "name": "ConfigLightCount",
@@ -242,7 +242,7 @@
             },
             {
                 "name": "GatherDOF_FocalLength",
-                "value": "75.413002"
+                "value": "576.906006"
             },
             {
                 "name": "GatherDOF_NearTransitionRegion",
@@ -278,7 +278,7 @@
             },
             {
                 "name": "GatherDOF_BlurTapCount",
-                "value": "12"
+                "value": "32"
             },
             {
                 "name": "GatherDOF_FloodFillTapCount",
