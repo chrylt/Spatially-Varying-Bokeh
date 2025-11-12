@@ -20,16 +20,16 @@
         "ProjMtx_textureName": "ColorHDR"
     },
     "snapshot": {
-        "resourceViewNodeIndex": 35,
-        "resourceViewResourceIndex": 3,
+        "resourceViewNodeIndex": 0,
+        "resourceViewResourceIndex": 215,
         "cameraPos": [
             462.2170104980469,
             126.86669921875,
             188.94212341308595
         ],
         "cameraAltitudeAzimuth": [
-            -0.24891315400600434,
-            1.7454910278320313
+            -0.23939087986946107,
+            1.7395493984222413
         ],
         "importedResources": [
             {
@@ -58,7 +58,7 @@
             },
             {
                 "name": "RenderPinhole",
-                "value": "true"
+                "value": "false"
             },
             {
                 "name": "RenderThinLensDoF",
@@ -66,7 +66,7 @@
             },
             {
                 "name": "RenderLensSimulationDoF",
-                "value": "false"
+                "value": "true"
             },
             {
                 "name": "RenderBokehConfig",
@@ -78,7 +78,7 @@
             },
             {
                 "name": "RenderSize",
-                "value": "800,600"
+                "value": "1600,1200"
             },
             {
                 "name": "Accumulate",
@@ -274,7 +274,7 @@
             },
             {
                 "name": "GatherDOF_KernelSize",
-                "value": "40.000000,1.570000,6.000000,0.000000"
+                "value": "50.000000,1.570000,6.000000,0.000000"
             },
             {
                 "name": "GatherDOF_BlurTapCount",
@@ -298,6 +298,14 @@
             },
             {
                 "name": "ToneMap_ToneMapper",
+                "value": "3"
+            },
+            {
+                "name": "ToneMap__1__ExposureFStops",
+                "value": "2.500000"
+            },
+            {
+                "name": "ToneMap__1__ToneMapper",
                 "value": "3"
             }
         ]

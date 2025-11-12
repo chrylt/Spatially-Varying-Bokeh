@@ -84,10 +84,10 @@ float3 getSpatiallyVaryingOffset(uint3 pxAndSampleIndex, uint2 screenSize)
 	float center_to_corner_distance = length(center_screen);
 	float normalized_distance = pixel_distance_to_center / center_to_corner_distance; // 0.0 at center, 1.0 at corner
 
+	DebugTex[pxAndSampleIndex.xy] = float4(normalized_distance, 0.0f, 0.0f, 1.0f);
+
 	// determine index
-	uint sv_bokeh_index = normalized_distance * sv_bokeh_count;
-	// rudimentary fix corner
-	if (sv_bokeh_index == 7) sv_bokeh_index = 6;
+	uint sv_bokeh_index = floor(normalized_distance * (sv_bokeh_count - 1));
 
 	float2 offset;
 	float sampleWeight;
@@ -300,7 +300,7 @@ float2 GetApertureSamplePoint(uint3 pxAndFrame, int u, int v, int maxuv, in floa
 		case LensRNG::bokeh:
 		{
 			float3 svoffset = getSpatiallyVaryingOffset(pxAndSampleIndex, screenSize);
-			sampleWeight = svoffset.z; // maybe not necessary, instead 1.0?
+			//sampleWeight = svoffset.z; // maybe not necessary, instead 1.0?
 			
 			return svoffset.xy;
         }

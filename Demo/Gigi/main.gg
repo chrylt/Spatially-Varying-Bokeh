@@ -996,7 +996,7 @@
             "actionSubGraph": {
                 "name": "ToneMap",
                 "editorPos": [
-                    434.0,
+                    418.0,
                     -670.0
                 ],
                 "linkProperties": [
@@ -1178,6 +1178,58 @@
                         "name": "RenderSize"
                     }
                 }
+            }
+        },
+        {
+            "actionSubGraph": {
+                "name": "ToneMap (1)",
+                "editorPos": [
+                    197.0,
+                    -574.0
+                ],
+                "linkProperties": [
+                    {},
+                    {}
+                ],
+                "connections": [
+                    {
+                        "srcPin": "Color HDR",
+                        "dstNode": "Raytrace",
+                        "dstPin": "LensSimulationOut"
+                    },
+                    {
+                        "srcPin": "Color SDR"
+                    }
+                ],
+                "fileName": "Tonemap\\Tonemap.gg",
+                "subGraphData": {
+                    "importedResources": [
+                        "Color HDR"
+                    ],
+                    "exportedResources": [
+                        "Color SDR"
+                    ],
+                    "variables": [
+                        {
+                            "name": "ExposureFStops",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "ToneMapper",
+                            "visibility": "User"
+                        }
+                    ]
+                },
+                "variableSettings": [
+                    {
+                        "name": "ExposureFStops",
+                        "visibility": "User"
+                    },
+                    {
+                        "name": "ToneMapper",
+                        "visibility": "User"
+                    }
+                ]
             }
         }
     ],

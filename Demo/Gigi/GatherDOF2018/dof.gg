@@ -203,6 +203,11 @@
                     "name": "BlurredFarFieldColorAlpha",
                     "access": "UAV",
                     "type": "Texture"
+                },
+                {
+                    "name": "DebugTex",
+                    "access": "UAV",
+                    "type": "Texture"
                 }
             ],
             "samplers": [
@@ -563,6 +568,7 @@
                 "linkProperties": [
                     {},
                     {},
+                    {},
                     {}
                 ],
                 "connections": [
@@ -574,6 +580,11 @@
                     {
                         "srcPin": "BlurredFarFieldColorAlpha",
                         "dstNode": "BlurredFarFieldColorAlpha",
+                        "dstPin": "resource"
+                    },
+                    {
+                        "srcPin": "DebugTex",
+                        "dstNode": "DebugTex",
                         "dstPin": "resource"
                     }
                 ],
@@ -1104,6 +1115,25 @@
                 "dispatchSize": {
                     "node": {
                         "name": "Output"
+                    }
+                }
+            }
+        },
+        {
+            "resourceTexture": {
+                "name": "DebugTex",
+                "editorPos": [
+                    43.0,
+                    194.0
+                ],
+                "format": {
+                    "node": {
+                        "name": "Color"
+                    }
+                },
+                "size": {
+                    "node": {
+                        "name": "Color"
                     }
                 }
             }
