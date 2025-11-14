@@ -20,16 +20,16 @@
         "ProjMtx_textureName": "ColorHDR"
     },
     "snapshot": {
-        "resourceViewNodeIndex": 0,
-        "resourceViewResourceIndex": 215,
+        "resourceViewNodeIndex": 36,
+        "resourceViewResourceIndex": 3,
         "cameraPos": [
             462.2170104980469,
             126.86669921875,
             188.94212341308595
         ],
         "cameraAltitudeAzimuth": [
-            -0.23939087986946107,
-            1.7395493984222413
+            -0.24891315400600434,
+            1.7454910278320313
         ],
         "importedResources": [
             {
@@ -58,7 +58,7 @@
             },
             {
                 "name": "RenderPinhole",
-                "value": "false"
+                "value": "true"
             },
             {
                 "name": "RenderThinLensDoF",
@@ -66,7 +66,7 @@
             },
             {
                 "name": "RenderLensSimulationDoF",
-                "value": "true"
+                "value": "false"
             },
             {
                 "name": "RenderBokehConfig",
@@ -98,7 +98,7 @@
             },
             {
                 "name": "HeliosApertureStop",
-                "value": "6"
+                "value": "3"
             },
             {
                 "name": "ShiftHeliosPosition",
@@ -210,7 +210,11 @@
             },
             {
                 "name": "ConfigLightCount",
-                "value": "8,0"
+                "value": "7,5"
+            },
+            {
+                "name": "ConfigOnlyDiagonal",
+                "value": "false"
             },
             {
                 "name": "OnlyThisLightByIndex",
@@ -274,7 +278,7 @@
             },
             {
                 "name": "GatherDOF_KernelSize",
-                "value": "50.000000,1.570000,6.000000,0.000000"
+                "value": "100.000000,1.570000,6.000000,0.000000"
             },
             {
                 "name": "GatherDOF_BlurTapCount",
@@ -290,7 +294,7 @@
             },
             {
                 "name": "TemporalAccumulation_Enabled",
-                "value": "false"
+                "value": "true"
             },
             {
                 "name": "ToneMap_ExposureFStops",
