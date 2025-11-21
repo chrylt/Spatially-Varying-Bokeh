@@ -3,6 +3,11 @@
     "version": "1.0",
     "variables": [
         {
+            "name": "doubleOffset",
+            "type": "Bool",
+            "visibility": "User"
+        },
+        {
             "name": "UseNoiseTextures",
             "type": "Bool",
             "dflt": "false",

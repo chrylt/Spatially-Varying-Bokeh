@@ -76,7 +76,7 @@ float2 ReadVec2STTexture(in uint3 pxAndFrame, in Texture2DArray<float2> tex)
 float3 getSpatiallyVaryingOffset(uint3 pxAndSampleIndex, uint2 screenSize)
 {
 	uint sv_bokeh_count = 8;
-	float positions[] = {0.000,0.145,0.290,0.435,0.578,0.718,0.854,0.962};
+	const float spatial_intensities[] = {1.0f, 6692.0f / 7141.0f, 5765.0f / 7141.0f, 4789.0f / 7141.0f, 3972.0f / 7141.0f, 3347.0f / 7141.0f, 2908.0f / 7141.0f};
 
 	// calculate spatially varying bokeh index based on pixel position
 	float2 center_screen = float2(screenSize) * 0.5f;
@@ -89,44 +89,25 @@ float3 getSpatiallyVaryingOffset(uint3 pxAndSampleIndex, uint2 screenSize)
 	// determine index
 	uint sv_bokeh_index = floor(normalized_distance * (sv_bokeh_count - 1));
 
-	float2 offset;
-	float sampleWeight;
-	switch (sv_bokeh_index) {
-		case 0: 
-		offset = ReadVec2STTexture(pxAndSampleIndex, /*$(Image2DArray:Assets\NoiseTextures\bokeh\bokeh_fl45.0_as6_samples500000_od500_lidx0of8_%i.png:RG8_UNorm:float2:false:false)*/);
-		sampleWeight = /*$(Image2D:Assets\NoiseTextures\bokeh\weights\bokeh_fl45.0_as6_samples500000_od500_lidx0of8.png:R8_UNorm:float:false:false)*/.SampleLevel(linearClampSampler, 0.5 * offset.xy + 0.5, 0).r;
-		break;
-		case 1:
-		offset = ReadVec2STTexture(pxAndSampleIndex, /*$(Image2DArray:Assets\NoiseTextures\bokeh\bokeh_fl45.0_as6_samples500000_od500_lidx1of8_%i.png:RG8_UNorm:float2:false:false)*/);
-		sampleWeight = /*$(Image2D:Assets\NoiseTextures\bokeh\weights\bokeh_fl45.0_as6_samples500000_od500_lidx1of8.png:R8_UNorm:float:false:false)*/.SampleLevel(linearClampSampler, 0.5 * offset.xy + 0.5, 0).r;
-		break;
-		case 2:
-		offset = ReadVec2STTexture(pxAndSampleIndex, /*$(Image2DArray:Assets\NoiseTextures\bokeh\bokeh_fl45.0_as6_samples500000_od500_lidx2of8_%i.png:RG8_UNorm:float2:false:false)*/);
-		sampleWeight = /*$(Image2D:Assets\NoiseTextures\bokeh\weights\bokeh_fl45.0_as6_samples500000_od500_lidx2of8.png:R8_UNorm:float:false:false)*/.SampleLevel(linearClampSampler, 0.5 * offset.xy + 0.5, 0).r;
-		break;
-		case 3:
-		offset = ReadVec2STTexture(pxAndSampleIndex, /*$(Image2DArray:Assets\NoiseTextures\bokeh\bokeh_fl45.0_as6_samples500000_od500_lidx3of8_%i.png:RG8_UNorm:float2:false:false)*/);
-		sampleWeight = /*$(Image2D:Assets\NoiseTextures\bokeh\weights\bokeh_fl45.0_as6_samples500000_od500_lidx3of8.png:R8_UNorm:float:false:false)*/.SampleLevel(linearClampSampler, 0.5 * offset.xy + 0.5, 0).r;
-		break;
-		case 4:
-		offset = ReadVec2STTexture(pxAndSampleIndex, /*$(Image2DArray:Assets\NoiseTextures\bokeh\bokeh_fl45.0_as6_samples500000_od500_lidx4of8_%i.png:RG8_UNorm:float2:false:false)*/);
-		sampleWeight = /*$(Image2D:Assets\NoiseTextures\bokeh\weights\bokeh_fl45.0_as6_samples500000_od500_lidx4of8.png:R8_UNorm:float:false:false)*/.SampleLevel(linearClampSampler, 0.5 * offset.xy + 0.5, 0).r;
-		break;
-		case 5:
-		offset = ReadVec2STTexture(pxAndSampleIndex, /*$(Image2DArray:Assets\NoiseTextures\bokeh\bokeh_fl45.0_as6_samples500000_od500_lidx5of8_%i.png:RG8_UNorm:float2:false:false)*/);
-		sampleWeight = /*$(Image2D:Assets\NoiseTextures\bokeh\weights\bokeh_fl45.0_as6_samples500000_od500_lidx5of8.png:R8_UNorm:float:false:false)*/.SampleLevel(linearClampSampler, 0.5 * offset.xy + 0.5, 0).r;
-		break;
-		case 6:
-		offset = ReadVec2STTexture(pxAndSampleIndex, /*$(Image2DArray:Assets\NoiseTextures\bokeh\bokeh_fl45.0_as6_samples500000_od500_lidx6of8_%i.png:RG8_UNorm:float2:false:false)*/);
-		sampleWeight = /*$(Image2D:Assets\NoiseTextures\bokeh\weights\bokeh_fl45.0_as6_samples500000_od500_lidx6of8.png:R8_UNorm:float:false:false)*/.SampleLevel(linearClampSampler, 0.5 * offset.xy + 0.5, 0).r;
-		break;
-		case 7:
-		offset = ReadVec2STTexture(pxAndSampleIndex, /*$(Image2DArray:Assets\NoiseTextures\bokeh\bokeh_fl45.0_as6_samples500000_od500_lidx7of8_%i.png:RG8_UNorm:float2:false:false)*/);
-		sampleWeight = /*$(Image2D:Assets\NoiseTextures\bokeh\weights\bokeh_fl45.0_as6_samples500000_od500_lidx7of8.png:R8_UNorm:float:false:false)*/.SampleLevel(linearClampSampler, 0.5 * offset.xy + 0.5, 0).r;
-		break;
+	float2 offset = ReadVec2STTexture(pxAndSampleIndex, /*$(Image2DArray:Assets\NoiseTextures\bokeh\bokeh_fl45.0_as6_samples500000_od500_lidx0of8_%i.png:RG8_UNorm:float2:false:false)*/);
+	float alpha = normalized_distance * (sv_bokeh_count - 1) - sv_bokeh_index;
+	float spatial_intensity = 1.0f;
+
+	Texture2DArray<float2> distortionMaps = /*$(Image2DArray:Assets\DistortionMaps\distortion_map_%i.png:RG8_UNorm:float2:false:false)*/;
+
+	for(uint i = 0; i < sv_bokeh_index; ++i) {
+		float2 distortion_pos = distortionMaps.SampleLevel(linearClampSampler, float3(0.5 * offset.xy + 0.5, i), 0).rg;
+		distortion_pos = distortion_pos * 2.0f - float2(1, 1); // to [-1.0,1.0]
+		if(sv_bokeh_index == i + 1) {
+			offset += alpha * (distortion_pos - offset);
+			if(/*$(Variable:doubleOffset)*/)
+				spatial_intensity = spatial_intensities[i] + alpha * (spatial_intensities[i+1]);
+		} else {
+			offset = distortion_pos;
+		}
 	}
 
-	return float3(offset.x, offset.y, sampleWeight);
+	return float3(offset.x, offset.y, spatial_intensity);
 }
 
 float2 SampleICDF(float2 rng, in Texture2D<float> MarginalCDF)
@@ -300,9 +281,9 @@ float2 GetApertureSamplePoint(uint3 pxAndFrame, int u, int v, int maxuv, in floa
 		case LensRNG::bokeh:
 		{
 			float3 svoffset = getSpatiallyVaryingOffset(pxAndSampleIndex, screenSize);
-			//sampleWeight = svoffset.z; // maybe not necessary, instead 1.0?
+			sampleWeight = svoffset.b;
 			
-			return svoffset.xy;
+			return svoffset.rg;
         }
 	}
 

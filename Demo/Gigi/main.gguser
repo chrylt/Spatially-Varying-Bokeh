@@ -70,7 +70,7 @@
             },
             {
                 "name": "RenderBokehConfig",
-                "value": "false"
+                "value": "true"
             },
             {
                 "name": "Reset",
@@ -78,7 +78,7 @@
             },
             {
                 "name": "RenderSize",
-                "value": "1600,1200"
+                "value": "800,600"
             },
             {
                 "name": "Accumulate",
@@ -98,7 +98,7 @@
             },
             {
                 "name": "HeliosApertureStop",
-                "value": "3"
+                "value": "6"
             },
             {
                 "name": "ShiftHeliosPosition",
@@ -225,6 +225,10 @@
                 "value": "30.400000"
             },
             {
+                "name": "GatherDOF_doubleOffset",
+                "value": "false"
+            },
+            {
                 "name": "GatherDOF_UseNoiseTextures",
                 "value": "true"
             },
@@ -278,11 +282,11 @@
             },
             {
                 "name": "GatherDOF_KernelSize",
-                "value": "100.000000,1.570000,6.000000,0.000000"
+                "value": "60.000000,1.570000,6.000000,0.000000"
             },
             {
                 "name": "GatherDOF_BlurTapCount",
-                "value": "32"
+                "value": "80"
             },
             {
                 "name": "GatherDOF_FloodFillTapCount",
@@ -294,7 +298,7 @@
             },
             {
                 "name": "TemporalAccumulation_Enabled",
-                "value": "true"
+                "value": "false"
             },
             {
                 "name": "ToneMap_ExposureFStops",

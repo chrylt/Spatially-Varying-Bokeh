@@ -797,6 +797,10 @@
                     ],
                     "variables": [
                         {
+                            "name": "doubleOffset",
+                            "visibility": "User"
+                        },
+                        {
                             "name": "UseNoiseTextures",
                             "visibility": "User"
                         },
@@ -882,6 +886,10 @@
                     ]
                 },
                 "variableSettings": [
+                    {
+                        "name": "doubleOffset",
+                        "visibility": "User"
+                    },
                     {
                         "name": "UseNoiseTextures",
                         "visibility": "User"

@@ -10,7 +10,7 @@ focus_distances = [45.0]
 object_distances = [500]
 aperture_stops = [6] # 0.. 6
 samples_per_pixel_per_frame = 16
-sample_count_total = 500
+sample_count_total = 500000
 light_count = 8
 
 runs_per_config =  sample_count_total // samples_per_pixel_per_frame
@@ -63,7 +63,7 @@ def _render_config(focus_distance: float, aperture_stop: float, object_distance:
     # clamp 32-bit float HDR data to LDR and pack into 8-bit RGBA for PNG output
     lastReadbackNp = np.clip(lastReadbackNp, 0.0, 1.0)
     lastReadbackNp = (lastReadbackNp * 255.0).astype(np.uint8)
-    out_path = os.path.join(Host.GetScriptPath(), f"rawRenderings\\bokeh_fl{fd_str}_as{as_str}_samples{sample_count_total}_od{object_distance}_lidx{light_index}of{light_count}.png")
+    out_path = os.path.join(Host.GetScriptPath(), f"1_rawRenderings\\bokeh_fl{fd_str}_as{as_str}_samples{sample_count_total}_od{object_distance}_lidx{light_index}of{light_count}.png")
     Image.fromarray(lastReadbackNp, "RGBA").save(out_path)
     print(f"Saved: {out_path}")
 
