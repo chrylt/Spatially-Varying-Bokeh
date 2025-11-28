@@ -20,16 +20,16 @@
         "ProjMtx_textureName": "ColorHDR"
     },
     "snapshot": {
-        "resourceViewNodeIndex": 36,
-        "resourceViewResourceIndex": 3,
+        "resourceViewNodeIndex": 0,
+        "resourceViewResourceIndex": 216,
         "cameraPos": [
-            462.2170104980469,
-            126.86669921875,
-            188.94212341308595
+            524.4736938476563,
+            142.18775939941407,
+            182.99388122558595
         ],
         "cameraAltitudeAzimuth": [
-            -0.24891315400600434,
-            1.7454910278320313
+            -0.18793214857578278,
+            1.5845519304275513
         ],
         "importedResources": [
             {
@@ -214,7 +214,7 @@
             },
             {
                 "name": "ConfigOnlyDiagonal",
-                "value": "false"
+                "value": "true"
             },
             {
                 "name": "OnlyThisLightByIndex",
@@ -298,7 +298,7 @@
             },
             {
                 "name": "TemporalAccumulation_Enabled",
-                "value": "false"
+                "value": "true"
             },
             {
                 "name": "ToneMap_ExposureFStops",

@@ -38,6 +38,7 @@ static const float t_config_light_field_width = /*$(Variable:ConfigLightFieldWid
 
 float sampleHeliosApertureMask(float2 uv)
 {
+	//return 1 - /*$(Image2D:Assets\NoiseTextures\UniformStar\UniformStar.png:R8_UNorm:float:false:false)*/.SampleLevel(PointClampSampler, uv, 0).r;
 	switch(t_aperture_stop)
 	{
 		case 0: return /*$(Image2D:Assets\LensKernels\f2.png:R8_UNorm:float:false:false)*/.SampleLevel(PointClampSampler, uv, 0).r;
@@ -1533,11 +1534,6 @@ float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 
 		float3 oldColor = BokehConfigOut[pixelCoord].rgb;
 		float3 blended = lerp(oldColor, bokehColor, accumulationAlpha);
 		BokehConfigOut[pixelCoord] = float4(blended, 1.0f);
-
-		// Draw a gradient on top for reference
-		if(pixelCoord.y <= 10) {
-			BokehConfigOut[pixelCoord] = float4(float3(pixelCoord.x / dispatchDims.x, pixelCoord.x / dispatchDims.x, pixelCoord.x / dispatchDims.x), 1.0f);
-		}
 	}
 
 	if (all(uint2(/*$(Variable:MouseState)*/.xy) == pixelCoord))

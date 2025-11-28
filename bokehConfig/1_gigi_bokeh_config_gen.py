@@ -7,11 +7,11 @@ import os
 # Settings
 ReadbackResource = "Raytrace.BokehConfigOut: ColorHDR___ (UAV - After)"
 focus_distances = [45.0]
-object_distances = [500]
+object_distances = [400]
 aperture_stops = [6] # 0.. 6
 samples_per_pixel_per_frame = 16
 sample_count_total = 500000
-light_count = 8
+light_count = 15
 
 runs_per_config =  sample_count_total // samples_per_pixel_per_frame
 
