@@ -1192,8 +1192,8 @@
             "actionSubGraph": {
                 "name": "ToneMap (1)",
                 "editorPos": [
-                    197.0,
-                    -574.0
+                    117.0,
+                    -622.0
                 ],
                 "linkProperties": [
                     {},
@@ -1203,7 +1203,341 @@
                     {
                         "srcPin": "Color HDR",
                         "dstNode": "Raytrace",
-                        "dstPin": "LensSimulationOut"
+                        "dstPin": "BokehConfigOut"
+                    },
+                    {
+                        "srcPin": "Color SDR"
+                    }
+                ],
+                "fileName": "Tonemap\\Tonemap.gg",
+                "subGraphData": {
+                    "importedResources": [
+                        "Color HDR"
+                    ],
+                    "exportedResources": [
+                        "Color SDR"
+                    ],
+                    "variables": [
+                        {
+                            "name": "ExposureFStops",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "ToneMapper",
+                            "visibility": "User"
+                        }
+                    ]
+                },
+                "variableSettings": [
+                    {
+                        "name": "ExposureFStops",
+                        "visibility": "User"
+                    },
+                    {
+                        "name": "ToneMapper",
+                        "visibility": "User"
+                    }
+                ]
+            }
+        },
+        {
+            "actionSubGraph": {
+                "name": "GatherDOF (1)",
+                "editorPos": [
+                    71.0,
+                    -516.0
+                ],
+                "linkProperties": [
+                    {},
+                    {},
+                    {}
+                ],
+                "connections": [
+                    {
+                        "srcPin": "Color",
+                        "dstNode": "Raytrace",
+                        "dstPin": "BokehConfigOut"
+                    },
+                    {
+                        "srcPin": "LinearDepth",
+                        "dstNode": "LinearDepth",
+                        "dstPin": "resource"
+                    },
+                    {
+                        "srcPin": "Output"
+                    }
+                ],
+                "fileName": "GatherDOF2018\\dof.gg",
+                "subGraphData": {
+                    "importedResources": [
+                        "Color",
+                        "LinearDepth"
+                    ],
+                    "exportedResources": [
+                        "Output"
+                    ],
+                    "variables": [
+                        {
+                            "name": "doubleOffset",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "UseNoiseTextures",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "AnimateNoiseTextures",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "LensRNGSource",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "LensRNGExtend",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "JitterNoiseTextures",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "SuppressBokeh",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "FocalDistance",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "FocalRegion",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "FocalLength",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "NearTransitionRegion",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "FarTransitionRegion",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "Scale",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "DoFarField",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "DoFarFieldFloodFill",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "DoNearField",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "DoNearFieldFloodFill",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "KernelSize",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "BlurTapCount",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "FloodFillTapCount",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "sRGB",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "FrameIndex"
+                        }
+                    ]
+                },
+                "variableSettings": [
+                    {
+                        "name": "doubleOffset",
+                        "visibility": "User"
+                    },
+                    {
+                        "name": "UseNoiseTextures",
+                        "visibility": "User"
+                    },
+                    {
+                        "name": "AnimateNoiseTextures",
+                        "visibility": "User"
+                    },
+                    {
+                        "name": "LensRNGSource",
+                        "visibility": "User",
+                        "replaceWithStr": "LensRNGSource"
+                    },
+                    {
+                        "name": "LensRNGExtend",
+                        "visibility": "User",
+                        "replaceWithStr": "LensRNGExtend"
+                    },
+                    {
+                        "name": "JitterNoiseTextures",
+                        "visibility": "User",
+                        "replaceWithStr": "JitterNoiseTextures"
+                    },
+                    {
+                        "name": "SuppressBokeh",
+                        "visibility": "User"
+                    },
+                    {
+                        "name": "FocalDistance",
+                        "visibility": "User"
+                    },
+                    {
+                        "name": "FocalRegion",
+                        "visibility": "User"
+                    },
+                    {
+                        "name": "FocalLength",
+                        "visibility": "User"
+                    },
+                    {
+                        "name": "NearTransitionRegion",
+                        "visibility": "User"
+                    },
+                    {
+                        "name": "FarTransitionRegion",
+                        "visibility": "User"
+                    },
+                    {
+                        "name": "Scale",
+                        "visibility": "User"
+                    },
+                    {
+                        "name": "DoFarField",
+                        "visibility": "User"
+                    },
+                    {
+                        "name": "DoFarFieldFloodFill",
+                        "visibility": "User"
+                    },
+                    {
+                        "name": "DoNearField",
+                        "visibility": "User"
+                    },
+                    {
+                        "name": "DoNearFieldFloodFill",
+                        "visibility": "User"
+                    },
+                    {
+                        "name": "KernelSize",
+                        "visibility": "User"
+                    },
+                    {
+                        "name": "BlurTapCount",
+                        "visibility": "User"
+                    },
+                    {
+                        "name": "FloodFillTapCount",
+                        "visibility": "User"
+                    },
+                    {
+                        "name": "sRGB",
+                        "visibility": "User",
+                        "replaceWithValue": "false"
+                    },
+                    {
+                        "name": "FrameIndex"
+                    }
+                ]
+            }
+        },
+        {
+            "actionSubGraph": {
+                "name": "TemporalAccumulation (1)",
+                "editorPos": [
+                    235.0,
+                    -510.0
+                ],
+                "linkProperties": [
+                    {},
+                    {}
+                ],
+                "connections": [
+                    {
+                        "srcPin": "Input",
+                        "dstNode": "GatherDOF (1)",
+                        "dstPin": "Output"
+                    },
+                    {
+                        "srcPin": "Accum"
+                    }
+                ],
+                "fileName": "TemporalAccumulation\\TemporalAccumulation.gg",
+                "subGraphData": {
+                    "importedResources": [
+                        "Input"
+                    ],
+                    "exportedResources": [
+                        "Accum"
+                    ],
+                    "variables": [
+                        {
+                            "name": "Alpha",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "Enabled",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "Reset",
+                            "visibility": "User"
+                        }
+                    ]
+                },
+                "variableSettings": [
+                    {
+                        "name": "Alpha",
+                        "visibility": "User"
+                    },
+                    {
+                        "name": "Enabled",
+                        "visibility": "User"
+                    },
+                    {
+                        "name": "Reset",
+                        "visibility": "User",
+                        "replaceWithStr": "CameraChanged"
+                    }
+                ]
+            }
+        },
+        {
+            "actionSubGraph": {
+                "name": "ToneMap (2)",
+                "editorPos": [
+                    450.0,
+                    -510.0
+                ],
+                "linkProperties": [
+                    {},
+                    {}
+                ],
+                "connections": [
+                    {
+                        "srcPin": "Color HDR",
+                        "dstNode": "TemporalAccumulation (1)",
+                        "dstPin": "Accum"
                     },
                     {
                         "srcPin": "Color SDR"

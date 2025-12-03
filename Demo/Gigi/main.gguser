@@ -4,7 +4,7 @@
     "systemVars": {
         "camera": {
             "leftHanded": false,
-            "FOV": 28.0,
+            "FOV": 24.0,
             "flySpeed": 0.20000000298023225,
             "mouseSensitivity": 0.0010000000474974514,
             "startingCameraPos": [
@@ -20,16 +20,16 @@
         "ProjMtx_textureName": "ColorHDR"
     },
     "snapshot": {
-        "resourceViewNodeIndex": 0,
-        "resourceViewResourceIndex": 216,
+        "resourceViewNodeIndex": 65,
+        "resourceViewResourceIndex": 3,
         "cameraPos": [
-            524.4736938476563,
-            142.18775939941407,
-            182.99388122558595
+            462.2170104980469,
+            126.86669921875,
+            188.94212341308595
         ],
         "cameraAltitudeAzimuth": [
-            -0.18793214857578278,
-            1.5845519304275513
+            -1.539380431175232,
+            1.6104787588119507
         ],
         "importedResources": [
             {
@@ -90,7 +90,7 @@
             },
             {
                 "name": "BokehConfigMode",
-                "value": "2"
+                "value": "0"
             },
             {
                 "name": "DebugToggle",
@@ -190,7 +190,7 @@
             },
             {
                 "name": "SmallLightBrightness",
-                "value": "50.000000"
+                "value": "100.000000"
             },
             {
                 "name": "SmallLightsColor",
@@ -202,7 +202,7 @@
             },
             {
                 "name": "SmallLightRadius",
-                "value": "1.000000"
+                "value": "0.800000"
             },
             {
                 "name": "ConfigLightDistance",
@@ -214,7 +214,7 @@
             },
             {
                 "name": "ConfigOnlyDiagonal",
-                "value": "true"
+                "value": "false"
             },
             {
                 "name": "OnlyThisLightByIndex",
@@ -274,7 +274,7 @@
             },
             {
                 "name": "GatherDOF_DoNearField",
-                "value": "true"
+                "value": "false"
             },
             {
                 "name": "GatherDOF_DoNearFieldFloodFill",
@@ -314,6 +314,50 @@
             },
             {
                 "name": "ToneMap__1__ToneMapper",
+                "value": "3"
+            },
+            {
+                "name": "GatherDOF__1__doubleOffset",
+                "value": "true"
+            },
+            {
+                "name": "GatherDOF__1__UseNoiseTextures",
+                "value": "true"
+            },
+            {
+                "name": "GatherDOF__1__FocalDistance",
+                "value": "45.000000"
+            },
+            {
+                "name": "GatherDOF__1__FocalRegion",
+                "value": "0.100000"
+            },
+            {
+                "name": "GatherDOF__1__FocalLength",
+                "value": "580.153015"
+            },
+            {
+                "name": "GatherDOF__1__DoNearField",
+                "value": "false"
+            },
+            {
+                "name": "GatherDOF__1__DoNearFieldFloodFill",
+                "value": "false"
+            },
+            {
+                "name": "GatherDOF__1__KernelSize",
+                "value": "46.000000,15.000000,5.000000,0.000000"
+            },
+            {
+                "name": "GatherDOF__1__BlurTapCount",
+                "value": "80"
+            },
+            {
+                "name": "TemporalAccumulation__1__Enabled",
+                "value": "true"
+            },
+            {
+                "name": "ToneMap__2__ToneMapper",
                 "value": "3"
             }
         ]

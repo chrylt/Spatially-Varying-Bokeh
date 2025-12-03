@@ -75,8 +75,8 @@ float2 ReadVec2STTexture(in uint3 pxAndFrame, in Texture2DArray<float2> tex)
 
 float3 getSpatiallyVaryingOffset(uint3 pxAndSampleIndex, uint2 screenSize)
 {
-	uint sv_bokeh_count = 8;
-	const float spatial_intensities[] = {1.0f, 6692.0f / 7141.0f, 5765.0f / 7141.0f, 4789.0f / 7141.0f, 3972.0f / 7141.0f, 3347.0f / 7141.0f, 2908.0f / 7141.0f};
+	uint sv_bokeh_count = 9; // shift by 1 to compensate for local selection of bokeh stage
+	//const float spatial_intensities[] = {1.0f, 6692.0f / 7141.0f, 5765.0f / 7141.0f, 4789.0f / 7141.0f, 3972.0f / 7141.0f, 3347.0f / 7141.0f, 2908.0f / 7141.0f};
 
 	// calculate spatially varying bokeh index based on pixel position
 	float2 center_screen = float2(screenSize) * 0.5f;
@@ -89,9 +89,8 @@ float3 getSpatiallyVaryingOffset(uint3 pxAndSampleIndex, uint2 screenSize)
 	// determine index
 	uint sv_bokeh_index = floor(normalized_distance * (sv_bokeh_count - 1));
 
-	float2 offset = ReadVec2STTexture(pxAndSampleIndex, /*$(Image2DArray:Assets\NoiseTextures\bokeh\bokeh_fl45.0_as6_samples500000_od500_lidx0of8_%i.png:RG8_UNorm:float2:false:false)*/);
+	float2 offset = ReadVec2STTexture(pxAndSampleIndex, /*$(Image2DArray:Assets\NoiseTextures\bokeh\bokeh_fl45.0_as6_samples1000000_od400_lidx0of15_%i.png:RG8_UNorm:float2:false:false)*/);
 	float alpha = normalized_distance * (sv_bokeh_count - 1) - sv_bokeh_index;
-	float spatial_intensity = 1.0f;
 
 	Texture2DArray<float2> distortionMaps = /*$(Image2DArray:Assets\DistortionMaps\distortion_map_%i.png:RG8_UNorm:float2:false:false)*/;
 
@@ -100,12 +99,14 @@ float3 getSpatiallyVaryingOffset(uint3 pxAndSampleIndex, uint2 screenSize)
 		distortion_pos = distortion_pos * 2.0f - float2(1, 1); // to [-1.0,1.0]
 		if(sv_bokeh_index == i + 1) {
 			offset += alpha * (distortion_pos - offset);
-			if(/*$(Variable:doubleOffset)*/)
-				spatial_intensity = spatial_intensities[i] + alpha * (spatial_intensities[i+1]);
+			
 		} else {
 			offset = distortion_pos;
 		}
 	}
+
+	// spatial intensity polynomial fit
+	float spatial_intensity = -0.41720654 * normalized_distance * normalized_distance - 0.25085544 *  normalized_distance +  1.00672758;
 
 	return float3(offset.x, offset.y, spatial_intensity);
 }
@@ -281,7 +282,7 @@ float2 GetApertureSamplePoint(uint3 pxAndFrame, int u, int v, int maxuv, in floa
 		case LensRNG::bokeh:
 		{
 			float3 svoffset = getSpatiallyVaryingOffset(pxAndSampleIndex, screenSize);
-			sampleWeight = svoffset.b;
+			sampleWeight = svoffset.z;
 			
 			return svoffset.rg;
         }
@@ -362,9 +363,9 @@ float2 GetApertureSamplePoint(uint3 pxAndFrame, int u, int v, int maxuv, in floa
 				float4 tapColor = FarFieldColorCoC.SampleLevel(linearClampSampler, uv, 0); //Texture2DSampleLevel(PostprocessInput0, PostprocessInput0Sampler, uv, 0);
 				
 				// Weighted by CoC. Gives more influence to taps with a CoC higher than us.
-				float TapWeight = sampleWeight * tapColor.w * saturate(1.0f - (PixelCoC - tapColor.w)); 
+				float TapWeight = tapColor.w * saturate(1.0f - (PixelCoC - tapColor.w)); 
 				
-				ResultColor +=  tapColor.xyz * TapWeight;
+				ResultColor +=  tapColor.xyz * sampleWeight * TapWeight;
 				Weight += TapWeight;
 			}
 		}
