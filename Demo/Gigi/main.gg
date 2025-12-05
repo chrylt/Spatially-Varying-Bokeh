@@ -1260,8 +1260,8 @@
                     },
                     {
                         "srcPin": "LinearDepth",
-                        "dstNode": "LinearDepth",
-                        "dstPin": "resource"
+                        "dstNode": "Raytrace",
+                        "dstPin": "LinearDepth"
                     },
                     {
                         "srcPin": "Output"

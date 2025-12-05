@@ -3,6 +3,7 @@ float TestSphereTrace(in float3 rayPos, in float3 rayDir, in float4 sphere, out 
 
 // Fixed configuration constants
 static const float3 BCONF_LIGHT_COLOR = float3(1.0f, 1.0f, 1.0f);
+static const float VERTICAL_FOV = 22.0f; // degrees
 
 bool TraceLightsDiagonal(float3 pos, float3 dir, float3 planeCenter, float3 cameraRight, float3 cameraUp, float fieldWidth, float fieldHeight, int targetIndex, inout float globalHitT)
 {
@@ -112,7 +113,7 @@ bool VisualFieldLightContributions(float3 pos, float3 dir, uint2 screenDims, out
 	float aspect = (screenDims.y > 0u) ? (float(screenDims.x) / float(screenDims.y)) : 1.0f;
 	float planeDistance = t_config_light_distance;
 
-	float horizontalFov = t_config_light_field_width;
+	float horizontalFov = VERTICAL_FOV * aspect;
 	horizontalFov = (horizontalFov > 3.14159265f) ? radians(horizontalFov) : horizontalFov;
 	float halfHorizontalFov = horizontalFov * 0.5f;
 	float distanceAbs = abs(planeDistance);

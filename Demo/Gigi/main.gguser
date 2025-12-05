@@ -29,7 +29,7 @@
         ],
         "cameraAltitudeAzimuth": [
             -1.539380431175232,
-            1.6104787588119507
+            1.1116054058074952
         ],
         "importedResources": [
             {
@@ -82,11 +82,11 @@
             },
             {
                 "name": "Accumulate",
-                "value": "true"
+                "value": "false"
             },
             {
                 "name": "Animate",
-                "value": "true"
+                "value": "false"
             },
             {
                 "name": "BokehConfigMode",
@@ -202,7 +202,7 @@
             },
             {
                 "name": "SmallLightRadius",
-                "value": "0.800000"
+                "value": "0.500000"
             },
             {
                 "name": "ConfigLightDistance",
@@ -354,7 +354,7 @@
             },
             {
                 "name": "TemporalAccumulation__1__Enabled",
-                "value": "true"
+                "value": "false"
             },
             {
                 "name": "ToneMap__2__ToneMapper",
