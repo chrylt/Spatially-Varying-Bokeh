@@ -144,12 +144,12 @@ LensElement createLensElement(float curvatureRadius, float thickness, float n, f
 	return le;
 }
 
-static const uint lens_element_count = 12;
+static const uint lens_element_count = 11;
 static LensElement lens_elements[] = {
 	// Helios 44-2 58mm/f2 lens OR BIOTAR 58mm/f2 lens
 	// scaled from 100 units to 58mm
 	// 			curvature radiii	    separation			n			v			opening radius	
-	createLensElement( no_curv, 	    d0, 		    n_air, 		v_air, 		r0_size, 		    false),
+	//createLensElement( no_curv, 	    d0, 		    n_air, 		v_air, 		r0_size, 		    false),
 	createLensElement( r1_curv,	        d1, 			biotar_n1, 	biotar_v1,	r1_size, 		    false),
 	createLensElement( r2_curv,	        l1, 			n_air, 		v_air, 		r2_size, 		    false),
 	createLensElement( r3_curv,	        d2, 			biotar_n2, 	biotar_v2,	r3_size, 		    false),
@@ -160,7 +160,8 @@ static LensElement lens_elements[] = {
 	createLensElement( r7_curv, 	    d5, 			biotar_n5, 	biotar_v5,	r7_size, 		    false),
 	createLensElement( r8_curv, 	    l3, 			n_air, 		v_air, 		r8_size, 		    false),
 	createLensElement( r9_curv, 	    d6, 			biotar_n6, 	biotar_v6,	r9_size, 		    false),
-	createLensElement( r10_curv, 	d_to_film, 			n_air, 		v_air, 		r10_size, 	        false), //12
+	createLensElement( r10_curv, 	d_to_film, 			n_air, 		v_air, 		r10_size, 	        false), //11
+	createLensElement( 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f ),
 	createLensElement( 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f ),
 	createLensElement( 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f ),
 	createLensElement( 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f ),

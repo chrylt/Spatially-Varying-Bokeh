@@ -4,13 +4,13 @@
     "systemVars": {
         "camera": {
             "leftHanded": false,
-            "FOV": 24.0,
+            "FOV": 22.13800048828125,
             "flySpeed": 0.20000000298023225,
             "mouseSensitivity": 0.0010000000474974514,
             "startingCameraPos": [
-                462.2170104980469,
-                126.86669921875,
-                188.94212341308595
+                443.38165283203127,
+                122.00506591796875,
+                185.6177978515625
             ],
             "startingCameraAltitudeAzimuth": [
                 -0.24891315400600434,
@@ -20,16 +20,16 @@
         "ProjMtx_textureName": "ColorHDR"
     },
     "snapshot": {
-        "resourceViewNodeIndex": 65,
-        "resourceViewResourceIndex": 3,
+        "resourceViewNodeIndex": 0,
+        "resourceViewResourceIndex": 215,
         "cameraPos": [
-            462.2170104980469,
-            126.86669921875,
-            188.94212341308595
+            376.72552490234377,
+            113.82376098632813,
+            172.89395141601563
         ],
         "cameraAltitudeAzimuth": [
-            -1.539380431175232,
-            1.209978699684143
+            1.2783317565917969,
+            1.6187025308609009
         ],
         "importedResources": [
             {
@@ -66,11 +66,11 @@
             },
             {
                 "name": "RenderLensSimulationDoF",
-                "value": "false"
+                "value": "true"
             },
             {
                 "name": "RenderBokehConfig",
-                "value": "true"
+                "value": "false"
             },
             {
                 "name": "Reset",
@@ -82,11 +82,11 @@
             },
             {
                 "name": "Accumulate",
-                "value": "false"
+                "value": "true"
             },
             {
                 "name": "Animate",
-                "value": "false"
+                "value": "true"
             },
             {
                 "name": "BokehConfigMode",
@@ -102,7 +102,7 @@
             },
             {
                 "name": "ShiftHeliosPosition",
-                "value": "0.000000"
+                "value": "-1.362000"
             },
             {
                 "name": "ToggleChromaticAberration",
@@ -114,7 +114,7 @@
             },
             {
                 "name": "SamplesPerPixelPerFrame",
-                "value": "8"
+                "value": "15"
             },
             {
                 "name": "JitterPixels",
@@ -130,7 +130,7 @@
             },
             {
                 "name": "NumBounces",
-                "value": "15"
+                "value": "4"
             },
             {
                 "name": "AlbedoMode",
@@ -190,7 +190,7 @@
             },
             {
                 "name": "SmallLightBrightness",
-                "value": "100.000000"
+                "value": "500.000000"
             },
             {
                 "name": "SmallLightsColor",
@@ -282,7 +282,7 @@
             },
             {
                 "name": "GatherDOF_KernelSize",
-                "value": "60.000000,1.570000,6.000000,0.000000"
+                "value": "40.000000,1.570000,6.000000,0.000000"
             },
             {
                 "name": "GatherDOF_BlurTapCount",
@@ -346,7 +346,7 @@
             },
             {
                 "name": "GatherDOF__1__KernelSize",
-                "value": "46.000000,15.000000,5.000000,0.000000"
+                "value": "40.000000,15.000000,5.000000,0.000000"
             },
             {
                 "name": "GatherDOF__1__BlurTapCount",

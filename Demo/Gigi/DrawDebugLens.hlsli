@@ -31,7 +31,7 @@ void UIPrintHeader(inout DebugInfo di, float filmHeightMM)
 	// LensL
 	s2h_printTxt(di.ui, _L, _e, _n, _s, _L);
 	s2h_printLF(di.ui);
-	s2h_printFloat(di.ui, helios_lens_length_measured);
+	s2h_printFloat(di.ui, biotar_lens_length_mm);
 	s2h_printLF(di.ui);
 	s2h_printLF(di.ui);
 
@@ -186,7 +186,7 @@ void drawDebugHelios(inout DebugInfo debugInfo)
 
 	// Film and UI header
 	DrawFilmPlane(debugInfo, filmHeightMM);
-	//UIPrintHeader(debugInfo, filmHeightMM);
+	UIPrintHeader(debugInfo, filmHeightMM);
 
 	// Baseline and lens stack
 	DrawAxisBaseline(debugInfo);

@@ -176,7 +176,7 @@ bool traceLensesFromFilm(inout DebugInfo debugInfo, Ray ray, in float wavelength
 }
 
 // returns PDF
-float ApplyRealisticLensSimulation(inout Ray ray, float wavelength, uint3 px, inout uint RNG, uint2 screenDims, float2 screenPos)
+float ApplyRealisticLensSimulation(out Ray ray, float wavelength, uint3 px, inout uint RNG, uint2 screenDims, float2 screenPos)
 {
 	float3 cameraRight = mul(float4(1.0f, 0.0f, 0.0f, 0.0f), t_invViewMtx).xyz;
 	float3 cameraUp = mul(float4(0.0f, 1.0f, 0.0f, 0.0f), t_invViewMtx).xyz;
@@ -224,11 +224,11 @@ float ApplyRealisticLensSimulation(inout Ray ray, float wavelength, uint3 px, in
 		float mm_to_cm = 1.0f / 10;
 		ray.Origin = camPos +
 			 (refracted.Origin.x * mm_to_cm) * cameraRight +
-			 (refracted.Origin.y * mm_to_cm) * cameraUp -
-			 (refracted.Origin.z * mm_to_cm) * cameraForward;
+			 (refracted.Origin.y * mm_to_cm) * cameraUp +
+			 (refracted.Origin.z * mm_to_cm) * cameraForward; // film at z=0, rays travel toward -z
 
 		// match camera position with thin-lens simulation
-		ray.Origin += (t_lens_position_shift * mm_to_cm) * cameraForward;
+		//ray.Origin += (t_lens_position_shift * mm_to_cm) * cameraForward;
 
 		ray.Direction = normalize(
 			 refracted.Direction.x * cameraRight +
