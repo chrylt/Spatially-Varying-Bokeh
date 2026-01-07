@@ -1431,53 +1431,61 @@ float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 
 
 		if (t_renderPinhole)
 		{
-			float mm_to_cm = 1.0f / 10.0f;
-
-			float2 uv = (float2(pixelCoord) + pixelJitter) / dispatchDims;
-			uv.x = 1 - uv.x; // both axis are flipped in the image because of lens mirroring, so this is equivalent to screenPos.y = -screenPos.y;
-
-			float3 pinholeOrigin;
-			pinholeOrigin.x = /*$(Image2D:Assets\LensDistortion\exit_position_x.exr:R32_Float:float:false:false)*/.SampleLevel(Linear, uv, 0);
-			pinholeOrigin.y = /*$(Image2D:Assets\LensDistortion\exit_position_y.exr:R32_Float:float:false:false)*/.SampleLevel(Linear, uv, 0);
-			pinholeOrigin.z = /*$(Image2D:Assets\LensDistortion\exit_position_z.exr:R32_Float:float:false:false)*/.SampleLevel(Linear, uv, 0);
-
-			float3 pinholeDirection;
-			pinholeDirection.x = /*$(Image2D:Assets\LensDistortion\exit_direction_x.exr:R32_Float:float:false:false)*/.SampleLevel(Linear, uv, 0);
-			pinholeDirection.y = /*$(Image2D:Assets\LensDistortion\exit_direction_y.exr:R32_Float:float:false:false)*/.SampleLevel(Linear, uv, 0);
-			pinholeDirection.z = /*$(Image2D:Assets\LensDistortion\exit_direction_z.exr:R32_Float:float:false:false)*/.SampleLevel(Linear, uv, 0);
 			
-			// Transform to world space
-			float3 position_bounds_min = float3(-8.960395, -5.97466, -97.406456);
-			float3 position_bounds_max = float3(8.971093, 6.0161457, -96.19627);
-			float3 span = position_bounds_max - position_bounds_min;
+			if(false) {
 
-			pinholeOrigin.xyz = pinholeOrigin.xyz * span + position_bounds_min;
-			pinholeDirection.xyz = normalize(pinholeDirection.xyz * 2.0f - 1.0f);
+				float mm_to_cm = 1.0f / 10.0f;
+
+				float2 uv = (float2(pixelCoord) + pixelJitter) / dispatchDims;
+				uv.x = 1 - uv.x; // both axis are flipped in the image because of lens mirroring, so this is equivalent to screenPos.y = -screenPos.y;
+
+				float3 pinholeOrigin;
+				//pinholeOrigin.x = /*$(Image2D:Assets\LensDistortion\exit_position_x.exr:R32_Float:float:false:false)*/.SampleLevel(Linear, uv, 0);
+				//pinholeOrigin.y = /*$(Image2D:Assets\LensDistortion\exit_position_y.exr:R32_Float:float:false:false)*/.SampleLevel(Linear, uv, 0);
+				//pinholeOrigin.z = /*$(Image2D:Assets\LensDistortion\exit_position_z.exr:R32_Float:float:false:false)*/.SampleLevel(Linear, uv, 0);
+
+				float3 pinholeDirection;
+				//pinholeDirection.x = /*$(Image2D:Assets\LensDistortion\exit_direction_x.exr:R32_Float:float:false:false)*/.SampleLevel(Linear, uv, 0);
+				//pinholeDirection.y = /*$(Image2D:Assets\LensDistortion\exit_direction_y.exr:R32_Float:float:false:false)*/.SampleLevel(Linear, uv, 0);
+				//pinholeDirection.z = /*$(Image2D:Assets\LensDistortion\exit_direction_z.exr:R32_Float:float:false:false)*/.SampleLevel(Linear, uv, 0);
+				
+				// Transform to world space
+				float3 position_bounds_min = float3(-8.960395, -5.97466, -97.406456);
+				float3 position_bounds_max = float3(8.971093, 6.0161457, -96.19627);
+				float3 span = position_bounds_max - position_bounds_min;
+
+				pinholeOrigin.xyz = pinholeOrigin.xyz * span + position_bounds_min;
+				pinholeDirection.xyz = normalize(pinholeDirection.xyz * 2.0f - 1.0f);
+				
+				float3 cameraRight = mul(float4(1.0f, 0.0f, 0.0f, 0.0f), t_invViewMtx).xyz;
+				float3 cameraUp = mul(float4(0.0f, 1.0f, 0.0f, 0.0f), t_invViewMtx).xyz;
+				float3 cameraForward = mul(float4(0.0f, 0.0f, 1.0f, 0.0f), t_invViewMtx).xyz;
+				float3 camPos = t_cameraPos;
+
+				Ray pinholeRay;
+				
+				pinholeRay.Origin = camPos +
+					(pinholeOrigin.x * mm_to_cm) * cameraRight +
+					(pinholeOrigin.y * mm_to_cm) * cameraUp +
+					(pinholeOrigin.z * mm_to_cm) * cameraForward;
+
+				// Debug draw
+				DebugLensOutTwo[pixelCoord] = float4(pinholeOrigin, 1.0f);
+
+				pinholeRay.Origin += 
+					(t_lens_position_shift.x * mm_to_cm) * cameraRight +
+					(t_lens_position_shift.y * mm_to_cm) * cameraUp +
+					(t_lens_position_shift.z * mm_to_cm) * cameraForward;
+
+				pinholeRay.Direction = normalize(
+					pinholeDirection.x * cameraRight +
+					pinholeDirection.y * cameraUp +
+					pinholeDirection.z * cameraForward);
+			}
 			
-			float3 cameraRight = mul(float4(1.0f, 0.0f, 0.0f, 0.0f), t_invViewMtx).xyz;
-			float3 cameraUp = mul(float4(0.0f, 1.0f, 0.0f, 0.0f), t_invViewMtx).xyz;
-			float3 cameraForward = mul(float4(0.0f, 0.0f, 1.0f, 0.0f), t_invViewMtx).xyz;
-			float3 camPos = t_cameraPos;
-
 			Ray pinholeRay;
-			
-			pinholeRay.Origin = camPos +
-			 	(pinholeOrigin.x * mm_to_cm) * cameraRight +
-			 	(pinholeOrigin.y * mm_to_cm) * cameraUp +
-			 	(pinholeOrigin.z * mm_to_cm) * cameraForward;
-
-			// Debug draw
-			DebugLensOutTwo[pixelCoord] = float4(pinholeOrigin, 1.0f);
-
-			pinholeRay.Origin += 
-				(t_lens_position_shift.x * mm_to_cm) * cameraRight +
-			 	(t_lens_position_shift.y * mm_to_cm) * cameraUp +
-			 	(t_lens_position_shift.z * mm_to_cm) * cameraForward;
-
-			pinholeRay.Direction = normalize(
-			 	pinholeDirection.x * cameraRight +
-			 	pinholeDirection.y * cameraUp +
-			 	pinholeDirection.z * cameraForward);
+			pinholeRay.Origin = baseRay.Origin;
+			pinholeRay.Direction = baseRay.Direction;
 
 			float3 sampleColor = ShadeSceneSample(pinholeRay, 1.0f, pinholeDebug, rayIndex, px, rngPinhole);
 			pinholeColor = lerp(pinholeColor, sampleColor, sampleWeight);

@@ -3,5 +3,6 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LocalDebuggerCommandArguments>-o taksim-circle.pgm 16384 1000 taskim-circle.png</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArgumentsHistory>-o taksim-circle.pgm 16384 1000 taskim-circle.png|</LocalDebuggerCommandArgumentsHistory>
   </PropertyGroup>
 </Project>
