@@ -94,18 +94,12 @@
             "UIGroup": "LensSimulationDoF"
         },
         {
-            "name": "ShiftHeliosPosition",
+            "name": "ShiftPinholePosition",
             "comment": "Shift the position of the helios lens backward in millimeters",
-            "type": "Float",
+            "type": "Float3",
             "dflt": "0",
             "visibility": "User",
-            "UISettings": {
-                "UIHint": "Slider",
-                "min": "-200",
-                "max": "200",
-                "step": "0.1"
-            },
-            "UIGroup": "LensSimulationDoF"
+            "UIGroup": "Pinhole"
         },
         {
             "name": "ToggleChromaticAberration",
@@ -453,6 +447,11 @@
                     "name": "DebugLensOut",
                     "access": "UAV",
                     "type": "Texture"
+                },
+                {
+                    "name": "DebugLensOutTwo",
+                    "access": "UAV",
+                    "type": "Texture"
                 }
             ],
             "samplers": [
@@ -463,6 +462,11 @@
                 {
                     "name": "PointClampSampler",
                     "filter": "MinMagMipPoint",
+                    "addressMode": "Clamp"
+                },
+                {
+                    "name": "Linear",
+                    "filter": "MinMagLinear_MipPoint",
                     "addressMode": "Clamp"
                 }
             ]
@@ -651,6 +655,7 @@
                     {},
                     {},
                     {},
+                    {},
                     {}
                 ],
                 "connections": [
@@ -697,6 +702,11 @@
                     {
                         "srcPin": "DebugLensOut",
                         "dstNode": "DebugTex",
+                        "dstPin": "resource"
+                    },
+                    {
+                        "srcPin": "DebugLensOutTwo",
+                        "dstNode": "DebugTex (1)",
                         "dstPin": "resource"
                     }
                 ],
@@ -1118,8 +1128,8 @@
             "resourceTexture": {
                 "name": "DebugTex",
                 "editorPos": [
-                    -421.0,
-                    -462.0
+                    -437.0,
+                    -446.0
                 ],
                 "transient": false,
                 "format": {
@@ -1573,6 +1583,27 @@
                         "visibility": "User"
                     }
                 ]
+            }
+        },
+        {
+            "resourceTexture": {
+                "name": "DebugTex (1)",
+                "editorPos": [
+                    -334.0,
+                    -385.0
+                ],
+                "transient": false,
+                "format": {
+                    "format": "RGBA32_Float"
+                },
+                "size": {
+                    "node": {
+                        "name": "ColorHDR"
+                    },
+                    "variable": {
+                        "name": "RenderSize"
+                    }
+                }
             }
         }
     ],

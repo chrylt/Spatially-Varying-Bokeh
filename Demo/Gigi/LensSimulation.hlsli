@@ -204,6 +204,8 @@ float ApplyRealisticLensSimulation(out Ray ray, float wavelength, uint3 px, inou
 	float3 target = float3(apertureOffset.x, apertureOffset.y, -d_to_film);
 	filmRay.Direction = normalize(target - filmRay.Origin);
 
+	
+
 	// Debug draw
 	DebugInfo debugInfo;
 	if(t_debug_toggle) {
@@ -229,6 +231,8 @@ float ApplyRealisticLensSimulation(out Ray ray, float wavelength, uint3 px, inou
 
 		// match camera position with thin-lens simulation
 		//ray.Origin += (t_lens_position_shift * mm_to_cm) * cameraForward;
+
+		DebugLensOut[px.xy] = float4(refracted.Origin, 1.0f);
 
 		ray.Direction = normalize(
 			 refracted.Direction.x * cameraRight +

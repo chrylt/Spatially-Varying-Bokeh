@@ -21,15 +21,15 @@
     },
     "snapshot": {
         "resourceViewNodeIndex": 0,
-        "resourceViewResourceIndex": 215,
+        "resourceViewResourceIndex": 216,
         "cameraPos": [
-            376.72552490234377,
-            113.82376098632813,
-            172.89395141601563
+            443.38165283203127,
+            122.00506591796875,
+            185.6177978515625
         ],
         "cameraAltitudeAzimuth": [
-            1.2783317565917969,
-            1.6187025308609009
+            -0.24891315400600434,
+            1.7454910278320313
         ],
         "importedResources": [
             {
@@ -101,8 +101,8 @@
                 "value": "6"
             },
             {
-                "name": "ShiftHeliosPosition",
-                "value": "-1.362000"
+                "name": "ShiftPinholePosition",
+                "value": "0.000000,0.000000,0.000000"
             },
             {
                 "name": "ToggleChromaticAberration",
