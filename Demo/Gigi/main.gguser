@@ -294,7 +294,7 @@
             },
             {
                 "name": "TemporalAccumulation_Enabled",
-                "value": "true"
+                "value": "false"
             },
             {
                 "name": "ToneMap_ExposureFStops",
