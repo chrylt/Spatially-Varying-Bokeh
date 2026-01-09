@@ -149,7 +149,7 @@ float2 SampleDistortionStage(float2 currentOffset, uint stageIndex, Texture2DArr
 	return sample * 2.0f - 1.0f;
 }
 
-float2 ApplyDistortionStagesSlow(float2 offset, ScreenGeometry screen, float centerToSamplePos)
+float2 ApplyDistortionStagesSlow(float2 offset, ScreenGeometry screen, float2 centerToSamplePos)
 {
 	const uint kStageCount = 8u;
 
@@ -173,10 +173,14 @@ float2 ApplyDistortionStagesSlow(float2 offset, ScreenGeometry screen, float cen
 
 // slow distortion end
 
-float2 ApplyDistortionStagesFast(float2 baseOffset, DistortionStageInfo stageInfo, Texture2DArray<float2> distortionMaps)
+float2 ApplyDistortionStagesFast(float2 offset, ScreenGeometry screen, float2 centerToSamplePos)
 {
-	float2 uv = baseOffset * 0.5f + 0.5f;
-	float2 sample = distortionMaps.SampleLevel(linearClampSampler, float3(uv, stageInfo.stageIndex + stageInfo.alpha), 0).rg;
+	const uint kStageCount = 8u;
+	float normalizedDistance = length(centerToSamplePos) * screen.invCenterToCornerDistance;
+	DistortionStageInfo stageInfo = ComputeDistortionStageInfo(normalizedDistance, kStageCount);
+	float2 uv = offset * 0.5f + 0.5f;
+	Texture2DArray<float2> distortionMaps = /*$(Image2DArray:Assets\DistortionMaps\one_sample\distortion_map_%i.png:RG8_UNorm:float2:false:false)*/;
+	float2 sample = distortionMaps.SampleLevel(linearClampSampler, float3(uv, normalizedDistance * (kStageCount - 1)), 0).rg;
 	return sample * 2.0f - 1.0f;
 }
 
@@ -206,7 +210,7 @@ float3 getSpatiallyVaryingOffset(uint3 pxAndSampleIndex, uint2 screenSize)
 	RotationBasis rotation = BuildRotationBasis(sampleAngle - c_bottomLeftDirectionAngle);
 	float2 offsetLocal = RotateBackward(sampledOffset, rotation);
 
-	offsetLocal = ApplyDistortionStagesSlow(offsetLocal, screen, centerToSamplePos);
+	offsetLocal = ApplyDistortionStagesFast(offsetLocal, screen, centerToSamplePos);
 
 	float2 offsetScreen = RotateForward(offsetLocal, rotation);
 	float2 samplePos = screen.pixelPosition + offsetScreen * blurRadius;

@@ -23,13 +23,13 @@
         "resourceViewNodeIndex": 36,
         "resourceViewResourceIndex": 3,
         "cameraPos": [
-            443.38165283203127,
-            122.00506591796875,
-            185.6177978515625
+            507.689697265625,
+            138.18455505371095,
+            187.47596740722657
         ],
         "cameraAltitudeAzimuth": [
-            -0.24891315400600434,
-            1.7454910278320313
+            -0.2827434837818146,
+            1.6232351064682007
         ],
         "importedResources": [
             {
@@ -294,7 +294,7 @@
             },
             {
                 "name": "TemporalAccumulation_Enabled",
-                "value": "false"
+                "value": "true"
             },
             {
                 "name": "ToneMap_ExposureFStops",
