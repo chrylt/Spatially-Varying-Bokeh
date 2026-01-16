@@ -1434,7 +1434,7 @@ float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 
 			float mm_to_cm = 1.0f / 10.0f;
 
 			float2 uv = (float2(pixelCoord) + pixelJitter) / dispatchDims;
-			uv.y = 1 - uv.y; // both axis are flipped in the image because of lens mirroring, so this is equivalent to screenPos.y = -screenPos.y;
+			uv.y = 1 - uv.y; // equivalent to screenPos.y = -screenPos.y;
 
 			float3 pinholeOrigin;
 			pinholeOrigin.x = /*$(Image2D:Assets\LensDistortion\exit_position_x.exr:R32_Float:float:false:false)*/.SampleLevel(Linear, uv, 0);

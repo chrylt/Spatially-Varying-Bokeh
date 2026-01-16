@@ -21,7 +21,7 @@
     },
     "snapshot": {
         "resourceViewNodeIndex": 0,
-        "resourceViewResourceIndex": 219,
+        "resourceViewResourceIndex": 221,
         "cameraPos": [
             443.38165283203127,
             122.00506591796875,
@@ -98,7 +98,7 @@
             },
             {
                 "name": "HeliosApertureStop",
-                "value": "2"
+                "value": "6"
             },
             {
                 "name": "ToggleChromaticAberration",
@@ -238,7 +238,7 @@
             },
             {
                 "name": "GatherDOF_FocalDistance",
-                "value": "45.000000"
+                "value": "60.000000"
             },
             {
                 "name": "GatherDOF_FocalRegion",
@@ -246,7 +246,7 @@
             },
             {
                 "name": "GatherDOF_FocalLength",
-                "value": "576.906006"
+                "value": "-280.235992"
             },
             {
                 "name": "GatherDOF_NearTransitionRegion",
@@ -278,7 +278,7 @@
             },
             {
                 "name": "GatherDOF_KernelSize",
-                "value": "40.000000,1.570000,6.000000,0.000000"
+                "value": "60.000000,1.570000,6.000000,0.000000"
             },
             {
                 "name": "GatherDOF_BlurTapCount",
@@ -294,7 +294,7 @@
             },
             {
                 "name": "TemporalAccumulation_Enabled",
-                "value": "true"
+                "value": "false"
             },
             {
                 "name": "ToneMap_ExposureFStops",
