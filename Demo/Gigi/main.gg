@@ -464,6 +464,10 @@
                     "name": "PointClampSampler",
                     "filter": "MinMagMipPoint",
                     "addressMode": "Clamp"
+                },
+                {
+                    "name": "Linear",
+                    "addressMode": "Clamp"
                 }
             ]
         },

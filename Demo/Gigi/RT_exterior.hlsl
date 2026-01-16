@@ -1431,13 +1431,42 @@ float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 
 
 		if (t_renderPinhole)
 		{
-			Ray pinholeRay = baseRay;
+			float mm_to_cm = 1.0f / 10.0f;
+
+			float2 uv = (float2(pixelCoord) + pixelJitter) / dispatchDims;
+			uv.y = 1 - uv.y; // both axis are flipped in the image because of lens mirroring, so this is equivalent to screenPos.y = -screenPos.y;
+
+			float3 pinholeOrigin;
+			pinholeOrigin.x = /*$(Image2D:Assets\LensDistortion\exit_position_x.exr:R32_Float:float:false:false)*/.SampleLevel(Linear, uv, 0);
+			pinholeOrigin.y = /*$(Image2D:Assets\LensDistortion\exit_position_y.exr:R32_Float:float:false:false)*/.SampleLevel(Linear, uv, 0);
+			pinholeOrigin.z = /*$(Image2D:Assets\LensDistortion\exit_position_z.exr:R32_Float:float:false:false)*/.SampleLevel(Linear, uv, 0);
+
+			float3 pinholeDirection;
+			pinholeDirection.x = /*$(Image2D:Assets\LensDistortion\exit_direction_x.exr:R32_Float:float:false:false)*/.SampleLevel(Linear, uv, 0);
+			pinholeDirection.y = /*$(Image2D:Assets\LensDistortion\exit_direction_y.exr:R32_Float:float:false:false)*/.SampleLevel(Linear, uv, 0);
+			pinholeDirection.z = /*$(Image2D:Assets\LensDistortion\exit_direction_z.exr:R32_Float:float:false:false)*/.SampleLevel(Linear, uv, 0);
+			pinholeDirection.xyz = normalize(pinholeDirection.xyz);
 			
+			float3 cameraRight = mul(float4(1.0f, 0.0f, 0.0f, 0.0f), t_invViewMtx).xyz;
+			float3 cameraUp = mul(float4(0.0f, 1.0f, 0.0f, 0.0f), t_invViewMtx).xyz;
+			float3 cameraForward = mul(float4(0.0f, 0.0f, 1.0f, 0.0f), t_invViewMtx).xyz;
+			float3 camPos = t_cameraPos;
+
+			Ray pinholeRay;
+			
+			pinholeRay.Origin = camPos +
+			 	(pinholeOrigin.x * mm_to_cm) * cameraRight +
+			 	(pinholeOrigin.y * mm_to_cm) * cameraUp +
+			 	(pinholeOrigin.z * mm_to_cm) * cameraForward;
+
+			pinholeRay.Direction = normalize(
+			 	pinholeDirection.x * cameraRight +
+			 	pinholeDirection.y * cameraUp +
+			 	pinholeDirection.z * cameraForward);
+
 			float3 sampleColor = ShadeSceneSample(pinholeRay, 1.0f, pinholeDebug, rayIndex, px, rngPinhole);
 			pinholeColor = lerp(pinholeColor, sampleColor, sampleWeight);
 
-			// Debug draw
-			DebugLensOut[pixelCoord] = float4(pinholeRay.Direction, 1.0f);
 		}
 
 		if (t_renderThinLensDoF)

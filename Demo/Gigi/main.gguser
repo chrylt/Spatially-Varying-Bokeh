@@ -20,16 +20,16 @@
         "ProjMtx_textureName": "ColorHDR"
     },
     "snapshot": {
-        "resourceViewNodeIndex": 36,
-        "resourceViewResourceIndex": 3,
+        "resourceViewNodeIndex": 0,
+        "resourceViewResourceIndex": 219,
         "cameraPos": [
-            507.689697265625,
-            138.18455505371095,
-            187.47596740722657
+            443.38165283203127,
+            122.00506591796875,
+            185.6177978515625
         ],
         "cameraAltitudeAzimuth": [
-            -0.2827434837818146,
-            1.6232351064682007
+            -0.24891315400600434,
+            1.7454910278320313
         ],
         "importedResources": [
             {
@@ -66,7 +66,7 @@
             },
             {
                 "name": "RenderLensSimulationDoF",
-                "value": "false"
+                "value": "true"
             },
             {
                 "name": "RenderBokehConfig",
@@ -78,7 +78,7 @@
             },
             {
                 "name": "RenderSize",
-                "value": "800,600"
+                "value": "900,600"
             },
             {
                 "name": "Accumulate",
@@ -98,7 +98,7 @@
             },
             {
                 "name": "HeliosApertureStop",
-                "value": "6"
+                "value": "2"
             },
             {
                 "name": "ToggleChromaticAberration",
