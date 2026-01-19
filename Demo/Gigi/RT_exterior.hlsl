@@ -56,7 +56,6 @@ float sampleHeliosApertureMask(float2 uv)
 #include "DrawBokehConfig.hlsli"
 #include "CameraLensData.hlsli"
 #include "LensSimulation.hlsli"
-#include "DrawDebugLens.hlsli"
 
 //#define FLT_MAX		3.402823466e+38
 #define FLT_MAX		c_maxT

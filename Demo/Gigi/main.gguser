@@ -8,28 +8,28 @@
             "flySpeed": 0.20000000298023225,
             "mouseSensitivity": 0.0010000000474974514,
             "startingCameraPos": [
-                443.38165283203127,
-                122.00506591796875,
-                185.6177978515625
+                499.0633850097656,
+                135.18789672851563,
+                191.41563415527345
             ],
             "startingCameraAltitudeAzimuth": [
-                -0.24891315400600434,
-                1.7454910278320313
+                -0.253282755613327,
+                1.5850532054901124
             ]
         },
         "ProjMtx_textureName": "ColorHDR"
     },
     "snapshot": {
-        "resourceViewNodeIndex": 0,
-        "resourceViewResourceIndex": 221,
+        "resourceViewNodeIndex": 36,
+        "resourceViewResourceIndex": 3,
         "cameraPos": [
-            443.38165283203127,
-            122.00506591796875,
-            185.6177978515625
+            499.0633850097656,
+            135.18789672851563,
+            191.41563415527345
         ],
         "cameraAltitudeAzimuth": [
-            -0.24891315400600434,
-            1.7454910278320313
+            -0.253282755613327,
+            1.5850532054901124
         ],
         "importedResources": [
             {
@@ -66,7 +66,7 @@
             },
             {
                 "name": "RenderLensSimulationDoF",
-                "value": "true"
+                "value": "false"
             },
             {
                 "name": "RenderBokehConfig",

@@ -179,8 +179,8 @@ float2 ApplyDistortionStagesFast(float2 offset, ScreenGeometry screen, float2 ce
 	float normalizedDistance = length(centerToSamplePos) * screen.invCenterToCornerDistance;
 	DistortionStageInfo stageInfo = ComputeDistortionStageInfo(normalizedDistance, kStageCount);
 	float2 uv = offset * 0.5f + 0.5f;
-	Texture2DArray<float2> distortionMaps = /*$(Image2DArray:Assets\DistortionMaps\one_sample\distortion_map_%i.png:RG8_UNorm:float2:false:false)*/;
-	float2 sample = distortionMaps.SampleLevel(linearClampSampler, float3(uv, normalizedDistance * (kStageCount - 1)), 0).rg;
+	Texture3D<float2> distortionMaps = /*$(Image3D:Assets\DistortionMaps\one_sample\distortion_map_%i.png:RG8_UNorm:float2:false:false)*/;
+	float2 sample = distortionMaps.SampleLevel(linearClampSampler, float3(uv, normalizedDistance), 0).rg;
 	return sample * 2.0f - 1.0f;
 }
 

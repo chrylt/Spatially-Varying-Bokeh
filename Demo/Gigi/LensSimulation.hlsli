@@ -1,9 +1,6 @@
 //forward declarations
-void drawDebugHelios(inout DebugInfo debugInfo);
 float3 GetColorForRay(float3 pos, float3 dir, inout uint RNG, inout Struct_PixelDebugStruct pixelDebug, in uint rayIndex, in uint2 px);
 bool VisualFieldLightContributions(float3 pos, float3 dir, uint2 screenDims, out float3 lightColor);
-
-static const float kDebugLineThicknessMultiplier = 0.1f;
 
 // Ray-sphere intersection for a sphere at the origin
 // Returns true if intersection exists and writes the two t values to "intersections" (t0 <= t1)
@@ -68,7 +65,7 @@ float getEtaForWavelength(float n_D, float v_D, float wavelength)
 	return eta;
 }
 
-bool traceLensesFromFilm(inout DebugInfo debugInfo, Ray ray, in float wavelength, int elementCount, LensElement lensElements[16], out Ray outRay)
+bool traceLensesFromFilm(Ray ray, in float wavelength, int elementCount, LensElement lensElements[16], out Ray outRay)
 {
 	float z = 0.0f; // Start at the film, z = 0
 	
@@ -112,8 +109,6 @@ bool traceLensesFromFilm(inout DebugInfo debugInfo, Ray ray, in float wavelength
 			float center = z + curvatureRadius;
 			if (!intersect(curvatureRadius, center, ray, t, normal))
 			{
-                if(t_debug_toggle)
-				    s2h_drawLine(debugInfo.ui, ray.Origin.zy * debugInfo.scale_debug, (ray.Origin + ray.Direction * 10.0f).zy * debugInfo.scale_debug, float4(1, 0, 0, 1), debugInfo.line_thickness *0.1);
 				return false;
 			}
 		}
@@ -129,15 +124,11 @@ bool traceLensesFromFilm(inout DebugInfo debugInfo, Ray ray, in float wavelength
 			bool outOfBounds = (maskUV.x < 0.0f || maskUV.x > 1.0f || maskUV.y < 0.0f || maskUV.y > 1.0f);
 			if (outOfBounds)
 			{
-				if(t_debug_toggle)
-					s2h_drawLine(debugInfo.ui, ray.Origin.zy * debugInfo.scale_debug, (ray.Origin + ray.Direction * 10.0f).zy * debugInfo.scale_debug, float4(1, 0, 0, 1), debugInfo.line_thickness * kDebugLineThicknessMultiplier);
 				return false;
 			}
 			float maskValue = sampleHeliosApertureMask(maskUV);
 			if (maskValue < 0.5f)
 			{
-				if(t_debug_toggle)
-					s2h_drawLine(debugInfo.ui, ray.Origin.zy * debugInfo.scale_debug, (ray.Origin + ray.Direction * 10.0f).zy * debugInfo.scale_debug, float4(1, 0, 0, 1), debugInfo.line_thickness * kDebugLineThicknessMultiplier);
 				return false;
 			}
 		}
@@ -148,15 +139,10 @@ bool traceLensesFromFilm(inout DebugInfo debugInfo, Ray ray, in float wavelength
 			
 			if (r2 > (apertureRadius * apertureRadius)) 
 			{
-                if(t_debug_toggle)
-				    s2h_drawLine(debugInfo.ui, ray.Origin.zy * debugInfo.scale_debug, (ray.Origin + ray.Direction * 10.0f).zy * debugInfo.scale_debug, float4(1, 0, 0, 1), debugInfo.line_thickness * 0.1);
 				return false;
 			}
 		}
 
-		// draw debug line
-		s2h_drawLine(debugInfo.ui, ray.Origin.zy * debugInfo.scale_debug, hit.zy * debugInfo.scale_debug, debugInfo.color, debugInfo.line_thickness * 0.1);
-		
 		ray.Origin = hit;
 		
 		if (!isStop)
@@ -204,31 +190,15 @@ float ApplyRealisticLensSimulation(out Ray ray, float wavelength, uint3 px, inou
 	float3 target = float3(apertureOffset.x, apertureOffset.y, -d_to_film);
 	filmRay.Direction = normalize(target - filmRay.Origin);
 
-	// Debug draw
-	DebugInfo debugInfo;
-	if(t_debug_toggle) {
-		debugInfo.offset = -int2(750, 300);
-		debugInfo.px = px;
-		debugInfo.scale_debug = 6.0f;
-		debugInfo.line_thickness = 5.0f;
-		debugInfo.sensor_height = sensor_height;
-		debugInfo.sensor_width = sensor_width;
-		s2h_init(debugInfo.ui, int2(debugInfo.px.xy) + debugInfo.offset);
-		drawDebugHelios(debugInfo);
-	}
-
 	// Trace through lens elements
 	Ray refracted;
-	if (traceLensesFromFilm(debugInfo, filmRay, wavelength, lens_element_count, lens_elements, refracted))
+	if (traceLensesFromFilm(filmRay, wavelength, lens_element_count, lens_elements, refracted))
 	{
 		float mm_to_cm = 1.0f / 10;
 		ray.Origin = camPos +
 			 (refracted.Origin.x * mm_to_cm) * cameraRight +
 			 (refracted.Origin.y * mm_to_cm) * cameraUp +
 			 (refracted.Origin.z * mm_to_cm) * cameraForward; // film at z=0, rays travel toward -z
-
-		// match camera position with thin-lens simulation
-		//ray.Origin += (t_lens_position_shift * mm_to_cm) * cameraForward;
 
 		ray.Direction = normalize(
 			 refracted.Direction.x * cameraRight +
