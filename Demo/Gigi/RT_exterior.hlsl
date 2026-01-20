@@ -17,12 +17,9 @@ static const float c_maxT = 10000.0f;
 
 // bridge tokens to include files
 static const uint t_aperture_stop = /*$(Variable:HeliosApertureStop)*/;
-static const float t_focal_length = /*$(Variable:FocalLength)*/;
 static const float t_focus_distance = /*$(Variable:FocusDistance)*/;
 static const float4x4 t_invViewMtx = /*$(Variable:InvViewMtx)*/;
 static const float3 t_cameraPos = /*$(Variable:CameraPos)*/;
-static const float t_lens_position_shift = /*$(Variable:ShiftHeliosPosition)*/;
-static const bool t_debug_toggle = /*$(Variable:DebugToggle)*/;
 static const float t_smallLightRadius = /*$(Variable:SmallLightRadius)*/;
 static const float t_smallLightBrightness = /*$(Variable:SmallLightBrightness)*/;
 static const bool t_renderPinhole = /*$(Variable:RenderPinhole)*/;
@@ -34,11 +31,9 @@ static const float t_config_light_distance = /*$(Variable:ConfigLightDistance)*/
 static const uint2 t_config_light_count = /*$(Variable:ConfigLightCount)*/;
 static const bool t_config_only_diagonal = /*$(Variable:ConfigOnlyDiagonal)*/;
 static const int t_only_this_light_by_index = /*$(Variable:OnlyThisLightByIndex)*/;
-static const float t_config_light_field_width = /*$(Variable:ConfigLightFieldWidth)*/;
 
 float sampleHeliosApertureMask(float2 uv)
 {
-	//return 1 - /*$(Image2D:Assets\NoiseTextures\UniformStar\UniformStar.png:R8_UNorm:float:false:false)*/.SampleLevel(PointClampSampler, uv, 0).r;
 	switch(t_aperture_stop)
 	{
 		case 0: return /*$(Image2D:Assets\LensKernels\f2.png:R8_UNorm:float:false:false)*/.SampleLevel(PointClampSampler, uv, 0).r;
@@ -71,7 +66,6 @@ float3 getDistortedScreenToWorldPosition(float2 uv){
 		(origin.z * mm_to_cm) * cameraForward;
 
 	return cameraAdjustedOrigin;
-		
 }
 
 float3 getDistortedScreenToWorldDirection(float2 uv){
@@ -87,9 +81,9 @@ float3 getDistortedScreenToWorldDirection(float2 uv){
 	float3 cameraForward = mul(float4(0.0f, 0.0f, 1.0f, 0.0f), t_invViewMtx).xyz;
 
 	float3 cameraAdjustedDirection = normalize(
-	direction.x * cameraRight +
-	direction.y * cameraUp +
-	direction.z * cameraForward);
+		direction.x * cameraRight +
+		direction.y * cameraUp +
+		direction.z * cameraForward);
 
 	return cameraAdjustedDirection;
 }
@@ -829,7 +823,7 @@ float3 SmallLightColor(int index)
 	return ret;
 }
 
-bool SmallLightContributions(float3 pos, float3 dir, inout Struct_PixelDebugStruct pixelDebug, float maxT, out float3 lightColor, bool writeDebugHitT)
+bool SmallLightContributions(float3 pos, float3 dir, float maxT, out float3 lightColor)
 {
 	// corner 878,380, 419
 	// 815, 380, 395
@@ -880,20 +874,16 @@ bool SmallLightContributions(float3 pos, float3 dir, inout Struct_PixelDebugStru
 		return false;
 	}
 
-	if (writeDebugHitT)
-	{
-		pixelDebug.HitT = globalHitT;
-	}
 	return true;
 }
 
-float3 GetColorForRay(float3 pos, float3 dir, inout uint RNG, inout Struct_PixelDebugStruct pixelDebug, in uint rayIndex, in uint2 px)
+float3 GetColorForRay(float3 pos, float3 dir, inout uint RNG, in uint rayIndex, in uint2 px)
 {
 	float3 throughput = float3(1.0f, 1.0f, 1.0f);
 	float3 color = float3(0.0f, 0.0f, 0.0f);
 
 	// show small lights for primary ray
-	if(SmallLightContributions(pos, dir, pixelDebug, c_maxT, color, rayIndex == 0))
+	if(SmallLightContributions(pos, dir, c_maxT, color))
 		return color;
 
 	for (uint bounceIndex = 0; bounceIndex < /*$(Variable:NumBounces)*/; ++bounceIndex)
@@ -917,7 +907,7 @@ float3 GetColorForRay(float3 pos, float3 dir, inout uint RNG, inout Struct_Pixel
 
 		// see if the ray hit the small lights
 		float3 smallLightColor = float3(0.0f, 0.0f, 0.0f);
-		if(SmallLightContributions(ray.Origin, ray.Direction, pixelDebug, (payload.hitT < 0.0f ? c_maxT : payload.hitT), smallLightColor, false))
+		if(SmallLightContributions(ray.Origin, ray.Direction, (payload.hitT < 0.0f ? c_maxT : payload.hitT), smallLightColor))
 		{
 			color += smallLightColor * throughput;
 			return color;
@@ -929,12 +919,6 @@ float3 GetColorForRay(float3 pos, float3 dir, inout uint RNG, inout Struct_Pixel
 			float3 emissive = /*$(Variable:SkyColor)*/ * /*$(Variable:SkyBrightness)*/;
 			color += emissive * throughput;
 
-			if (rayIndex == 0 && bounceIndex == 0)
-			{
-				pixelDebug.MaterialID = ~0;
-				pixelDebug.HitT = FLT_MAX;
-				pixelDebug.WorldPos = float3(0.0f, 0.0f, 0.0f);
-			}
 			return color;
 		}
 
@@ -963,13 +947,6 @@ float3 GetColorForRay(float3 pos, float3 dir, inout uint RNG, inout Struct_Pixel
 			case MaterialSets::Exterior: materialInfo = EvaluateMaterial_Exterior(materialID, UV); break;
 			case MaterialSets::Interior: materialInfo = EvaluateMaterial_Interior(materialID, UV); break;
 			default: materialInfo.albedo = float3(1.0f, 0.0f, 1.0f); break;
-		}
-
-		if (rayIndex == 0 && bounceIndex == 0)
-		{
-			pixelDebug.MaterialID = materialID;
-			pixelDebug.HitT = payload.hitT;
-			pixelDebug.WorldPos = pos + dir * payload.hitT;
 		}
 
 		// Glass
@@ -1420,11 +1397,6 @@ float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 
 	const float2 dispatchDims = float2(dispatchDimsUInt);
 	const uint2 pixelCoord = DispatchRaysIndex().xy;
 
-	Struct_PixelDebugStruct pinholeDebug = (Struct_PixelDebugStruct)0;
-	Struct_PixelDebugStruct thinLensDebug = (Struct_PixelDebugStruct)0;
-	Struct_PixelDebugStruct lensSimDebug = (Struct_PixelDebugStruct)0;
-	Struct_PixelDebugStruct bokehDebug = (Struct_PixelDebugStruct)0;
-
 	float3 pinholeColor = float3(0.0f, 0.0f, 0.0f);
 	float3 thinLensColor = float3(0.0f, 0.0f, 0.0f);
 	float3 lensSimColor = float3(0.0f, 0.0f, 0.0f);
@@ -1456,13 +1428,6 @@ float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 
 		float2 screenPos = (float2(pixelCoord) + pixelJitter) / dispatchDims * 2.0f - 1.0f;
 		screenPos.y = -screenPos.y;
 
-		float4 world = mul(float4(screenPos, /*$(Variable:DepthNearPlane)*/, 1.0f), /*$(Variable:InvViewProjMtx)*/);
-		world.xyz /= world.w;
-
-		Ray baseRay;
-		baseRay.Origin = /*$(Variable:CameraPos)*/;
-		baseRay.Direction = normalize(world.xyz - /*$(Variable:CameraPos)*/);
-
 		float sampleWeight = 1.0f / float(rayIndex + 1);
 
 		uint rngPinhole = rngForJitter;
@@ -1473,7 +1438,7 @@ float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 
 		float mm_to_cm = 1.0f / 10.0f;
 
 		float2 uv = (float2(pixelCoord) + pixelJitter) / dispatchDims;
-		uv.y = 1 - uv.y; // equivalent to screenPos.y = -screenPos.y;
+		uv.y = 1 - uv.y;
 
 		Ray pinholeRay;
 		pinholeRay.Origin = getDistortedScreenToWorldPosition(uv);
@@ -1481,34 +1446,34 @@ float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 
 		
 		if (t_renderPinhole)
 		{
-			float3 sampleColor = ShadeSceneSample(pinholeRay, 1.0f, pinholeDebug, rayIndex, px, rngPinhole);
+			float3 sampleColor = ShadeSceneSample(pinholeRay, 1.0f, rayIndex, px, rngPinhole);
 			pinholeColor = lerp(pinholeColor, sampleColor, sampleWeight);
 		}
 
 		if (t_renderThinLensDoF)
 		{
+			float4 world = mul(float4(screenPos, /*$(Variable:DepthNearPlane)*/, 1.0f), /*$(Variable:InvViewProjMtx)*/);
+			world.xyz /= world.w;
+
 			Ray thinRay = (Ray)0;
 			float thinPDF = 1.0f;
-			float3 thinOrigin = baseRay.Origin;
-			float3 thinDirection = baseRay.Direction;
+			float3 thinOrigin = t_cameraPos;
+			float3 thinDirection = normalize(world.xyz - t_cameraPos);
 			thinPDF = ApplyDOFLensSimulation(thinOrigin, thinDirection, px, rngThinLens, dispatchDimsUInt);
 			thinRay.Origin = thinOrigin;
 			thinRay.Direction = thinDirection;
 
-			if (t_renderThinLensDoF)
-			{
-				float3 sampleColor = ShadeSceneSample(thinRay, thinPDF, thinLensDebug, rayIndex, px, rngThinLens);
-				thinLensColor = lerp(thinLensColor, sampleColor, sampleWeight);
-			}
+			float3 sampleColor = ShadeSceneSample(thinRay, thinPDF, rayIndex, px, rngThinLens);
+			thinLensColor = lerp(thinLensColor, sampleColor, sampleWeight);
 		}
 
 		if (t_renderLensSimulationDoF)
 		{
-			// todo: more efficient by generating base rays towards aperture circle?
+			Ray outputRay;
 			uint rngLensScene = rngLensSimulation;
 			float3 sampleColor = (/*$(Variable:ToggleChromaticAberration)*/)
-				? TraceRealisticChromatic(baseRay, screenPos, dispatchDimsUInt, px, rngLensScene, lensSimDebug, rayIndex, false)
-				: TraceRealisticMonochrome(baseRay, screenPos, dispatchDimsUInt, px, rngLensScene, lensSimDebug, rayIndex, false);
+				? TraceRealisticChromatic(outputRay, screenPos, dispatchDimsUInt, px, rngLensScene, rayIndex, false)
+				: TraceRealisticMonochrome(outputRay, screenPos, dispatchDimsUInt, px, rngLensScene, rayIndex, false);
 			lensSimColor = lerp(lensSimColor, sampleColor, sampleWeight);
 		}
 
@@ -1525,22 +1490,27 @@ float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 
 				}
 				case BokehConfigState::ThinLens:
 				{
+					float4 world = mul(float4(screenPos, /*$(Variable:DepthNearPlane)*/, 1.0f), /*$(Variable:InvViewProjMtx)*/);
+					world.xyz /= world.w;
+
 					Ray thinRay = (Ray)0;
 					float thinPDF = 1.0f;
-					float3 thinOrigin = baseRay.Origin;
-					float3 thinDirection = baseRay.Direction;
+					float3 thinOrigin = t_cameraPos;
+					float3 thinDirection = normalize(world.xyz - t_cameraPos);
 					thinPDF = ApplyDOFLensSimulation(thinOrigin, thinDirection, px, rngThinLens, dispatchDimsUInt);
 					thinRay.Origin = thinOrigin;
 					thinRay.Direction = thinDirection;
+
 					sampleColor = ShadeVisualFieldSample(thinRay, thinPDF);
 					break;
 				}
 				case BokehConfigState::RealisticLens:
 				{
+					Ray outputRay;
 					uint rngLensBokeh = rngBokeh;
 					sampleColor = (/*$(Variable:ToggleChromaticAberration)*/)
-						? TraceRealisticChromatic(baseRay, screenPos, dispatchDimsUInt, px, rngLensBokeh, bokehDebug, rayIndex, true)
-						: TraceRealisticMonochrome(baseRay, screenPos, dispatchDimsUInt, px, rngLensBokeh, bokehDebug, rayIndex, true);
+						? TraceRealisticChromatic(outputRay, screenPos, dispatchDimsUInt, px, rngLensBokeh, rayIndex, true)
+						: TraceRealisticMonochrome(outputRay, screenPos, dispatchDimsUInt, px, rngLensBokeh, rayIndex, true);
 					break;
 				}
 				default:
@@ -1563,7 +1533,6 @@ float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 
 		float3 oldColor = PinholeOut[pixelCoord].rgb;
 		float3 blended = lerp(oldColor, pinholeColor, accumulationAlpha);
 		PinholeOut[pixelCoord] = float4(blended, 1.0f);
-		LinearDepth[pixelCoord] = pinholeDebug.HitT;
 	}
 
 	if (t_renderThinLensDoF)
@@ -1587,11 +1556,6 @@ float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 
 		BokehConfigOut[pixelCoord] = float4(blended, 1.0f);
 	}
 
-	if (all(uint2(/*$(Variable:MouseState)*/.xy) == pixelCoord))
-	{
-		pinholeDebug.MousePos = /*$(Variable:MouseState)*/.xy;
-		PixelDebug[0] = pinholeDebug;
-	}
 }
 
 /*$(_miss:Miss)*/

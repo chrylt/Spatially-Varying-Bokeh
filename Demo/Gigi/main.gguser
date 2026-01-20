@@ -21,7 +21,7 @@
     },
     "snapshot": {
         "resourceViewNodeIndex": 0,
-        "resourceViewResourceIndex": 222,
+        "resourceViewResourceIndex": 220,
         "cameraPos": [
             499.0633850097656,
             135.18789672851563,
@@ -89,14 +89,6 @@
                 "value": "true"
             },
             {
-                "name": "BokehConfigMode",
-                "value": "0"
-            },
-            {
-                "name": "DebugToggle",
-                "value": "false"
-            },
-            {
                 "name": "HeliosApertureStop",
                 "value": "6"
             },
@@ -135,10 +127,6 @@
             {
                 "name": "AlbedoModeAlbedoMultiplier",
                 "value": "2.000000"
-            },
-            {
-                "name": "FocalLength",
-                "value": "46.331001"
             },
             {
                 "name": "LensRNGSource",
@@ -217,8 +205,12 @@
                 "value": "-1"
             },
             {
-                "name": "ConfigLightFieldWidth",
-                "value": "30.400000"
+                "name": "BokehConfigMode",
+                "value": "0"
+            },
+            {
+                "name": "FocalLength",
+                "value": "46.331001"
             },
             {
                 "name": "GatherDOF_doubleOffset",

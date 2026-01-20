@@ -66,21 +66,6 @@
             "visibility": "User"
         },
         {
-            "name": "BokehConfigMode",
-            "type": "Int",
-            "dflt": "0",
-            "visibility": "User",
-            "Enum": "BokehConfigState",
-            "UIGroup": "BokehConfig"
-        },
-        {
-            "name": "DebugToggle",
-            "type": "Bool",
-            "dflt": "0",
-            "visibility": "User",
-            "UIGroup": "LensSimulationDoF"
-        },
-        {
             "name": "HeliosApertureStop",
             "type": "Uint",
             "dflt": "6",
@@ -90,20 +75,6 @@
                 "min": "0",
                 "max": "6",
                 "step": "1"
-            },
-            "UIGroup": "LensSimulationDoF"
-        },
-        {
-            "name": "ShiftHeliosPosition",
-            "comment": "Shift the position of the helios lens backward in millimeters",
-            "type": "Float",
-            "dflt": "0",
-            "visibility": "User",
-            "UISettings": {
-                "UIHint": "Slider",
-                "min": "-200",
-                "max": "200",
-                "step": "0.1"
             },
             "UIGroup": "LensSimulationDoF"
         },
@@ -195,19 +166,6 @@
             "dflt": "0.5f",
             "visibility": "User",
             "UIGroup": "Scene"
-        },
-        {
-            "name": "FocalLength",
-            "type": "Float",
-            "dflt": "28",
-            "visibility": "User",
-            "UISettings": {
-                "UIHint": "Slider",
-                "min": "5",
-                "max": "60",
-                "step": "0.1"
-            },
-            "UIGroup": "ThinLensDoF"
         },
         {
             "name": "LensRNGSource",
@@ -364,12 +322,19 @@
             "UIGroup": "BokehConfig"
         },
         {
-            "name": "ConfigLightFieldWidth",
-            "comment": "width of lights field in world units (cm)",
-            "type": "Float",
-            "dflt": "1000",
+            "name": "BokehConfigMode",
+            "type": "Int",
+            "dflt": "0",
             "visibility": "User",
+            "Enum": "BokehConfigState",
             "UIGroup": "BokehConfig"
+        },
+        {
+            "name": "FocalLength",
+            "type": "Float",
+            "dflt": "40",
+            "visibility": "User",
+            "UIGroup": "ThinLensDoF"
         }
     ],
     "shaders": [
@@ -437,22 +402,6 @@
                         },
                         "PODAsStructuredBuffer": false
                     }
-                },
-                {
-                    "name": "PixelDebug",
-                    "access": "UAV",
-                    "type": "Buffer",
-                    "buffer": {
-                        "typeStruct": {
-                            "name": "PixelDebugStruct"
-                        },
-                        "PODAsStructuredBuffer": false
-                    }
-                },
-                {
-                    "name": "DebugLensOut",
-                    "access": "UAV",
-                    "type": "Texture"
                 }
             ],
             "samplers": [
@@ -529,39 +478,6 @@
                     "semantic": "MaterialID"
                 }
             ]
-        },
-        {
-            "name": "PixelDebugStruct",
-            "fields": [
-                {
-                    "name": "MousePos",
-                    "type": "Float2"
-                },
-                {
-                    "name": "MaterialID",
-                    "type": "Uint"
-                },
-                {
-                    "name": "HitT",
-                    "type": "Float"
-                },
-                {
-                    "name": "WorldPos",
-                    "type": "Float3"
-                },
-                {
-                    "name": "centerDepth",
-                    "type": "Float"
-                },
-                {
-                    "name": "centerSize",
-                    "type": "Float"
-                },
-                {
-                    "name": "tot",
-                    "type": "Float"
-                }
-            ]
         }
     ],
     "fileCopies": [
@@ -571,10 +487,6 @@
         },
         {
             "fileName": "CameraLensData.hlsli",
-            "type": "Shader"
-        },
-        {
-            "fileName": "DrawDebugLens.hlsli",
             "type": "Shader"
         },
         {
@@ -653,8 +565,6 @@
                     {},
                     {},
                     {},
-                    {},
-                    {},
                     {}
                 ],
                 "connections": [
@@ -692,16 +602,6 @@
                         "srcPin": "VertexBuffer",
                         "dstNode": "VertexBuffer",
                         "dstPin": "resource"
-                    },
-                    {
-                        "srcPin": "PixelDebug",
-                        "dstNode": "PixelDebug",
-                        "dstPin": "resource"
-                    },
-                    {
-                        "srcPin": "DebugLensOut",
-                        "dstNode": "DebugTex",
-                        "dstPin": "resource"
                     }
                 ],
                 "shader": {
@@ -728,20 +628,6 @@
                 "size": {
                     "variable": {
                         "name": "RenderSize"
-                    }
-                }
-            }
-        },
-        {
-            "resourceBuffer": {
-                "name": "PixelDebug",
-                "editorPos": [
-                    -453.0,
-                    -526.0
-                ],
-                "format": {
-                    "structureType": {
-                        "name": "PixelDebugStruct"
                     }
                 }
             }
@@ -1116,27 +1002,6 @@
                         "replaceWithStr": "CameraChanged"
                     }
                 ]
-            }
-        },
-        {
-            "resourceTexture": {
-                "name": "DebugTex",
-                "editorPos": [
-                    -421.0,
-                    -462.0
-                ],
-                "transient": false,
-                "format": {
-                    "format": "RGBA32_Float"
-                },
-                "size": {
-                    "node": {
-                        "name": "ColorHDR"
-                    },
-                    "variable": {
-                        "name": "RenderSize"
-                    }
-                }
             }
         },
         {

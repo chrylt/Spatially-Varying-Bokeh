@@ -1,6 +1,6 @@
 //forward declarations
-float3 GetColorForRay(float3 pos, float3 dir, inout uint RNG, inout Struct_PixelDebugStruct pixelDebug, in uint rayIndex, in uint2 px);
-bool VisualFieldLightContributions(float3 pos, float3 dir, uint2 screenDims, out float3 lightColor);
+float3 GetColorForRay(float3 pos, float3 dir, inout uint RNG, in uint rayIndex, in uint2 px);
+bool VisualFieldLightContributions(float3 pos, float3 dir, out float3 lightColor);
 
 // Ray-sphere intersection for a sphere at the origin
 // Returns true if intersection exists and writes the two t values to "intersections" (t0 <= t1)
@@ -213,12 +213,11 @@ float ApplyRealisticLensSimulation(out Ray ray, float wavelength, uint3 px, inou
 float3 ShadeSceneSample(
 	Ray    ray,
 	float  PDF,
-	inout Struct_PixelDebugStruct pixelDebug,
 	uint   rayIndex,
 	uint3  px,
 	inout uint RNG)
 {
-	return (PDF > 0.0f) ? GetColorForRay(ray.Origin, ray.Direction, RNG, pixelDebug, rayIndex, px.xy) / PDF : float3(0.0f, 0.0f, 0.0f);
+	return (PDF > 0.0f) ? GetColorForRay(ray.Origin, ray.Direction, RNG, rayIndex, px.xy) / PDF : float3(0.0f, 0.0f, 0.0f);
 }
 
 float3 ShadeVisualFieldSample(
@@ -237,7 +236,6 @@ float3 TraceRealisticMonochrome(
 	uint2  screenDims,
 	uint3  px,
 	inout uint RNG,
-	inout Struct_PixelDebugStruct pixelDebug,
 	uint   rayIndex,
 	bool   bokehView)
 {
@@ -245,7 +243,7 @@ float3 TraceRealisticMonochrome(
 	float PDF = ApplyRealisticLensSimulation(ray, 0.0f, px, RNG, screenDims, screenPos);
 	return bokehView
 		? ShadeVisualFieldSample(ray, PDF)
-		: ShadeSceneSample(ray, PDF, pixelDebug, rayIndex, px, RNG);
+		: ShadeSceneSample(ray, PDF, rayIndex, px, RNG);
 }
 
 // Realistic lens with simple RGB chromatic aberration splitting
@@ -255,7 +253,6 @@ float3 TraceRealisticChromatic(
 	uint2  screenDims,
 	uint3  px,
 	inout uint RNG,
-	inout Struct_PixelDebugStruct pixelDebug,
 	uint   rayIndex,
 	bool   bokehView)
 {
@@ -288,7 +285,7 @@ float3 TraceRealisticChromatic(
 	{
 		Ray ray = baseRay;
 		float PDF = ApplyRealisticLensSimulation(ray, wavelengths[i], px, RNG, screenDims, screenPos);
-		channelSamples[i] = ShadeSceneSample(ray, PDF, pixelDebug, rayIndex, px, RNG);
+		channelSamples[i] = ShadeSceneSample(ray, PDF, rayIndex, px, RNG);
 	}
 	return float3(channelSamples[0].r, channelSamples[1].g, channelSamples[2].b);
 }
