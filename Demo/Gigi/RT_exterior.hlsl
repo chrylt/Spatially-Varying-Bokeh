@@ -52,6 +52,48 @@ float sampleHeliosApertureMask(float2 uv)
 	}
 }
 
+float3 getDistortedScreenToWorldPosition(float2 uv){
+
+	float3 origin;
+	origin.x = /*$(Image2D:Assets\LensDistortion\exit_position_x.exr:R32_Float:float:false:false)*/.SampleLevel(Linear, uv, 0);
+	origin.y = /*$(Image2D:Assets\LensDistortion\exit_position_y.exr:R32_Float:float:false:false)*/.SampleLevel(Linear, uv, 0);
+	origin.z = /*$(Image2D:Assets\LensDistortion\exit_position_z.exr:R32_Float:float:false:false)*/.SampleLevel(Linear, uv, 0);
+
+	float3 cameraRight = mul(float4(1.0f, 0.0f, 0.0f, 0.0f), t_invViewMtx).xyz;
+	float3 cameraUp = mul(float4(0.0f, 1.0f, 0.0f, 0.0f), t_invViewMtx).xyz;
+	float3 cameraForward = mul(float4(0.0f, 0.0f, 1.0f, 0.0f), t_invViewMtx).xyz;
+
+	float mm_to_cm = 1.0f / 10.0f;
+
+	float3 cameraAdjustedOrigin = t_cameraPos +
+		(origin.x * mm_to_cm) * cameraRight +
+		(origin.y * mm_to_cm) * cameraUp +
+		(origin.z * mm_to_cm) * cameraForward;
+
+	return cameraAdjustedOrigin;
+		
+}
+
+float3 getDistortedScreenToWorldDirection(float2 uv){
+
+	float3 direction;
+	direction.x = /*$(Image2D:Assets\LensDistortion\exit_direction_x.exr:R32_Float:float:false:false)*/.SampleLevel(Linear, uv, 0);
+	direction.y = /*$(Image2D:Assets\LensDistortion\exit_direction_y.exr:R32_Float:float:false:false)*/.SampleLevel(Linear, uv, 0);
+	direction.z = /*$(Image2D:Assets\LensDistortion\exit_direction_z.exr:R32_Float:float:false:false)*/.SampleLevel(Linear, uv, 0);
+	direction.xyz = normalize(direction.xyz);
+
+	float3 cameraRight = mul(float4(1.0f, 0.0f, 0.0f, 0.0f), t_invViewMtx).xyz;
+	float3 cameraUp = mul(float4(0.0f, 1.0f, 0.0f, 0.0f), t_invViewMtx).xyz;
+	float3 cameraForward = mul(float4(0.0f, 0.0f, 1.0f, 0.0f), t_invViewMtx).xyz;
+
+	float3 cameraAdjustedDirection = normalize(
+	direction.x * cameraRight +
+	direction.y * cameraUp +
+	direction.z * cameraForward);
+
+	return cameraAdjustedDirection;
+}
+
 #include "common_structs.hlsli"
 #include "DrawBokehConfig.hlsli"
 #include "CameraLensData.hlsli"
@@ -1428,44 +1470,19 @@ float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 
 		uint rngLensSimulation = wang_hash(rngThinLens);
 		uint rngBokeh = wang_hash(rngLensSimulation);
 
+		float mm_to_cm = 1.0f / 10.0f;
+
+		float2 uv = (float2(pixelCoord) + pixelJitter) / dispatchDims;
+		uv.y = 1 - uv.y; // equivalent to screenPos.y = -screenPos.y;
+
+		Ray pinholeRay;
+		pinholeRay.Origin = getDistortedScreenToWorldPosition(uv);
+		pinholeRay.Direction = getDistortedScreenToWorldDirection(uv);
+		
 		if (t_renderPinhole)
 		{
-			float mm_to_cm = 1.0f / 10.0f;
-
-			float2 uv = (float2(pixelCoord) + pixelJitter) / dispatchDims;
-			uv.y = 1 - uv.y; // equivalent to screenPos.y = -screenPos.y;
-
-			float3 pinholeOrigin;
-			pinholeOrigin.x = /*$(Image2D:Assets\LensDistortion\exit_position_x.exr:R32_Float:float:false:false)*/.SampleLevel(Linear, uv, 0);
-			pinholeOrigin.y = /*$(Image2D:Assets\LensDistortion\exit_position_y.exr:R32_Float:float:false:false)*/.SampleLevel(Linear, uv, 0);
-			pinholeOrigin.z = /*$(Image2D:Assets\LensDistortion\exit_position_z.exr:R32_Float:float:false:false)*/.SampleLevel(Linear, uv, 0);
-
-			float3 pinholeDirection;
-			pinholeDirection.x = /*$(Image2D:Assets\LensDistortion\exit_direction_x.exr:R32_Float:float:false:false)*/.SampleLevel(Linear, uv, 0);
-			pinholeDirection.y = /*$(Image2D:Assets\LensDistortion\exit_direction_y.exr:R32_Float:float:false:false)*/.SampleLevel(Linear, uv, 0);
-			pinholeDirection.z = /*$(Image2D:Assets\LensDistortion\exit_direction_z.exr:R32_Float:float:false:false)*/.SampleLevel(Linear, uv, 0);
-			pinholeDirection.xyz = normalize(pinholeDirection.xyz);
-			
-			float3 cameraRight = mul(float4(1.0f, 0.0f, 0.0f, 0.0f), t_invViewMtx).xyz;
-			float3 cameraUp = mul(float4(0.0f, 1.0f, 0.0f, 0.0f), t_invViewMtx).xyz;
-			float3 cameraForward = mul(float4(0.0f, 0.0f, 1.0f, 0.0f), t_invViewMtx).xyz;
-			float3 camPos = t_cameraPos;
-
-			Ray pinholeRay;
-			
-			pinholeRay.Origin = camPos +
-			 	(pinholeOrigin.x * mm_to_cm) * cameraRight +
-			 	(pinholeOrigin.y * mm_to_cm) * cameraUp +
-			 	(pinholeOrigin.z * mm_to_cm) * cameraForward;
-
-			pinholeRay.Direction = normalize(
-			 	pinholeDirection.x * cameraRight +
-			 	pinholeDirection.y * cameraUp +
-			 	pinholeDirection.z * cameraForward);
-
 			float3 sampleColor = ShadeSceneSample(pinholeRay, 1.0f, pinholeDebug, rayIndex, px, rngPinhole);
 			pinholeColor = lerp(pinholeColor, sampleColor, sampleWeight);
-
 		}
 
 		if (t_renderThinLensDoF)
@@ -1503,7 +1520,7 @@ float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 
 			{
 				case BokehConfigState::NoDoF:
 				{
-					sampleColor = ShadeVisualFieldSample(baseRay, 1.0f, dispatchDimsUInt);
+					sampleColor = ShadeVisualFieldSample(pinholeRay, 1.0f);
 					break;
 				}
 				case BokehConfigState::ThinLens:
@@ -1515,7 +1532,7 @@ float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 
 					thinPDF = ApplyDOFLensSimulation(thinOrigin, thinDirection, px, rngThinLens, dispatchDimsUInt);
 					thinRay.Origin = thinOrigin;
 					thinRay.Direction = thinDirection;
-					sampleColor = ShadeVisualFieldSample(thinRay, thinPDF, dispatchDimsUInt);
+					sampleColor = ShadeVisualFieldSample(thinRay, thinPDF);
 					break;
 				}
 				case BokehConfigState::RealisticLens:

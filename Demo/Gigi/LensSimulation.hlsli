@@ -198,7 +198,7 @@ float ApplyRealisticLensSimulation(out Ray ray, float wavelength, uint3 px, inou
 		ray.Origin = camPos +
 			 (refracted.Origin.x * mm_to_cm) * cameraRight +
 			 (refracted.Origin.y * mm_to_cm) * cameraUp +
-			 (refracted.Origin.z * mm_to_cm) * cameraForward; // film at z=0, rays travel toward -z
+			 (refracted.Origin.z * mm_to_cm) * cameraForward;
 
 		ray.Direction = normalize(
 			 refracted.Direction.x * cameraRight +
@@ -223,11 +223,10 @@ float3 ShadeSceneSample(
 
 float3 ShadeVisualFieldSample(
 	Ray   ray,
-	float PDF,
-	uint2 screenDims)
+	float PDF)
 {
 	float3 lightColor = float3(0.0f, 0.0f, 0.0f);
-	bool hit = (PDF > 0.0f) && VisualFieldLightContributions(ray.Origin, ray.Direction, screenDims, lightColor);
+	bool hit = (PDF > 0.0f) && VisualFieldLightContributions(ray.Origin, ray.Direction, lightColor);
 	return hit ? (lightColor / max(PDF, 1e-6f)) : float3(0.0f, 0.0f, 0.0f);
 }
 
@@ -245,7 +244,7 @@ float3 TraceRealisticMonochrome(
 	Ray ray = baseRay;
 	float PDF = ApplyRealisticLensSimulation(ray, 0.0f, px, RNG, screenDims, screenPos);
 	return bokehView
-		? ShadeVisualFieldSample(ray, PDF, screenDims)
+		? ShadeVisualFieldSample(ray, PDF)
 		: ShadeSceneSample(ray, PDF, pixelDebug, rayIndex, px, RNG);
 }
 
@@ -276,7 +275,7 @@ float3 TraceRealisticChromatic(
 			Ray ray = baseRay;
 			float PDF = ApplyRealisticLensSimulation(ray, wavelengths[i], px, RNG, screenDims, screenPos);
 			float3 lc = 0.0f;
-			bool hit = (PDF > 0.0f) && VisualFieldLightContributions(ray.Origin, ray.Direction, screenDims, lc);
+			bool hit = (PDF > 0.0f) && VisualFieldLightContributions(ray.Origin, ray.Direction, lc);
 			rc[i] = hit ? (lc[i] / max(PDF, 1e-6f)) : 0.0f;
 		}
 		return rc;

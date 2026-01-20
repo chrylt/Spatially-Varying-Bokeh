@@ -20,8 +20,8 @@
         "ProjMtx_textureName": "ColorHDR"
     },
     "snapshot": {
-        "resourceViewNodeIndex": 36,
-        "resourceViewResourceIndex": 3,
+        "resourceViewNodeIndex": 0,
+        "resourceViewResourceIndex": 222,
         "cameraPos": [
             499.0633850097656,
             135.18789672851563,
@@ -58,7 +58,7 @@
             },
             {
                 "name": "RenderPinhole",
-                "value": "true"
+                "value": "false"
             },
             {
                 "name": "RenderThinLensDoF",
@@ -70,7 +70,7 @@
             },
             {
                 "name": "RenderBokehConfig",
-                "value": "false"
+                "value": "true"
             },
             {
                 "name": "Reset",
@@ -126,7 +126,7 @@
             },
             {
                 "name": "NumBounces",
-                "value": "4"
+                "value": "2"
             },
             {
                 "name": "AlbedoMode",
@@ -186,7 +186,7 @@
             },
             {
                 "name": "SmallLightBrightness",
-                "value": "100.000000"
+                "value": "500.000000"
             },
             {
                 "name": "SmallLightsColor",
@@ -194,23 +194,23 @@
             },
             {
                 "name": "SmallLightsColorful",
-                "value": "true"
+                "value": "false"
             },
             {
                 "name": "SmallLightRadius",
-                "value": "0.500000"
+                "value": "0.100000"
             },
             {
                 "name": "ConfigLightDistance",
-                "value": "400.000000"
+                "value": "300.000000"
             },
             {
                 "name": "ConfigLightCount",
-                "value": "7,5"
+                "value": "15,7"
             },
             {
                 "name": "ConfigOnlyDiagonal",
-                "value": "false"
+                "value": "true"
             },
             {
                 "name": "OnlyThisLightByIndex",
@@ -278,11 +278,11 @@
             },
             {
                 "name": "GatherDOF_KernelSize",
-                "value": "60.000000,1.570000,6.000000,0.000000"
+                "value": "55.000000,1.570000,6.000000,0.000000"
             },
             {
                 "name": "GatherDOF_BlurTapCount",
-                "value": "80"
+                "value": "6"
             },
             {
                 "name": "GatherDOF_FloodFillTapCount",
@@ -294,7 +294,7 @@
             },
             {
                 "name": "TemporalAccumulation_Enabled",
-                "value": "false"
+                "value": "true"
             },
             {
                 "name": "ToneMap_ExposureFStops",

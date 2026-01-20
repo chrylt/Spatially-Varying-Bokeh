@@ -3,17 +3,22 @@ float TestSphereTrace(in float3 rayPos, in float3 rayDir, in float4 sphere, out 
 
 // Fixed configuration constants
 static const float3 BCONF_LIGHT_COLOR = float3(1.0f, 1.0f, 1.0f);
-static const float VERTICAL_FOV = 22.0f; // degrees
 
-bool TraceLightsDiagonal(float3 pos, float3 dir, float3 planeCenter, float3 cameraRight, float3 cameraUp, float fieldWidth, float fieldHeight, int targetIndex, inout float globalHitT)
+bool TraceLightsDiagonal(float3 pos, float3 dir, int targetIndex, inout float globalHitT)
 {
-	uint diagCount = max(t_config_light_count.x, t_config_light_count.y);
-	diagCount = max(diagCount, 1u);
+	uint diagCount = max(t_config_light_count.x, 1u);
 
-	float halfWidth = fieldWidth * 0.5f;
-	float halfHeight = fieldHeight * 0.5f;
-	float3 diagonalStart = planeCenter;
-	float3 diagonalEnd = planeCenter + cameraRight * halfWidth + cameraUp * halfHeight;
+	float2 uv = float2(0.5, 0.5);
+	float3 distortedCenterOrigin = getDistortedScreenToWorldPosition(uv);
+	float3 distortedCenterDirection = getDistortedScreenToWorldDirection(uv);
+	
+	float3 diagonalStart = distortedCenterOrigin + distortedCenterDirection * t_config_light_distance;
+
+	uv = float2(1, 1);
+	float3 distortedCornerOrigin = getDistortedScreenToWorldPosition(uv);
+	float3 distortedCornerDirection = getDistortedScreenToWorldDirection(uv);
+
+	float3 diagonalEnd = distortedCornerOrigin + distortedCornerDirection * t_config_light_distance;
 
 	bool anyHit = false;
 
@@ -51,19 +56,16 @@ bool TraceLightsDiagonal(float3 pos, float3 dir, float3 planeCenter, float3 came
 	return anyHit;
 }
 
-bool TraceLightsGrid(float3 pos, float3 dir, float3 planeCenter, float3 cameraRight, float3 cameraUp, float fieldWidth, float fieldHeight, int targetIndex, inout float globalHitT)
+bool TraceLightsGrid(float3 pos, float3 dir, int targetIndex, inout float globalHitT)
 {
 	uint gridLightsX = max(t_config_light_count.x, 1u);
 	uint gridLightsY = max(t_config_light_count.y, 1u);
-
-	float halfWidth = fieldWidth * 0.5f;
-	float halfHeight = fieldHeight * 0.5f;
 
 	bool anyHit = false;
 
 	for (uint y = 0u; y < gridLightsY; ++y)
 	{
-		float v = ((float(y) + 0.5f) / float(gridLightsY)) * 2.0f - 1.0f;
+		float v = float(y) / float(gridLightsY - 1);
 
 		for (uint x = 0u; x < gridLightsX; ++x)
 		{
@@ -77,11 +79,15 @@ bool TraceLightsGrid(float3 pos, float3 dir, float3 planeCenter, float3 cameraRi
 					return anyHit;
 			}
 
-			float u = ((float(x) + 0.5f) / float(gridLightsX)) * 2.0f - 1.0f;
+			float u = float(x) / float(gridLightsX - 1);
 
-			float3 lightPos = planeCenter
-				+ (u * halfWidth) * cameraRight
-				+ (v * halfHeight) * cameraUp;
+			float2 uv = float2(u, v);
+			uv.y = 1 - uv.y;
+			float3 distortedPinholeOrigin = getDistortedScreenToWorldPosition(uv);
+			float3 distortedPinholeDirection = getDistortedScreenToWorldDirection(uv);
+
+			// this makes the grid consistent with the distortion in screen space, but not world space
+			float3 lightPos = distortedPinholeOrigin + distortedPinholeDirection * t_config_light_distance; 
 
 			float3 sphereNormal;
 			float t = TestSphereTrace(pos, dir, float4(lightPos, t_smallLightRadius), sphereNormal);
@@ -103,35 +109,18 @@ bool TraceLightsGrid(float3 pos, float3 dir, float3 planeCenter, float3 cameraRi
 	return anyHit;
 }
 
-bool VisualFieldLightContributions(float3 pos, float3 dir, uint2 screenDims, out float3 lightColor)
+bool VisualFieldLightContributions(float3 pos, float3 dir, out float3 lightColor)
 {
-	float3 cameraRight = mul(float4(1.0f, 0.0f, 0.0f, 0.0f), t_invViewMtx).xyz;
-	float3 cameraUp    = mul(float4(0.0f, 1.0f, 0.0f, 0.0f), t_invViewMtx).xyz;
-	float3 cameraFwd   = mul(float4(0.0f, 0.0f, -1.0f, 0.0f), t_invViewMtx).xyz;
-	float3 camPos      = t_cameraPos;
-
-	float aspect = (screenDims.y > 0u) ? (float(screenDims.x) / float(screenDims.y)) : 1.0f;
-	float planeDistance = t_config_light_distance;
-
-	float horizontalFov = VERTICAL_FOV * aspect;
-	horizontalFov = (horizontalFov > 3.14159265f) ? radians(horizontalFov) : horizontalFov;
-	float halfHorizontalFov = horizontalFov * 0.5f;
-	float distanceAbs = abs(planeDistance);
-	float fieldWidth = (halfHorizontalFov > 0.0f) ? (2.0f * distanceAbs * tan(halfHorizontalFov)) : 0.0f;
-	float fieldHeight = (aspect > 0.0f) ? (fieldWidth / aspect) : fieldWidth;
-
-	float3 planeCenter = camPos + cameraFwd * planeDistance;
-
 	float globalHitT = c_maxT;
 	bool anyHit = false;
 
 	if (t_config_only_diagonal)
 	{
-		anyHit = TraceLightsDiagonal(pos, dir, planeCenter, cameraRight, cameraUp, fieldWidth, fieldHeight, t_only_this_light_by_index, globalHitT);
+		anyHit = TraceLightsDiagonal(pos, dir, t_only_this_light_by_index, globalHitT);
 	}
 	else
 	{
-		anyHit = TraceLightsGrid(pos, dir, planeCenter, cameraRight, cameraUp, fieldWidth, fieldHeight, t_only_this_light_by_index, globalHitT);
+		anyHit = TraceLightsGrid(pos, dir, t_only_this_light_by_index, globalHitT);
 	}
 
 	if (!anyHit)
