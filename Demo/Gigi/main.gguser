@@ -8,28 +8,28 @@
             "flySpeed": 0.20000000298023225,
             "mouseSensitivity": 0.0010000000474974514,
             "startingCameraPos": [
-                499.0633850097656,
-                135.18789672851563,
-                191.41563415527345
+                414.5135192871094,
+                121.68706512451172,
+                191.9246368408203
             ],
             "startingCameraAltitudeAzimuth": [
-                -0.253282755613327,
-                1.5850532054901124
+                -0.1658744513988495,
+                1.6004464626312256
             ]
         },
         "ProjMtx_textureName": "ColorHDR"
     },
     "snapshot": {
-        "resourceViewNodeIndex": 0,
-        "resourceViewResourceIndex": 220,
+        "resourceViewNodeIndex": 36,
+        "resourceViewResourceIndex": 3,
         "cameraPos": [
-            499.0633850097656,
-            135.18789672851563,
-            191.41563415527345
+            414.5135192871094,
+            121.68706512451172,
+            191.9246368408203
         ],
         "cameraAltitudeAzimuth": [
-            -0.253282755613327,
-            1.5850532054901124
+            -0.1658744513988495,
+            1.6004464626312256
         ],
         "importedResources": [
             {
@@ -54,7 +54,7 @@
         "savedVariables": [
             {
                 "name": "FocusDistance",
-                "value": "45.000000"
+                "value": "37.525002"
             },
             {
                 "name": "RenderPinhole",
@@ -82,7 +82,7 @@
             },
             {
                 "name": "Accumulate",
-                "value": "true"
+                "value": "false"
             },
             {
                 "name": "Animate",
@@ -94,7 +94,7 @@
             },
             {
                 "name": "ToggleChromaticAberration",
-                "value": "false"
+                "value": "true"
             },
             {
                 "name": "MaterialSet",
@@ -118,7 +118,7 @@
             },
             {
                 "name": "NumBounces",
-                "value": "2"
+                "value": "8"
             },
             {
                 "name": "AlbedoMode",
@@ -174,7 +174,7 @@
             },
             {
                 "name": "SmallLightBrightness",
-                "value": "500.000000"
+                "value": "50.000000"
             },
             {
                 "name": "SmallLightsColor",
@@ -182,11 +182,11 @@
             },
             {
                 "name": "SmallLightsColorful",
-                "value": "false"
+                "value": "true"
             },
             {
                 "name": "SmallLightRadius",
-                "value": "0.100000"
+                "value": "0.300000"
             },
             {
                 "name": "ConfigLightDistance",
@@ -194,11 +194,11 @@
             },
             {
                 "name": "ConfigLightCount",
-                "value": "15,7"
+                "value": "11,7"
             },
             {
                 "name": "ConfigOnlyDiagonal",
-                "value": "true"
+                "value": "false"
             },
             {
                 "name": "OnlyThisLightByIndex",
@@ -206,7 +206,7 @@
             },
             {
                 "name": "BokehConfigMode",
-                "value": "0"
+                "value": "2"
             },
             {
                 "name": "FocalLength",
@@ -274,7 +274,7 @@
             },
             {
                 "name": "GatherDOF_BlurTapCount",
-                "value": "6"
+                "value": "3"
             },
             {
                 "name": "GatherDOF_FloodFillTapCount",
@@ -286,7 +286,7 @@
             },
             {
                 "name": "TemporalAccumulation_Enabled",
-                "value": "true"
+                "value": "false"
             },
             {
                 "name": "ToneMap_ExposureFStops",
@@ -306,7 +306,7 @@
             },
             {
                 "name": "GatherDOF__1__doubleOffset",
-                "value": "true"
+                "value": "false"
             },
             {
                 "name": "GatherDOF__1__UseNoiseTextures",
@@ -322,7 +322,7 @@
             },
             {
                 "name": "GatherDOF__1__FocalLength",
-                "value": "580.153015"
+                "value": "-241.378998"
             },
             {
                 "name": "GatherDOF__1__DoNearField",

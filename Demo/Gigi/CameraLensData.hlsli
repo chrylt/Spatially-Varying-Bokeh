@@ -1,15 +1,21 @@
-// === CAMERA / LENS SPECS ===
+// === CAMERA SPECS ===
 // Sony a7R III camera
-// Helios 44-2 58mm/f2 lens
-static const float sony_sensor_width = 35.9f; // sonya7riii specs Full frame (35.9 x 24 mm) sensor size
+static const float sony_sensor_width = 35.9f;
 static const float sony_sensor_height = 24.0f;
-static const float helios_max_focal_length = 58.0f; // mm
+//static const float sony_sensor_width = 60;
+//static const float sony_sensor_height = 40;
+
+// === HELIOS LENS DATA ===
+// Helios 44-2 58mm/f2 lens
+// measured (mm)
+static const float helios_measured_aperture[] = { 3.0f, 8.0f, 12.0f, 15.0f, 17.2f, 19.0f, 20.0f }; // mm
+
+static const float focal_length = 50.0f; // mm
 static const float helios_aperture_stops[7] = { 2.0f, 2.8f, 4.0f, 5.6f, 8.0f, 11.0f, 16.0f }; // f-stops [0; 6]
 
 // === BIOTAR PATENT DATA ===
-//static const float helios_scale = helios_max_focal_length / 100.0f; // helios unit scaling from patent wrong?
-
-// Curvature radii (patent units)
+// according to Biotar 1:1.4/5
+// curvature radii (patent units)
 static const float no_curv = 0.0f; // obviously flat
 static const float biotar_r1_p = 83.6f;
 static const float biotar_r2_p = 321.0f;
@@ -22,7 +28,7 @@ static const float biotar_r8_p = -53.2f;
 static const float biotar_r9_p = 106.0f;
 static const float biotar_r10_p = -120.0f;
 
-// Lens thicknesses (patent units)
+// lens thicknesses (patent units)
 static const float biotar_d1_p = 10.75f;
 static const float biotar_d2_p = 15.55f;
 static const float biotar_d3_p = 5.05f;
@@ -30,12 +36,12 @@ static const float biotar_d4_p = 5.05f;
 static const float biotar_d5_p = 21.22f;
 static const float biotar_d6_p = 13.9f;
 
-// Separations/distances (patent units)
+// separations (patent units)
 static const float biotar_l1_p = 1.65f;
 static const float biotar_l2_p = 18.9f;
 static const float biotar_l3_p = 0.97f;
 
-// Refractive indices
+// refractive indices
 static const float n_air = 1.0f;
 static const float biotar_n1 = 1.64238f;
 static const float biotar_n2 = 1.62306f;
@@ -53,32 +59,29 @@ static const float biotar_v4 = 32.2f;
 static const float biotar_v5 = 48.0f;
 static const float biotar_v6 = 48.0f;
 
-// measured (mm)
-// focal length variation in reality measured: 9mm
-// measured 18mm distance from aperture to r10 center
-// adapter length 26mm added distance to film
-// measured 16mm adapter end to film
-// measured 19mm r10 to adapter end
-// measured 28mm r10 to adapter end at infinity focus
-static const float helios_lens_length_measured = 40.0f; // mm
-static const float helios_front_hood_length_mm = 15.0f - 2.0f; // mm; excluding outermost ring
-static const float helios_measured_aperture[] = { 3.0f, 8.0f, 12.0f, 15.0f, 17.2f, 19.0f, 20.0f }; // mm
+// measured (pixel)
+static const float biotar_a1_px = 455;	// measured as diameter
+static const float biotar_a2_px = 406;	// measured as diameter
+static const float biotar_a3_px = 270;	// measured as diameter
+static const float biotar_a4_px = 362;	// measured as diameter
 
-// Lens radius (mm)
-static const float helios_lens_r0_mm = 41.5f / 2; // mm measured
-static const float helios_lens_r1_mm = 30.0f / 2; // mm measured
-static const float helios_lens_r5_mm = 20.0f / 2; // mm measured
-static const float helios_lens_r6_mm = 19.0f / 2; // mm measured
-static const float helios_lens_r10_mm = 25.0f / 2; // mm measured; should cover r7-r10
+static const float biotar_l2_1 = 73;
+static const float biotar_l2_2 = 46;
+static const float biotar_l2_split = biotar_l2_1 / (biotar_l2_1 + biotar_l2_2); // portion of l2 before aperture
 
-// Useful calculations
-static const float biotar_lens_length_p = biotar_d1_p + biotar_d2_p + biotar_d3_p + biotar_d4_p + biotar_d5_p + biotar_d6_p + biotar_l1_p + biotar_l2_p + biotar_l3_p; // sum of sep in mm ~53.9632
+// measured (pixel) for pixel to mm conversion
+static const float biotar_d1_px = 71;
+static const float biotar_d2_px = 100;
+static const float biotar_d3_px = 30;
+static const float biotar_d4_px = 30;
+static const float biotar_d5_px = 134;
+static const float biotar_d6_px = 86;
 
-// Conversions
-//static const float patent_to_mm = helios_lens_length_measured / helios_lens_length_p; // mm per patent unit
-static const float patent_to_mm = 0.58f;
-static const float biotar_lens_length_mm = biotar_lens_length_p * patent_to_mm;
-static const float helios_to_biotar_mm = biotar_lens_length_mm / helios_lens_length_measured; // should be close to patent_to_mm but not exactly the same
+// === CONSTRUCTION OF USABLE LENS DATA ===
+
+// conversions
+static const float patent_to_mm = focal_length / 100.0f;
+static const float pixel_to_patent =  (biotar_d1_p / biotar_d1_px + biotar_d2_p / biotar_d2_px + biotar_d3_p / biotar_d3_px + biotar_d4_p / biotar_d4_px + biotar_d5_p / biotar_d5_px + biotar_d6_p / biotar_d6_px) / 6.0f; // patent units per pixel, take average for more accuracy
 
 // decide on which measures to use (in mm)
 // curvature radii
@@ -94,19 +97,12 @@ static const float r9_curv = biotar_r9_p * patent_to_mm;
 static const float r10_curv = biotar_r10_p * patent_to_mm;
 
 // lens size radii
-static const float r0_size = helios_lens_r0_mm * helios_to_biotar_mm;
-static const float r1_size = helios_lens_r1_mm * helios_to_biotar_mm;
-static const float r2_size = helios_lens_r1_mm * helios_to_biotar_mm;
-static const float r3_size = helios_lens_r1_mm * helios_to_biotar_mm; // use r1 size for r2 and r3 because of lack of better measurements
-static const float r4_size = helios_lens_r1_mm * helios_to_biotar_mm;
-static const float r5_size = helios_lens_r5_mm * helios_to_biotar_mm;
-static const float r6_size = helios_lens_r6_mm * helios_to_biotar_mm;
-static const float r7_size = helios_lens_r10_mm * helios_to_biotar_mm; // use r10 size for r7-r10
-static const float r8_size = helios_lens_r10_mm * helios_to_biotar_mm; // use r10 size for r7-r10
-static const float r9_size = helios_lens_r10_mm * helios_to_biotar_mm; // use r10 size for r7-r10
-static const float r10_size = helios_lens_r10_mm * helios_to_biotar_mm;
+static const float a1 = biotar_a1_px * pixel_to_patent * patent_to_mm * 0.5; // radius from diameter
+static const float a2 = biotar_a2_px * pixel_to_patent * patent_to_mm * 0.5;
+static const float a3 = biotar_a3_px * pixel_to_patent * patent_to_mm * 0.5;
+static const float a4 = biotar_a4_px * pixel_to_patent * patent_to_mm * 0.5;
 
-static const float d0 = helios_front_hood_length_mm * helios_to_biotar_mm;
+// lens thickness
 static const float d1 = biotar_d1_p * patent_to_mm;
 static const float d2 = biotar_d2_p * patent_to_mm;
 static const float d3 = biotar_d3_p * patent_to_mm;
@@ -114,13 +110,16 @@ static const float d4 = biotar_d4_p * patent_to_mm;
 static const float d5 = biotar_d5_p * patent_to_mm;
 static const float d6 = biotar_d6_p * patent_to_mm;
 
+// lens separations
 static const float l1 = biotar_l1_p * patent_to_mm;
 static const float l2 = biotar_l2_p * patent_to_mm;
 static const float l3 = biotar_l3_p * patent_to_mm;
 
-// Variables
-static const float helios_aperture = helios_measured_aperture[t_aperture_stop] * 0.5f * helios_to_biotar_mm; // directly take measured aperture size (kept helios_ prefix because measured)
-static const float d_to_film = 335.598 / (t_focus_distance + 15.4) + 37.887; // mm, by empirically fitted curve
+// variables
+static const float aperture = helios_measured_aperture[t_aperture_stop] * (a3 / (helios_measured_aperture[6] * 0.5)) * 0.5f;
+//static const float d_to_film = 335.598 / (t_focus_distance + 15.4) + 37.887; // mm, by empirically fitted curve, todo: ajust again
+static const float d_to_film = t_focus_distance;
+
 
 struct LensElement
 {
@@ -146,24 +145,17 @@ LensElement createLensElement(float curvatureRadius, float thickness, float n, f
 
 static const uint lens_element_count = 11;
 static LensElement lens_elements[] = {
-	// Helios 44-2 58mm/f2 lens OR BIOTAR 58mm/f2 lens
-	// scaled from 100 units to 58mm
-	// 			curvature radiii	    separation			n			v			opening radius	
-	//createLensElement( no_curv, 	    d0, 		    n_air, 		v_air, 		r0_size, 		    false),
-	createLensElement( r1_curv,	        d1, 			biotar_n1, 	biotar_v1,	r1_size, 		    false),
-	createLensElement( r2_curv,	        l1, 			n_air, 		v_air, 		r2_size, 		    false),
-	createLensElement( r3_curv,	        d2, 			biotar_n2, 	biotar_v2,	r3_size, 		    false),
-	createLensElement( r4_curv,	        d3, 			biotar_n3, 	biotar_v3,	r4_size, 		    false),
-	createLensElement( r5_curv,	        l2 / 2,		    n_air, 		v_air, 		r5_size, 		    false),
-	createLensElement( no_curv, 	    l2 / 2, 		n_air, 		v_air, 		helios_aperture,    true),
-	createLensElement( r6_curv, 	    d4, 			biotar_n4, 	biotar_v4,	r6_size, 		    false),
-	createLensElement( r7_curv, 	    d5, 			biotar_n5, 	biotar_v5,	r7_size, 		    false),
-	createLensElement( r8_curv, 	    l3, 			n_air, 		v_air, 		r8_size, 		    false),
-	createLensElement( r9_curv, 	    d6, 			biotar_n6, 	biotar_v6,	r9_size, 		    false),
-	createLensElement( r10_curv, 	d_to_film, 			n_air, 		v_air, 		r10_size, 	        false), //11
-	createLensElement( 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f ),
-	createLensElement( 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f ),
-	createLensElement( 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f ),
-	createLensElement( 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f ),
-	createLensElement( 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f ),
+	// Zeiss BIOTAR 58mm lens with Helios 44-2 aperture shape
+	//					| curvature radiii	| separation				|	n		|	v		| opening radius	| use texture
+	createLensElement( 	r1_curv,	        d1, 						biotar_n1, 	biotar_v1,	a1, 	    		false),
+	createLensElement( 	r2_curv,	        l1, 						n_air, 		v_air, 		a1, 	    		false),
+	createLensElement( 	r3_curv,	        d2, 						biotar_n2, 	biotar_v2,	a2, 	   			false),
+	createLensElement( 	r4_curv,	        d3, 						biotar_n3, 	biotar_v3,	a2, 	   			false),
+	createLensElement( 	r5_curv,	        l2 * biotar_l2_split,		n_air, 		v_air, 		a4, 	   			false),
+	createLensElement( 	no_curv, 	        l2 * (1 - biotar_l2_split), n_air, 		v_air, 		aperture,			true),
+	createLensElement( 	r6_curv, 	        d4, 						biotar_n4, 	biotar_v4,	a3, 	   			false),
+	createLensElement( 	r7_curv, 	        d5, 						biotar_n5, 	biotar_v5,	a4, 	   			false),
+	createLensElement( 	r8_curv, 	        l3, 						n_air, 		v_air, 		a4, 	   			false),
+	createLensElement( 	r9_curv, 	        d6, 						biotar_n6, 	biotar_v6,	a4, 	   			false),
+	createLensElement( 	r10_curv, 	        d_to_film, 					n_air, 		v_air, 		a4, 	   			false), // 11 items
 };

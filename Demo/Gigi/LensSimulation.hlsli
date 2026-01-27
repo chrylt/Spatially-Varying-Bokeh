@@ -1,5 +1,5 @@
-//forward declarations
-float3 GetColorForRay(float3 pos, float3 dir, inout uint RNG, in uint rayIndex, in uint2 px);
+// forward declarations
+float3 GetColorForRay(float3 pos, float3 dir, inout uint RNG, inout PixelInfo pixelInfo, in uint rayIndex, in uint2 px);
 bool VisualFieldLightContributions(float3 pos, float3 dir, out float3 lightColor);
 
 // Ray-sphere intersection for a sphere at the origin
@@ -47,7 +47,7 @@ bool intersect(float radius, float center, Ray ray, out float t, out float3 norm
 	
 	normal = normalize(ray.Origin + t * ray.Direction - float3(0, 0, center));
 
-	// If using the second intersection, we need to flip the normal	
+	// if using the second intersection, we need to flip the normal	
 	normal *= useCloserT ? 1.0f : -1.0f;
 
 	return true;
@@ -65,9 +65,9 @@ float getEtaForWavelength(float n_D, float v_D, float wavelength)
 	return eta;
 }
 
-bool traceLensesFromFilm(Ray ray, in float wavelength, int elementCount, LensElement lensElements[16], out Ray outRay)
+bool traceLensesFromFilm(Ray ray, in float wavelength, int elementCount, LensElement lensElements[11], out Ray outRay)
 {
-	float z = 0.0f; // Start at the film, z = 0
+	float z = 0.0f; // start at the film, z = 0
 	
 	for (int i = elementCount - 1; i >= 0; i--)
 	{
@@ -115,12 +115,12 @@ bool traceLensesFromFilm(Ray ray, in float wavelength, int elementCount, LensEle
 		
 		float3 hit = ray.Origin + t * ray.Direction;
 
-		// Aperture / stop shape test
+		// aperture mask test
 		if (useOpeningTexture)
 		{
-			// Normalize hit to aperture space and cull outside the aperture mask
+			// normalize hit to aperture space and cull outside the aperture mask
 			float2 p = hit.xy / apertureRadius;
-			float2 maskUV = p * 0.5f + 0.5f; // [-1,1] -> [0,1]
+			float2 maskUV = p * 0.5f + 0.5f; // [-1,1] -> [0,1], negated to compensate for film coordinate inversion
 			bool outOfBounds = (maskUV.x < 0.0f || maskUV.x > 1.0f || maskUV.y < 0.0f || maskUV.y > 1.0f);
 			if (outOfBounds)
 			{
@@ -134,7 +134,7 @@ bool traceLensesFromFilm(Ray ray, in float wavelength, int elementCount, LensEle
 		}
 		else
 		{
-			// Default circular aperture test
+			// default circular aperture test
 			float r2 = hit.x * hit.x + hit.y * hit.y;
 			
 			if (r2 > (apertureRadius * apertureRadius)) 
@@ -162,14 +162,14 @@ bool traceLensesFromFilm(Ray ray, in float wavelength, int elementCount, LensEle
 }
 
 // returns PDF
-float ApplyRealisticLensSimulation(out Ray ray, float wavelength, uint3 px, inout uint RNG, uint2 screenDims, float2 screenPos)
+float ApplyRealisticLensSimulation(out Ray ray, float wavelength, inout uint RNG, uint2 screenDims, float2 screenPos)
 {
 	float3 cameraRight = mul(float4(1.0f, 0.0f, 0.0f, 0.0f), t_invViewMtx).xyz;
 	float3 cameraUp = mul(float4(0.0f, 1.0f, 0.0f, 0.0f), t_invViewMtx).xyz;
 	float3 cameraForward = mul(float4(0.0f, 0.0f, 1.0f, 0.0f), t_invViewMtx).xyz;
 	float3 camPos = t_cameraPos;
 
-	// Map normalized screen position ([-1,1]) to film plane coordinates in mm
+	// map normalized screen position ([-1,1]) to film plane coordinates in mm
 	float aspect = float(screenDims.x) / float(screenDims.y);
 	float sensor_height = min(sony_sensor_height, sony_sensor_width / aspect);
 	float sensor_width  = sensor_height * aspect;
@@ -177,20 +177,20 @@ float ApplyRealisticLensSimulation(out Ray ray, float wavelength, uint3 px, inou
 	float filmX = -screenPos.x * (sensor_width * 0.5f);
 	float filmY = -screenPos.y * (sensor_height * 0.5f);
 
-	// Sample a random point on closest lens element using polar coordinates
+	// sample a random point on closest lens element using polar coordinates
     wang_hash(RNG);
 	float theta = RandomFloat01(RNG) * 2 * PI;
 	float r = sqrt(RandomFloat01(RNG));
 	float2 apertureOffset = float2(cos(theta), sin(theta)) * r;
-	apertureOffset *= r1_size;
+	apertureOffset *= a4; // scale to aperture radius
 
-	// Construct film-space ray with the sampled aperture offset
+	// construct film-space ray with the sampled aperture offset
 	Ray filmRay;
 	filmRay.Origin = float3(filmX, filmY, 0.0f);
 	float3 target = float3(apertureOffset.x, apertureOffset.y, -d_to_film);
 	filmRay.Direction = normalize(target - filmRay.Origin);
 
-	// Trace through lens elements
+	// trace ray through lens elements
 	Ray refracted;
 	if (traceLensesFromFilm(filmRay, wavelength, lens_element_count, lens_elements, refracted))
 	{
@@ -213,11 +213,12 @@ float ApplyRealisticLensSimulation(out Ray ray, float wavelength, uint3 px, inou
 float3 ShadeSceneSample(
 	Ray    ray,
 	float  PDF,
+	inout PixelInfo pixelInfo,
 	uint   rayIndex,
 	uint3  px,
 	inout uint RNG)
 {
-	return (PDF > 0.0f) ? GetColorForRay(ray.Origin, ray.Direction, RNG, rayIndex, px.xy) / PDF : float3(0.0f, 0.0f, 0.0f);
+	return (PDF > 0.0f) ? GetColorForRay(ray.Origin, ray.Direction, RNG, pixelInfo, rayIndex, px.xy) / PDF : float3(0.0f, 0.0f, 0.0f);
 }
 
 float3 ShadeVisualFieldSample(
@@ -231,32 +232,32 @@ float3 ShadeVisualFieldSample(
 
 // Realistic lens, single wavelength (no chromatic splitting)
 float3 TraceRealisticMonochrome(
-	Ray    baseRay,
 	float2 screenPos,
 	uint2  screenDims,
 	uint3  px,
 	inout uint RNG,
+	inout PixelInfo pixelInfo,
 	uint   rayIndex,
 	bool   bokehView)
 {
-	Ray ray = baseRay;
-	float PDF = ApplyRealisticLensSimulation(ray, 0.0f, px, RNG, screenDims, screenPos);
+	Ray ray;
+	float PDF = ApplyRealisticLensSimulation(ray, 0.0f, RNG, screenDims, screenPos);
 	return bokehView
 		? ShadeVisualFieldSample(ray, PDF)
-		: ShadeSceneSample(ray, PDF, rayIndex, px, RNG);
+		: ShadeSceneSample(ray, PDF, pixelInfo, rayIndex, px, RNG);
 }
 
 // Realistic lens with simple RGB chromatic aberration splitting
 float3 TraceRealisticChromatic(
-	Ray    baseRay,
 	float2 screenPos,
 	uint2  screenDims,
 	uint3  px,
 	inout uint RNG,
+	inout PixelInfo pixelInfo,
 	uint   rayIndex,
 	bool   bokehView)
 {
-	// Representative wavelengths for RGB (nm)
+	// representative wavelengths for RGB (nm)
 	const float wl_r = 625.0f;
 	const float wl_g = 510.0f;
 	const float wl_b = 440.0f;
@@ -269,8 +270,8 @@ float3 TraceRealisticChromatic(
 		[unroll]
 		for (int i = 0; i < 3; ++i)
 		{
-			Ray ray = baseRay;
-			float PDF = ApplyRealisticLensSimulation(ray, wavelengths[i], px, RNG, screenDims, screenPos);
+			Ray ray;
+			float PDF = ApplyRealisticLensSimulation(ray, wavelengths[i], RNG, screenDims, screenPos);
 			float3 lc = 0.0f;
 			bool hit = (PDF > 0.0f) && VisualFieldLightContributions(ray.Origin, ray.Direction, lc);
 			rc[i] = hit ? (lc[i] / max(PDF, 1e-6f)) : 0.0f;
@@ -278,14 +279,14 @@ float3 TraceRealisticChromatic(
 		return rc;
 	}
 
-	// Regular shading path: shade each wavelength, keep only the matching color channel
+	// regular shading path: shade each wavelength, keep only the matching color channel
 	float3 channelSamples[3];
 	[unroll]
 	for (int i = 0; i < 3; ++i)
 	{
-		Ray ray = baseRay;
-		float PDF = ApplyRealisticLensSimulation(ray, wavelengths[i], px, RNG, screenDims, screenPos);
-		channelSamples[i] = ShadeSceneSample(ray, PDF, rayIndex, px, RNG);
+		Ray ray;
+		float PDF = ApplyRealisticLensSimulation(ray, wavelengths[i], RNG, screenDims, screenPos);
+		channelSamples[i] = ShadeSceneSample(ray, PDF, pixelInfo, rayIndex, px, RNG);
 	}
 	return float3(channelSamples[0].r, channelSamples[1].g, channelSamples[2].b);
 }
