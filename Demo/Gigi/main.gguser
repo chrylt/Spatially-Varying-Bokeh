@@ -54,7 +54,7 @@
         "savedVariables": [
             {
                 "name": "FocusDistance",
-                "value": "37.525002"
+                "value": "35.352001"
             },
             {
                 "name": "RenderPinhole",
@@ -82,7 +82,7 @@
             },
             {
                 "name": "Accumulate",
-                "value": "true"
+                "value": "false"
             },
             {
                 "name": "Animate",
@@ -190,7 +190,7 @@
             },
             {
                 "name": "ConfigLightDistance",
-                "value": "300.000000"
+                "value": "100.000000"
             },
             {
                 "name": "ConfigLightCount",

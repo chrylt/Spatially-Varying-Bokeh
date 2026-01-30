@@ -1,0 +1,4 @@
+total 15
+valid 13
+intensity_polynomial -0.38046 -0.330186 0.986908
+intensity_function -0.38046 * x^2 + -0.330186 * x + 0.986908

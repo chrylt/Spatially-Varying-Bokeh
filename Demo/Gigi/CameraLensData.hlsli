@@ -151,7 +151,7 @@ static LensElement lens_elements[] = {
 	createLensElement( 	r2_curv,	        l1, 						n_air, 		v_air, 		a1, 	    		false),
 	createLensElement( 	r3_curv,	        d2, 						biotar_n2, 	biotar_v2,	a2, 	   			false),
 	createLensElement( 	r4_curv,	        d3, 						biotar_n3, 	biotar_v3,	a2, 	   			false),
-	createLensElement( 	r5_curv,	        l2 * biotar_l2_split,		n_air, 		v_air, 		a4, 	   			false),
+	createLensElement( 	r5_curv,	        l2 * biotar_l2_split,		n_air, 		v_air, 		a3, 	   			false),
 	createLensElement( 	no_curv, 	        l2 * (1 - biotar_l2_split), n_air, 		v_air, 		aperture,			true),
 	createLensElement( 	r6_curv, 	        d4, 						biotar_n4, 	biotar_v4,	a3, 	   			false),
 	createLensElement( 	r7_curv, 	        d5, 						biotar_n5, 	biotar_v5,	a4, 	   			false),
@@ -159,3 +159,4 @@ static LensElement lens_elements[] = {
 	createLensElement( 	r9_curv, 	        d6, 						biotar_n6, 	biotar_v6,	a4, 	   			false),
 	createLensElement( 	r10_curv, 	        d_to_film, 					n_air, 		v_air, 		a4, 	   			false), // 11 items
 };
+
