@@ -145,7 +145,7 @@ LensElement createLensElement(float curvatureRadius, float thickness, float n, f
 
 static const uint lens_element_count = 11;
 static LensElement lens_elements[] = {
-	// Zeiss BIOTAR 58mm lens with Helios 44-2 aperture shape
+	// Zeiss BIOTAR 1:1.4 lens with Helios 44-2 aperture shape
 	//					| curvature radiii	| separation				|	n		|	v		| opening radius	| use texture
 	createLensElement( 	r1_curv,	        d1, 						biotar_n1, 	biotar_v1,	a1, 	    		false),
 	createLensElement( 	r2_curv,	        l1, 						n_air, 		v_air, 		a1, 	    		false),

@@ -82,7 +82,7 @@
             },
             {
                 "name": "Accumulate",
-                "value": "false"
+                "value": "true"
             },
             {
                 "name": "Animate",
