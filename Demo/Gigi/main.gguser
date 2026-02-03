@@ -53,8 +53,8 @@
         ],
         "savedVariables": [
             {
-                "name": "FocusDistance",
-                "value": "35.352001"
+                "name": "FilmDistanceToLens",
+                "value": "37.627998"
             },
             {
                 "name": "RenderPinhole",
@@ -82,7 +82,7 @@
             },
             {
                 "name": "Accumulate",
-                "value": "false"
+                "value": "true"
             },
             {
                 "name": "Animate",
@@ -94,7 +94,7 @@
             },
             {
                 "name": "ToggleChromaticAberration",
-                "value": "true"
+                "value": "false"
             },
             {
                 "name": "MaterialSet",
@@ -186,11 +186,11 @@
             },
             {
                 "name": "SmallLightRadius",
-                "value": "0.300000"
+                "value": "0.100000"
             },
             {
                 "name": "ConfigLightDistance",
-                "value": "100.000000"
+                "value": "200.000000"
             },
             {
                 "name": "ConfigLightCount",
@@ -206,7 +206,7 @@
             },
             {
                 "name": "BokehConfigMode",
-                "value": "2"
+                "value": "0"
             },
             {
                 "name": "FocalLength",

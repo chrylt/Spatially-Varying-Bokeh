@@ -2,8 +2,6 @@
 // Sony a7R III camera
 static const float sony_sensor_width = 35.9f;
 static const float sony_sensor_height = 24.0f;
-//static const float sony_sensor_width = 60;
-//static const float sony_sensor_height = 40;
 
 // === HELIOS LENS DATA ===
 // Helios 44-2 58mm/f2 lens

@@ -4,10 +4,10 @@
     "version": "1.0",
     "variables": [
         {
-            "name": "FocusDistance",
+            "name": "FilmDistanceToLens",
             "comment": "Distance of focus in scene units (cm)",
             "type": "Float",
-            "dflt": "45",
+            "dflt": "38.02896713963912",
             "visibility": "User",
             "UISettings": {
                 "UIHint": "Slider",
