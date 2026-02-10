@@ -1079,7 +1079,7 @@
                     {
                         "srcPin": "Color HDR",
                         "dstNode": "Raytrace",
-                        "dstPin": "BokehConfigOut"
+                        "dstPin": "LensSimulationOut"
                     },
                     {
                         "srcPin": "Color SDR"

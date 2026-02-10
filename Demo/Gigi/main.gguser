@@ -8,9 +8,9 @@
             "flySpeed": 0.20000000298023225,
             "mouseSensitivity": 0.0010000000474974514,
             "startingCameraPos": [
-                414.5135192871094,
-                121.68706512451172,
-                191.9246368408203
+                450.2478942871094,
+                127.6720962524414,
+                192.98443603515626
             ],
             "startingCameraAltitudeAzimuth": [
                 -0.1658744513988495,
@@ -20,12 +20,12 @@
         "ProjMtx_textureName": "ColorHDR"
     },
     "snapshot": {
-        "resourceViewNodeIndex": 36,
+        "resourceViewNodeIndex": 63,
         "resourceViewResourceIndex": 3,
         "cameraPos": [
-            414.5135192871094,
-            121.68706512451172,
-            191.9246368408203
+            450.2478942871094,
+            127.6720962524414,
+            192.98443603515626
         ],
         "cameraAltitudeAzimuth": [
             -0.1658744513988495,
@@ -54,7 +54,7 @@
         "savedVariables": [
             {
                 "name": "FilmDistanceToLens",
-                "value": "37.627998"
+                "value": "38.028999"
             },
             {
                 "name": "RenderPinhole",
@@ -78,7 +78,7 @@
             },
             {
                 "name": "RenderSize",
-                "value": "900,600"
+                "value": "1200,800"
             },
             {
                 "name": "Accumulate",
@@ -174,7 +174,7 @@
             },
             {
                 "name": "SmallLightBrightness",
-                "value": "50.000000"
+                "value": "100.000000"
             },
             {
                 "name": "SmallLightsColor",
@@ -186,11 +186,11 @@
             },
             {
                 "name": "SmallLightRadius",
-                "value": "0.100000"
+                "value": "0.300000"
             },
             {
                 "name": "ConfigLightDistance",
-                "value": "200.000000"
+                "value": "250.000000"
             },
             {
                 "name": "ConfigLightCount",
@@ -274,7 +274,7 @@
             },
             {
                 "name": "GatherDOF_BlurTapCount",
-                "value": "3"
+                "value": "91"
             },
             {
                 "name": "GatherDOF_FloodFillTapCount",
@@ -286,7 +286,7 @@
             },
             {
                 "name": "TemporalAccumulation_Enabled",
-                "value": "false"
+                "value": "true"
             },
             {
                 "name": "ToneMap_ExposureFStops",
@@ -313,6 +313,14 @@
                 "value": "true"
             },
             {
+                "name": "GatherDOF__1__AnimateNoiseTextures",
+                "value": "true"
+            },
+            {
+                "name": "GatherDOF__1__SuppressBokeh",
+                "value": "false"
+            },
+            {
                 "name": "GatherDOF__1__FocalDistance",
                 "value": "45.000000"
             },
@@ -322,11 +330,27 @@
             },
             {
                 "name": "GatherDOF__1__FocalLength",
-                "value": "-241.378998"
+                "value": "33.660999"
+            },
+            {
+                "name": "GatherDOF__1__NearTransitionRegion",
+                "value": "50.000000"
+            },
+            {
+                "name": "GatherDOF__1__FarTransitionRegion",
+                "value": "200.000000"
+            },
+            {
+                "name": "GatherDOF__1__DoFarField",
+                "value": "true"
+            },
+            {
+                "name": "GatherDOF__1__DoFarFieldFloodFill",
+                "value": "false"
             },
             {
                 "name": "GatherDOF__1__DoNearField",
-                "value": "false"
+                "value": "true"
             },
             {
                 "name": "GatherDOF__1__DoNearFieldFloodFill",
@@ -334,15 +358,15 @@
             },
             {
                 "name": "GatherDOF__1__KernelSize",
-                "value": "40.000000,15.000000,5.000000,0.000000"
+                "value": "65.000000,15.000000,5.000000,0.000000"
             },
             {
                 "name": "GatherDOF__1__BlurTapCount",
-                "value": "80"
+                "value": "90"
             },
             {
                 "name": "TemporalAccumulation__1__Enabled",
-                "value": "false"
+                "value": "true"
             },
             {
                 "name": "ToneMap__2__ToneMapper",

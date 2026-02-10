@@ -1503,7 +1503,7 @@ float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 
 			{
 				case BokehConfigState::NoDoF:
 				{
-					sampleColor = ShadeVisualFieldSample(pinholeRay, 1.0f);
+					sampleColor = ShadeVisualFieldSample(pinholeRay, 1.0f, pixelInfo);
 					break;
 				}
 				case BokehConfigState::ThinLens:
@@ -1519,15 +1519,15 @@ float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 
 					thinRay.Origin = thinOrigin;
 					thinRay.Direction = thinDirection;
 
-					sampleColor = ShadeVisualFieldSample(thinRay, thinPDF);
+					sampleColor = ShadeVisualFieldSample(thinRay, thinPDF, pixelInfo);
 					break;
 				}
 				case BokehConfigState::RealisticLens:
 				{
 					uint rngLensBokeh = rngBokeh;
 					sampleColor = (/*$(Variable:ToggleChromaticAberration)*/)
-						? TraceRealisticChromatic(screenPos, dispatchDimsUInt, px, rngLensBokeh, pixelInfoDiscard, rayIndex, true)
-						: TraceRealisticMonochrome(screenPos, dispatchDimsUInt, px, rngLensBokeh, pixelInfoDiscard,rayIndex, true);
+						? TraceRealisticChromatic(screenPos, dispatchDimsUInt, px, rngLensBokeh, pixelInfo, rayIndex, true)
+						: TraceRealisticMonochrome(screenPos, dispatchDimsUInt, px, rngLensBokeh, pixelInfo, rayIndex, true);
 					break;
 				}
 				default:
@@ -1572,6 +1572,7 @@ float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 
 		float3 oldColor = BokehConfigOut[pixelCoord].rgb;
 		float3 blended = lerp(oldColor, bokehColor, accumulationAlpha);
 		BokehConfigOut[pixelCoord] = float4(blended, 1.0f);
+		LinearDepth[pixelCoord] = t_config_light_distance; //pixelInfo.HitT; - creates artifacts
 	}
 
 }

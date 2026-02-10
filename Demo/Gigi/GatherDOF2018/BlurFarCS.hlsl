@@ -150,7 +150,7 @@ float2 SampleDistortionStage(float2 currentOffset, uint stageIndex, Texture2DArr
 }
 
 float2 ApplyDistortionStagesSlow(float2 offset, ScreenGeometry screen, float2 centerToSamplePos)
-{
+{ // TODO: something is wrong here and creates a grid pattern. Maybe the interpolation isnt working at some point?
 	const uint kStageCount = 8u;
 
 	float normalizedDistance = length(centerToSamplePos) * screen.invCenterToCornerDistance;
@@ -214,8 +214,6 @@ float3 getSpatiallyVaryingOffset(uint3 pxAndSampleIndex, uint2 screenSize)
 
 	float2 offsetScreen = RotateForward(offsetLocal, rotation);
 	float2 samplePos = screen.pixelPosition + offsetScreen * blurRadius;
-
-	samplePos = screen.pixelPosition + offsetScreen * blurRadius;
 
 	float spatialIntensity = GetSpatialIntensity(length(samplePos - screen.center) * screen.invCenterToCornerDistance);
 
@@ -453,6 +451,9 @@ float2 GetApertureSamplePoint(uint3 pxAndFrame, int u, int v, int maxuv, in floa
 				//float2 uv = float2(u, v) / (TAP_COUNT - 1); // map to [0, 1]
 				//uv = SquareToPolygonMapping( uv, KernelSize ) / float2(FarFieldColorCoCSize); // map to bokeh shape, then to texel size
 				uv = UVAndScreenPos.xy + radius * uv;
+
+				// Mirror coordinates outside [0,1] to prevent edge artifacts
+				uv = 1.0f - abs(fmod(abs(uv), 2.0f) - 1.0f);
 
 				float4 tapColor = FarFieldColorCoC.SampleLevel(linearClampSampler, uv, 0); //Texture2DSampleLevel(PostprocessInput0, PostprocessInput0Sampler, uv, 0);
 				

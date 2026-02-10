@@ -223,10 +223,13 @@ float3 ShadeSceneSample(
 
 float3 ShadeVisualFieldSample(
 	Ray   ray,
-	float PDF)
+	float PDF,
+	inout PixelInfo pixelInfo)
 {
 	float3 lightColor = float3(0.0f, 0.0f, 0.0f);
-	bool hit = (PDF > 0.0f) && VisualFieldLightContributions(ray.Origin, ray.Direction, lightColor);
+	float hitT = c_maxT;
+	bool hit = (PDF > 0.0f) && VisualFieldLightContributions(ray.Origin, ray.Direction, lightColor, hitT);
+	pixelInfo.HitT = hitT;  // c_maxT on miss, actual distance on hit
 	return hit ? (lightColor / max(PDF, 1e-6f)) : float3(0.0f, 0.0f, 0.0f);
 }
 
@@ -243,7 +246,7 @@ float3 TraceRealisticMonochrome(
 	Ray ray;
 	float PDF = ApplyRealisticLensSimulation(ray, 0.0f, RNG, screenDims, screenPos);
 	return bokehView
-		? ShadeVisualFieldSample(ray, PDF)
+		? ShadeVisualFieldSample(ray, PDF, pixelInfo)
 		: ShadeSceneSample(ray, PDF, pixelInfo, rayIndex, px, RNG);
 }
 
@@ -267,15 +270,20 @@ float3 TraceRealisticChromatic(
 	if (bokehView)
 	{
 		float3 rc = 0.0f;
+		float finalHitT = c_maxT;
 		[unroll]
 		for (int i = 0; i < 3; ++i)
 		{
 			Ray ray;
 			float PDF = ApplyRealisticLensSimulation(ray, wavelengths[i], RNG, screenDims, screenPos);
 			float3 lc = 0.0f;
-			bool hit = (PDF > 0.0f) && VisualFieldLightContributions(ray.Origin, ray.Direction, lc);
+			float hitT = c_maxT;
+			bool hit = (PDF > 0.0f) && VisualFieldLightContributions(ray.Origin, ray.Direction, lc, hitT);
+			if (hit)
+				finalHitT = hitT;
 			rc[i] = hit ? (lc[i] / max(PDF, 1e-6f)) : 0.0f;
 		}
+		pixelInfo.HitT = finalHitT;  // c_maxT if all miss, actual distance if any hit
 		return rc;
 	}
 

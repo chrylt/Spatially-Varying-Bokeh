@@ -109,7 +109,7 @@ bool TraceLightsGrid(float3 pos, float3 dir, int targetIndex, inout float global
 	return anyHit;
 }
 
-bool VisualFieldLightContributions(float3 pos, float3 dir, out float3 lightColor)
+bool VisualFieldLightContributions(float3 pos, float3 dir, out float3 lightColor, out float hitT)
 {
 	float globalHitT = c_maxT;
 	bool anyHit = false;
@@ -126,9 +126,11 @@ bool VisualFieldLightContributions(float3 pos, float3 dir, out float3 lightColor
 	if (!anyHit)
 	{
 		lightColor = float3(0.0f, 0.0f, 0.0f);
+		hitT = c_maxT;
 		return false;
 	}
 
 	lightColor = BCONF_LIGHT_COLOR * t_smallLightBrightness;
+	hitT = globalHitT;
 	return true;
 }

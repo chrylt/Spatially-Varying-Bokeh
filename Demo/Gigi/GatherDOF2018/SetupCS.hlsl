@@ -79,13 +79,26 @@ float4 CommonDOFSetup(/*in float2 CenterUV*/ in uint2 px, out bool bFrontLayer, 
 
 	float4 ColorAndDepth[4];
 	float2 Layer[4];
+	
+	// Sentinel value for "no hit" - pixels with this depth don't contribute to blending
+	static const float c_maxT = 10000.0f;
+	static const float c_noHitThreshold = c_maxT * 0.99f;
 
 	for(uint i = 0; i < 4; ++i)
 	{
 		// clamping to a small number fixes black dots appearing (denorms?, 0 doesn't fix it)
 		ColorAndDepth[i].rgb = max(float3(0.0001f, 0.0001f, 0.0001f), Color[samplePoints[i]].rgb /*Texture2DSample(PostprocessInput0, PostprocessInput0Sampler, UV[i]).rgb*/);
 		ColorAndDepth[i].a = Depth[samplePoints[i]];
-		Layer[i] = ComputeLayerContributions(ColorAndDepth[i].a, View);
+		
+		// Skip pixels with no hit
+		if (ColorAndDepth[i].a >= c_noHitThreshold)
+		{
+			Layer[i] = float2(0.0f, 0.0f);
+		}
+		else
+		{
+			Layer[i] = ComputeLayerContributions(ColorAndDepth[i].a, View);
+		}
 	}
 
 	float2 LayerSum = Layer[0] + Layer[1] + Layer[2] + Layer[3];
@@ -109,6 +122,7 @@ float4 CommonDOFSetup(/*in float2 CenterUV*/ in uint2 px, out bool bFrontLayer, 
 	}
 	else
 	{
+		// All pixels are no-hit; return first one
 		OutColor = ColorAndDepth[0];
 	}
 	return OutColor;
