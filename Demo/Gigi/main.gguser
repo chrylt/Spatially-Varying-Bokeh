@@ -20,7 +20,7 @@
         "ProjMtx_textureName": "ColorHDR"
     },
     "snapshot": {
-        "resourceViewNodeIndex": 63,
+        "resourceViewNodeIndex": 34,
         "resourceViewResourceIndex": 3,
         "cameraPos": [
             450.2478942871094,
@@ -28,8 +28,8 @@
             192.98443603515626
         ],
         "cameraAltitudeAzimuth": [
-            -0.1658744513988495,
-            1.6004464626312256
+            -0.13644227385520936,
+            1.5834089517593384
         ],
         "importedResources": [
             {
@@ -58,7 +58,7 @@
             },
             {
                 "name": "RenderPinhole",
-                "value": "false"
+                "value": "true"
             },
             {
                 "name": "RenderThinLensDoF",
@@ -70,7 +70,7 @@
             },
             {
                 "name": "RenderBokehConfig",
-                "value": "true"
+                "value": "false"
             },
             {
                 "name": "Reset",
@@ -138,7 +138,7 @@
             },
             {
                 "name": "JitterNoiseTextures",
-                "value": "false"
+                "value": "true"
             },
             {
                 "name": "ApertureRadius",
@@ -194,7 +194,7 @@
             },
             {
                 "name": "ConfigLightCount",
-                "value": "11,7"
+                "value": "7,7"
             },
             {
                 "name": "ConfigOnlyDiagonal",
@@ -286,7 +286,7 @@
             },
             {
                 "name": "TemporalAccumulation_Enabled",
-                "value": "true"
+                "value": "false"
             },
             {
                 "name": "ToneMap_ExposureFStops",

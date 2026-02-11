@@ -145,7 +145,7 @@ DistortionStageInfo ComputeDistortionStageInfo(float normalizedDistance, uint st
 float2 SampleDistortionStage(float2 currentOffset, uint stageIndex, Texture2DArray<float2> distortionMaps)
 {
 	float2 uv = currentOffset * 0.5f + 0.5f;
-	float2 sample = distortionMaps.SampleLevel(linearClampSampler, float3(saturate(uv), stageIndex), 0).rg;
+	float2 sample = distortionMaps.SampleLevel(linearClampSampler, float3(uv, stageIndex), 0).rg;
 	return sample * 2.0f - 1.0f;
 }
 
@@ -157,7 +157,7 @@ float2 ApplyDistortionStagesSlow(float2 offset, ScreenGeometry screen, float2 ce
 	Texture2DArray<float2> distortionMaps = /*$(Image2DArray:Assets\DistortionMaps\one_after_another\distortion_map_%i.png:RG8_UNorm:float2:false:false)*/;
 	DistortionStageInfo stageInfo = ComputeDistortionStageInfo(normalizedDistance, kStageCount);
 
-	for (uint stage = 0; stage < stageInfo.stageIndex; ++stage)
+	for (uint stage = 1; stage < stageInfo.stageIndex; ++stage)
 	{
 		offset = SampleDistortionStage(offset, stage, distortionMaps);
 	}
@@ -180,7 +180,8 @@ float2 ApplyDistortionStagesFast(float2 offset, ScreenGeometry screen, float2 ce
 	DistortionStageInfo stageInfo = ComputeDistortionStageInfo(normalizedDistance, kStageCount);
 	float2 uv = offset * 0.5f + 0.5f;
 	Texture3D<float2> distortionMaps = /*$(Image3D:Assets\DistortionMaps\one_sample\distortion_map_%i.png:RG8_UNorm:float2:false:false)*/;
-	float2 sample = distortionMaps.SampleLevel(linearClampSampler, float3(uv, normalizedDistance), 0).rg;
+	float w = (normalizedDistance * (stageInfo.maxStageIndex - 1) + 0.5) / max(stageInfo.maxStageIndex, 1); // compensate for texel center at 0.5
+	float2 sample = distortionMaps.SampleLevel(linearClampSampler, float3(uv, w), 0).rg;
 	return sample * 2.0f - 1.0f;
 }
 

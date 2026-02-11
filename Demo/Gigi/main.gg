@@ -422,7 +422,7 @@
                 },
                 {
                     "name": "Linear",
-                    "addressMode": "Clamp"
+                    "addressMode": "Border"
                 }
             ]
         },
