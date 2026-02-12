@@ -17,7 +17,7 @@ static const float c_maxT = 10000.0f;
 
 // bridge tokens to include files
 static const uint t_aperture_stop = /*$(Variable:HeliosApertureStop)*/;
-static const float t_focus_distance = /*$(Variable:FilmDistanceToLens)*/;
+static const float t_focus_distance = /*$(Variable:FocusDistance)*/;
 static const float4x4 t_invViewMtx = /*$(Variable:InvViewMtx)*/;
 static const float3 t_cameraPos = /*$(Variable:CameraPos)*/;
 static const float t_smallLightRadius = /*$(Variable:SmallLightRadius)*/;

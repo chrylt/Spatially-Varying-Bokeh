@@ -20,16 +20,16 @@
         "ProjMtx_textureName": "ColorHDR"
     },
     "snapshot": {
-        "resourceViewNodeIndex": 34,
-        "resourceViewResourceIndex": 3,
+        "resourceViewNodeIndex": 0,
+        "resourceViewResourceIndex": 220,
         "cameraPos": [
             450.2478942871094,
             127.6720962524414,
             192.98443603515626
         ],
         "cameraAltitudeAzimuth": [
-            -0.13644227385520936,
-            1.5834089517593384
+            -0.1658744513988495,
+            1.6004464626312256
         ],
         "importedResources": [
             {
@@ -53,10 +53,6 @@
         ],
         "savedVariables": [
             {
-                "name": "FilmDistanceToLens",
-                "value": "38.028999"
-            },
-            {
                 "name": "RenderPinhole",
                 "value": "true"
             },
@@ -70,7 +66,7 @@
             },
             {
                 "name": "RenderBokehConfig",
-                "value": "false"
+                "value": "true"
             },
             {
                 "name": "Reset",
@@ -194,11 +190,11 @@
             },
             {
                 "name": "ConfigLightCount",
-                "value": "7,7"
+                "value": "12,7"
             },
             {
                 "name": "ConfigOnlyDiagonal",
-                "value": "false"
+                "value": "true"
             },
             {
                 "name": "OnlyThisLightByIndex",
@@ -206,7 +202,7 @@
             },
             {
                 "name": "BokehConfigMode",
-                "value": "0"
+                "value": "2"
             },
             {
                 "name": "FocalLength",
