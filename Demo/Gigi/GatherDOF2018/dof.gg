@@ -3,11 +3,6 @@
     "version": "1.0",
     "variables": [
         {
-            "name": "doubleOffset",
-            "type": "Bool",
-            "visibility": "User"
-        },
-        {
             "name": "UseNoiseTextures",
             "type": "Bool",
             "dflt": "false",
@@ -156,6 +151,18 @@
             "type": "Uint",
             "dflt": "0",
             "transient": true
+        },
+        {
+            "name": "SpatiallyVarying",
+            "type": "Bool",
+            "dflt": "true",
+            "visibility": "User"
+        },
+        {
+            "name": "FastDistortion",
+            "type": "Bool",
+            "dflt": "true",
+            "visibility": "User"
         }
     ],
     "shaders": [
@@ -397,6 +404,10 @@
         },
         {
             "fileName": "LDSShuffler.hlsli",
+            "type": "Shader"
+        },
+        {
+            "fileName": "SpatiallyVaryingBokeh.hlsli",
             "type": "Shader"
         }
     ],

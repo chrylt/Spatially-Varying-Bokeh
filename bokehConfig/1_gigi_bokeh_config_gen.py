@@ -5,9 +5,9 @@ ReadbackResource = "Raytrace.BokehConfigOut: ColorHDR___ (UAV - After)"
 focus_distances = [45.0]
 object_distances = [250]
 aperture_stops = [6]
-samples_per_pixel_per_frame = 16
-sample_count_total = 10000 # 1000000
-light_count = 12
+samples_per_pixel_per_frame = 8192
+sample_count_total = 134217728
+light_count = 15
 light_size = 0.3
 
 runs_per_config = sample_count_total // samples_per_pixel_per_frame
@@ -40,6 +40,7 @@ def _render_config(focus_distance, aperture_stop, object_distance, light_index):
     Host.SetVariable("OnlyThisLightByIndex", str(light_index))
     Host.SetVariable("SmallLightRadius", str(light_size))
     Host.SetVariable("ConfigLightDistance", str(object_distance))
+    Host.SetVariable("ConfigLightCount", str(light_count))
 
     for _ in range(runs_per_config):
         Host.RunTechnique()

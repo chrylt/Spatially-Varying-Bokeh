@@ -20,7 +20,7 @@
         {
             "name": "RenderPinhole",
             "type": "Bool",
-            "dflt": "1",
+            "dflt": "0",
             "visibility": "User",
             "UIGroup": "Pinhole"
         },
@@ -341,6 +341,36 @@
             "dflt": "40",
             "visibility": "User",
             "UIGroup": "ThinLensDoF"
+        },
+        {
+            "name": "DoGatherDoF",
+            "type": "Bool",
+            "dflt": "false",
+            "visibility": "User"
+        },
+        {
+            "name": "DoDOFAccumulation",
+            "type": "Bool",
+            "dflt": "false",
+            "visibility": "User"
+        },
+        {
+            "name": "SpatiallyVarying",
+            "type": "Bool",
+            "dflt": "true",
+            "visibility": "User"
+        },
+        {
+            "name": "FastDistortionGatherDoF",
+            "type": "Bool",
+            "dflt": "true",
+            "visibility": "User"
+        },
+        {
+            "name": "GatherDOFTapCount",
+            "type": "Uint",
+            "dflt": "20",
+            "visibility": "User"
         }
     ],
     "shaders": [
@@ -658,10 +688,10 @@
         },
         {
             "actionSubGraph": {
-                "name": "GatherDOF",
+                "name": "GatherDOF_Pinhole",
                 "editorPos": [
                     53.0,
-                    -724.0
+                    -721.0
                 ],
                 "linkProperties": [
                     {},
@@ -693,10 +723,6 @@
                         "Output"
                     ],
                     "variables": [
-                        {
-                            "name": "doubleOffset",
-                            "visibility": "User"
-                        },
                         {
                             "name": "UseNoiseTextures",
                             "visibility": "User"
@@ -779,14 +805,18 @@
                         },
                         {
                             "name": "FrameIndex"
+                        },
+                        {
+                            "name": "SpatiallyVarying",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "FastDistortion",
+                            "visibility": "User"
                         }
                     ]
                 },
                 "variableSettings": [
-                    {
-                        "name": "doubleOffset",
-                        "visibility": "User"
-                    },
                     {
                         "name": "UseNoiseTextures",
                         "visibility": "User"
@@ -840,19 +870,23 @@
                     },
                     {
                         "name": "DoFarField",
-                        "visibility": "User"
+                        "visibility": "User",
+                        "replaceWithStr": "DoGatherDoF"
                     },
                     {
                         "name": "DoFarFieldFloodFill",
-                        "visibility": "User"
+                        "visibility": "User",
+                        "replaceWithValue": "false"
                     },
                     {
                         "name": "DoNearField",
-                        "visibility": "User"
+                        "visibility": "User",
+                        "replaceWithStr": "DoGatherDoF"
                     },
                     {
                         "name": "DoNearFieldFloodFill",
-                        "visibility": "User"
+                        "visibility": "User",
+                        "replaceWithValue": "false"
                     },
                     {
                         "name": "KernelSize",
@@ -860,7 +894,8 @@
                     },
                     {
                         "name": "BlurTapCount",
-                        "visibility": "User"
+                        "visibility": "User",
+                        "replaceWithStr": "GatherDOFTapCount"
                     },
                     {
                         "name": "FloodFillTapCount",
@@ -873,6 +908,16 @@
                     },
                     {
                         "name": "FrameIndex"
+                    },
+                    {
+                        "name": "SpatiallyVarying",
+                        "visibility": "User",
+                        "replaceWithStr": "SpatiallyVarying"
+                    },
+                    {
+                        "name": "FastDistortion",
+                        "visibility": "User",
+                        "replaceWithStr": "FastDistortionGatherDoF"
                     }
                 ]
             }
@@ -899,10 +944,10 @@
         },
         {
             "actionSubGraph": {
-                "name": "ToneMap",
+                "name": "ToneMap_PinholeDOF",
                 "editorPos": [
-                    418.0,
-                    -670.0
+                    501.0,
+                    -657.0
                 ],
                 "linkProperties": [
                     {},
@@ -911,7 +956,7 @@
                 "connections": [
                     {
                         "srcPin": "Color HDR",
-                        "dstNode": "TemporalAccumulation",
+                        "dstNode": "TemporalAccumulation_PinholeDOF",
                         "dstPin": "Accum"
                     },
                     {
@@ -951,10 +996,10 @@
         },
         {
             "actionSubGraph": {
-                "name": "TemporalAccumulation",
+                "name": "TemporalAccumulation_PinholeDOF",
                 "editorPos": [
                     213.0,
-                    -705.0
+                    -702.0
                 ],
                 "linkProperties": [
                     {},
@@ -963,7 +1008,7 @@
                 "connections": [
                     {
                         "srcPin": "Input",
-                        "dstNode": "GatherDOF",
+                        "dstNode": "GatherDOF_Pinhole",
                         "dstPin": "Output"
                     },
                     {
@@ -1000,7 +1045,8 @@
                     },
                     {
                         "name": "Enabled",
-                        "visibility": "User"
+                        "visibility": "User",
+                        "replaceWithStr": "DoDOFAccumulation"
                     },
                     {
                         "name": "Reset",
@@ -1066,7 +1112,7 @@
         },
         {
             "actionSubGraph": {
-                "name": "ToneMap (1)",
+                "name": "ToneMapLens_Simulation",
                 "editorPos": [
                     117.0,
                     -622.0
@@ -1118,9 +1164,9 @@
         },
         {
             "actionSubGraph": {
-                "name": "GatherDOF (1)",
+                "name": "GatherDOF_BokehConfig",
                 "editorPos": [
-                    71.0,
+                    69.0,
                     -516.0
                 ],
                 "linkProperties": [
@@ -1153,10 +1199,6 @@
                         "Output"
                     ],
                     "variables": [
-                        {
-                            "name": "doubleOffset",
-                            "visibility": "User"
-                        },
                         {
                             "name": "UseNoiseTextures",
                             "visibility": "User"
@@ -1239,14 +1281,18 @@
                         },
                         {
                             "name": "FrameIndex"
+                        },
+                        {
+                            "name": "SpatiallyVarying",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "FastDistortion",
+                            "visibility": "User"
                         }
                     ]
                 },
                 "variableSettings": [
-                    {
-                        "name": "doubleOffset",
-                        "visibility": "User"
-                    },
                     {
                         "name": "UseNoiseTextures",
                         "visibility": "User"
@@ -1300,19 +1346,23 @@
                     },
                     {
                         "name": "DoFarField",
-                        "visibility": "User"
+                        "visibility": "User",
+                        "replaceWithStr": "DoGatherDoF"
                     },
                     {
                         "name": "DoFarFieldFloodFill",
-                        "visibility": "User"
+                        "visibility": "User",
+                        "replaceWithValue": "false"
                     },
                     {
                         "name": "DoNearField",
-                        "visibility": "User"
+                        "visibility": "User",
+                        "replaceWithStr": "DoGatherDoF"
                     },
                     {
                         "name": "DoNearFieldFloodFill",
-                        "visibility": "User"
+                        "visibility": "User",
+                        "replaceWithValue": "false"
                     },
                     {
                         "name": "KernelSize",
@@ -1320,7 +1370,8 @@
                     },
                     {
                         "name": "BlurTapCount",
-                        "visibility": "User"
+                        "visibility": "User",
+                        "replaceWithStr": "GatherDOFTapCount"
                     },
                     {
                         "name": "FloodFillTapCount",
@@ -1333,16 +1384,26 @@
                     },
                     {
                         "name": "FrameIndex"
+                    },
+                    {
+                        "name": "SpatiallyVarying",
+                        "visibility": "User",
+                        "replaceWithStr": "SpatiallyVarying"
+                    },
+                    {
+                        "name": "FastDistortion",
+                        "visibility": "User",
+                        "replaceWithStr": "FastDistortionGatherDoF"
                     }
                 ]
             }
         },
         {
             "actionSubGraph": {
-                "name": "TemporalAccumulation (1)",
+                "name": "TemporalAccumulation_BokehConfig",
                 "editorPos": [
-                    235.0,
-                    -510.0
+                    275.0,
+                    -433.0
                 ],
                 "linkProperties": [
                     {},
@@ -1351,7 +1412,7 @@
                 "connections": [
                     {
                         "srcPin": "Input",
-                        "dstNode": "GatherDOF (1)",
+                        "dstNode": "GatherDOF_BokehConfig",
                         "dstPin": "Output"
                     },
                     {
@@ -1388,7 +1449,8 @@
                     },
                     {
                         "name": "Enabled",
-                        "visibility": "User"
+                        "visibility": "User",
+                        "replaceWithStr": "DoDOFAccumulation"
                     },
                     {
                         "name": "Reset",
@@ -1400,10 +1462,10 @@
         },
         {
             "actionSubGraph": {
-                "name": "ToneMap (2)",
+                "name": "ToneMap_BokehConfig",
                 "editorPos": [
-                    450.0,
-                    -510.0
+                    549.0,
+                    -433.0
                 ],
                 "linkProperties": [
                     {},
@@ -1412,7 +1474,7 @@
                 "connections": [
                     {
                         "srcPin": "Color HDR",
-                        "dstNode": "TemporalAccumulation (1)",
+                        "dstNode": "TemporalAccumulation_BokehConfig",
                         "dstPin": "Accum"
                     },
                     {

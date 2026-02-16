@@ -57,6 +57,8 @@ float2 ReadVec2STTexture(in uint3 pxAndFrame, in Texture2DArray<float2> tex)
 	return ret;
 }
 
+#include "SpatiallyVaryingBokeh.hlsli"
+
 float2 SampleICDF(float2 rng, in Texture2D<float> MarginalCDF)
 {
     rng = clamp(rng, 0.001f, 0.999f);
@@ -111,8 +113,10 @@ float2 SampleICDF(float2 rng, in Texture2D<float> MarginalCDF)
     return uv * 2.0f - 1.0f;
 }
 
-float2 GetApertureSamplePoint(uint3 pxAndFrame, int u, int v, int maxuv, in float4 KernelSize)
+float2 GetApertureSamplePoint(uint3 pxAndFrame, float pixelCoC, int u, int v, int maxuv, in float4 KernelSize, out float sampleWeight, uint2 screenSize)
 {
+	sampleWeight = 1.0f;
+
 	if (!/*$(Variable:UseNoiseTextures)*/)
 	{
 		float2 uv = float2(u, v) / (maxuv.xx - 1); // map to [0, 1]
@@ -225,7 +229,23 @@ float2 GetApertureSamplePoint(uint3 pxAndFrame, int u, int v, int maxuv, in floa
         }
 		case LensRNG::bokeh:
 		{
-			return ReadVec2STTexture(pxAndSampleIndex, /*$(Image2DArray:Assets\NoiseTextures\bokeh\bokehInv_%i.png:RG8_UNorm:float2:false:false)*/);
+			Texture2DArray<float2> noiseTexture = /*$(Image2DArray:Assets\NoiseTextures\bokeh\base_bokeh_%i.png:RG8_UNorm:float2:false:false)*/;
+			Texture3D<float2> distortionMapsFast = /*$(Image3D:Assets\DistortionMaps\one_sample\distortion_map_%i.png:RG8_UNorm:float2:false:false)*/;
+			Texture2DArray<float2> distortionMapsSlow = /*$(Image2DArray:Assets\DistortionMaps\one_after_another\distortion_map_%i.png:RG8_UNorm:float2:false:false)*/;
+			
+			float3 svoffset;
+
+			bool spatiallyVarying = /*$(Variable:SpatiallyVarying)*/;
+			bool fastDistortion = /*$(Variable:FastDistortion)*/;
+			
+			if(spatiallyVarying)
+				svoffset = getSpatiallyVaryingOffset(pxAndSampleIndex, pixelCoC, screenSize, noiseTexture, KernelSize, distortionMapsFast, distortionMapsSlow, fastDistortion);
+			else
+				svoffset = getSpatiallyConstantOffset(pxAndSampleIndex, noiseTexture);
+
+			sampleWeight = svoffset.z;
+			
+			return svoffset.rg;
         }
 	}
 
@@ -265,7 +285,8 @@ float2 GetApertureSamplePoint(uint3 pxAndFrame, int u, int v, int maxuv, in floa
 		{
 			for (int v = 0; v < TAP_COUNT; ++v)
 			{
-				float2 uv = GetApertureSamplePoint(pxAndFrame, u, v, TAP_COUNT, KernelSize);
+				float sampleWeight = 1.0f;
+				float2 uv = GetApertureSamplePoint(pxAndFrame, PixelCoC, u, v, TAP_COUNT, KernelSize, sampleWeight, NearFieldColorCoCBorderSize);
 				uv /= float2(NearFieldColorCoCBorderSize);
 
 				//float2 uv = float2(u, v) / (TAP_COUNT - 1); // map to [0, 1]

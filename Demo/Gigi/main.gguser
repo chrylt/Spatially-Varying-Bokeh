@@ -20,8 +20,8 @@
         "ProjMtx_textureName": "ColorHDR"
     },
     "snapshot": {
-        "resourceViewNodeIndex": 0,
-        "resourceViewResourceIndex": 220,
+        "resourceViewNodeIndex": 63,
+        "resourceViewResourceIndex": 3,
         "cameraPos": [
             450.2478942871094,
             127.6720962524414,
@@ -54,7 +54,7 @@
         "savedVariables": [
             {
                 "name": "RenderPinhole",
-                "value": "true"
+                "value": "false"
             },
             {
                 "name": "RenderThinLensDoF",
@@ -114,7 +114,7 @@
             },
             {
                 "name": "NumBounces",
-                "value": "8"
+                "value": "16"
             },
             {
                 "name": "AlbedoMode",
@@ -190,7 +190,7 @@
             },
             {
                 "name": "ConfigLightCount",
-                "value": "12,7"
+                "value": "15,7"
             },
             {
                 "name": "ConfigOnlyDiagonal",
@@ -202,171 +202,103 @@
             },
             {
                 "name": "BokehConfigMode",
-                "value": "2"
+                "value": "0"
             },
             {
                 "name": "FocalLength",
                 "value": "46.331001"
             },
             {
-                "name": "GatherDOF_doubleOffset",
-                "value": "false"
-            },
-            {
-                "name": "GatherDOF_UseNoiseTextures",
+                "name": "DoGatherDoF",
                 "value": "true"
             },
             {
-                "name": "GatherDOF_AnimateNoiseTextures",
+                "name": "DoDOFAccumulation",
                 "value": "true"
             },
             {
-                "name": "GatherDOF_SuppressBokeh",
-                "value": "false"
-            },
-            {
-                "name": "GatherDOF_FocalDistance",
-                "value": "60.000000"
-            },
-            {
-                "name": "GatherDOF_FocalRegion",
-                "value": "0.100000"
-            },
-            {
-                "name": "GatherDOF_FocalLength",
-                "value": "-280.235992"
-            },
-            {
-                "name": "GatherDOF_NearTransitionRegion",
-                "value": "50.000000"
-            },
-            {
-                "name": "GatherDOF_FarTransitionRegion",
-                "value": "200.000000"
-            },
-            {
-                "name": "GatherDOF_Scale",
-                "value": "0.500000"
-            },
-            {
-                "name": "GatherDOF_DoFarField",
+                "name": "SpatiallyVarying",
                 "value": "true"
             },
             {
-                "name": "GatherDOF_DoFarFieldFloodFill",
-                "value": "false"
-            },
-            {
-                "name": "GatherDOF_DoNearField",
-                "value": "false"
-            },
-            {
-                "name": "GatherDOF_DoNearFieldFloodFill",
-                "value": "false"
-            },
-            {
-                "name": "GatherDOF_KernelSize",
-                "value": "55.000000,1.570000,6.000000,0.000000"
-            },
-            {
-                "name": "GatherDOF_BlurTapCount",
-                "value": "91"
-            },
-            {
-                "name": "GatherDOF_FloodFillTapCount",
-                "value": "4"
-            },
-            {
-                "name": "TemporalAccumulation_Alpha",
-                "value": "0.010000"
-            },
-            {
-                "name": "TemporalAccumulation_Enabled",
-                "value": "false"
-            },
-            {
-                "name": "ToneMap_ExposureFStops",
-                "value": "2.000000"
-            },
-            {
-                "name": "ToneMap_ToneMapper",
-                "value": "3"
-            },
-            {
-                "name": "ToneMap__1__ExposureFStops",
-                "value": "2.500000"
-            },
-            {
-                "name": "ToneMap__1__ToneMapper",
-                "value": "3"
-            },
-            {
-                "name": "GatherDOF__1__doubleOffset",
-                "value": "false"
-            },
-            {
-                "name": "GatherDOF__1__UseNoiseTextures",
+                "name": "FastDistortionGatherDoF",
                 "value": "true"
             },
             {
-                "name": "GatherDOF__1__AnimateNoiseTextures",
+                "name": "GatherDOFTapCount",
+                "value": "39"
+            },
+            {
+                "name": "GatherDOF_Pinhole_UseNoiseTextures",
                 "value": "true"
             },
             {
-                "name": "GatherDOF__1__SuppressBokeh",
+                "name": "GatherDOF_Pinhole_AnimateNoiseTextures",
                 "value": "false"
             },
             {
-                "name": "GatherDOF__1__FocalDistance",
+                "name": "GatherDOF_Pinhole_SuppressBokeh",
+                "value": "false"
+            },
+            {
+                "name": "GatherDOF_Pinhole_FocalDistance",
                 "value": "45.000000"
             },
             {
-                "name": "GatherDOF__1__FocalRegion",
-                "value": "0.100000"
+                "name": "GatherDOF_Pinhole_FocalRegion",
+                "value": "1.000000"
             },
             {
-                "name": "GatherDOF__1__FocalLength",
-                "value": "33.660999"
+                "name": "GatherDOF_Pinhole_FocalLength",
+                "value": "48.312000"
             },
             {
-                "name": "GatherDOF__1__NearTransitionRegion",
-                "value": "50.000000"
+                "name": "GatherDOF_Pinhole_NearTransitionRegion",
+                "value": "1.000000"
             },
             {
-                "name": "GatherDOF__1__FarTransitionRegion",
-                "value": "200.000000"
+                "name": "GatherDOF_Pinhole_FarTransitionRegion",
+                "value": "1.000000"
             },
             {
-                "name": "GatherDOF__1__DoFarField",
-                "value": "true"
+                "name": "GatherDOF_Pinhole_Scale",
+                "value": "0.500000"
             },
             {
-                "name": "GatherDOF__1__DoFarFieldFloodFill",
-                "value": "false"
+                "name": "GatherDOF_Pinhole_KernelSize",
+                "value": "60.000000,0.000000,0.000000,0.000000"
             },
             {
-                "name": "GatherDOF__1__DoNearField",
-                "value": "true"
-            },
-            {
-                "name": "GatherDOF__1__DoNearFieldFloodFill",
-                "value": "false"
-            },
-            {
-                "name": "GatherDOF__1__KernelSize",
-                "value": "65.000000,15.000000,5.000000,0.000000"
-            },
-            {
-                "name": "GatherDOF__1__BlurTapCount",
-                "value": "90"
-            },
-            {
-                "name": "TemporalAccumulation__1__Enabled",
-                "value": "true"
-            },
-            {
-                "name": "ToneMap__2__ToneMapper",
+                "name": "GatherDOF_Pinhole_FloodFillTapCount",
                 "value": "3"
+            },
+            {
+                "name": "GatherDOF_BokehConfig_UseNoiseTextures",
+                "value": "true"
+            },
+            {
+                "name": "GatherDOF_BokehConfig_FocalDistance",
+                "value": "45.000000"
+            },
+            {
+                "name": "GatherDOF_BokehConfig_FocalRegion",
+                "value": "1.000000"
+            },
+            {
+                "name": "GatherDOF_BokehConfig_FocalLength",
+                "value": "47.028000"
+            },
+            {
+                "name": "GatherDOF_BokehConfig_NearTransitionRegion",
+                "value": "1.000000"
+            },
+            {
+                "name": "GatherDOF_BokehConfig_FarTransitionRegion",
+                "value": "1.000000"
+            },
+            {
+                "name": "GatherDOF_BokehConfig_KernelSize",
+                "value": "60.000000,0.000000,0.000000,0.000000"
             }
         ]
     },

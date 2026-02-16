@@ -71,157 +71,7 @@ float2 ReadVec2STTexture(in uint3 pxAndFrame, in Texture2DArray<float2> tex) // 
 	return ret;
 }
 
-//------------- spatially varying bokeh --------------------
-
-struct RotationBasis
-{
-	float2 row0;
-	float2 row1;
-};
-
-RotationBasis BuildRotationBasis(float angle)
-{
-	float sine;
-	float cosine;
-	sincos(angle, sine, cosine);
-
-	RotationBasis basis;
-	basis.row0 = float2(cosine, -sine);
-	basis.row1 = float2(sine, cosine);
-	return basis;
-}
-
-float2 RotateForward(float2 v, RotationBasis basis)
-{
-	return float2(dot(basis.row0, v), dot(basis.row1, v));
-}
-
-float2 RotateBackward(float2 v, RotationBasis basis)
-{
-	float2 column0 = float2(basis.row0.x, basis.row1.x);
-	float2 column1 = float2(basis.row0.y, basis.row1.y);
-	return float2(dot(column0, v), dot(column1, v));
-}
-
-
-
-struct ScreenGeometry
-{
-	float2 center;
-	float invCenterToCornerDistance;
-	float2 pixelPosition;
-	float2 screenSize;
-};
-
-// slow distortion start
-
-struct DistortionStageInfo
-{
-	uint stageIndex;
-	uint maxStageIndex;
-	float alpha;
-};
-
-DistortionStageInfo ComputeDistortionStageInfo(float normalizedDistance, uint stageCount)
-{
-	DistortionStageInfo info = (DistortionStageInfo)0;
-	if (stageCount == 0)
-	{
-		return info;
-	}
-
-	info.maxStageIndex = stageCount - 1;
-	float stagePosition = normalizedDistance * info.maxStageIndex;
-	float stageFloor = floor(stagePosition);
-	info.stageIndex = (uint)min(stageFloor, (float)info.maxStageIndex);
-	info.alpha = stagePosition - stageFloor;
-	if (info.stageIndex == info.maxStageIndex)
-	{
-		info.alpha = 0.0f;
-	}
-	return info;
-}
-
-float2 SampleDistortionStage(float2 currentOffset, uint stageIndex, Texture2DArray<float2> distortionMaps)
-{
-	float2 uv = currentOffset * 0.5f + 0.5f;
-	float2 sample = distortionMaps.SampleLevel(linearClampSampler, float3(uv, stageIndex), 0).rg;
-	return sample * 2.0f - 1.0f;
-}
-
-float2 ApplyDistortionStagesSlow(float2 offset, ScreenGeometry screen, float2 centerToSamplePos)
-{ // TODO: something is wrong here and creates a grid pattern. Maybe the interpolation isnt working at some point?
-	const uint kStageCount = 8u;
-
-	float normalizedDistance = length(centerToSamplePos) * screen.invCenterToCornerDistance;
-	Texture2DArray<float2> distortionMaps = /*$(Image2DArray:Assets\DistortionMaps\one_after_another\distortion_map_%i.png:RG8_UNorm:float2:false:false)*/;
-	DistortionStageInfo stageInfo = ComputeDistortionStageInfo(normalizedDistance, kStageCount);
-
-	for (uint stage = 1; stage < stageInfo.stageIndex; ++stage)
-	{
-		offset = SampleDistortionStage(offset, stage, distortionMaps);
-	}
-
-	if (stageInfo.alpha > 0.0f && stageInfo.stageIndex < stageInfo.maxStageIndex)
-	{
-		float2 nextOffset = SampleDistortionStage(offset, stageInfo.stageIndex, distortionMaps);
-		offset = lerp(offset, nextOffset, stageInfo.alpha);
-	}
-
-	return offset;
-}
-
-// slow distortion end
-
-float2 ApplyDistortionStagesFast(float2 offset, ScreenGeometry screen, float2 centerToSamplePos)
-{
-	const uint kStageCount = 8u;
-	float normalizedDistance = length(centerToSamplePos) * screen.invCenterToCornerDistance;
-	DistortionStageInfo stageInfo = ComputeDistortionStageInfo(normalizedDistance, kStageCount);
-	float2 uv = offset * 0.5f + 0.5f;
-	Texture3D<float2> distortionMaps = /*$(Image3D:Assets\DistortionMaps\one_sample\distortion_map_%i.png:RG8_UNorm:float2:false:false)*/;
-	float w = (normalizedDistance * (stageInfo.maxStageIndex - 1) + 0.5) / max(stageInfo.maxStageIndex, 1); // compensate for texel center at 0.5
-	float2 sample = distortionMaps.SampleLevel(linearClampSampler, float3(uv, w), 0).rg;
-	return sample * 2.0f - 1.0f;
-}
-
-float GetSpatialIntensity(float normalizedDistance)
-{
-	float n = saturate(normalizedDistance);
-	float n2 = n * n;
-	return mad(-0.41720654f, n2, mad(-0.25085544f, n, 1.00672758f));
-}
-
-float3 getSpatiallyVaryingOffset(uint3 pxAndSampleIndex, uint2 screenSize)
-{
-	ScreenGeometry screen;
-	screen.center = float2(screenSize) * 0.5f;
-	screen.invCenterToCornerDistance = rcp(max(length(screen.center), 1e-5f));
-	screen.pixelPosition = float2(pxAndSampleIndex.xy);
-	screen.screenSize = float2(screenSize);
-
-	float2 sampledOffset = ReadVec2STTexture(pxAndSampleIndex, /*$(Image2DArray:Assets\NoiseTextures\bokeh\bokeh_fl45.0_as6_samples1000000_od400_lidx0of15_%i.png:RG8_UNorm:float2:false:false)*/);
-	float PixelCoC = FarFieldColorCoC[pxAndSampleIndex.xy].w;
-	float blurRadius = /*$(Variable:KernelSize)*/.x * PixelCoC;
-	
-	float2 centerToSamplePos = (screen.pixelPosition + sampledOffset * blurRadius) - screen.center;
-	float sampleAngle = atan2(centerToSamplePos.y, centerToSamplePos.x);
-
-	static const float c_bottomLeftDirectionAngle = 2.5535900500422257; // atan2(2, -3) to match aspect ratio at which the bokeh textures were generated
-	RotationBasis rotation = BuildRotationBasis(sampleAngle - c_bottomLeftDirectionAngle);
-	float2 offsetLocal = RotateBackward(sampledOffset, rotation);
-
-	offsetLocal = ApplyDistortionStagesFast(offsetLocal, screen, centerToSamplePos);
-
-	float2 offsetScreen = RotateForward(offsetLocal, rotation);
-	float2 samplePos = screen.pixelPosition + offsetScreen * blurRadius;
-
-	float spatialIntensity = GetSpatialIntensity(length(samplePos - screen.center) * screen.invCenterToCornerDistance);
-
-	return float3(offsetScreen, spatialIntensity);
-}
-
-//------------- spatially varying bokeh end --------------------
+#include "SpatiallyVaryingBokeh.hlsli"
 
 float2 SampleICDF(float2 rng, in Texture2D<float> MarginalCDF)
 {
@@ -277,7 +127,7 @@ float2 SampleICDF(float2 rng, in Texture2D<float> MarginalCDF)
     return uv * 2.0f - 1.0f;
 }
 
-float2 GetApertureSamplePoint(uint3 pxAndFrame, int u, int v, int maxuv, in float4 KernelSize, out float sampleWeight, uint2 screenSize)
+float2 GetApertureSamplePoint(uint3 pxAndFrame, float pixelCoC, int u, int v, int maxuv, in float4 KernelSize, out float sampleWeight, uint2 screenSize)
 {
 	sampleWeight = 1.0f;
 
@@ -393,7 +243,20 @@ float2 GetApertureSamplePoint(uint3 pxAndFrame, int u, int v, int maxuv, in floa
         }
 		case LensRNG::bokeh:
 		{
-			float3 svoffset = getSpatiallyVaryingOffset(pxAndSampleIndex, screenSize);
+			Texture2DArray<float2> noiseTexture = /*$(Image2DArray:Assets\NoiseTextures\bokeh\base_bokeh_%i.png:RG8_UNorm:float2:false:false)*/;
+			Texture3D<float2> distortionMapsFast = /*$(Image3D:Assets\DistortionMaps\one_sample\distortion_map_%i.png:RG8_UNorm:float2:false:false)*/;
+			Texture2DArray<float2> distortionMapsSlow = /*$(Image2DArray:Assets\DistortionMaps\one_after_another\distortion_map_%i.png:RG8_UNorm:float2:false:false)*/;
+			
+			float3 svoffset;
+
+			bool spatiallyVarying = /*$(Variable:SpatiallyVarying)*/;
+			bool fastDistortion = /*$(Variable:FastDistortion)*/;
+			
+			if(spatiallyVarying)
+				svoffset = getSpatiallyVaryingOffset(pxAndSampleIndex, pixelCoC, screenSize, noiseTexture, KernelSize, distortionMapsFast, distortionMapsSlow, fastDistortion);
+			else
+				svoffset = getSpatiallyConstantOffset(pxAndSampleIndex, noiseTexture);
+
 			sampleWeight = svoffset.z;
 			
 			return svoffset.rg;
@@ -446,7 +309,7 @@ float2 GetApertureSamplePoint(uint3 pxAndFrame, int u, int v, int maxuv, in floa
 			for (int v = 0; v < TAP_COUNT; ++v)
 			{
 				float sampleWeight = 1.0f;
-				float2 uv = GetApertureSamplePoint(pxAndFrame, u, v, TAP_COUNT, KernelSize, sampleWeight, FarFieldColorCoCSize);
+				float2 uv = GetApertureSamplePoint(pxAndFrame, PixelCoC, u, v, TAP_COUNT, KernelSize, sampleWeight, FarFieldColorCoCSize);
 				uv /= float2(FarFieldColorCoCSize);
 
 				//float2 uv = float2(u, v) / (TAP_COUNT - 1); // map to [0, 1]
