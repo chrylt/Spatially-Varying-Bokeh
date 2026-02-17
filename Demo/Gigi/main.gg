@@ -1114,7 +1114,7 @@
             "actionSubGraph": {
                 "name": "ToneMapLens_Simulation",
                 "editorPos": [
-                    117.0,
+                    165.0,
                     -622.0
                 ],
                 "linkProperties": [
@@ -1476,6 +1476,58 @@
                         "srcPin": "Color HDR",
                         "dstNode": "TemporalAccumulation_BokehConfig",
                         "dstPin": "Accum"
+                    },
+                    {
+                        "srcPin": "Color SDR"
+                    }
+                ],
+                "fileName": "Tonemap\\Tonemap.gg",
+                "subGraphData": {
+                    "importedResources": [
+                        "Color HDR"
+                    ],
+                    "exportedResources": [
+                        "Color SDR"
+                    ],
+                    "variables": [
+                        {
+                            "name": "ExposureFStops",
+                            "visibility": "User"
+                        },
+                        {
+                            "name": "ToneMapper",
+                            "visibility": "User"
+                        }
+                    ]
+                },
+                "variableSettings": [
+                    {
+                        "name": "ExposureFStops",
+                        "visibility": "User"
+                    },
+                    {
+                        "name": "ToneMapper",
+                        "visibility": "User"
+                    }
+                ]
+            }
+        },
+        {
+            "actionSubGraph": {
+                "name": "ToneMapLens_BokehConfig_Simulation",
+                "editorPos": [
+                    293.0,
+                    -542.0
+                ],
+                "linkProperties": [
+                    {},
+                    {}
+                ],
+                "connections": [
+                    {
+                        "srcPin": "Color HDR",
+                        "dstNode": "Raytrace",
+                        "dstPin": "BokehConfigOut"
                     },
                     {
                         "srcPin": "Color SDR"

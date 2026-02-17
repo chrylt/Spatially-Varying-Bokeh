@@ -28,7 +28,7 @@
             192.98443603515626
         ],
         "cameraAltitudeAzimuth": [
-            -0.1658744513988495,
+            -0.17985090613365174,
             1.6004464626312256
         ],
         "importedResources": [
@@ -53,6 +53,10 @@
         ],
         "savedVariables": [
             {
+                "name": "FocusDistance",
+                "value": "45.425999"
+            },
+            {
                 "name": "RenderPinhole",
                 "value": "false"
             },
@@ -62,7 +66,7 @@
             },
             {
                 "name": "RenderLensSimulationDoF",
-                "value": "false"
+                "value": "true"
             },
             {
                 "name": "RenderBokehConfig",
@@ -114,7 +118,7 @@
             },
             {
                 "name": "NumBounces",
-                "value": "16"
+                "value": "2"
             },
             {
                 "name": "AlbedoMode",
@@ -190,11 +194,11 @@
             },
             {
                 "name": "ConfigLightCount",
-                "value": "15,7"
+                "value": "13,7"
             },
             {
                 "name": "ConfigOnlyDiagonal",
-                "value": "true"
+                "value": "false"
             },
             {
                 "name": "OnlyThisLightByIndex",
@@ -214,7 +218,7 @@
             },
             {
                 "name": "DoDOFAccumulation",
-                "value": "true"
+                "value": "false"
             },
             {
                 "name": "SpatiallyVarying",
@@ -226,7 +230,7 @@
             },
             {
                 "name": "GatherDOFTapCount",
-                "value": "39"
+                "value": "0"
             },
             {
                 "name": "GatherDOF_Pinhole_UseNoiseTextures",

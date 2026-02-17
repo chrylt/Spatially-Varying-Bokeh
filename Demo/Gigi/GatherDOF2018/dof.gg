@@ -226,6 +226,11 @@
                 {
                     "name": "linearClampSampler",
                     "addressMode": "Clamp"
+                },
+                {
+                    "name": "nearestNeighborSampler",
+                    "filter": "MinMagMipPoint",
+                    "addressMode": "Border"
                 }
             ]
         },

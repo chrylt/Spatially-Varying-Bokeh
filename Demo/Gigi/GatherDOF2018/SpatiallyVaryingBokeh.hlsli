@@ -102,9 +102,8 @@ float2 ApplyDistortionStagesFast(float2 offset, ScreenGeometry screen, float2 ce
 	const float kHiddenBokehCount = 2u;
 	const float kDistortionMapsCount = (kRenderedBokehConfigs - kHiddenBokehCount - 1) / 2;
 
-	// todo: how to compensate for the hidden stages?
 	float normalizedDistance = length(centerToSamplePos) * screen.invCenterToCornerDistance;
-	normalizedDistance = normalizedDistance * kDistortionMapsCount / kRenderedBokehConfigs; // compensate for hidden stages
+	normalizedDistance = normalizedDistance / kRenderedBokehConfigs * (kRenderedBokehConfigs - kHiddenBokehCount - 1); // compensate for hidden stages
 	float2 uv = offset * 0.5f + 0.5f;
 	float w = (normalizedDistance * (kDistortionMapsCount - 1) + 0.5) / max(kDistortionMapsCount, 1); // compensate for texel center at 0.5
 	float2 sample = distortionMaps.SampleLevel(linearClampSampler, float3(uv, w), 0).rg;
