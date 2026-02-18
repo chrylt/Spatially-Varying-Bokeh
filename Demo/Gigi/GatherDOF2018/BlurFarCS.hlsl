@@ -71,6 +71,8 @@ float2 ReadVec2STTexture(in uint3 pxAndFrame, in Texture2DArray<float2> tex) // 
 	return ret;
 }
 
+static const bool tdebug = /*$(Variable:Debug)*/;
+
 #include "SpatiallyVaryingBokeh.hlsli"
 
 float2 SampleICDF(float2 rng, in Texture2D<float> MarginalCDF)
@@ -127,15 +129,9 @@ float2 SampleICDF(float2 rng, in Texture2D<float> MarginalCDF)
     return uv * 2.0f - 1.0f;
 }
 
-float2 GetApertureSamplePoint(uint3 pxAndFrame, float pixelCoC, int u, int v, int maxuv, in float4 KernelSize, out float sampleWeight, uint2 screenSize)
+float3 GetApertureSamplePoint(uint3 pxAndFrame, float pixelCoC, int u, int v, int maxuv, in float4 KernelSize, out float sampleWeight, uint2 screenSize)
 {
 	sampleWeight = 1.0f;
-
-	if (!/*$(Variable:UseNoiseTextures)*/)
-	{
-		float2 uv = float2(u, v) / (maxuv.xx - 1); // map to [0, 1]
-		return SquareToPolygonMapping( uv, KernelSize );
-	}
 
 	// calculate what sample index we are on
 	uint sampleIndex = pxAndFrame.z * maxuv * maxuv;
@@ -145,102 +141,6 @@ float2 GetApertureSamplePoint(uint3 pxAndFrame, float pixelCoC, int u, int v, in
 	float2 offset = float2(0.0f, 0.0f);
 	switch(/*$(Variable:LensRNGSource)*/)
 	{
-		case LensRNG::UniformCircleWhite_PCG:
-		{
-			uint RNG = HashInit(pxAndSampleIndex);
-			float angle = RandomFloat01(RNG) * 2.0f * c_pi;
-			float radius = sqrt(RandomFloat01(RNG));
-			return float2(cos(angle), sin(angle)) * radius;
-		}
-		case LensRNG::UniformCircleWhite:
-		{
-			return ReadVec2STTexture(pxAndSampleIndex, /*$(Image2DArray:Assets\NoiseTextures\UniformCircle\UniformCircle_%i.0.png:RG8_UNorm:float2:false:false)*/);
-		}
-		case LensRNG::UniformCircleBlue:
-		{
-			return ReadVec2STTexture(pxAndSampleIndex, /*$(Image2DArray:Assets\NoiseTextures\UniformCircle\UniformCircle_%i.png:RG8_UNorm:float2:false:false)*/);
-		}
-		case LensRNG::UniformHexagonWhite:
-		{
-			return ReadVec2STTexture(pxAndSampleIndex, /*$(Image2DArray:Assets\NoiseTextures\UniformHexagon\UniformHexagon_%i.0.png:RG8_UNorm:float2:false:false)*/);
-		}
-		case LensRNG::UniformHexagonBlue:
-		{
-			return ReadVec2STTexture(pxAndSampleIndex, /*$(Image2DArray:Assets\NoiseTextures\UniformHexagon\UniformHexagon_%i.png:RG8_UNorm:float2:false:false)*/);
-        }
-        case LensRNG::UniformHexagonICDF_White:
-        {
-            uint RNG = HashInit(pxAndSampleIndex);
-            float2 rng = float2(RandomFloat01(RNG), RandomFloat01(RNG));
-            return SampleICDF(rng, /*$(Image2D:Assets\NoiseTextures\UniformHexagon\UniformHexagon.icdf.exr:R32_Float:float:false:false)*/);
-        }
-        case LensRNG::UniformHexagonICDF_Blue:
-        {
-            float2 rng = ReadVec2STTextureRaw(pxAndSampleIndex, /*$(Image2DArray:Assets\NoiseTextures\FAST\vector2_uniform_gauss1_0_Gauss10_separate05_%i.png:RG8_UNorm:float2:false:false)*/);
-            return SampleICDF(rng, /*$(Image2D:Assets\NoiseTextures\UniformHexagon\UniformHexagon.icdf.exr:R32_Float:float:false:false)*/);
-        }
-		case LensRNG::UniformStarWhite:
-		{
-			return ReadVec2STTexture(pxAndSampleIndex, /*$(Image2DArray:Assets\NoiseTextures\UniformStar\UniformStar_%i.0.png:RG8_UNorm:float2:false:false)*/);
-		}
-		case LensRNG::UniformStarBlue:
-		{
-			return ReadVec2STTexture(pxAndSampleIndex, /*$(Image2DArray:Assets\NoiseTextures\UniformStar\UniformStar_%i.png:RG8_UNorm:float2:false:false)*/);
-		}
-		case LensRNG::NonUniformStarWhite:
-		{
-			return ReadVec2STTexture(pxAndSampleIndex, /*$(Image2DArray:Assets\NoiseTextures\NonUniformStar\NonUniformStar_%i.0.png:RG8_UNorm:float2:false:false)*/);
-		}
-		case LensRNG::NonUniformStarBlue:
-		{
-			return ReadVec2STTexture(pxAndSampleIndex, /*$(Image2DArray:Assets\NoiseTextures\NonUniformStar\NonUniformStar_%i.png:RG8_UNorm:float2:false:false)*/);
-        }
-        case LensRNG::UniformStarICDF_White:
-        {
-            uint RNG = HashInit(pxAndSampleIndex);
-            float2 rng = float2(RandomFloat01(RNG), RandomFloat01(RNG));
-            return SampleICDF(rng, /*$(Image2D:Assets\NoiseTextures\UniformStar\UniformStar.icdf.exr:R32_Float:float:false:false)*/);
-        }
-        case LensRNG::UniformStarICDF_Blue:
-        {
-            float2 rng = ReadVec2STTextureRaw(pxAndSampleIndex, /*$(Image2DArray:Assets\NoiseTextures\FAST\vector2_uniform_gauss1_0_Gauss10_separate05_%i.png:RG8_UNorm:float2:false:false)*/);
-            return SampleICDF(rng, /*$(Image2D:Assets\NoiseTextures\UniformStar\UniformStar.icdf.exr:R32_Float:float:false:false)*/);
-        }
-		case LensRNG::NonUniformStar2White:
-		{
-			return ReadVec2STTexture(pxAndSampleIndex, /*$(Image2DArray:Assets\NoiseTextures\NonUniformStar2\NonUniformStar2_%i.0.png:RG8_UNorm:float2:false:false)*/);
-		}
-		case LensRNG::NonUniformStar2Blue:
-		{
-			return ReadVec2STTexture(pxAndSampleIndex, /*$(Image2DArray:Assets\NoiseTextures\NonUniformStar2\NonUniformStar2_%i.png:RG8_UNorm:float2:false:false)*/);
-		}
-		case LensRNG::LKCP6White:
-		{
-			return ReadVec2STTexture(pxAndSampleIndex, /*$(Image2DArray:Assets\NoiseTextures\Lens_kernel_compositingpro.006\Lens_kernel_compositingpro.006_%i.0.png:RG8_UNorm:float2:false:false)*/);
-		}
-		case LensRNG::LKCP6Blue:
-		{
-			return ReadVec2STTexture(pxAndSampleIndex, /*$(Image2DArray:Assets\NoiseTextures\Lens_kernel_compositingpro.006\Lens_kernel_compositingpro.006_%i.png:RG8_UNorm:float2:false:false)*/);
-		}
-		case LensRNG::LKCP204White:
-		{
-			return ReadVec2STTexture(pxAndSampleIndex, /*$(Image2DArray:Assets\NoiseTextures\Lens_kernel_compositingpro.204\Lens_kernel_compositingpro.204_%i.0.png:RG8_UNorm:float2:false:false)*/);
-		}
-		case LensRNG::LKCP204Blue:
-		{
-			return ReadVec2STTexture(pxAndSampleIndex, /*$(Image2DArray:Assets\NoiseTextures\Lens_kernel_compositingpro.204\Lens_kernel_compositingpro.204_%i.png:RG8_UNorm:float2:false:false)*/);
-        }
-        case LensRNG::LKCP204ICDF_White:
-        {
-            uint RNG = HashInit(pxAndSampleIndex);
-            float2 rng = float2(RandomFloat01(RNG), RandomFloat01(RNG));
-            return SampleICDF(rng, /*$(Image2D:Assets\NoiseTextures\Lens_kernel_compositingpro.204\Lens_kernel_compositingpro.204.icdf.exr:R32_Float:float:false:false)*/);
-        }
-        case LensRNG::LKCP204ICDF_Blue:
-        {
-            float2 rng = ReadVec2STTextureRaw(pxAndSampleIndex, /*$(Image2DArray:Assets\NoiseTextures\FAST\vector2_uniform_gauss1_0_Gauss10_separate05_%i.png:RG8_UNorm:float2:false:false)*/);
-            return SampleICDF(rng, /*$(Image2D:Assets\NoiseTextures\Lens_kernel_compositingpro.204\Lens_kernel_compositingpro.204.icdf.exr:R32_Float:float:false:false)*/);
-        }
 		case LensRNG::bokeh:
 		{
 			Texture2DArray<float2> noiseTexture = /*$(Image2DArray:Assets\NoiseTextures\bokeh\base_bokeh_%i.png:RG8_UNorm:float2:false:false)*/;
@@ -259,11 +159,11 @@ float2 GetApertureSamplePoint(uint3 pxAndFrame, float pixelCoC, int u, int v, in
 
 			sampleWeight = svoffset.z;
 			
-			return svoffset.rg;
+			return float3(svoffset.rg, svoffset.z);
         }
 	}
 
-	return float2(0.0f, 0.0f);
+	return float3(0.0f, 0.0f, 0.0f);
 }
 
 #define BLUR_TAP_COUNT /*$(Variable:BlurTapCount)*/
@@ -309,23 +209,27 @@ float2 GetApertureSamplePoint(uint3 pxAndFrame, float pixelCoC, int u, int v, in
 			for (int v = 0; v < TAP_COUNT; ++v)
 			{
 				float sampleWeight = 1.0f;
-				float2 uv = GetApertureSamplePoint(pxAndFrame, PixelCoC, u, v, TAP_COUNT, KernelSize, sampleWeight, FarFieldColorCoCSize);
-				uv /= float2(FarFieldColorCoCSize);
+				float3 uv = GetApertureSamplePoint(pxAndFrame, PixelCoC, u, v, TAP_COUNT, KernelSize, sampleWeight, FarFieldColorCoCSize);
+				uv.xy /= float2(FarFieldColorCoCSize);
 
 				//float2 uv = float2(u, v) / (TAP_COUNT - 1); // map to [0, 1]
 				//uv = SquareToPolygonMapping( uv, KernelSize ) / float2(FarFieldColorCoCSize); // map to bokeh shape, then to texel size
-				uv = UVAndScreenPos.xy + radius * uv;
+				uv.xy = UVAndScreenPos.xy + radius * uv.xy;
 
 				// Mirror coordinates outside [0,1] to prevent edge artifacts
-				uv = 1.0f - abs(fmod(abs(uv), 2.0f) - 1.0f);
+				uv.xy = 1.0f - abs(fmod(abs(uv.xy), 2.0f) - 1.0f);
 
-				float4 tapColor = FarFieldColorCoC.SampleLevel(linearClampSampler, uv, 0); //Texture2DSampleLevel(PostprocessInput0, PostprocessInput0Sampler, uv, 0);
-				
+				float4 tapColor = FarFieldColorCoC.SampleLevel(linearClampSampler, uv.xy, 0); //Texture2DSampleLevel(PostprocessInput0, PostprocessInput0Sampler, uv, 0);
 				// Weighted by CoC. Gives more influence to taps with a CoC higher than us.
 				float TapWeight = tapColor.w * saturate(1.0f - (PixelCoC - tapColor.w)); 
 				
 				ResultColor +=  tapColor.xyz * sampleWeight * TapWeight;
 				Weight += TapWeight;
+
+				if (tdebug) {
+					ResultColor = float4(uv.z, 0.0f, 0.0f, 1.0f); // debug: visualize UV coordinates as color
+					Weight = 1.0f; // debug: disable weighting
+				} 
 			}
 		}
 		if (Weight > 0) ResultColor /= Weight;

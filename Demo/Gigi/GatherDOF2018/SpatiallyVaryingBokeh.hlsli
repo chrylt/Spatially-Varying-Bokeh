@@ -1,4 +1,6 @@
 
+
+
 struct RotationBasis
 {
 	float2 row0;
@@ -46,19 +48,18 @@ struct DistortionStageInfo
 	float alpha;
 };
 
-DistortionStageInfo ComputeDistortionStageInfo(float normalizedDistance, uint stageCount)
+DistortionStageInfo ComputeDistortionStageInfo(float normalizedDistance)
 {
-	DistortionStageInfo info = (DistortionStageInfo)0;
-	if (stageCount == 0)
-	{
-		return info;
-	}
+	const float kRenderedBokehConfigs = 15.0f;
+	const float kHiddenBokehCount = 2.0f;
+	const float kDistortionMapsCount = floor((kRenderedBokehConfigs - kHiddenBokehCount) / 2.0f) + 1.0f;
 
-	info.maxStageIndex = stageCount - 1;
-	float stagePosition = normalizedDistance * info.maxStageIndex;
-	float stageFloor = floor(stagePosition);
-	info.stageIndex = (uint)min(stageFloor, (float)info.maxStageIndex);
-	info.alpha = stagePosition - stageFloor;
+	DistortionStageInfo info = (DistortionStageInfo)0;
+
+	info.maxStageIndex = kDistortionMapsCount - 1;
+	float stagePosition = min(normalizedDistance * (kRenderedBokehConfigs - 1), (kRenderedBokehConfigs - kHiddenBokehCount - 1)) / 2.0f; // compensate for hidden stages
+	info.stageIndex = floor(stagePosition);
+	info.alpha = frac(stagePosition);
 	if (info.stageIndex == info.maxStageIndex)
 	{
 		info.alpha = 0.0f;
@@ -69,45 +70,53 @@ DistortionStageInfo ComputeDistortionStageInfo(float normalizedDistance, uint st
 float2 SampleDistortionStage(float2 currentOffset, uint stageIndex, Texture2DArray<float2> distortionMaps)
 {
 	float2 uv = currentOffset * 0.5f + 0.5f;
+	uv = uv * 51.0f / 52.0f + 1.0f / 52.0f / 2.0f;
 	float2 sample = distortionMaps.SampleLevel(linearClampSampler, float3(uv, stageIndex), 0).rg;
 	return sample * 2.0f - 1.0f;
 }
 
-float2 ApplyDistortionStagesSlow(float2 offset, ScreenGeometry screen, float2 centerToSamplePos, Texture2DArray<float2> distortionMaps) 
+float3 ApplyDistortionStagesSlow(float2 offset, ScreenGeometry screen, float2 centerToSamplePos, Texture2DArray<float2> distortionMaps) 
 {
-	const uint kStageCount = 8u;
-
 	float normalizedDistance = length(centerToSamplePos) * screen.invCenterToCornerDistance;
-	DistortionStageInfo stageInfo = ComputeDistortionStageInfo(normalizedDistance, kStageCount);
+	DistortionStageInfo stageInfo = ComputeDistortionStageInfo(normalizedDistance);
 
-	for (uint stage = 1; stage < stageInfo.stageIndex; ++stage)
+	float debugFloat = 1.0f;
+
+	for (uint stage = 1; stage <= stageInfo.stageIndex; ++stage)
 	{
 		offset = SampleDistortionStage(offset, stage, distortionMaps);
 	}
 
 	if (stageInfo.alpha > 0.0f && stageInfo.stageIndex < stageInfo.maxStageIndex)
 	{
-		float2 nextOffset = SampleDistortionStage(offset, stageInfo.stageIndex, distortionMaps);
+		float2 nextOffset = SampleDistortionStage(offset, stageInfo.stageIndex + 1, distortionMaps);
 		offset = lerp(offset, nextOffset, stageInfo.alpha);
 	}
 
-	return offset;
+	//if (stageInfo.stageIndex == stageInfo.maxStageIndex)
+	//{
+		//debugFloat = 1.0f; // debug: visualize interpolation factor of last stage as color
+	//}
+	//debugFloat = (float(stageInfo.stageIndex) + stageInfo.alpha) / float(stageInfo.maxStageIndex);
+
+	return float3(offset, debugFloat);
 }
 
 // slow distortion end
 
-float2 ApplyDistortionStagesFast(float2 offset, ScreenGeometry screen, float2 centerToSamplePos, Texture3D<float2> distortionMaps)
+float3 ApplyDistortionStagesFast(float2 offset, ScreenGeometry screen, float2 centerToSamplePos, Texture3D<float2> distortionMaps)
 {
-	const float kRenderedBokehConfigs = 15u;
-	const float kHiddenBokehCount = 2u;
-	const float kDistortionMapsCount = (kRenderedBokehConfigs - kHiddenBokehCount - 1) / 2;
+	const float kRenderedBokehConfigs = 15.0f;
+	const float kHiddenBokehCount = 2.0f;
+	const float kDistortionMapsCount = floor((kRenderedBokehConfigs - kHiddenBokehCount) / 2.0f) + 1.0f;
 
 	float normalizedDistance = length(centerToSamplePos) * screen.invCenterToCornerDistance;
-	normalizedDistance = normalizedDistance / kRenderedBokehConfigs * (kRenderedBokehConfigs - kHiddenBokehCount - 1); // compensate for hidden stages
+	normalizedDistance = min(normalizedDistance * (kRenderedBokehConfigs - 1), (kRenderedBokehConfigs - kHiddenBokehCount - 1)) / 2.0f; // compensate for hidden stages
 	float2 uv = offset * 0.5f + 0.5f;
-	float w = (normalizedDistance * (kDistortionMapsCount - 1) + 0.5) / max(kDistortionMapsCount, 1); // compensate for texel center at 0.5
+	uv = uv * 51.0f / 52.0f + 1.0f / 52.0f / 2.0f;
+	float w = (normalizedDistance / (kDistortionMapsCount - 1)) * 6.0f / 7.0f + 1.0f / 7.0f / 2.0f; // compensate for texel center at 0.5
 	float2 sample = distortionMaps.SampleLevel(linearClampSampler, float3(uv, w), 0).rg;
-	return sample * 2.0f - 1.0f;
+	return float3(sample * 2.0f - 1.0f, 1.0f);
 }
 
 float GetSpatialIntensity(float normalizedDistance)
@@ -133,20 +142,21 @@ float3 getSpatiallyVaryingOffset(uint3 pxAndSampleIndex, float pixelCoC, uint2 s
 
 	static const float c_bottomLeftDirectionAngle = 2.5535900500422257; // atan2(2, -3) to match aspect ratio at which the bokeh textures were generated
 	RotationBasis rotation = BuildRotationBasis(sampleAngle - c_bottomLeftDirectionAngle);
-	float2 offsetLocal = RotateBackward(sampledOffset, rotation);
+	float2 offset = RotateBackward(sampledOffset, rotation);
+	float3 offsetLocal = float3(offset, 1.0f);// GetSpatialIntensity(length(centerToSamplePos) * screen.invCenterToCornerDistance));
 
 	if(fastDistortion) {
-		offsetLocal = ApplyDistortionStagesFast(offsetLocal, screen, centerToSamplePos, distortionMapsFast);
+		offsetLocal = ApplyDistortionStagesFast(offset, screen, centerToSamplePos, distortionMapsFast);
 	} else {
-		offsetLocal = ApplyDistortionStagesSlow(offsetLocal, screen, centerToSamplePos, distortionMapsSlow);
+		offsetLocal = ApplyDistortionStagesSlow(offset, screen, centerToSamplePos, distortionMapsSlow);
 	}
 
-	float2 offsetScreen = RotateForward(offsetLocal, rotation);
+	float2 offsetScreen = RotateForward(offsetLocal.xy, rotation);
 	float2 samplePos = screen.pixelPosition + offsetScreen * blurRadius;
 
-	float spatialIntensity = GetSpatialIntensity(length(samplePos - screen.center) * screen.invCenterToCornerDistance);
+	//float spatialIntensity = GetSpatialIntensity(length(samplePos - screen.center) * screen.invCenterToCornerDistance);
 
-	return float3(offsetScreen, spatialIntensity);
+	return float3(offsetScreen, offsetLocal.z);//spatialIntensity);
 }
 
 float3 getSpatiallyConstantOffset(uint3 pxAndSampleIndex, Texture2DArray<float2> noiseTexture)

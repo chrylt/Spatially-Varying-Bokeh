@@ -57,6 +57,7 @@ float2 ReadVec2STTexture(in uint3 pxAndFrame, in Texture2DArray<float2> tex)
 	return ret;
 }
 
+static const bool tdebug = /*$(Variable:Debug)*/;
 #include "SpatiallyVaryingBokeh.hlsli"
 
 float2 SampleICDF(float2 rng, in Texture2D<float> MarginalCDF)

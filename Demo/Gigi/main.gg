@@ -371,6 +371,11 @@
             "type": "Uint",
             "dflt": "20",
             "visibility": "User"
+        },
+        {
+            "name": "Debug",
+            "type": "Bool",
+            "visibility": "User"
         }
     ],
     "shaders": [
@@ -813,6 +818,10 @@
                         {
                             "name": "FastDistortion",
                             "visibility": "User"
+                        },
+                        {
+                            "name": "Debug",
+                            "visibility": "User"
                         }
                     ]
                 },
@@ -918,6 +927,11 @@
                         "name": "FastDistortion",
                         "visibility": "User",
                         "replaceWithStr": "FastDistortionGatherDoF"
+                    },
+                    {
+                        "name": "Debug",
+                        "visibility": "User",
+                        "replaceWithStr": "Debug"
                     }
                 ]
             }
@@ -1289,6 +1303,10 @@
                         {
                             "name": "FastDistortion",
                             "visibility": "User"
+                        },
+                        {
+                            "name": "Debug",
+                            "visibility": "User"
                         }
                     ]
                 },
@@ -1394,6 +1412,11 @@
                         "name": "FastDistortion",
                         "visibility": "User",
                         "replaceWithStr": "FastDistortionGatherDoF"
+                    },
+                    {
+                        "name": "Debug",
+                        "visibility": "User",
+                        "replaceWithStr": "Debug"
                     }
                 ]
             }

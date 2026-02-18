@@ -20,15 +20,15 @@
         "ProjMtx_textureName": "ColorHDR"
     },
     "snapshot": {
-        "resourceViewNodeIndex": 63,
-        "resourceViewResourceIndex": 3,
+        "resourceViewNodeIndex": 42,
+        "resourceViewResourceIndex": 7,
         "cameraPos": [
             450.2478942871094,
             127.6720962524414,
             192.98443603515626
         ],
         "cameraAltitudeAzimuth": [
-            -0.17985090613365174,
+            -0.1658744513988495,
             1.6004464626312256
         ],
         "importedResources": [
@@ -58,7 +58,7 @@
             },
             {
                 "name": "RenderPinhole",
-                "value": "false"
+                "value": "true"
             },
             {
                 "name": "RenderThinLensDoF",
@@ -194,11 +194,11 @@
             },
             {
                 "name": "ConfigLightCount",
-                "value": "13,7"
+                "value": "15,11"
             },
             {
                 "name": "ConfigOnlyDiagonal",
-                "value": "false"
+                "value": "true"
             },
             {
                 "name": "OnlyThisLightByIndex",
@@ -230,7 +230,11 @@
             },
             {
                 "name": "GatherDOFTapCount",
-                "value": "0"
+                "value": "21"
+            },
+            {
+                "name": "Debug",
+                "value": "false"
             },
             {
                 "name": "GatherDOF_Pinhole_UseNoiseTextures",

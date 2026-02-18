@@ -163,6 +163,11 @@
             "type": "Bool",
             "dflt": "true",
             "visibility": "User"
+        },
+        {
+            "name": "Debug",
+            "type": "Bool",
+            "visibility": "User"
         }
     ],
     "shaders": [
