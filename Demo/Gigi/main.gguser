@@ -20,8 +20,8 @@
         "ProjMtx_textureName": "ColorHDR"
     },
     "snapshot": {
-        "resourceViewNodeIndex": 42,
-        "resourceViewResourceIndex": 7,
+        "resourceViewNodeIndex": 63,
+        "resourceViewResourceIndex": 3,
         "cameraPos": [
             450.2478942871094,
             127.6720962524414,
@@ -198,7 +198,7 @@
             },
             {
                 "name": "ConfigOnlyDiagonal",
-                "value": "true"
+                "value": "false"
             },
             {
                 "name": "OnlyThisLightByIndex",
@@ -218,7 +218,7 @@
             },
             {
                 "name": "DoDOFAccumulation",
-                "value": "false"
+                "value": "true"
             },
             {
                 "name": "SpatiallyVarying",

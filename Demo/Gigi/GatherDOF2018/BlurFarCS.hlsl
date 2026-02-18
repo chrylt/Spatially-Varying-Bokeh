@@ -209,27 +209,22 @@ float3 GetApertureSamplePoint(uint3 pxAndFrame, float pixelCoC, int u, int v, in
 			for (int v = 0; v < TAP_COUNT; ++v)
 			{
 				float sampleWeight = 1.0f;
-				float3 uv = GetApertureSamplePoint(pxAndFrame, PixelCoC, u, v, TAP_COUNT, KernelSize, sampleWeight, FarFieldColorCoCSize);
-				uv.xy /= float2(FarFieldColorCoCSize);
+				float2 uv = GetApertureSamplePoint(pxAndFrame, PixelCoC, u, v, TAP_COUNT, KernelSize, sampleWeight, FarFieldColorCoCSize);
+				uv /= float2(FarFieldColorCoCSize);
 
 				//float2 uv = float2(u, v) / (TAP_COUNT - 1); // map to [0, 1]
 				//uv = SquareToPolygonMapping( uv, KernelSize ) / float2(FarFieldColorCoCSize); // map to bokeh shape, then to texel size
-				uv.xy = UVAndScreenPos.xy + radius * uv.xy;
+				uv = UVAndScreenPos.xy + radius * uv;
 
 				// Mirror coordinates outside [0,1] to prevent edge artifacts
-				uv.xy = 1.0f - abs(fmod(abs(uv.xy), 2.0f) - 1.0f);
+				uv = 1.0f - abs(fmod(abs(uv), 2.0f) - 1.0f);
 
-				float4 tapColor = FarFieldColorCoC.SampleLevel(linearClampSampler, uv.xy, 0); //Texture2DSampleLevel(PostprocessInput0, PostprocessInput0Sampler, uv, 0);
+				float4 tapColor = FarFieldColorCoC.SampleLevel(linearClampSampler, uv, 0); //Texture2DSampleLevel(PostprocessInput0, PostprocessInput0Sampler, uv, 0);
 				// Weighted by CoC. Gives more influence to taps with a CoC higher than us.
 				float TapWeight = tapColor.w * saturate(1.0f - (PixelCoC - tapColor.w)); 
 				
 				ResultColor +=  tapColor.xyz * sampleWeight * TapWeight;
 				Weight += TapWeight;
-
-				if (tdebug) {
-					ResultColor = float4(uv.z, 0.0f, 0.0f, 1.0f); // debug: visualize UV coordinates as color
-					Weight = 1.0f; // debug: disable weighting
-				} 
 			}
 		}
 		if (Weight > 0) ResultColor /= Weight;
