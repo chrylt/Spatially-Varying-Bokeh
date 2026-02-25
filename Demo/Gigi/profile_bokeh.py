@@ -13,12 +13,15 @@ NUM_WARMUP_FRAMES = 10
 NUM_PROFILING_FRAMES = 100
 
 # Accumulation settings
-PINHOLE_CONVERGE_FRAMES = 5       # Frames to converge pinhole path tracing
-DOF_ACCUMULATION_FRAMES = 2000       # Frames to accumulate DOF effect
-GROUND_TRUTH_CONVERGE_FRAMES = 10000 # Frames for ground truth rendering
+PINHOLE_CONVERGE_FRAMES = 1000       # Frames to converge pinhole path tracing
+DOF_ACCUMULATION_FRAMES = 10       # Frames to accumulate DOF effect
+GROUND_TRUTH_CONVERGE_FRAMES = 5000 # Frames for ground truth rendering
 
 # Tap count range for noise level comparison
-TAP_COUNT_VALUES = [1, 5, 10, 20, 40, 60, 80]
+TAP_COUNT_VALUES = [1, 5, 10, 20, 40, 60, 80, 100]
+
+HIGH_QUALITY_TAP_COUNT = 100
+LOW_QUALITY_TAP_COUNT = 5
 
 # Output directory structure
 TIMESTAMP = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -39,7 +42,7 @@ Host.DisableGGUserSave(True)
 Host.SetProfilingMode(True)
 Host.ForceEnableProfiling(True)
 
-# Helper Functions
+# Helper Functionssl
 
 def create_output_dirs():
     """Create all necessary output directories."""
@@ -71,6 +74,8 @@ def reset_all_variables():
     Host.SetVariable("FastDistortionGatherDoF", "false")
     Host.SetVariable("Accumulate", "false")
     Host.SetVariable("Animate", "false")
+    Host.SetVariable("SmallLightBrightness", "300")
+    Host.SetVariable("SmallLightRadius", "0.3")
 
 
 def reset_accumulation():
@@ -275,6 +280,7 @@ def profileGatherDoFSpatiallyConstantScene():
     Host.SetVariable("DoGatherDoF", "true")
     Host.SetVariable("SpatiallyVarying", "false")
     Host.SetVariable("DoDOFAccumulation", "false")
+    Host.SetVariable("GatherDOFTapCount", str(LOW_QUALITY_TAP_COUNT))
     
     # Run profiling
     profiling_data = run_profiling("GatherDoF_SpatiallyConstant_Scene")
@@ -282,12 +288,13 @@ def profileGatherDoFSpatiallyConstantScene():
     save_profiling_data(profiling_data, output_dir, "gather_dof_spatially_constant")
     
     # Accumulate to convergence and save rendered image
+    Host.SetVariable("GatherDOFTapCount", str(HIGH_QUALITY_TAP_COUNT))
+    Host.SetVariable("DoGatherDoF", "true")
+    Host.RunTechnique()  # Run one frame to apply the change before accumulation
     Host.SetVariable("DoDOFAccumulation", "true")
-    Host.SetVariable("Accumulate", "true")
-    Host.SetVariable("Animate", "true")
     
     Host.Print(f"  Accumulating {DOF_ACCUMULATION_FRAMES} frames...")
-    accumulate_frames(DOF_ACCUMULATION_FRAMES, reset=True)
+    accumulate_frames(DOF_ACCUMULATION_FRAMES, reset=False)
     
     output_path = os.path.join(BASE_OUTPUT_DIR, "scene", "images", "gather_dof_spatially_constant.png")
     save_image_png(RESOURCE_PINHOLE_SDR, output_path)
@@ -295,8 +302,7 @@ def profileGatherDoFSpatiallyConstantScene():
     # Reset
     Host.SetVariable("DoGatherDoF", "false")
     Host.SetVariable("DoDOFAccumulation", "false")
-    Host.SetVariable("Accumulate", "false")
-    Host.SetVariable("Animate", "false")
+    Host.SetVariable("GatherDOFTapCount", str(LOW_QUALITY_TAP_COUNT))
 
 def profileGatherDoFSpatiallyVaryingScene():
     """Profile Gather DoF with spatially varying settings for the scene (both cumulative and incremental)."""
@@ -315,6 +321,7 @@ def profileGatherDoFSpatiallyVaryingScene():
         Host.SetVariable("SpatiallyVarying", "true")
         Host.SetVariable("FastDistortionGatherDoF", fast_distortion_value)
         Host.SetVariable("DoDOFAccumulation", "false")
+        Host.SetVariable("GatherDOFTapCount", str(LOW_QUALITY_TAP_COUNT))
         
         # Run profiling
         profiling_data = run_profiling(f"GatherDoF_SpatiallyVarying_{mode_label.capitalize()}_Scene")
@@ -322,12 +329,13 @@ def profileGatherDoFSpatiallyVaryingScene():
         save_profiling_data(profiling_data, output_dir, f"gather_dof_spatially_varying_{mode_label}")
         
         # Accumulate to convergence and save rendered image
+        Host.SetVariable("GatherDOFTapCount", str(HIGH_QUALITY_TAP_COUNT))
+        Host.SetVariable("DoGatherDoF", "true")
+        Host.RunTechnique()  # Run one frame to apply the change before accumulation
         Host.SetVariable("DoDOFAccumulation", "true")
-        Host.SetVariable("Accumulate", "true")
-        Host.SetVariable("Animate", "true")
         
         Host.Print(f"  Accumulating {DOF_ACCUMULATION_FRAMES} frames...")
-        accumulate_frames(DOF_ACCUMULATION_FRAMES, reset=True)
+        accumulate_frames(DOF_ACCUMULATION_FRAMES, reset=False)
         
         output_path = os.path.join(BASE_OUTPUT_DIR, "scene", "images", f"gather_dof_spatially_varying_{mode_label}.png")
         save_image_png(RESOURCE_PINHOLE_SDR, output_path)
@@ -339,6 +347,7 @@ def profileGatherDoFSpatiallyVaryingScene():
     Host.SetVariable("DoDOFAccumulation", "false")
     Host.SetVariable("Accumulate", "false")
     Host.SetVariable("Animate", "false")
+    Host.SetVariable("GatherDOFTapCount", str(LOW_QUALITY_TAP_COUNT))
 
 def generateGroundTruthDataScene():
     """Generate ground truth lens simulation data for the scene."""
@@ -403,6 +412,7 @@ def profileGatherDoFSpatiallyConstantBokehConfig():
     Host.SetVariable("DoGatherDoF", "true")
     Host.SetVariable("SpatiallyVarying", "false")
     Host.SetVariable("DoDOFAccumulation", "false")
+    Host.SetVariable("GatherDOFTapCount", str(LOW_QUALITY_TAP_COUNT))
     
     # Run profiling
     profiling_data = run_profiling("GatherDoF_SpatiallyConstant_BokehConfig")
@@ -410,12 +420,14 @@ def profileGatherDoFSpatiallyConstantBokehConfig():
     save_profiling_data(profiling_data, output_dir, "gather_dof_spatially_constant")
     
     # Accumulate to convergence and save rendered image
+    Host.SetVariable("GatherDOFTapCount", str(HIGH_QUALITY_TAP_COUNT))
+    Host.SetVariable("DoGatherDoF", "true")
+    Host.SetVariable("DoDOFAccumulation", "false")
+    Host.RunTechnique()  # Run one frame to apply the change before accumulation
     Host.SetVariable("DoDOFAccumulation", "true")
-    Host.SetVariable("Accumulate", "true")
-    Host.SetVariable("Animate", "true")
     
     Host.Print(f"  Accumulating {DOF_ACCUMULATION_FRAMES} frames...")
-    accumulate_frames(DOF_ACCUMULATION_FRAMES, reset=True)
+    accumulate_frames(DOF_ACCUMULATION_FRAMES, reset=False)
     
     output_path = os.path.join(BASE_OUTPUT_DIR, "bokeh_config", "images", "gather_dof_spatially_constant.png")
     save_image_png(RESOURCE_BOKEH_CONFIG_SDR, output_path)
@@ -423,8 +435,7 @@ def profileGatherDoFSpatiallyConstantBokehConfig():
     # Reset
     Host.SetVariable("DoGatherDoF", "false")
     Host.SetVariable("DoDOFAccumulation", "false")
-    Host.SetVariable("Accumulate", "false")
-    Host.SetVariable("Animate", "false")
+    Host.SetVariable("GatherDOFTapCount", str(LOW_QUALITY_TAP_COUNT))
 
 def profileGatherDoFSpatiallyVaryingBokehConfig():
     """Profile Gather DoF with spatially varying settings for bokeh config (both cumulative and incremental)."""
@@ -443,6 +454,7 @@ def profileGatherDoFSpatiallyVaryingBokehConfig():
         Host.SetVariable("SpatiallyVarying", "true")
         Host.SetVariable("FastDistortionGatherDoF", fast_distortion_value)
         Host.SetVariable("DoDOFAccumulation", "false")
+        Host.SetVariable("GatherDOFTapCount", str(LOW_QUALITY_TAP_COUNT))
         
         # Run profiling
         profiling_data = run_profiling(f"GatherDoF_SpatiallyVarying_{mode_label.capitalize()}_BokehConfig")
@@ -450,12 +462,14 @@ def profileGatherDoFSpatiallyVaryingBokehConfig():
         save_profiling_data(profiling_data, output_dir, f"gather_dof_spatially_varying_{mode_label}")
         
         # Accumulate to convergence and save rendered image
+        Host.SetVariable("GatherDOFTapCount", str(HIGH_QUALITY_TAP_COUNT))
+        Host.SetVariable("DoGatherDoF", "true")
+        Host.SetVariable("DoDOFAccumulation", "false")
+        Host.RunTechnique()  # Run one frame to apply the change before accumulation
         Host.SetVariable("DoDOFAccumulation", "true")
-        Host.SetVariable("Accumulate", "true")
-        Host.SetVariable("Animate", "true")
         
         Host.Print(f"  Accumulating {DOF_ACCUMULATION_FRAMES} frames...")
-        accumulate_frames(DOF_ACCUMULATION_FRAMES, reset=True)
+        accumulate_frames(DOF_ACCUMULATION_FRAMES, reset=False)
         
         output_path = os.path.join(BASE_OUTPUT_DIR, "bokeh_config", "images", f"gather_dof_spatially_varying_{mode_label}.png")
         save_image_png(RESOURCE_BOKEH_CONFIG_SDR, output_path)
@@ -465,8 +479,7 @@ def profileGatherDoFSpatiallyVaryingBokehConfig():
     Host.SetVariable("SpatiallyVarying", "false")
     Host.SetVariable("FastDistortionGatherDoF", "false")
     Host.SetVariable("DoDOFAccumulation", "false")
-    Host.SetVariable("Accumulate", "false")
-    Host.SetVariable("Animate", "false")
+    Host.SetVariable("GatherDOFTapCount", str(LOW_QUALITY_TAP_COUNT))
 
 def generateGroundTruthDataBokehConfig():
     """Generate ground truth realistic lens data for bokeh config."""
@@ -498,23 +511,25 @@ def generateGroundTruthDataBokehConfig():
     Host.SetVariable("Animate", "false")
 
 def profileAndGenerateDOFBokehConfigWithVaryingNoiseLevels():
-    """Profile and generate DoF images with varying tap counts (noise levels) for both distortion modes."""
+    """Profile and generate DoF images with varying tap counts (noise levels) for constant, incremental, and cumulative modes."""
     Host.Print("\n=== Tap Count Comparison (Bokeh Config) ===")
     
     # Prepare pinhole base
     letPinholeAccumulateBokehConfig()
     
-    # Profile both FastDistortionGatherDoF modes
-    distortion_modes = [
-        ("true", "cumulative"),   # FastDistortionGatherDoF = true (cumulative distortion maps)
-        ("false", "incremental")  # FastDistortionGatherDoF = false (incremental distortion maps)
+    # Profile all three modes: constant, incremental, and cumulative
+    # Mode tuple format: (SpatiallyVarying, FastDistortionGatherDoF, mode_label)
+    modes = [
+        ("false", "false", "constant"),    # Spatially constant (no distortion maps)
+        ("true", "false", "incremental"),  # Spatially varying with incremental distortion maps
+        ("true", "true", "cumulative"),    # Spatially varying with cumulative distortion maps
     ]
     
-    for fast_distortion_value, mode_label in distortion_modes:
-        Host.Print(f"\n  --- {mode_label.capitalize()} Distortion Maps (FastDistortionGatherDoF={fast_distortion_value}) ---")
+    for spatially_varying_value, fast_distortion_value, mode_label in modes:
+        Host.Print(f"\n  --- {mode_label.capitalize()} Mode (SpatiallyVarying={spatially_varying_value}, FastDistortionGatherDoF={fast_distortion_value}) ---")
         
         Host.SetVariable("DoGatherDoF", "true")
-        Host.SetVariable("SpatiallyVarying", "true")
+        Host.SetVariable("SpatiallyVarying", spatially_varying_value)
         Host.SetVariable("FastDistortionGatherDoF", fast_distortion_value)
         Host.SetVariable("DoDOFAccumulation", "false")
         

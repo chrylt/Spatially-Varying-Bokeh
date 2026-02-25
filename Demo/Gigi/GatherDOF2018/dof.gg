@@ -47,7 +47,13 @@
             "comment": "Anything closer than this is considered near field",
             "type": "Float",
             "dflt": "600.0f",
-            "visibility": "User"
+            "visibility": "User",
+            "UISettings": {
+                "UIHint": "Slider",
+                "min": "20",
+                "max": "200",
+                "step": "0.1"
+            }
         },
         {
             "name": "FocalRegion",

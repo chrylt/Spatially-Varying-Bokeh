@@ -115,7 +115,7 @@ static const float l3 = biotar_l3_p * patent_to_mm;
 
 // variables
 static const float aperture = helios_measured_aperture[t_aperture_stop] * (a3 / (helios_measured_aperture[6] * 0.5)) * 0.5f;
-static const float d_to_film = 237.480/(t_focus_distance + -1.939) + 32.514; // mm, by empirically fitted curve
+static const float d_to_film = 237.480/(t_focus_distance -1.939) + 32.514; // mm, by empirically fitted curve
 
 struct LensElement
 {

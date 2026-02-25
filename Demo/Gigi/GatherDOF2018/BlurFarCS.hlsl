@@ -183,7 +183,7 @@ float3 GetApertureSamplePoint(uint3 pxAndFrame, float pixelCoC, int u, int v, in
 	float2 UVAndScreenPos = (float2(px) + float2(0.5f, 0.5f)) / float2(FarFieldColorCoCSize);
 
 	float4 PixelColor = FarFieldColorCoC[px];
-	float PixelCoC = PixelColor.w;
+	float PixelCoC = 1.0f;//PixelColor.w; todo: just for measuring quality! remove later!!!
 
 	float3 ResultColor = 0;
 	float Weight = 0;
@@ -221,10 +221,10 @@ float3 GetApertureSamplePoint(uint3 pxAndFrame, float pixelCoC, int u, int v, in
 
 				float4 tapColor = FarFieldColorCoC.SampleLevel(linearClampSampler, uv, 0); //Texture2DSampleLevel(PostprocessInput0, PostprocessInput0Sampler, uv, 0);
 				// Weighted by CoC. Gives more influence to taps with a CoC higher than us.
-				float TapWeight = tapColor.w * saturate(1.0f - (PixelCoC - tapColor.w)); 
+				//float TapWeight = tapColor.w * saturate(1.0f - (PixelCoC - tapColor.w)); 
 				
-				ResultColor +=  tapColor.xyz * sampleWeight * TapWeight;
-				Weight += TapWeight;
+				ResultColor +=  tapColor.xyz * sampleWeight;// * TapWeight; for more consistent comparison
+				Weight += 1.0f;//TapWeight;
 			}
 		}
 		if (Weight > 0) ResultColor /= Weight;

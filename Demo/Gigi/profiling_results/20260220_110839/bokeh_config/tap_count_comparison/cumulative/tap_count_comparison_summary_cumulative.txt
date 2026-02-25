@@ -1,0 +1,12 @@
+Tap Count Comparison Summary (Cumulative Distortion Maps)
+============================================================
+
+Tap Count    Total GPU (ms)  Blur GPU (ms)  
+------------------------------------------------------------
+Cumulative   137.133         0.132          
+Cumulative   137.480         0.598          
+Cumulative   138.622         1.914          
+Cumulative   143.584         7.214          
+Cumulative   165.583         28.903         
+Cumulative   204.328         67.666         
+Cumulative   261.187         124.287        

@@ -20,7 +20,7 @@
         "ProjMtx_textureName": "ColorHDR"
     },
     "snapshot": {
-        "resourceViewNodeIndex": 63,
+        "resourceViewNodeIndex": 34,
         "resourceViewResourceIndex": 3,
         "cameraPos": [
             450.2478942871094,
@@ -28,8 +28,8 @@
             192.98443603515626
         ],
         "cameraAltitudeAzimuth": [
-            -0.1679048240184784,
-            1.6006346940994263
+            -0.1658744513988495,
+            1.6004464626312256
         ],
         "importedResources": [
             {
@@ -54,7 +54,7 @@
         "savedVariables": [
             {
                 "name": "FocusDistance",
-                "value": "45.425999"
+                "value": "45.025002"
             },
             {
                 "name": "RenderPinhole",
@@ -66,11 +66,11 @@
             },
             {
                 "name": "RenderLensSimulationDoF",
-                "value": "true"
+                "value": "false"
             },
             {
                 "name": "RenderBokehConfig",
-                "value": "true"
+                "value": "false"
             },
             {
                 "name": "Reset",
@@ -118,7 +118,7 @@
             },
             {
                 "name": "NumBounces",
-                "value": "2"
+                "value": "6"
             },
             {
                 "name": "AlbedoMode",
@@ -174,7 +174,7 @@
             },
             {
                 "name": "SmallLightBrightness",
-                "value": "100.000000"
+                "value": "300.000000"
             },
             {
                 "name": "SmallLightsColor",
@@ -194,7 +194,7 @@
             },
             {
                 "name": "ConfigLightCount",
-                "value": "15,11"
+                "value": "11,7"
             },
             {
                 "name": "ConfigOnlyDiagonal",
@@ -206,7 +206,7 @@
             },
             {
                 "name": "BokehConfigMode",
-                "value": "0"
+                "value": "2"
             },
             {
                 "name": "FocalLength",
@@ -214,11 +214,11 @@
             },
             {
                 "name": "DoGatherDoF",
-                "value": "true"
+                "value": "false"
             },
             {
                 "name": "DoDOFAccumulation",
-                "value": "true"
+                "value": "false"
             },
             {
                 "name": "SpatiallyVarying",
@@ -230,11 +230,15 @@
             },
             {
                 "name": "GatherDOFTapCount",
-                "value": "21"
+                "value": "5"
             },
             {
                 "name": "Debug",
-                "value": "false"
+                "value": "true"
+            },
+            {
+                "name": "DoLensDistortion",
+                "value": "true"
             },
             {
                 "name": "GatherDOF_Pinhole_UseNoiseTextures",
@@ -242,42 +246,42 @@
             },
             {
                 "name": "GatherDOF_Pinhole_AnimateNoiseTextures",
-                "value": "false"
+                "value": "true"
             },
             {
                 "name": "GatherDOF_Pinhole_SuppressBokeh",
                 "value": "false"
             },
             {
-                "name": "GatherDOF_Pinhole_FocalDistance",
-                "value": "45.000000"
-            },
-            {
-                "name": "GatherDOF_Pinhole_FocalRegion",
-                "value": "1.000000"
-            },
-            {
                 "name": "GatherDOF_Pinhole_FocalLength",
-                "value": "48.312000"
-            },
-            {
-                "name": "GatherDOF_Pinhole_NearTransitionRegion",
-                "value": "1.000000"
+                "value": "251.701996"
             },
             {
                 "name": "GatherDOF_Pinhole_FarTransitionRegion",
-                "value": "1.000000"
+                "value": "50.000000"
             },
             {
                 "name": "GatherDOF_Pinhole_Scale",
-                "value": "0.500000"
+                "value": "4.000000"
             },
             {
                 "name": "GatherDOF_Pinhole_KernelSize",
-                "value": "60.000000,0.000000,0.000000,0.000000"
+                "value": "26.500000,15.000000,5.000000,0.000000"
             },
             {
-                "name": "GatherDOF_Pinhole_FloodFillTapCount",
+                "name": "ToneMap_PinholeDOF_ExposureFStops",
+                "value": "1.000000"
+            },
+            {
+                "name": "ToneMap_PinholeDOF_ToneMapper",
+                "value": "1"
+            },
+            {
+                "name": "ToneMapLens_Simulation_ExposureFStops",
+                "value": "3.000000"
+            },
+            {
+                "name": "ToneMapLens_Simulation_ToneMapper",
                 "value": "3"
             },
             {
@@ -306,7 +310,23 @@
             },
             {
                 "name": "GatherDOF_BokehConfig_KernelSize",
-                "value": "60.000000,0.000000,0.000000,0.000000"
+                "value": "26.500000,0.000000,0.000000,0.000000"
+            },
+            {
+                "name": "ToneMap_BokehConfig_ExposureFStops",
+                "value": "0.000000"
+            },
+            {
+                "name": "ToneMap_BokehConfig_ToneMapper",
+                "value": "3"
+            },
+            {
+                "name": "ToneMapLens_BokehConfig_Simulation_ExposureFStops",
+                "value": "0.000000"
+            },
+            {
+                "name": "ToneMapLens_BokehConfig_Simulation_ToneMapper",
+                "value": "3"
             }
         ]
     },

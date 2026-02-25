@@ -10,7 +10,6 @@
             "dflt": "45",
             "visibility": "User",
             "UISettings": {
-                "UIHint": "Slider",
                 "min": "1",
                 "max": "60",
                 "step": "1"
@@ -376,6 +375,12 @@
             "name": "Debug",
             "type": "Bool",
             "visibility": "User"
+        },
+        {
+            "name": "DoLensDistortion",
+            "type": "Bool",
+            "dflt": "true",
+            "visibility": "User"
         }
     ],
     "shaders": [
@@ -696,7 +701,7 @@
                 "name": "GatherDOF_Pinhole",
                 "editorPos": [
                     53.0,
-                    -721.0
+                    -718.0
                 ],
                 "linkProperties": [
                     {},
@@ -855,11 +860,13 @@
                     },
                     {
                         "name": "FocalDistance",
-                        "visibility": "User"
+                        "visibility": "User",
+                        "replaceWithValue": "48"
                     },
                     {
                         "name": "FocalRegion",
-                        "visibility": "User"
+                        "visibility": "User",
+                        "replaceWithValue": "50"
                     },
                     {
                         "name": "FocalLength",
@@ -908,7 +915,8 @@
                     },
                     {
                         "name": "FloodFillTapCount",
-                        "visibility": "User"
+                        "visibility": "User",
+                        "replaceWithValue": "0"
                     },
                     {
                         "name": "sRGB",

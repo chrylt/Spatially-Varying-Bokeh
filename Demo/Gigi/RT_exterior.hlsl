@@ -1460,8 +1460,19 @@ float ApplyDOFLensSimulation(inout float3 rayPos, inout float3 rayDir, in uint3 
 		uv.y = 1 - uv.y;
 
 		Ray pinholeRay;
-		pinholeRay.Origin = getDistortedScreenToWorldPosition(uv);
-		pinholeRay.Direction = getDistortedScreenToWorldDirection(uv);
+		if(/*$(Variable:DoLensDistortion)*/)
+		{
+			pinholeRay.Origin = getDistortedScreenToWorldPosition(uv);
+			pinholeRay.Direction = getDistortedScreenToWorldDirection(uv);
+		} else {
+			float4 world = mul(float4(screenPos, /*$(Variable:DepthNearPlane)*/, 1), /*$(Variable:InvViewProjMtx)*/);
+			world.xyz /= world.w;
+
+			// Apply depth of field through lens simulation
+			pinholeRay.Origin = /*$(Variable:CameraPos)*/;
+			pinholeRay.Direction = normalize(world.xyz - /*$(Variable:CameraPos)*/);
+		}
+		
 		
 		if (t_renderPinhole)
 		{

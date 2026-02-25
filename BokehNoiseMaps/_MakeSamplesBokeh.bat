@@ -1,1 +1,0 @@
-for /l %%x in (0, 1, 31) do ..\Utils\agbn\agbn.exe -o bokehInv.pgm 16384 1000 bokehInv%%x.txt bokehInv%%x.png
