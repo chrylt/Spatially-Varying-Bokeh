@@ -1,0 +1,13 @@
+Tap Count Comparison Summary (Constant Distortion Maps)
+============================================================
+
+Tap Count    Total GPU (ms)  Blur GPU (ms)  
+------------------------------------------------------------
+Constant     137.039         0.110          
+Constant     136.940         0.480          
+Constant     138.053         1.526          
+Constant     142.196         5.592          
+Constant     159.265         23.078         
+Constant     188.520         52.641         
+Constant     229.603         93.465         
+Constant     283.912         147.302        
