@@ -1,0 +1,13 @@
+Tap Count Comparison Summary (Incremental Distortion Maps)
+============================================================
+
+Tap Count    Total GPU (ms)  Blur GPU (ms)  
+------------------------------------------------------------
+Incremental  20.137          0.413          
+Incremental  21.071          1.377          
+Incremental  24.062          4.235          
+Incremental  37.717          17.681         
+Incremental  80.624          58.812         
+Incremental  154.178         132.528        
+Incremental  259.273         238.293        
+Incremental  397.460         376.826        

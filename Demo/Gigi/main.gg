@@ -1,7 +1,7 @@
 {
     "$schema": "gigischema.json",
     "name": "FastBokeh",
-    "version": "1.0",
+    "version": "1.01",
     "variables": [
         {
             "name": "FocusDistance",
@@ -479,18 +479,6 @@
             "type": "RTClosestHit",
             "entryPoint": "ClosestHit",
             "copyFile": false
-        },
-        {
-            "name": "ShaderToHuman",
-            "fileName": "s2h\\include\\s2h.hlsl",
-            "type": "Count",
-            "entryPoint": ""
-        },
-        {
-            "name": "S2H Scatter",
-            "fileName": "s2h\\include\\s2h_scatter.hlsl",
-            "type": "Count",
-            "entryPoint": ""
         }
     ],
     "structs": [

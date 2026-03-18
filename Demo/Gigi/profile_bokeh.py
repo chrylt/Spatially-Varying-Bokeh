@@ -615,7 +615,7 @@ def profileAll():
     letPinholeAccumulateScene()
     profileGatherDoFSpatiallyConstantScene()
     profileGatherDoFSpatiallyVaryingScene()
-    generateGroundTruthDataScene()
+    #generateGroundTruthDataScene()
     
     # Bokeh Config Profiling
     Host.Print("\n" + "=" * 70)
@@ -625,7 +625,7 @@ def profileAll():
     letPinholeAccumulateBokehConfig()
     profileGatherDoFSpatiallyConstantBokehConfig()
     profileGatherDoFSpatiallyVaryingBokehConfig()
-    generateGroundTruthDataBokehConfig()
+    #generateGroundTruthDataBokehConfig()
     
     # Special Comparisons - Tap Count Variation
     Host.Print("\n" + "=" * 70)

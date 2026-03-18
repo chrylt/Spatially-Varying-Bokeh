@@ -20,7 +20,7 @@
         "ProjMtx_textureName": "ColorHDR"
     },
     "snapshot": {
-        "resourceViewNodeIndex": 34,
+        "resourceViewNodeIndex": 63,
         "resourceViewResourceIndex": 3,
         "cameraPos": [
             450.2478942871094,
@@ -58,7 +58,7 @@
             },
             {
                 "name": "RenderPinhole",
-                "value": "true"
+                "value": "false"
             },
             {
                 "name": "RenderThinLensDoF",
@@ -70,7 +70,7 @@
             },
             {
                 "name": "RenderBokehConfig",
-                "value": "false"
+                "value": "true"
             },
             {
                 "name": "Reset",
@@ -118,7 +118,7 @@
             },
             {
                 "name": "NumBounces",
-                "value": "6"
+                "value": "2"
             },
             {
                 "name": "AlbedoMode",
@@ -174,7 +174,7 @@
             },
             {
                 "name": "SmallLightBrightness",
-                "value": "300.000000"
+                "value": "100.000000"
             },
             {
                 "name": "SmallLightsColor",
@@ -206,7 +206,7 @@
             },
             {
                 "name": "BokehConfigMode",
-                "value": "2"
+                "value": "0"
             },
             {
                 "name": "FocalLength",
@@ -214,11 +214,11 @@
             },
             {
                 "name": "DoGatherDoF",
-                "value": "false"
+                "value": "true"
             },
             {
                 "name": "DoDOFAccumulation",
-                "value": "false"
+                "value": "true"
             },
             {
                 "name": "SpatiallyVarying",
@@ -230,11 +230,11 @@
             },
             {
                 "name": "GatherDOFTapCount",
-                "value": "5"
+                "value": "13"
             },
             {
                 "name": "Debug",
-                "value": "true"
+                "value": "false"
             },
             {
                 "name": "DoLensDistortion",
@@ -270,11 +270,11 @@
             },
             {
                 "name": "ToneMap_PinholeDOF_ExposureFStops",
-                "value": "1.000000"
+                "value": "2.500000"
             },
             {
                 "name": "ToneMap_PinholeDOF_ToneMapper",
-                "value": "1"
+                "value": "3"
             },
             {
                 "name": "ToneMapLens_Simulation_ExposureFStops",
@@ -310,7 +310,11 @@
             },
             {
                 "name": "GatherDOF_BokehConfig_KernelSize",
-                "value": "26.500000,0.000000,0.000000,0.000000"
+                "value": "26.000000,0.000000,0.000000,0.000000"
+            },
+            {
+                "name": "TemporalAccumulation_BokehConfig_Alpha",
+                "value": "0.100000"
             },
             {
                 "name": "ToneMap_BokehConfig_ExposureFStops",

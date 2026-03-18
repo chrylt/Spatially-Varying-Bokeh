@@ -9,8 +9,6 @@
 #include "PCG.hlsli"
 #include "IndexToColor.hlsli"
 #include "LDSShuffler.hlsli"
-#include "s2h\\include\\s2h.hlsl"
-#include "s2h\\include\\s2h_scatter.hlsl"
 
 static const float PI = 3.14159265358979323846f;
 static const float c_maxT = 10000.0f;
