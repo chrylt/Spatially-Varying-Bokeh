@@ -1,150 +1,127 @@
-# Filter-Adapted Spatio-Temporal Sampling With General Distributions
+# Implementation Details
 
-This repo goes with the paper [Importance-Sampled Filter-Adapted Spatio-Temporal Sampling](https://jcgt.org/published/0014/01/08/).
+## Pipeline
 
-![image](teaser.png)
+### Rendering and processing reference bokeh shapes
 
-A point distribution image (left top) is made into a representative blue noise point
-set (middle top), used to initialize an image for FAST optimization to make a noise texture (left
-bottom), meant to be filtered by a 3x3 box filter (middle bottom). A spatiotemporal FAST noise
-texture using that distribution is used to sample the lens in a thin lens path tracer on the right.
+First, the reference bokeh shapes from the lens simulation need to be generated along the diagonal by running `bokehConfig/1_gigi_bokeh_config_gen.py` directly from Gigi. This places the one-by-one rendered shapes as .exr images in the folder `bokehConfig/1_rawRenderings`.
 
-This image, and the other images in the paper, were rendered using the demo in this repo.
+In `bokehConfig/1_gigi_bokeh_config_gen.py`, we set the focus distance to 45 units and the light spheres of radius 0.3 at a distance of 250 units. We set the f-stop to its widest setting and generate 15 shapes, each in a different image along the half-diagonal, with 8192 SPP until an accumulated total of 134217728 SPP is reached. We save these images as .exr files, which are shown below.
 
-## Other Resources
+<p align="center">
+  <img src="figures/bokeh_focus45.0_aperture6_samples167772216_distance250_light1of15.png" width="32%">
+  <img src="figures/bokeh_focus45.0_aperture6_samples167772216_distance250_light2of15.png" width="32%">
+  <img src="figures/bokeh_focus45.0_aperture6_samples167772216_distance250_light3of15.png" width="32%">
+</p>
+<p align="center">
+  <img src="figures/bokeh_focus45.0_aperture6_samples167772216_distance250_light4of15.png" width="32%">
+  <img src="figures/bokeh_focus45.0_aperture6_samples167772216_distance250_light5of15.png" width="32%">
+  <img src="figures/bokeh_focus45.0_aperture6_samples167772216_distance250_light6of15.png" width="32%">
+</p>
+<p align="center">
+  <img src="figures/bokeh_focus45.0_aperture6_samples167772216_distance250_light7of15.png" width="32%">
+  <img src="figures/bokeh_focus45.0_aperture6_samples167772216_distance250_light8of15.png" width="32%">
+  <img src="figures/bokeh_focus45.0_aperture6_samples167772216_distance250_light9of15.png" width="32%">
+</p>
+<p align="center">
+  <img src="figures/bokeh_focus45.0_aperture6_samples167772216_distance250_light10of15.png" width="32%">
+  <img src="figures/bokeh_focus45.0_aperture6_samples167772216_distance250_light11of15.png" width="32%">
+  <img src="figures/bokeh_focus45.0_aperture6_samples167772216_distance250_light12of15.png" width="32%">
+</p>
+<p align="center">
+  <img src="figures/bokeh_focus45.0_aperture6_samples167772216_distance250_light13of15.png" width="32%">
+  <img src="figures/bokeh_focus45.0_aperture6_samples167772216_distance250_light14of15.png" width="32%">
+  <img src="figures/bokeh_focus45.0_aperture6_samples167772216_distance250_light15of15.png" width="32%">
+</p>
 
-[WebGPU Area Light Sampling Comparative Demo](https://electronicarts.github.io/gigi/Demos/BlueNoiseAreaLights/index.html)
+*Figure: Raw Filter Kernel Density Renderings — The raw renderings of the 15 bokeh shapes along the half-diagonal. The last two shapes intersect with the image edge and corner and are thus discarded. Here we can perceive the image location of the rendered shapes, for a more detailed look on the individual shapes, refer to the cropped shapes below.*
 
-[25 Minute YouTube Video](https://www.youtube.com/watch?v=aFSkDFcxVVc)
+Next, we run the jupyter notebook `bokehConfig/2_process_raw_bokeh.ipynb`. This crops all bokeh shapes to the same size, which is defined by the largest bokeh size, the center bokeh. The center of each cropped bokeh image is calculated as an intensity-weighted center of the shape. We save these cropped bokeh shapes (see below) as .pgm in the folder `2_cropped`.
 
-[Slide Deck](https://docs.google.com/presentation/d/1OX9A-lipIfnBn84uRfpsBXXivdK4n1Nt/edit?usp=sharing&ouid=103654468992788649377&rtpof=true&sd=true)
+<p align="center">
+  <img src="figures/cropped/bokeh_focus45.0_aperture6_samples167772216_distance250_light1of15.png" width="19%">
+  <img src="figures/cropped/bokeh_focus45.0_aperture6_samples167772216_distance250_light2of15.png" width="19%">
+  <img src="figures/cropped/bokeh_focus45.0_aperture6_samples167772216_distance250_light3of15.png" width="19%">
+  <img src="figures/cropped/bokeh_focus45.0_aperture6_samples167772216_distance250_light4of15.png" width="19%">
+  <img src="figures/cropped/bokeh_focus45.0_aperture6_samples167772216_distance250_light5of15.png" width="19%">
+</p>
+<p align="center">
+  <img src="figures/cropped/bokeh_focus45.0_aperture6_samples167772216_distance250_light6of15.png" width="19%">
+  <img src="figures/cropped/bokeh_focus45.0_aperture6_samples167772216_distance250_light7of15.png" width="19%">
+  <img src="figures/cropped/bokeh_focus45.0_aperture6_samples167772216_distance250_light8of15.png" width="19%">
+  <img src="figures/cropped/bokeh_focus45.0_aperture6_samples167772216_distance250_light9of15.png" width="19%">
+  <img src="figures/cropped/bokeh_focus45.0_aperture6_samples167772216_distance250_light10of15.png" width="19%">
+</p>
+<p align="center">
+  <img src="figures/cropped/bokeh_focus45.0_aperture6_samples167772216_distance250_light11of15.png" width="19%">
+  <img src="figures/cropped/bokeh_focus45.0_aperture6_samples167772216_distance250_light12of15.png" width="19%">
+  <img src="figures/cropped/bokeh_focus45.0_aperture6_samples167772216_distance250_light13of15.png" width="19%">
+</p>
 
-[Published Paper](https://jcgt.org/published/0014/01/08/)
+*Figure: Rendered Filter Kernel Densities — The bokeh shapes are cropped to the same shape defined by the center-most shape. The shapes that touched the edge of the raw rendering were removed as they could not be used meaningfully. Instead, we use the last shape for those corner areas. Odd indices will be used as key shapes for the distortion, and even indices will be used as mid-points in the gradient descent.*
 
-## Running the Demo
+In this notebook, we also calculate the intensity sum for each shape and fit a polynomial to the values as a function of their distance from the non-cropped image center. We print the resulting coefficients and use them in the code for the intensity correction.
 
-There are two ways to run the demo.
+#### Generating noise
 
-1. The `Demo/Gigi/` folder contains the Gigi implementation of the demo `main.gg`.  Gigi is a rapid graphics development and research platform: https://github.com/electronicarts/gigi/.
-2. The `Demo/DX12/` folder contains a solution to run the DX12 / C++ code generated by Gigi.
+As a last step in `bokehConfig/2_process_raw_bokeh.ipynb`, we generate `3_generate_noise.bat`, which generates FAST noise for the center bokeh shape in 3 steps, similar to Wolfe et al. [[1]](#references). First, blue noise is generated by running the utility `agbn.exe`, then it is packed to binary format, and finally, FAST noise is generated via a clone from the GitHub of Donnelly et al. [[2]](#references). For details and parameters, see the batch script below.
 
-### Replicating Paper results
+<details>
+<summary>Batch script: generate blue-noise, pack to binary, and generate FAST noise</summary>
 
-By default, the demo is set to show a high sample count path traced depth of field / bokeh render, to show that the noise textures converge nicely at high sample counts.
+```batch
+echo Step 1: Generating blue noise...
+for /l %%x in (0, 1, 31) do ..\Utils\agbn\agbn.exe -F 0 path\Spatially-Varying-Bokeh\bokehConfig\2_cropped\bokeh_focus45.0_aperture6_samples167772216_distance250_light1of15.pgm 16384 1000 path\Spatially-Varying-Bokeh\bokehConfig\3_blue_noise\base_bokeh_%%x.txt path\Spatially-Varying-Bokeh\bokehConfig\3_blue_noise\base_bokeh_%%x.png
 
-#### Low Sample Count Path Traced Results
+echo Step 2: Packing blue noise to bin...
+..\Utils\Gbn2Bin\x64\Release\Gbn2Bin.exe path\Spatially-Varying-Bokeh\bokehConfig\3_blue_noise\base_bokeh_ path\Spatially-Varying-Bokeh\bokehConfig\4_blue_noise_bin\base_bokeh
 
-To replicate the lower sample count path traced results, turn `Accumulate` off and `AlbedoMode` on. You can also turn off `Animate` if you want a stable image.  Note that you'll have to click the `Reset` button after making changes to settings, to reset the rendering.
+echo Step 3: Running FastNoise...
+pushd "path\fastnoise"
+FastNoise.exe Vector2 Uniform gauss 1.0 exponential 0.1 0.1 separate 0.5 128 128 32 base_bokeh -split -init "path\Spatially-Varying-Bokeh\bokehConfig\4_blue_noise_bin\base_bokeh.bin" -progress 1
+for %%f in ("base_bokeh*") do move /Y "%%f" "path\Spatially-Varying-Bokeh\bokehConfig\5_fast_noise"
+popd
 
-From here, you can change the `LensRNGSource` from `LKCP204Blue` to `LKCP204White` to remove the benefits of a FAST optimized noise texture, while still keeping the importance sampling of the pregenerated samples.
+echo Done!
+pause
+```
 
-From here, turning on `NoImportanceSampling` removes the benefits of the importance sampling, and instead generates uniform white noise random numbers, and uses the PDF to weight samples. This has the effect of also adding in rejection sampling, for the places where the PDF is 0.
+</details>
 
-The paper used the `LensRNGSource` value of `UniformStarBlue` and `UniformStarWhite`, and the `Exterior` geometry, instead of the default `Interior` geometry.  It also used different camera settings.
+After running `bokehConfig/2_process_raw_bokeh.ipynb`, we need to actually generate the noise by running `3_generate_noise.bat`. This takes a while and populates folders `3_blue_noise`, `4_blue_noise_bin` and `5_fast_noise`. After the FAST noise is generated, we copy it to the Gigi project's assets folder, namely `Assets/NoiseTextures/bokeh/`, for use in the code.
 
-In general though, the results should all be similar in that the blue (spatiotemporal optimized) noise texture does the best, the white (non optimized) texture does noticeably less well, and removing importance sampling looks far worse.
+#### Generating distortion maps
 
-#### GatherDOF Results
+We generate the distortion flow fields by running the Jupyter notebook `distortion_vectors.ipynb`.
+It accesses the cropped bokeh .pgm files in `2_cropped` and generates the distortion maps in approximately 40 seconds.
+Finally, the generated distortion maps are saved in the `distortion_maps` folder and must also be copied to the Gigi project's asset folder `Assets/DistortionMaps`.
 
-The GatherDOF post processing depth of field technique requires a rendered scene to apply the technique to.  Normally you would get this through real time rendering means, but in this demo we apply it to a path traced result.
+## Gigi Project
 
-Set `JitterPixels` to `None`, the `DOF` drop down to `Off` and click the `Reset` button, then wait for it to converge a reasonable amount.
+For the Gigi project, we modified the implementation of Wolfe et al. [[1]](#references) for our purposes. Our Gigi graph can be seen below.
 
-Next, set the `DOF` drop down to `PostProcessing`. Turn on the `DoFarFieldFloodFill` and `DoNearFieldFloodFill` GatherDOF settings, and set the `BlurTapCount` to 8. Also set the first value of `KernelSize` to 10 and set `UseNoiseTextures` to false.
+We structured our project to enable direct runtime comparison of different DoF techniques by using separate buffers for their outputs. It is possible to run all at the same time by setting their specific rendering toggle in the Gigi Viewer to *true*, but we don't recommend it due to performance issues.
 
-You should have a decent looking depth of field and bokeh render. This is the high quality GatherDOF result, using 80 samples per pixel in two passes, and not using the noise textures from our paper.  You can see that it's all done in post processing by switching the `DOF` drop down back and forth between `PostProcessing` and `Off`.
+It is possible to change a variety of parameters in the Gigi Viewer to see their effects in real-time, including but not limited to aperture stop and focus distance in the lens simulation, grid properties of the BokehConfig scene, to render a grid or diagonal of bokeh shapes, and their density or parameters for the different GatherDoFs.
 
-To see this fail at lower sample counts, turn off `DoFarFieldFloodFill` and `DoNearFieldFloodFill` and set `BlurTapCount` to 4.  The sampling artifacts should become very noticeable.  This is 16 samples per pixel in a single pass, still not using the noise textures from our paper.
+<p align="center">
+  <img src="figures/gigi_project.PNG" width="100%">
+</p>
 
-To see the results using our noise textures, set `LensRNGSource` to `UniformHexagonBlue` and turn on `UseNoiseTextures` in `GatherDOF`. At this point it should look temporally noisy.  Under `TemporalAccumulation` set `Alpha` to 0.1 and set `Enabled` to true. The noise should stabalize pretty nicely, showing comparable results using 16 samples of our noise textures in a single pass, compared to 80 samples without our noise textures in two passes.
+*Figure: Gigi Project Graph — The graph of our Gigi project shows how different components interact with each other.*
 
-Setting `LensRNGSource` to `UniformHexagonWhite` should show a degradation in quality. To see it more clearly, you can turn off temporal accumulation, and under `GatherDOF` turn off `AnimateNoiseTextures`. That will let you compare a single unfiltered frame of blue (spatiotemporal optimized) versus white (not optimized). White will be much rougher looking overall, where blue is smoother looking and finer details can be made out.  When animated and temporally accumulated, blue should be more temporally stable as well.
+### Overview of relevant source files
 
-## Pre-Generated Noise Textures
+1. **`CameraLensData.hlsli`** — This file contains the lens data for the simulation as well as the precise values from which the data was derived.
 
-A few pre-generated noise textures are available in the `Demo/Gigi/Assets/NoiseTextures/` folder.
+2. **`LensSimulation.hlsli`** — Contains the physically based lens simulation code, where rays are traced from the film through the lens into the scene. Chromatic aberration is also implemented here.
 
-Each is a set of 32 files that are 128x128, making a 2d array texture that is 128x128x32.  The textures are optimized to give rendering error as blue noise over space, and to converge more quickly under an exponential moving average, like is found in typical TAA implementations.
+3. **`RT_exterior.hlsl`** — Adapted from Wolfe et al. [[1]](#references) to incorporate the lens simulation.
 
-The textures are meant to be used as the source of per pixel random numbers, where you sample at `(pixelX, pixelY, sampleIndex) % (128, 128, 32)` to get a vec2 value.  To get more than 32 samples, a cycle index is calculated by dividing sampleIndex by 32, and that cycle index is used to offset the noise texture globally.  The 2D offset is calculated by putting the cycle index into a stateless 2D shuffle (bijection) which uses the golden ratio and the Hilbert curve to have the offset visit each pixel in the noise texture in a low discrepancy pattern before repeating, causing each pixel to have a sampling sequence that is 128\*128\*32 = 524,288 samples long.  You can read more about this low discrepancy shuffle at https://blog.demofox.org/2024/10/04/a-two-dimensional-low-discrepancy-shuffle-iterator-random-access-inversion/, and it is also implemented in the demo.
+4. **`SpatiallyVaryingBokeh.hlsli`** — Contains all the code that distorts samples according to our distortion maps and is integrated into the DoF by modifications in `BlurFarCS.hlsl` and `NearBlurCS.hlsl`.
 
-The textures ending in `.0.png` can be ignored. They are unoptimized white noise textures needed for experimental results in the paper.
+## References
 
-Please see our paper for more details on usage, and see the FAST noise documentation for more information on FAST noise [https://github.com/electronicarts/fastnoise/blob/main/FastNoiseDesign.md](https://github.com/electronicarts/fastnoise/blob/main/FastNoiseDesign.md).
+1. Wolfe et al., "ISFASS" (2025)
+2. Donnelly et al., "FAST" (2023)
 
-| Distribution | Image 0 | DFT | Folder |
-| ------------ | ------- | --- | -------- |
-| ![](Demo/Gigi/Assets/NoiseTextures/Lens_kernel_compositingpro.006/Lens_kernel_compositingpro.006.inverted.128.png) | ![](Demo/Gigi/Assets/NoiseTextures/Lens_kernel_compositingpro.006/Lens_kernel_compositingpro.006_0.png) | ![](Demo/Gigi/Assets/NoiseTextures/Lens_kernel_compositingpro.006/Lens_kernel_compositingpro.006_0_spectrum.png) | [Lens_kernel_compositingpro.006](Demo/Gigi/Assets/NoiseTextures/Lens_kernel_compositingpro.006/) |
-| ![](Demo/Gigi/Assets/NoiseTextures/Lens_kernel_compositingpro.204/Lens_kernel_compositingpro.204.inverted.128.png) | ![](Demo/Gigi/Assets/NoiseTextures/Lens_kernel_compositingpro.204/Lens_kernel_compositingpro.204_0.png) | ![](Demo/Gigi/Assets/NoiseTextures/Lens_kernel_compositingpro.204/Lens_kernel_compositingpro.204_0_spectrum.png) | [Lens_kernel_compositingpro.204](Demo/Gigi/Assets/NoiseTextures/Lens_kernel_compositingpro.204/) |
-| ![](Demo/Gigi/Assets/NoiseTextures/NonUniformStar/NonUniformStar.128.png) | ![](Demo/Gigi/Assets/NoiseTextures/NonUniformStar/NonUniformStar_0.png) | ![](Demo/Gigi/Assets/NoiseTextures/NonUniformStar/NonUniformStar_0_spectrum.png) | [NonUniformStar](Demo/Gigi/Assets/NoiseTextures/NonUniformStar/) |
-| ![](Demo/Gigi/Assets/NoiseTextures/NonUniformStar2/NonUniformStar2.128.png) | ![](Demo/Gigi/Assets/NoiseTextures/NonUniformStar2/NonUniformStar2_0.png) | ![](Demo/Gigi/Assets/NoiseTextures/NonUniformStar2/NonUniformStar2_0_spectrum.png) | [NonUniformStar2](Demo/Gigi/Assets/NoiseTextures/NonUniformStar2/) |
-| ![](Demo/Gigi/Assets/NoiseTextures/UniformCircle/UniformCircle.128.png) | ![](Demo/Gigi/Assets/NoiseTextures/UniformCircle/UniformCircle_0.png) | ![](Demo/Gigi/Assets/NoiseTextures/UniformCircle/UniformCircle_0_spectrum.png) | [UniformCircle](Demo/Gigi/Assets/NoiseTextures/UniformCircle/) |
-| ![](Demo/Gigi/Assets/NoiseTextures/UniformHexagon/UniformHexagon.128.png) | ![](Demo/Gigi/Assets/NoiseTextures/UniformHexagon/UniformHexagon_0.png) | ![](Demo/Gigi/Assets/NoiseTextures/UniformHexagon/UniformHexagon_0_spectrum.png) | [UniformHexagon](Demo/Gigi/Assets/NoiseTextures/UniformHexagon/) |
-| ![](Demo/Gigi/Assets/NoiseTextures/UniformStar/UniformStar.128.png) | ![](Demo/Gigi/Assets/NoiseTextures/UniformStar/UniformStar_0.png) | ![](Demo/Gigi/Assets/NoiseTextures/UniformStar/UniformStar_0_spectrum.png) | [UniformStar](Demo/Gigi/Assets/NoiseTextures/UniformStar/) |
-| ![](Demo/Gigi/Assets/NoiseTextures/FAST/FAST.png) | ![](Demo/Gigi/Assets/NoiseTextures/FAST/vector2_uniform_gauss1_0_Gauss10_separate05_0.png) | ![](Demo/Gigi/Assets/NoiseTextures/FAST/vector2_uniform_gauss1_0_Gauss10_separate05_0_spectrum.png) | [FAST](Demo/Gigi/Assets/NoiseTextures/FAST/) |
-
-## Generating Noise Textures
-
-Generating FAST noise textures with general distributions involves three steps:
-
-1. Turn a distribution into a blue noise point set.
-2. Convert the point set into a binary file of float4 values.
-3. Run the FAST noise generation utility, using the binary file as an initial state before optimization.
-
-### 1. Turn a distribution into a blue noise point set.
-
-For generating 2D blue noise point sets following a specific distribute, we use a greyscale image to describe the desired point densitities.
-
-We pass that image into the utility that goes with [Serial Gaussian Blue Noise Stippling](https://diglib.eg.org/items/d70b33ed-2a29-4e70-aa14-97088b2728d1), which can be found in `Utils/agbn`.
-
-The `_MakeSamples.bat` file shows how to convert from pgm files (a text format) into text files which contain the point sets.
-
-We generate each of the 32 Z slices independently, to ensure a good distribution of points for each Z slice.
-
-### 2. Convert the point set into a binary file of float4 values.
-
-We made a utility for this which can be found in `Utils/Gbn2Bin`.
-
-As we are only dealing with two dimensional points, but need to write out float4s for the FAST utility, we write 0 for z and 1 for w.  Z and w become the blue and alpha channel of the FAST noise textures respectively.
-
-### 3. Run the FAST noise generation utility, using the binary file as an initial state before optimization.
-
-We use the standard [FAST utility](https://github.com/electronicarts/fastnoise) to generate noise textures, using the binary format as an initial state before optimization.
-
-To specify a starting state for FAST, you use the `-init <filename>` command line option. For example:
-
-`FastNoise.exe Vector2 Uniform gauss 1.0 exponential 0.1 0.1 separate 0.5 128 128 32 NonUniformStar -split -init NonUniformStar.bin -progress 1`
-
-Your binary file must have the same number of data points as there are pixels in the image you are generating.
-
-### Notes
-
-The pregenerated files were made to be blue noise spatially, optimized for EMA temporally, and contain 2D points per pixel.
-
-The techniques described allow you to use general distributions while using the full range of FAST capabilities:
-* Optimize for different spatial filters.
-* Optimize for different temporal filters.
-* Store points in different spaces, such as on a sphere, on a mesh, or in a mesh.
-
-We showcased depth of field and bokeh as a usage case for this work, but are looking forward to people using the general idea in other situations as well.
-
-Another example made after the paper was published is use in area lights, with results shown below.  The demo for this is available in the [Gigi](https://github.com/electronicarts/gigi/) browser, and is named "Blue Noise Area Lights".
-
-There is also a WebGPU version at https://electronicarts.github.io/gigi/Demos/BlueNoiseAreaLights/index.html.
-
-![image](AreaLights1.png)
-
-![image](AreaLights2.png)
-
-## Authors
-
-<p align="center"><a href="https://seed.ea.com"><img src="SEED.jpg" width="150px"></a><br>
-<b>Search for Extraordinary Experiences Division (SEED) - Electronic Arts <br> http://seed.ea.com</b><br>
-We are a cross-disciplinary team within EA Worldwide Studios.<br>
-Our mission is to explore, build and help define the future of interactive entertainment.<br><br>
-Code and paper by Alan Wolfe, William Donnelly, and Henrik Halén.</p>
-
-## Contributing
-
-Before you can contribute, EA must have a Contributor License Agreement (CLA) on file that has been signed by each contributor.
-You can sign here: http://bit.ly/electronic-arts-cla
